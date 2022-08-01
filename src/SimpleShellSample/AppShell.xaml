@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ss:SimpleShell
+    x:Class="SimpleShellSample.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:SimpleShellSample"
+    xmlns:ss="clr-namespace:Radek.SimpleShell;assembly=Radek.SimpleShell"
+    xmlns:pages="clr-namespace:SimpleShellSample.Views.Pages"
+    Shell.FlyoutBehavior="Disabled"
+    x:Name="thisShell">
+
+    <!--Shell.NavBarIsVisible="False"-->
+
+    <Tab Title="First Tab" Route="FirstTab">
+        <ShellContent
+            Title="Yellow"
+            ContentTemplate="{DataTemplate pages:YellowPage}"
+            Route="YellowPage" />
+        <ShellContent
+            Title="Green"
+            ContentTemplate="{DataTemplate pages:GreenPage}"
+            Route="GreenPage" />
+    </Tab>
+    <Tab Title="Second Tab" Route="SecondTab">
+        <ShellContent
+            Title="Blue"
+            ContentTemplate="{DataTemplate pages:BluePage}"
+            Route="BluePage" />
+        <ShellContent
+            Title="Red"
+            ContentTemplate="{DataTemplate pages:RedPage}"
+            Route="RedPage" />
+    </Tab>
+
+    <ss:SimpleShell.Content>
+        <Grid Padding="12" RowDefinitions="100, *">
+            <HorizontalStackLayout BindableLayout.ItemsSource="{Binding Source={x:Reference thisShell}, Path=Items}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="ShellItem">
+                        <HorizontalStackLayout BindableLayout.ItemsSource="{Binding Items}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="ShellItem">
+                                    <HorizontalStackLayout>
+                                        <Button Text="{Binding Title}" Clicked="Button_Clicked"/>
+                                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Items}">
+                                            <BindableLayout.ItemTemplate>
+                                                <DataTemplate x:DataType="BaseShellItem">
+                                                    <Button Text="{Binding Title}" Clicked="Button_Clicked"/>
+                                                </DataTemplate>
+                                            </BindableLayout.ItemTemplate>
+                                        </VerticalStackLayout>
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </HorizontalStackLayout>
+            
+            <ss:SimpleNavigationHost Grid.Row="1"/>
+        </Grid>
+    </ss:SimpleShell.Content>
+
+</ss:SimpleShell>
