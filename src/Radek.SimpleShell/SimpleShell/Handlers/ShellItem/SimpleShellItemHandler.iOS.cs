@@ -9,14 +9,8 @@ namespace Radek.SimpleShell.Handlers
     {
         protected override UIView CreatePlatformElement()
         {
-            throw new NotImplementedException();
-
-            //shellSectionContainer = new CustomFrameLayout(MauiContext.Context)
-            //{
-            //    Id = AView.GenerateViewId()
-            //};
-
-            //return shellSectionContainer;
+            var container = new UIView();
+            return container;
         }
     }
 }

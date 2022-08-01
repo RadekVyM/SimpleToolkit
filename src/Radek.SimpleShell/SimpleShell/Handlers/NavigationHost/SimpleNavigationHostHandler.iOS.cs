@@ -1,6 +1,7 @@
 ﻿#if __IOS__ || MACCATALYST
 
 using Microsoft.Maui.Handlers;
+using Microsoft.Maui.Platform;
 using UIKit;
 
 namespace Radek.SimpleShell.Handlers
@@ -29,18 +30,16 @@ namespace Radek.SimpleShell.Handlers
 
         protected override UIView CreatePlatformView()
         {
-            throw new NotImplementedException();
-
-            //Container = new CustomFrameLayout(MauiContext.Context);
-            //return Container;
+            // TODO: Use Microsoft.Maui.Platform.ContentView if just UIView won't work: ViewHandler<ISimpleNavigationHost, Microsoft.Maui.Platform.ContentView>
+            var container = new UIView();
+            return container;
         }
 
         public virtual void SetContent(UIView view)
         {
-            throw new NotImplementedException();
-
-            //Container.RemoveAllViews();
-            //Container.AddView(view);
+            view.Frame = PlatformView.Bounds;
+            Container.ClearSubviews();
+            Container.AddSubview(view);
         }
     }
 }

@@ -3,7 +3,7 @@
 using NavFrame = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
 using PlatformPage = Android.Views.View;
 #elif __IOS__ || MACCATALYST
-using NavFrame = System.Object;
+using NavFrame = UIKit.UIView;
 using PlatformPage = UIKit.UIView;
 #elif WINDOWS
 using NavFrame = Microsoft.UI.Xaml.Controls.Frame;
@@ -87,7 +87,8 @@ namespace Radek.SimpleShell.NavigationManager
                 navigationFrame.RemoveAllViews();
                 navigationFrame.AddView(pageView);
 #elif __IOS__ || MACCATALYST
-                throw new NotImplementedException();
+                navigationFrame.ClearSubviews();
+                navigationFrame.AddSubview(pageView);
 #elif WINDOWS
                 navigationFrame.Content = pageView;
 #endif

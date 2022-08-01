@@ -10,15 +10,9 @@ namespace Radek.SimpleShell.Handlers
         protected override UIView CreatePlatformElement()
         {
             CreateNavigationManager();
-            
-            throw new NotImplementedException();
 
-            //var container = new CustomFrameLayout(MauiContext.Context)
-            //{
-            //    Id = AView.GenerateViewId()
-            //};
-
-            //return container;
+            var container = new UIView();
+            return container;
         }
     }
 }

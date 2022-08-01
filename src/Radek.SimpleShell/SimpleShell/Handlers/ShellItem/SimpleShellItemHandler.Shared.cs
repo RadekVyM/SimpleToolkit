@@ -66,6 +66,12 @@ namespace Radek.SimpleShell.Handlers
                     shellSectionContainer.RemoveAllViews();
                     shellSectionContainer.AddView(currentShellSectionHandler.PlatformView);
                 }
+#elif __IOS__ || MACCATALYST
+                if (PlatformView != (UIKit.UIView)shellSectionContainer.Subviews[0])
+                {
+                    shellSectionContainer.ClearSubviews();
+                    shellSectionContainer.AddSubview(currentShellSectionHandler.PlatformView);
+                }
 #elif WINDOWS
                 if (PlatformView != (Microsoft.UI.Xaml.Controls.Frame)shellSectionContainer.Content)
                     shellSectionContainer.Content = currentShellSectionHandler.PlatformView;

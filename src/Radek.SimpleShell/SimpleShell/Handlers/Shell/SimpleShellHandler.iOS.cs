@@ -9,8 +9,7 @@ namespace Radek.SimpleShell.Handlers
     {
         protected virtual UIView GetNavigationHostContent()
         {
-            throw new NotImplementedException();
-            //return (navigationHost?.Handler as SimpleNavigationHostHandler)?.Container?.Child as UIView;
+            return (navigationHost?.Handler as SimpleNavigationHostHandler)?.Container?.Subviews[0];
         }
     }
 }
