@@ -9,6 +9,21 @@
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="PageNavigationButton" TargetType="Button">
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="HorizontalOptions" Value="Center"/>
+                <Setter Property="VerticalOptions" Value="End"/>
+            </Style>
+
+            <Style x:Key="YellowPageNavigationButton" TargetType="Button" BasedOn="{StaticResource PageNavigationButton}">
+                <Setter Property="BackgroundColor" Value="DarkGoldenrod"/>
+            </Style>
+            
+            <Style x:Key="GreenPageNavigationButton" TargetType="Button" BasedOn="{StaticResource PageNavigationButton}">
+                <Setter Property="BackgroundColor" Value="DarkGreen"/>
+            </Style>
+            
         </ResourceDictionary>
     </Application.Resources>
 </Application>

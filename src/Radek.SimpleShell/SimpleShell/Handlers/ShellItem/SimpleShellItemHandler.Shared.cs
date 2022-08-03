@@ -7,7 +7,7 @@ using SectionContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFr
 #elif __IOS__ || MACCATALYST
 using SectionContainer = UIKit.UIView;
 #elif WINDOWS
-using SectionContainer = Microsoft.UI.Xaml.Controls.NavigationView;
+using SectionContainer = Microsoft.UI.Xaml.Controls.Border;
 #else
 using SectionContainer = System.Object;
 #endif
@@ -73,8 +73,8 @@ namespace Radek.SimpleShell.Handlers
                     shellSectionContainer.AddSubview(currentShellSectionHandler.PlatformView);
                 }
 #elif WINDOWS
-                if (PlatformView != (Microsoft.UI.Xaml.Controls.Frame)shellSectionContainer.Content)
-                    shellSectionContainer.Content = currentShellSectionHandler.PlatformView;
+                if (PlatformView != (Microsoft.UI.Xaml.Controls.Frame)shellSectionContainer.Child)
+                    shellSectionContainer.Child = currentShellSectionHandler.PlatformView;
 #endif
 
                 if (currentShellSectionHandler.VirtualView != VirtualView.CurrentItem)

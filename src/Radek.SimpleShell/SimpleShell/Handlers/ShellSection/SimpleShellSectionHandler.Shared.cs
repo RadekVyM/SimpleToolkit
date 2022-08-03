@@ -91,6 +91,9 @@ namespace Radek.SimpleShell.Handlers
             SyncNavigationStack(false);
         }
 
+        ShellContent currentShellContent;
+        bool navigationStackCanBeAdded = false;
+
         protected virtual void SyncNavigationStack(bool animated)
         {
             List<IView> pageStack = new List<IView>()
@@ -98,10 +101,17 @@ namespace Radek.SimpleShell.Handlers
                 (VirtualView.CurrentItem as IShellContentController).GetOrCreateContent()
             };
 
-            for (var i = 1; i < VirtualView.Navigation.NavigationStack.Count; i++)
-            {
-                pageStack.Add(VirtualView.Navigation.NavigationStack[i]);
-            }
+            var shell = ((IShellController)VirtualView.FindParentOfType<SimpleShell>());
+
+            // When navigating from subtab with a navigation stack to another subtab in same tab, there is NavigationStack of previous subtab in VirtualView.Navigation
+            if (currentShellContent == VirtualView.CurrentItem && !navigationStackCanBeAdded) // This is just a workaround of the bug in Shell
+                for (var i = 1; i < VirtualView.Navigation.NavigationStack.Count; i++)
+                {
+                    pageStack.Add(VirtualView.Navigation.NavigationStack[i]);
+                }
+
+            navigationStackCanBeAdded = currentShellContent != null && VirtualView.Navigation.NavigationStack.Count > 1 && currentShellContent != VirtualView.CurrentItem; // This is just a workaround of the bug in Shell
+            currentShellContent = VirtualView.CurrentItem; // This is just a workaround of the bug in Shell
 
             // The point of this is to push the shell navigation over to using the INavigationStack
             // work flow. Ideally we rewrite all the push/pop/etc.. parts inside ShellSection.cs

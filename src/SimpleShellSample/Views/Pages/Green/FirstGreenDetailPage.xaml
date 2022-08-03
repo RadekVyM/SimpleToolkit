@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SimpleShellSample.Views.Pages.GreenPage"
-             Title="GreenPage">
+             x:Class="SimpleShellSample.Views.Pages.FirstGreenDetailPage"
+             Title="FirstGreenDetailPage">
     <Grid BackgroundColor="ForestGreen">
         <Label
             FontSize="20"
-            Text="Green page"
+            Text="First green detail page"
             TextColor="White"
             TextTransform="Uppercase"
             FontAttributes="Bold"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
 
-        <Button Text="Go to school page" Clicked="Button_Clicked" VerticalOptions="End" HorizontalOptions="Center"/>
+        <Button Text="Go to red page" Clicked="Button_Clicked" Style="{StaticResource GreenPageNavigationButton}"/>
     </Grid>
 </ContentPage>

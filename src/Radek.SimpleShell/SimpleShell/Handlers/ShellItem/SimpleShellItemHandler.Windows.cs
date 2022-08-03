@@ -2,21 +2,15 @@
 // || (NETSTANDARD || !PLATFORM) || (NET6_0_OR_GREATER && !IOS && !ANDROID && !TIZEN)
 
 using Microsoft.Maui.Handlers;
-using Microsoft.UI.Xaml.Controls;
+using WBorder = Microsoft.UI.Xaml.Controls.Border;
 
 namespace Radek.SimpleShell.Handlers
 {
-    public partial class SimpleShellItemHandler : ElementHandler<ShellItem, NavigationView>, IAppearanceObserver
+    public partial class SimpleShellItemHandler : ElementHandler<ShellItem, WBorder>, IAppearanceObserver
     {
-        protected override NavigationView CreatePlatformElement()
+        protected override WBorder CreatePlatformElement()
         {
-            shellSectionContainer = new NavigationView()
-            {
-                PaneDisplayMode = NavigationViewPaneDisplayMode.Top,
-                IsBackButtonVisible = NavigationViewBackButtonVisible.Collapsed,
-                IsSettingsVisible = false,
-                IsPaneToggleButtonVisible = false
-            };
+            shellSectionContainer = new WBorder();
 
             return shellSectionContainer;
         }

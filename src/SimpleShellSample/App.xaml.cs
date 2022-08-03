@@ -6,6 +6,9 @@ public partial class App : Application
 	{
 		InitializeComponent();
 
-		MainPage = new AppShell();
-	}
+		if (MauiProgram.UseSimpleShell)
+			MainPage = new SimpleAppShell();
+		else
+            MainPage = new NormalAppShell();
+    }
 }

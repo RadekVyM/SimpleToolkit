@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ss:SimpleShell
-    x:Class="SimpleShellSample.AppShell"
+    x:Class="SimpleShellSample.SimpleAppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:SimpleShellSample"
     xmlns:ss="clr-namespace:Radek.SimpleShell;assembly=Radek.SimpleShell"
     xmlns:pages="clr-namespace:SimpleShellSample.Views.Pages"
-    Shell.FlyoutBehavior="Disabled"
-    x:Name="thisShell">
+    Shell.FlyoutBehavior="Flyout"
+    x:Name="thisShell"
+    Shell.BackgroundColor="White">
 
     <!--Shell.NavBarIsVisible="False"-->
+    <!--Shell.NavBarIsVisible="False"-->
 
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False"/>
+    </Shell.BackButtonBehavior>
+    
+    <Shell.TitleView>
+        <HorizontalStackLayout>
+            <Button Text="Back" Clicked="BackButtonClicked"/>
+            <Label Text="{Binding Source={x:Reference thisShell}, Path=CurrentItem.Title}"/>
+        </HorizontalStackLayout>
+    </Shell.TitleView>
+    
     <Tab Title="First Tab" Route="FirstTab">
         <ShellContent
             Title="Yellow"
@@ -56,8 +69,13 @@
                     </DataTemplate>
                 </BindableLayout.ItemTemplate>
             </HorizontalStackLayout>
-            
-            <ss:SimpleNavigationHost Grid.Row="1"/>
+
+            <Border Grid.Row="1">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10"/>
+                </Border.StrokeShape>
+                <ss:SimpleNavigationHost/>
+            </Border>
         </Grid>
     </ss:SimpleShell.Content>
 

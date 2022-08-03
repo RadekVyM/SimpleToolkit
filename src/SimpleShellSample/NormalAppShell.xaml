@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:pages="clr-namespace:SimpleShellSample.Views.Pages"
+       x:Class="SimpleShellSample.NormalAppShell"
+       Title="NormalAppShell">
+
+    <Shell.TitleView>
+        <Label Text="Hello title"/>
+    </Shell.TitleView>
+
+    <Tab Title="First Tab" Route="FirstTab">
+        <ShellContent
+            Title="Yellow"
+            ContentTemplate="{DataTemplate pages:YellowPage}"
+            Route="YellowPage" />
+        <ShellContent
+            Title="Green"
+            ContentTemplate="{DataTemplate pages:GreenPage}"
+            Route="GreenPage" />
+    </Tab>
+    <Tab Title="Second Tab" Route="SecondTab">
+        <ShellContent
+            Title="Blue"
+            ContentTemplate="{DataTemplate pages:BluePage}"
+            Route="BluePage" />
+        <ShellContent
+            Title="Red"
+            ContentTemplate="{DataTemplate pages:RedPage}"
+            Route="RedPage" />
+    </Tab>
+</Shell>
