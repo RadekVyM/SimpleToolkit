@@ -6,21 +6,19 @@
     xmlns:local="clr-namespace:SimpleShellSample"
     xmlns:ss="clr-namespace:Radek.SimpleShell;assembly=Radek.SimpleShell"
     xmlns:pages="clr-namespace:SimpleShellSample.Views.Pages"
-    Shell.FlyoutBehavior="Flyout"
     x:Name="thisShell"
-    Shell.BackgroundColor="White">
+    Shell.BackgroundColor="LightGray">
 
     <!--Shell.NavBarIsVisible="False"-->
     <!--Shell.NavBarIsVisible="False"-->
 
     <Shell.BackButtonBehavior>
-        <BackButtonBehavior IsVisible="False"/>
+        <BackButtonBehavior IsVisible="True" Command="{Binding Source={x:Reference thisShell}, Path=BackCommand}"/>
     </Shell.BackButtonBehavior>
     
     <Shell.TitleView>
         <HorizontalStackLayout>
             <Button Text="Back" Clicked="BackButtonClicked"/>
-            <Label Text="{Binding Source={x:Reference thisShell}, Path=CurrentItem.Title}"/>
         </HorizontalStackLayout>
     </Shell.TitleView>
     

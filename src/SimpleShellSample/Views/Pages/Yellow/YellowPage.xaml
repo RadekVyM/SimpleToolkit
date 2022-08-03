@@ -3,6 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SimpleShellSample.Views.Pages.YellowPage"
              Title="YellowPage">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="First ToolBarItem" Order="Secondary"/>
+        <ToolbarItem Text="Second ToolBarItem" Order="Secondary"/>
+        <ToolbarItem Text="Third ToolBarItem" Order="Secondary"/>
+        <ToolbarItem Text="Fourth ToolBarItem" Order="Secondary"/>
+    </ContentPage.ToolbarItems>
     
     <Grid BackgroundColor="Goldenrod">
         <Label

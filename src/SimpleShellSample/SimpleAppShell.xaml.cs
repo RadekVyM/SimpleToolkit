@@ -1,13 +1,20 @@
 ﻿using Radek.SimpleShell;
 using SimpleShellSample.Views.Pages;
+using System.Windows.Input;
 
 namespace SimpleShellSample;
 
 public partial class SimpleAppShell : SimpleShell
 {
+    public ICommand BackCommand { get; set; }
+
 	public SimpleAppShell()
 	{
-		InitializeComponent();
+        BackCommand = new Command(async () => {
+            await this.GoToAsync("..");
+        });
+		
+        InitializeComponent();
 
         Routing.RegisterRoute(nameof(FirstYellowDetailPage), typeof(FirstYellowDetailPage));
         Routing.RegisterRoute(nameof(SecondYellowDetailPage), typeof(SecondYellowDetailPage));

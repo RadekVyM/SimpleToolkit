@@ -33,11 +33,6 @@ namespace Radek.SimpleShell
             base.OnNavigated(args);
         }
 
-        protected override bool OnBackButtonPressed()
-        {
-            return base.OnBackButtonPressed();
-        }
-
         private static void OnContentChanged(BindableObject bindable, object oldValue, object newValue)
         {
         }
