@@ -21,6 +21,9 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
 
-        <Button Text="Go to first detail page" Clicked="Button_Clicked" Style="{StaticResource YellowPageNavigationButton}"/>
+        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="End">
+            <Button Text="Go to first detail page" Clicked="Button_Clicked" Style="{StaticResource YellowPageNavigationButton}"/>
+            <Button Text="Go to second detail page" Clicked="Button_Clicked_1" Style="{StaticResource YellowPageNavigationButton}"/>
+        </VerticalStackLayout>
     </Grid>
 </ContentPage>

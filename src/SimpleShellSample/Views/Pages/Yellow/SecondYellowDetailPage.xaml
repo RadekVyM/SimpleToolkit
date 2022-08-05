@@ -13,6 +13,6 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
 
-        <Button Text="Go third detail page" Clicked="Button_Clicked" Style="{StaticResource YellowPageNavigationButton}"/>
+        <Button Text="Go to third detail page" Clicked="Button_Clicked" Style="{StaticResource YellowPageNavigationButton}"/>
     </Grid>
 </ContentPage>

@@ -19,6 +19,7 @@
             ContentTemplate="{DataTemplate pages:GreenPage}"
             Route="GreenPage" />
     </Tab>
+
     <Tab Title="Second Tab" Route="SecondTab">
         <ShellContent
             Title="Blue"
@@ -29,4 +30,9 @@
             ContentTemplate="{DataTemplate pages:RedPage}"
             Route="RedPage" />
     </Tab>
+
+    <ShellContent
+            Title="Orange"
+            ContentTemplate="{DataTemplate pages:OrangePage}"
+            Route="OrangePage" />
 </Shell>

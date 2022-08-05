@@ -32,11 +32,28 @@ public partial class SimpleAppShell : SimpleShell
         var menuItems = MenuBarItems;
         var toolbarItems = ToolbarItems;
 
-		await this.GoToAsync($"//{shellItem.Route}");
+        await this.GoToAsync($"///{shellItem.Route}");
     }
 
     private async void BackButtonClicked(object sender, EventArgs e)
     {
         await this.GoToAsync("..");
+    }
+
+    private bool orangeAdded = false;
+
+    private void Button_Clicked_1(object sender, EventArgs e)
+    {
+        if (!orangeAdded)
+        {
+            this.Items.Add(new ShellContent()
+            {
+                Title = "Orange",
+                Route = nameof(OrangePage),
+                ContentTemplate = new DataTemplate(typeof(OrangePage))
+            });
+        }
+
+        orangeAdded = true;
     }
 }

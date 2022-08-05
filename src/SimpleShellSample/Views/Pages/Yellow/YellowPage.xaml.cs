@@ -11,4 +11,9 @@ public partial class YellowPage : ContentPage
     {
         await Shell.Current.GoToAsync(nameof(FirstYellowDetailPage));
     }
+
+    private async void Button_Clicked_1(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync($"/{nameof(FirstYellowDetailPage)}/{nameof(SecondYellowDetailPage)}");
+    }
 }
