@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleShellSample", "Simple
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Radek.SimpleShell", "Radek.SimpleShell\Radek.SimpleShell.csproj", "{86571D5F-B06F-4708-8394-C96256546203}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Radek.SimpleShell.Controls", "Radek.SimpleShell.Controls\Radek.SimpleShell.Controls.csproj", "{EBEE77C4-5F44-41BB-9936-F78DC4560775}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{86571D5F-B06F-4708-8394-C96256546203}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86571D5F-B06F-4708-8394-C96256546203}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86571D5F-B06F-4708-8394-C96256546203}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBEE77C4-5F44-41BB-9936-F78DC4560775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBEE77C4-5F44-41BB-9936-F78DC4560775}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBEE77C4-5F44-41BB-9936-F78DC4560775}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBEE77C4-5F44-41BB-9936-F78DC4560775}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

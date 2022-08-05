@@ -49,6 +49,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\settings.png" />
+	  <None Remove="Resources\Images\speaker.png" />
+	  <None Remove="Resources\Images\star.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Radek.SimpleShell.Controls\Radek.SimpleShell.Controls.csproj" />
 	  <ProjectReference Include="..\Radek.SimpleShell\Radek.SimpleShell.csproj" />
 	</ItemGroup>
 

@@ -32,7 +32,8 @@ public partial class SimpleAppShell : SimpleShell
         var menuItems = MenuBarItems;
         var toolbarItems = ToolbarItems;
 
-        await this.GoToAsync($"///{shellItem.Route}");
+        if (!CurrentState.Location.OriginalString.Contains(shellItem.Route))
+            await this.GoToAsync($"///{shellItem.Route}");
     }
 
     private async void BackButtonClicked(object sender, EventArgs e)

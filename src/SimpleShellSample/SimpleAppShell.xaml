@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:SimpleShellSample"
     xmlns:ss="clr-namespace:Radek.SimpleShell;assembly=Radek.SimpleShell"
+    xmlns:controls="clr-namespace:Radek.SimpleShell.Controls;assembly=Radek.SimpleShell.Controls"
     xmlns:pages="clr-namespace:SimpleShellSample.Views.Pages"
     x:Name="thisShell">
 
@@ -68,10 +69,12 @@
     <Tab Title="First Tab" Route="FirstTab">
         <ShellContent
             Title="Yellow"
+            Icon="star.png"
             ContentTemplate="{DataTemplate pages:YellowPage}"
             Route="YellowPage" />
         <ShellContent
             Title="Green"
+            Icon="settings.png"
             ContentTemplate="{DataTemplate pages:GreenPage}"
             Route="GreenPage" />
     </Tab>
@@ -79,10 +82,12 @@
     <Tab Title="Second Tab" Route="SecondTab">
         <ShellContent
             Title="Blue"
+            Icon="speaker.png"
             ContentTemplate="{DataTemplate pages:BluePage}"
             Route="BluePage" />
         <ShellContent
             Title="Red"
+            Icon="star.png"
             ContentTemplate="{DataTemplate pages:RedPage}"
             Route="RedPage" />
     </Tab>
@@ -94,7 +99,7 @@
     
     
     <ss:SimpleShell.Content>
-        <Grid x:Name="rootContainer" Padding="12" RowDefinitions="auto, auto, 100, *">
+        <Grid x:Name="rootContainer" Padding="12" RowDefinitions="auto, auto, 100, auto, *">
             <HorizontalStackLayout x:Name="appBar" Spacing="10">
                 <Button x:Name="backButton" Text="Back" Clicked="BackButtonClicked" VerticalOptions="Center">
                     <VisualStateManager.VisualStateGroups>
@@ -148,7 +153,9 @@
                 </HorizontalStackLayout>
             </ScrollView>
 
-            <Border Grid.Row="3">
+            <controls:TabView Grid.Row="3" Items="{Binding Source={x:Reference thisShell}, Path=ShellContents}" IconColor="Aqua" IsScrollable="False" MinimumItemWidth="100"/>
+
+            <Border Grid.Row="4">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="10"/>
                 </Border.StrokeShape>
