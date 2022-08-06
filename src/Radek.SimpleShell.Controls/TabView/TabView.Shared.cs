@@ -12,7 +12,22 @@
         private double tabViewHeight;
         private double fontSize;
         private double realMinimalItemWidth;
-        private double itemWidth => double.IsNaN(MinimumItemWidth) ? (IsScrollable ? double.NaN : Width / (Items?.Count() ?? 1)) : Math.Max(MinimumItemWidth, realMinimalItemWidth);
+        private double itemWidth
+        {
+            get
+            {
+                double width = double.NaN;
+
+                if (double.IsNaN(MinimumItemWidth) && !IsScrollable)
+                    width = Width / (Items?.Count() ?? 1);
+                if (!double.IsNaN(MinimumItemWidth) && !IsScrollable)
+                    width = Math.Min(Math.Max(MinimumItemWidth, realMinimalItemWidth), Width / (Items?.Count() ?? 1));
+                if (!double.IsNaN(MinimumItemWidth) && IsScrollable)
+                    width = Math.Max(MinimumItemWidth, realMinimalItemWidth);
+
+                return width;
+            }
+        }
         private double scrollPosition = 0;
         private TextTransform buttonTextTransform;
 
@@ -124,7 +139,8 @@
                 HorizontalOptions = ItemsAlignment,
                 Orientation = ScrollOrientation.Horizontal,
                 HorizontalScrollBarVisibility = GetScrollBarVisibility(),
-                VerticalScrollBarVisibility = ScrollBarVisibility.Never
+                VerticalScrollBarVisibility = ScrollBarVisibility.Never,
+                IsEnabled = IsScrollable
             };
             scrollView.Scrolled += ScrollViewScrolled;
 
@@ -164,13 +180,14 @@
             graphicsView.HeightRequest = tabViewHeight;
             scrollView.HeightRequest = tabViewHeight;
             scrollView.HorizontalOptions = ItemsAlignment;
+            scrollView.IsEnabled = IsScrollable;
             scrollView.HorizontalScrollBarVisibility = GetScrollBarVisibility();
             stackLayout.HeightRequest = tabViewHeight;
 
             foreach (var item in stackLayout)
             {
                 var grid = item as Grid;
-                var image = grid.Children[0] as Image;
+                var image = grid.Children[0] as BitmapIcon;
                 var button = grid.Children[1] as Button;
 
                 grid.HeightRequest = tabViewHeight;
@@ -183,8 +200,9 @@
                 image.HeightRequest = iconSize.Height;
                 image.WidthRequest = iconSize.Width;
                 image.Margin = iconMargin;
+                image.TintColor = IconColor;
 
-                image.ApplyTintToImage(IconColor);
+                //image.ApplyTintToImage(IconColor);
             }
         }
 
@@ -197,7 +215,7 @@
                     HeightRequest = tabViewHeight,
                     WidthRequest = itemWidth
                 };
-                var image = new Image
+                var image = new BitmapIcon
                 {
                     Source = item.Icon,
                     HeightRequest = iconSize.Height,
@@ -205,7 +223,8 @@
                     Margin = iconMargin,
                     HorizontalOptions = LayoutOptions.Center,
                     VerticalOptions = LayoutOptions.Center,
-                    Aspect = Aspect.AspectFill
+                    Aspect = Aspect.AspectFill,
+                    TintColor = IconColor
                 };
                 var button = new Button
                 {

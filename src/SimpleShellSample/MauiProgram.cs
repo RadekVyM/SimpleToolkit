@@ -1,4 +1,5 @@
 ﻿using Radek.SimpleShell;
+using Radek.SimpleShell.Controls;
 
 namespace SimpleShellSample;
 
@@ -18,7 +19,10 @@ public static class MauiProgram
             });
 
         if (UseSimpleShell)
+        {
             builder.AddSimpleShellHandlers();
+            builder.ConfigureSimpleShellControls();
+        }
 
         return builder.Build();
 	}

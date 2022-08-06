@@ -153,7 +153,7 @@
                 </HorizontalStackLayout>
             </ScrollView>
 
-            <controls:TabView Grid.Row="3" Items="{Binding Source={x:Reference thisShell}, Path=ShellContents}" IconColor="Aqua" IsScrollable="False" MinimumItemWidth="100"/>
+            <controls:TabView Grid.Row="3" Items="{Binding Source={x:Reference thisShell}, Path=ShellContents}" IconColor="DarkGray" IsScrollable="False" MinimumItemWidth="100"/>
 
             <Border Grid.Row="4">
                 <Border.StrokeShape>

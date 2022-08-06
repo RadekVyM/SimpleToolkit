@@ -21,6 +21,8 @@
 
         public static readonly BindableProperty ContentProperty = BindableProperty.Create(nameof(Content), typeof(IView), typeof(SimpleShell), propertyChanged: OnContentChanged);
         public static readonly BindableProperty CurrentPageProperty = BindableProperty.Create(nameof(CurrentPage), typeof(Page), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
+        public static readonly BindableProperty CurrentShellContentProperty = BindableProperty.Create(nameof(CurrentShellContent), typeof(ShellContent), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
+        public static readonly BindableProperty CurrentShellSectionProperty = BindableProperty.Create(nameof(CurrentShellSection), typeof(ShellSection), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
         public static readonly BindableProperty ShellSectionsProperty = BindableProperty.Create(nameof(ShellSections), typeof(IReadOnlyList<ShellSection>), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
         public static readonly BindableProperty ShellContentsProperty = BindableProperty.Create(nameof(ShellContents), typeof(IReadOnlyList<ShellContent>), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
 
@@ -34,6 +36,18 @@
         {
             get => (Page)GetValue(CurrentPageProperty);
             private set => SetValue(CurrentPageProperty, value);
+        }
+
+        public ShellContent CurrentShellContent
+        {
+            get => (ShellContent)GetValue(CurrentShellContentProperty);
+            private set => SetValue(CurrentShellContentProperty, value);
+        }
+
+        public ShellSection CurrentShellSection
+        {
+            get => (ShellSection)GetValue(CurrentShellSectionProperty);
+            private set => SetValue(CurrentShellSectionProperty, value);
         }
 
         public IReadOnlyList<ShellSection> ShellSections
@@ -114,6 +128,8 @@
             SetDefaultShellPropertyValues();
 
             CurrentPage = base.CurrentPage;
+            CurrentShellSection = CurrentItem?.CurrentItem;
+            CurrentShellContent = CurrentItem?.CurrentItem?.CurrentItem;
             // If BackButtonBehavior is not set on CurrentPage, set BackButtonBehavior of the Shell
             if (!CurrentPage.IsSet(Shell.BackButtonBehaviorProperty))
             {
