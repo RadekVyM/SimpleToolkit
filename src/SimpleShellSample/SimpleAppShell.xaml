@@ -13,22 +13,22 @@
         <VisualStateGroup x:Name="SimplePageStates">
             <VisualState x:Name="SimplePageState">
                 <VisualState.Setters>
-                    <Setter TargetName="backButton" Property="Button.BackgroundColor" Value="Black"/>
+                    <Setter TargetName="addButton" Property="Button.Background" Value="Black"/>
                 </VisualState.Setters>
             </VisualState>
-            <VisualState x:Name="SimplePageState.YellowPage">
+            <VisualState x:Name="SimplePageState.FirstYellowDetailPage">
                 <VisualState.Setters>
-                    <Setter TargetName="backButton" Property="Button.BackgroundColor" Value="Goldenrod"/>
+                    <Setter TargetName="addButton" Property="Button.Background" Value="Goldenrod"/>
                 </VisualState.Setters>
             </VisualState>
             <VisualState x:Name="SimplePageState.RedPage">
                 <VisualState.Setters>
-                    <Setter TargetName="backButton" Property="Button.BackgroundColor" Value="DarkRed"/>
+                    <Setter TargetName="addButton" Property="Button.Background" Value="DarkRed"/>
                 </VisualState.Setters>
             </VisualState>
             <VisualState x:Name="SimplePageState.FirstGreenDetailPage">
                 <VisualState.Setters>
-                    <Setter TargetName="backButton" Property="Button.BackgroundColor" Value="Green"/>
+                    <Setter TargetName="addButton" Property="Button.Background" Value="Green"/>
                 </VisualState.Setters>
             </VisualState>
         </VisualStateGroup>
@@ -66,32 +66,47 @@
     </Shell.SearchHandler>
     
     
-    <Tab Title="First Tab" Route="FirstTab">
+    <Tab Title="Flame tab" Route="FirstTab"
+         Icon="flame_empty.png"
+         controls:SimpleShell.SelectedIcon="flame_filled.png">
         <ShellContent
             Title="Yellow"
-            Icon="star.png"
+            Icon="flame_empty.png"
+            controls:SimpleShell.SelectedIcon="flame_filled.png"
             ContentTemplate="{DataTemplate pages:YellowPage}"
             Route="YellowPage" />
         <ShellContent
             Title="Green"
-            Icon="settings.png"
+            Icon="bird_empty.png"
+            controls:SimpleShell.SelectedIcon="bird_filled.png"
             ContentTemplate="{DataTemplate pages:GreenPage}"
             Route="GreenPage" />
     </Tab>
     
-    <Tab Title="Second Tab" Route="SecondTab">
+    <Tab Title="Case tab" Route="SecondTab"
+         Icon="case_empty.png"
+         controls:SimpleShell.SelectedIcon="case_filled.png">
         <ShellContent
             Title="Blue"
-            Icon="speaker.png"
+            Icon="case_empty.png"
+            controls:SimpleShell.SelectedIcon="case_filled.png"
             ContentTemplate="{DataTemplate pages:BluePage}"
             Route="BluePage" />
         <ShellContent
             Title="Red"
-            Icon="star.png"
+            Icon="avatar_empty.png"
+            controls:SimpleShell.SelectedIcon="avatar_filled.png"
             ContentTemplate="{DataTemplate pages:RedPage}"
             Route="RedPage" />
     </Tab>
 
+    <ShellContent
+            Title="Purple"
+            Icon="avatar_empty.png"
+            controls:SimpleShell.SelectedIcon="avatar_filled.png"
+            ContentTemplate="{DataTemplate pages:PurplePage}"
+            Route="PurplePage" />
+    
     <!--<ShellContent
             Title="Orange"
             ContentTemplate="{DataTemplate pages:OrangePage}"
@@ -99,8 +114,8 @@
     
     
     <ss:SimpleShell.Content>
-        <Grid x:Name="rootContainer" Padding="12" RowDefinitions="auto, auto, 100, auto, *">
-            <HorizontalStackLayout x:Name="appBar" Spacing="10">
+        <Grid x:Name="rootContainer" RowDefinitions="auto, auto, auto, *, auto">
+            <HorizontalStackLayout x:Name="appBar" Spacing="10" Padding="12">
                 <Button x:Name="backButton" Text="Back" Clicked="BackButtonClicked" VerticalOptions="Center">
                     <VisualStateManager.VisualStateGroups>
                         <!-- If I want to override default VisualStateGroup in Styles.xaml, I have to use VisualStateGroupList. See https://github.com/dotnet/maui/issues/8003 -->
@@ -120,11 +135,11 @@
                         </VisualStateGroupList>
                     </VisualStateManager.VisualStateGroups>
                 </Button>
-                <Button Text="Add" Clicked="Button_Clicked_1" VerticalOptions="Center" BackgroundColor="Black"/>
+                <Button x:Name="addButton" Text="Add" Clicked="Button_Clicked_1" VerticalOptions="Center" BackgroundColor="Black"/>
                 <Label Text="{Binding Source={x:Reference thisShell}, Path=CurrentPage.Title}" VerticalOptions="Center"/>
             </HorizontalStackLayout>
 
-            <ScrollView Grid.Row="1" Orientation="Horizontal" Padding="0" Margin="0">
+            <ScrollView Grid.Row="1" Orientation="Horizontal" Padding="12,0" Margin="0">
                 <HorizontalStackLayout BindableLayout.ItemsSource="{Binding Source={x:Reference thisShell}, Path=CurrentPage.ToolbarItems}" Spacing="10" Margin="0,10">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="ToolbarItem">
@@ -133,34 +148,35 @@
                     </BindableLayout.ItemTemplate>
                 </HorizontalStackLayout>
             </ScrollView>
-            
-            <ScrollView Grid.Row="2" Orientation="Horizontal" Padding="0" Margin="0">
-                <HorizontalStackLayout VerticalOptions="Center" HeightRequest="100" Spacing="10" BindableLayout.ItemsSource="{Binding Source={x:Reference thisShell}, Path=ShellSections}">
+
+            <ScrollView Grid.Row="2" Orientation="Horizontal" Padding="12,0" Margin="0">
+                <HorizontalStackLayout VerticalOptions="Center" Spacing="10" BindableLayout.ItemsSource="{Binding Source={x:Reference thisShell}, Path=CurrentShellSection.Items}">
                     <BindableLayout.ItemTemplate>
-                        <DataTemplate x:DataType="ShellSection">
-                            <VerticalStackLayout MinimumWidthRequest="150" VerticalOptions="Center">
-                                <Button Text="{Binding Title}" Clicked="Button_Clicked" Background="DarkCyan"/>
-                                <HorizontalStackLayout BindableLayout.ItemsSource="{Binding Items}">
-                                    <BindableLayout.ItemTemplate>
-                                        <DataTemplate x:DataType="BaseShellItem">
-                                            <Button Text="{Binding Title}" Clicked="Button_Clicked" MinimumWidthRequest="75" Background="DarkCyan"/>
-                                        </DataTemplate>
-                                    </BindableLayout.ItemTemplate>
-                                </HorizontalStackLayout>
-                            </VerticalStackLayout>
+                        <DataTemplate x:DataType="BaseShellItem">
+                            <Button Text="{Binding Title}" Clicked="Button_Clicked" Background="DarkCyan"/>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </HorizontalStackLayout>
             </ScrollView>
-
-            <controls:TabView Grid.Row="3" Items="{Binding Source={x:Reference thisShell}, Path=ShellContents}" IconColor="DarkGray" IsScrollable="False" MinimumItemWidth="100"/>
-
-            <Border Grid.Row="4">
+            
+            <Border Grid.Row="3" Stroke="Transparent" StrokeThickness="0">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="10"/>
+                    <RoundRectangle CornerRadius="10,10,0,0"/>
                 </Border.StrokeShape>
                 <ss:SimpleNavigationHost/>
             </Border>
+            
+            <controls:TabBar Grid.Row="4" 
+                             Items="{Binding Source={x:Reference thisShell}, Path=ShellSections}" 
+                             SelectedItem="{Binding Source={x:Reference thisShell}, Path=CurrentShellSection}" 
+                             ItemsAlignment="Center"
+                             IconColor="#1d192b"
+                             TextColor="#1d192b"
+                             Background="#f3edf7"
+                             PrimaryBrush="#e8def8"
+                             IsScrollable="False"
+                             ItemWidthRequest="100"
+                             ItemSelected="TabView_ItemSelected"/>
         </Grid>
     </ss:SimpleShell.Content>
 

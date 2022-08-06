@@ -27,13 +27,14 @@ public partial class SimpleAppShell : SimpleShell
         var button = sender as Button;
         var shellItem = button.BindingContext as BaseShellItem;
         
-        var items = Items;
-        var flyoutItems = FlyoutItems;
-        var menuItems = MenuBarItems;
-        var toolbarItems = ToolbarItems;
-
         if (!CurrentState.Location.OriginalString.Contains(shellItem.Route))
             await this.GoToAsync($"///{shellItem.Route}");
+    }
+
+    private async void TabView_ItemSelected(object sender, Radek.SimpleShell.Controls.TabViewItemSelectedEventArgs e)
+    {
+        if (!CurrentState.Location.OriginalString.Contains(e.ShellItem.Route))
+            await this.GoToAsync($"///{e.ShellItem.Route}");
     }
 
     private async void BackButtonClicked(object sender, EventArgs e)
