@@ -10,9 +10,10 @@
         private Border border;
         private Size iconSize;
         private Thickness iconMargin;
+        private Thickness itemStackLayoutPadding;
         private double tabBarHeight;
         private double fontSize;
-        private double stackLayoutSpacing;
+        private double itemStackLayoutSpacing;
         private double realMinimumItemWidth;
         private double itemWidth
         {
@@ -20,7 +21,7 @@
             {
                 double width = double.NaN;
 
-                if (double.IsNaN(ItemWidthRequest) && !IsScrollable)
+                if (double.IsNaN(ItemWidthRequest) && !IsScrollable && DesignLanguage is not DesignLanguage.Fluent)
                     width = Math.Floor(Width / (Items?.Count() ?? 1));
                 if (!double.IsNaN(ItemWidthRequest) && !IsScrollable)
                     width = Math.Min(Math.Max(ItemWidthRequest, realMinimumItemWidth), Math.Floor(Width / (Items?.Count() ?? 1)));
@@ -34,7 +35,7 @@
         private TextTransform labelTextTransform;
         private FontAttributes labelAttributes;
         private FontAttributes labelSelectionAttributes;
-        private StackOrientation stackLayoutOrientation = StackOrientation.Vertical;
+        private StackOrientation itemStackLayoutOrientation = StackOrientation.Vertical;
 
         public event TabViewItemSelectedEventHandler ItemSelected;
 
@@ -168,6 +169,9 @@
                 case DesignLanguage.Material3:
                     UpdateDrawableToMaterial3();
                     break;
+                case DesignLanguage.Fluent:
+                    UpdateDrawableToFluent();
+                    break;
             }
 
             graphicsView?.Invalidate();
@@ -258,8 +262,9 @@
                 };
                 var stackLayout = new StackLayout
                 {
-                    Orientation = stackLayoutOrientation,
-                    Spacing = stackLayoutSpacing,
+                    Padding = itemStackLayoutPadding,
+                    Orientation = itemStackLayoutOrientation,
+                    Spacing = itemStackLayoutSpacing,
                     HorizontalOptions = LayoutOptions.Center,
                     VerticalOptions = LayoutOptions.Fill,
                     Style = new Style(typeof(StackLayout)),
@@ -322,6 +327,9 @@
                 case DesignLanguage.Material3:
                     UpdateValuesToMaterial3();
                     break;
+                case DesignLanguage.Fluent:
+                    UpdateValuesToFluent();
+                    break;
             }
 
             UpdateControls();
@@ -350,6 +358,7 @@
                 if (border.HorizontalOptions.Alignment != ItemsAlignment)
                     border.HorizontalOptions = new LayoutOptions(ItemsAlignment, false);
             }
+
             stackLayout.HeightRequest = tabBarHeight;
 
             foreach (var item in stackLayout.Children)
@@ -364,19 +373,11 @@
 
                 grid.HeightRequest = tabBarHeight;
                 grid.WidthRequest = itemWidth;
-                stackLayout.Orientation = stackLayoutOrientation;
-                stackLayout.Spacing = stackLayoutSpacing;
                 button.HeightRequest = tabBarHeight;
                 label.TextTransform = labelTextTransform;
                 label.TextColor = IsSelected(shellItem) ? TextSelectionColor : TextColor;
                 label.FontSize = fontSize;
                 label.FontAttributes = IsSelected(shellItem) ? labelSelectionAttributes : labelAttributes;
-                image.HeightRequest = iconSize.Height;
-                image.WidthRequest = iconSize.Width;
-                if (image.Margin != iconMargin)
-                    image.Margin = iconMargin;
-                image.TintColor = IsSelected(shellItem) ? IconSelectionColor : IconColor;
-                image.Background = Colors.Red;
 
                 if (IsSelected(shellItem))
                 {
@@ -388,6 +389,18 @@
                 {
                     image.Source = shellItem.Icon;
                 }
+
+                image.HeightRequest = iconSize.Height;
+                image.WidthRequest = image.Source is not null ? iconSize.Width : 0;
+                if (image.Margin != iconMargin)
+                    image.Margin = iconMargin;
+                image.TintColor = IsSelected(shellItem) ? IconSelectionColor : IconColor;
+                image.Background = Colors.Red;
+
+                stackLayout.Orientation = itemStackLayoutOrientation;
+                stackLayout.Spacing = image.Source is null && itemStackLayoutOrientation is StackOrientation.Horizontal ? 0 : itemStackLayoutSpacing;
+                if (stackLayout.Padding != itemStackLayoutPadding)
+                    stackLayout.Padding = itemStackLayoutPadding;
             }
 
             InvalidateGraphicsView();
@@ -478,9 +491,35 @@
             tabBar.UpdateValuesAccordingToLanguage();
         }
 
-        private static void OnSelectedItemChanged(BindableObject bindable, object oldValue, object newValue)
+        private static async void OnSelectedItemChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var tabBar = bindable as TabBar;
+
+            if (tabBar.IsScrollable)
+            {
+
+                var element = tabBar.stackLayout.Children.Cast<Element>().FirstOrDefault(e => e.BindingContext == newValue);
+
+                //double scrollX = 0;
+                //if (tabBar.stackLayout is not null)
+                //{
+                //    foreach (var child in tabBar.stackLayout.Children)
+                //    {
+                //        var view = child as View;
+
+                //        if (view.BindingContext == newValue)
+                //            break;
+
+                //        scrollX += view.Width;
+                //    }
+                //}
+
+                _ = tabBar.scrollView.ScrollToAsync(element, ScrollToPosition.MakeVisible, true);
+            }
+
+            if (tabBar.DesignLanguage is DesignLanguage.Fluent)
+                await tabBar.AnimateFluentToSelected();
+
             tabBar.UpdateControls();
         }
 

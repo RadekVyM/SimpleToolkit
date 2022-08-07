@@ -5,16 +5,18 @@
         private void UpdateValuesToCupertino()
         {
             var isCompact = itemWidth > 180;
+
+            itemStackLayoutPadding = new Thickness(0);
             iconSize = isCompact ? new Size(18, 18) : new Size(25, 25);
             iconMargin = new Thickness(0, isCompact ? 0 : 8, 0, 0);
-            stackLayoutSpacing = isCompact ? 8 : 4;
+            itemStackLayoutSpacing = isCompact ? 8 : 4;
             tabBarHeight = isCompact ? 56 : 64;
             realMinimumItemWidth = 64;
             fontSize = 12;
             labelTextTransform = TextTransform.None;
             labelAttributes = FontAttributes.None;
             labelSelectionAttributes = FontAttributes.None;
-            stackLayoutOrientation = isCompact ? StackOrientation.Horizontal : StackOrientation.Vertical;
+            itemStackLayoutOrientation = isCompact ? StackOrientation.Horizontal : StackOrientation.Vertical;
         }
 
         private void UpdateDrawableToCupertino()

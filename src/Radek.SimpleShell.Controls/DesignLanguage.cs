@@ -2,6 +2,6 @@
 {
     public enum DesignLanguage
     {
-        Material3, Cupertino
+        Material3, Cupertino, Fluent
     }
 }

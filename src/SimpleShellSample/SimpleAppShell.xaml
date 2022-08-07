@@ -28,6 +28,16 @@
             <Setter Property="Background" Value="#ffffff"/>
             <Setter Property="DesignLanguage" Value="Cupertino"/>
         </Style>
+        
+        <Style x:Key="Fluent" TargetType="controls:TabBar">
+            <Setter Property="IconColor" Value="Black"/>
+            <Setter Property="IconSelectionColor" Value="Black"/>
+            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="TextSelectionColor" Value="Black"/>
+            <Setter Property="Background" Value="#f3f3f3"/>
+            <Setter Property="PrimaryBrush" Value="#3b4c73"/>
+            <Setter Property="DesignLanguage" Value="Fluent"/>
+        </Style>
     </ss:SimpleShell.Resources>
 
     <VisualStateManager.VisualStateGroups>
@@ -35,7 +45,7 @@
             <VisualState x:Name="SimplePageState">
                 <VisualState.Setters>
                     <Setter TargetName="addButton" Property="Button.Background" Value="Black"/>
-                    <Setter TargetName="tabBar" Property="Style" Value="{StaticResource Material}"/>
+                    <Setter TargetName="tabBar" Property="Style" Value="{StaticResource Fluent}"/>
                 </VisualState.Setters>
             </VisualState>
             <VisualState x:Name="SimplePageState.FirstYellowDetailPage">
@@ -204,8 +214,10 @@
                              SelectedItem="{Binding Source={x:Reference thisShell}, Path=CurrentShellSection}" 
                              ItemsAlignment="Center"
                              IsScrollable="False"
-                             ItemSelected="TabView_ItemSelected"
-                             ItemWidthRequest="{OnPlatform WinUI=200}"/>
+                             ItemSelected="TabView_ItemSelected"/>
+
+            <!--ItemWidthRequest="{OnPlatform WinUI=200}"-->
+
         </Grid>
     </ss:SimpleShell.Content>
 
