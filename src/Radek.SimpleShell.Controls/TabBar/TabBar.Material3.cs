@@ -6,11 +6,14 @@
         {
             iconSize = new Size(20, 20);
             iconMargin = new Thickness(0, 12 + ((32 - iconSize.Height) / 2d), 0, 0);
-            buttonPadding = new Thickness(0, 32, 0, 0);
+            stackLayoutSpacing = 8;
             tabBarHeight = 76;
-            realMinimalItemWidth = 64;
+            realMinimumItemWidth = 64;
             fontSize = 12;
-            buttonTextTransform = TextTransform.None;
+            labelTextTransform = TextTransform.None;
+            labelAttributes = FontAttributes.None;
+            labelSelectionAttributes = FontAttributes.Bold;
+            stackLayoutOrientation = StackOrientation.Vertical;
         }
 
         private void UpdateDrawableToMaterial3()
@@ -73,7 +76,7 @@
 
                     canvas.FillRoundedRectangle(pillRect, pillHeight / 2);
 
-                    canvas.ResetState();
+                    canvas.RestoreState();
                 }
             }
         }

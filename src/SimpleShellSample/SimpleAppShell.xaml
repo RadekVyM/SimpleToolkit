@@ -9,11 +9,33 @@
     xmlns:pages="clr-namespace:SimpleShellSample.Views.Pages"
     x:Name="thisShell">
 
+    <ss:SimpleShell.Resources>
+        <Style x:Key="Material" TargetType="controls:TabBar">
+            <Setter Property="IconColor" Value="#1d192b"/>
+            <Setter Property="IconSelectionColor" Value="#1d192b"/>
+            <Setter Property="TextColor" Value="#1d192b"/>
+            <Setter Property="TextSelectionColor" Value="#1d192b"/>
+            <Setter Property="Background" Value="#f3edf7"/>
+            <Setter Property="PrimaryBrush" Value="#e8def8"/>
+            <Setter Property="DesignLanguage" Value="Material3"/>
+        </Style>
+
+        <Style x:Key="Cupertino" TargetType="controls:TabBar">
+            <Setter Property="IconColor" Value="#999a99"/>
+            <Setter Property="IconSelectionColor" Value="#0279fc"/>
+            <Setter Property="TextColor" Value="#999a99"/>
+            <Setter Property="TextSelectionColor" Value="#0279fc"/>
+            <Setter Property="Background" Value="#ffffff"/>
+            <Setter Property="DesignLanguage" Value="Cupertino"/>
+        </Style>
+    </ss:SimpleShell.Resources>
+
     <VisualStateManager.VisualStateGroups>
         <VisualStateGroup x:Name="SimplePageStates">
             <VisualState x:Name="SimplePageState">
                 <VisualState.Setters>
                     <Setter TargetName="addButton" Property="Button.Background" Value="Black"/>
+                    <Setter TargetName="tabBar" Property="Style" Value="{StaticResource Material}"/>
                 </VisualState.Setters>
             </VisualState>
             <VisualState x:Name="SimplePageState.FirstYellowDetailPage">
@@ -21,9 +43,16 @@
                     <Setter TargetName="addButton" Property="Button.Background" Value="Goldenrod"/>
                 </VisualState.Setters>
             </VisualState>
+            <VisualState x:Name="SimplePageState.GreenPage">
+                <VisualState.Setters>
+                    <Setter TargetName="addButton" Property="Button.Background" Value="DarkRed"/>
+                    <Setter TargetName="tabBar" Property="Style" Value="{StaticResource Cupertino}"/>
+                </VisualState.Setters>
+            </VisualState>
             <VisualState x:Name="SimplePageState.RedPage">
                 <VisualState.Setters>
                     <Setter TargetName="addButton" Property="Button.Background" Value="DarkRed"/>
+                    <Setter TargetName="tabBar" Property="Style" Value="{StaticResource Cupertino}"/>
                 </VisualState.Setters>
             </VisualState>
             <VisualState x:Name="SimplePageState.FirstGreenDetailPage">
@@ -100,12 +129,16 @@
             Route="RedPage" />
     </Tab>
 
-    <ShellContent
+    <Tab Title="Purple"
+         Icon="avatar_empty.png"
+         controls:SimpleShell.SelectedIcon="avatar_filled.png">
+        <ShellContent
             Title="Purple"
             Icon="avatar_empty.png"
             controls:SimpleShell.SelectedIcon="avatar_filled.png"
             ContentTemplate="{DataTemplate pages:PurplePage}"
             Route="PurplePage" />
+    </Tab>
     
     <!--<ShellContent
             Title="Orange"
@@ -165,18 +198,14 @@
                 </Border.StrokeShape>
                 <ss:SimpleNavigationHost/>
             </Border>
-            
-            <controls:TabBar Grid.Row="4" 
+
+            <controls:TabBar x:Name="tabBar" Grid.Row="4" 
                              Items="{Binding Source={x:Reference thisShell}, Path=ShellSections}" 
                              SelectedItem="{Binding Source={x:Reference thisShell}, Path=CurrentShellSection}" 
                              ItemsAlignment="Center"
-                             IconColor="#1d192b"
-                             TextColor="#1d192b"
-                             Background="#f3edf7"
-                             PrimaryBrush="#e8def8"
                              IsScrollable="False"
-                             ItemWidthRequest="100"
-                             ItemSelected="TabView_ItemSelected"/>
+                             ItemSelected="TabView_ItemSelected"
+                             ItemWidthRequest="{OnPlatform WinUI=200}"/>
         </Grid>
     </ss:SimpleShell.Content>
 

@@ -10,10 +10,10 @@
         private Border border;
         private Size iconSize;
         private Thickness iconMargin;
-        private Thickness buttonPadding;
         private double tabBarHeight;
         private double fontSize;
-        private double realMinimalItemWidth;
+        private double stackLayoutSpacing;
+        private double realMinimumItemWidth;
         private double itemWidth
         {
             get
@@ -23,15 +23,18 @@
                 if (double.IsNaN(ItemWidthRequest) && !IsScrollable)
                     width = Math.Floor(Width / (Items?.Count() ?? 1));
                 if (!double.IsNaN(ItemWidthRequest) && !IsScrollable)
-                    width = Math.Min(Math.Max(ItemWidthRequest, realMinimalItemWidth), Math.Floor(Width / (Items?.Count() ?? 1)));
+                    width = Math.Min(Math.Max(ItemWidthRequest, realMinimumItemWidth), Math.Floor(Width / (Items?.Count() ?? 1)));
                 if (!double.IsNaN(ItemWidthRequest) && IsScrollable)
-                    width = Math.Max(ItemWidthRequest, realMinimalItemWidth);
+                    width = Math.Max(ItemWidthRequest, realMinimumItemWidth);
 
                 return width;
             }
         }
         private double scrollPosition = 0;
-        private TextTransform buttonTextTransform;
+        private TextTransform labelTextTransform;
+        private FontAttributes labelAttributes;
+        private FontAttributes labelSelectionAttributes;
+        private StackOrientation stackLayoutOrientation = StackOrientation.Vertical;
 
         public event TabViewItemSelectedEventHandler ItemSelected;
 
@@ -42,7 +45,9 @@
         public static readonly BindableProperty ItemsAlignmentProperty = BindableProperty.Create(nameof(ItemsAlignment), typeof(LayoutAlignment), typeof(TabBar), propertyChanged: OnItemsAlignmentChanged, defaultValue: LayoutAlignment.Center);
         public static readonly BindableProperty IsScrollableProperty = BindableProperty.Create(nameof(IsScrollable), typeof(bool), typeof(TabBar), propertyChanged: OnIsScrollableChanged, defaultValue: false);
         public static readonly BindableProperty IconColorProperty = BindableProperty.Create(nameof(IconColor), typeof(Color), typeof(TabBar), propertyChanged: OnIconColorChanged, defaultValue: null);
+        public static readonly BindableProperty IconSelectionColorProperty = BindableProperty.Create(nameof(IconSelectionColor), typeof(Color), typeof(TabBar), propertyChanged: OnIconColorChanged, defaultValue: null);
         public static readonly BindableProperty TextColorProperty = BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(TabBar), propertyChanged: OnTextColorChanged, defaultValue: Colors.Black);
+        public static readonly BindableProperty TextSelectionColorProperty = BindableProperty.Create(nameof(TextSelectionColor), typeof(Color), typeof(TabBar), propertyChanged: OnTextColorChanged, defaultValue: Colors.Black);
         public static readonly BindableProperty PrimaryBrushProperty = BindableProperty.Create(nameof(PrimaryBrush), typeof(Brush), typeof(TabBar), propertyChanged: OnPrimaryBrushChanged, defaultValue: null);
 
         public virtual IEnumerable<BaseShellItem> Items
@@ -87,10 +92,22 @@
             set => SetValue(IconColorProperty, value);
         }
 
+        public virtual Color IconSelectionColor
+        {
+            get => (Color)GetValue(IconSelectionColorProperty);
+            set => SetValue(IconSelectionColorProperty, value);
+        }
+
         public virtual Color TextColor
         {
             get => (Color)GetValue(TextColorProperty);
             set => SetValue(TextColorProperty, value);
+        }
+
+        public virtual Color TextSelectionColor
+        {
+            get => (Color)GetValue(TextSelectionColorProperty);
+            set => SetValue(TextSelectionColorProperty, value);
         }
 
         public virtual Brush PrimaryBrush
@@ -102,9 +119,11 @@
 
         public TabBar()
         {
-            HandlerChanged += TabViewHandlerChanged;
-            Unloaded += TabViewUnloaded;
-            SizeChanged += TabViewSizeChanged;
+            HorizontalOptions = LayoutOptions.Fill;
+
+            HandlerChanged += TabBarHandlerChanged;
+            Unloaded += TabBarUnloaded;
+            SizeChanged += TabBarSizeChanged;
         }
 
 
@@ -126,12 +145,17 @@
                 foreach (var item in Items)
                 {
                     i++;
-                    if (item == SelectedItem)
+                    if (IsSelected(item))
                         break;
                 }
             }
 
             return i;
+        }
+
+        private bool IsSelected(BindableObject bindableObject)
+        {
+            return bindableObject.BindingContext == SelectedItem || bindableObject == SelectedItem;
         }
 
         private void InvalidateGraphicsView()
@@ -154,8 +178,8 @@
             if (scrollView is null || border is null)
                 return;
 
-            scrollView.SizeChanged -= TabViewSizeChanged;
-            border.SizeChanged -= TabViewSizeChanged;
+            scrollView.SizeChanged -= TabBarSizeChanged;
+            border.SizeChanged -= TabBarSizeChanged;
 
             if (IsScrollable)
             {
@@ -164,7 +188,7 @@
                 border.Content = null;
                 scrollView.Content = stackLayout;
 
-                scrollView.SizeChanged += TabViewSizeChanged;
+                scrollView.SizeChanged += TabBarSizeChanged;
             }
             else
             {
@@ -173,7 +197,7 @@
                 scrollView.Content = null;
                 border.Content = stackLayout;
 
-                border.SizeChanged += TabViewSizeChanged;
+                border.SizeChanged += TabBarSizeChanged;
             }
         }
 
@@ -181,7 +205,8 @@
         {
             rootGrid = new Grid
             {
-                Style = new Style(typeof(Grid))
+                Style = new Style(typeof(Grid)),
+                Background = Colors.Transparent
             };
             graphicsView = new GraphicsView
             {
@@ -215,7 +240,76 @@
 
             SwapScrollView();
 
+            CompressedLayout.SetIsHeadless(rootGrid, true);
+
             Content = rootGrid;
+        }
+
+        private IEnumerable<IView> CreateItemViews(IEnumerable<BaseShellItem> items)
+        {
+            foreach (var item in items)
+            {
+                var grid = new Grid
+                {
+                    HeightRequest = tabBarHeight,
+                    WidthRequest = itemWidth,
+                    Style = new Style(typeof(Grid)),
+                    BindingContext = item
+                };
+                var stackLayout = new StackLayout
+                {
+                    Orientation = stackLayoutOrientation,
+                    Spacing = stackLayoutSpacing,
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Fill,
+                    Style = new Style(typeof(StackLayout)),
+                    BindingContext = item
+                };
+                var button = new Button
+                {
+                    HorizontalOptions = LayoutOptions.Fill,
+                    HeightRequest = tabBarHeight,
+                    BackgroundColor = Colors.Transparent,
+                    BorderWidth = 0,
+                    Style = new Style(typeof(Button)),
+                    BindingContext = item
+                };
+
+                var label = new Label
+                {
+                    Text = item.Title,
+                    TextColor = TextColor,
+                    FontSize = fontSize,
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center,
+                    Style = new Style(typeof(Label)),
+                    BindingContext = item
+                };
+                var image = new BitmapIcon
+                {
+                    Source = item.Icon,
+                    HeightRequest = iconSize.Height,
+                    WidthRequest = iconSize.Width,
+                    Margin = iconMargin,
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center,
+                    Aspect = Aspect.AspectFill,
+                    TintColor = IconColor,
+                    Style = new Style(typeof(BitmapIcon)),
+                    BindingContext = item
+                };
+
+                stackLayout.Children.Add(image);
+                stackLayout.Children.Add(label);
+
+                grid.Children.Add(stackLayout);
+                grid.Children.Add(button);
+
+                CompressedLayout.SetIsHeadless(stackLayout, true);
+                CompressedLayout.SetIsHeadless(grid, true);
+
+                yield return grid;
+            }
         }
 
         private void UpdateValuesAccordingToLanguage()
@@ -246,37 +340,45 @@
             if (IsScrollable)
             {
                 scrollView.HeightRequest = tabBarHeight;
-                scrollView.HorizontalOptions = new LayoutOptions(ItemsAlignment, false);
+                if (scrollView.HorizontalOptions.Alignment != ItemsAlignment)
+                    scrollView.HorizontalOptions = new LayoutOptions(ItemsAlignment, false);
                 scrollView.HorizontalScrollBarVisibility = GetScrollBarVisibility();
             }
             else
             {
                 border.HeightRequest = tabBarHeight;
-                border.HorizontalOptions = new LayoutOptions(ItemsAlignment, false);
+                if (border.HorizontalOptions.Alignment != ItemsAlignment)
+                    border.HorizontalOptions = new LayoutOptions(ItemsAlignment, false);
             }
             stackLayout.HeightRequest = tabBarHeight;
 
             foreach (var item in stackLayout.Children)
             {
                 var grid = item as Grid;
-                var image = grid.Children[0] as BitmapIcon;
+                var stackLayout = grid.Children[0] as StackLayout;
                 var button = grid.Children[1] as Button;
+                var image = stackLayout.Children[0] as BitmapIcon;
+                var label = stackLayout.Children[1] as Label;
 
                 var shellItem = grid.BindingContext as BaseShellItem;
 
                 grid.HeightRequest = tabBarHeight;
                 grid.WidthRequest = itemWidth;
+                stackLayout.Orientation = stackLayoutOrientation;
+                stackLayout.Spacing = stackLayoutSpacing;
                 button.HeightRequest = tabBarHeight;
-                button.Padding = buttonPadding;
-                button.TextColor = TextColor;
-                button.TextTransform = buttonTextTransform;
-                button.FontSize = fontSize;
-                button.FontAttributes = button.BindingContext == SelectedItem ? FontAttributes.Bold : FontAttributes.None;
+                label.TextTransform = labelTextTransform;
+                label.TextColor = IsSelected(shellItem) ? TextSelectionColor : TextColor;
+                label.FontSize = fontSize;
+                label.FontAttributes = IsSelected(shellItem) ? labelSelectionAttributes : labelAttributes;
                 image.HeightRequest = iconSize.Height;
                 image.WidthRequest = iconSize.Width;
-                image.Margin = iconMargin;
-                image.TintColor = IconColor;
-                if (shellItem == SelectedItem)
+                if (image.Margin != iconMargin)
+                    image.Margin = iconMargin;
+                image.TintColor = IsSelected(shellItem) ? IconSelectionColor : IconColor;
+                image.Background = Colors.Red;
+
+                if (IsSelected(shellItem))
                 {
                     var selectedIcon = SimpleShell.GetSelectedIcon(shellItem);
                     if (selectedIcon is not null)
@@ -289,50 +391,6 @@
             }
 
             InvalidateGraphicsView();
-        }
-
-        private IEnumerable<IView> CreateItemViews(IEnumerable<BaseShellItem> items)
-        {
-            foreach (var item in items)
-            {
-                var grid = new Grid
-                {
-                    HeightRequest = tabBarHeight,
-                    WidthRequest = itemWidth,
-                    Style = new Style(typeof(Grid)),
-                    BindingContext = item
-                };
-                var image = new BitmapIcon
-                {
-                    Source = item.Icon,
-                    HeightRequest = iconSize.Height,
-                    WidthRequest = iconSize.Width,
-                    Margin = iconMargin,
-                    HorizontalOptions = LayoutOptions.Center,
-                    VerticalOptions = LayoutOptions.Start,
-                    Aspect = Aspect.AspectFill,
-                    TintColor = IconColor,
-                    Style = new Style(typeof(BitmapIcon)),
-                    BindingContext = item
-                };
-                var button = new Button
-                {
-                    Text = item.Title,
-                    HeightRequest = tabBarHeight,
-                    Padding = buttonPadding,
-                    BackgroundColor = Colors.Transparent,
-                    TextColor = TextColor,
-                    BorderWidth = 0,
-                    FontSize = fontSize,
-                    Style = new Style(typeof(Button)),
-                    BindingContext = item
-                };
-
-                grid.Children.Add(image);
-                grid.Children.Add(button);
-
-                yield return grid;
-            }
         }
 
         private void UpdateButtons(IEnumerable<BaseShellItem> items)
@@ -372,12 +430,12 @@
             });
         }
 
-        private void TabViewSizeChanged(object sender, EventArgs e)
+        private void TabBarSizeChanged(object sender, EventArgs e)
         {
-            UpdateControls();
+            UpdateValuesAccordingToLanguage();
         }
 
-        private void TabViewHandlerChanged(object sender, EventArgs e)
+        private void TabBarHandlerChanged(object sender, EventArgs e)
         {
             SetUpBaseStructure();
             UpdateButtons(Items);
@@ -390,10 +448,10 @@
             InvalidateGraphicsView();
         }
 
-        private void TabViewUnloaded(object sender, EventArgs e)
+        private void TabBarUnloaded(object sender, EventArgs e)
         {
-            Unloaded -= TabViewUnloaded;
-            SizeChanged -= TabViewSizeChanged;
+            Unloaded -= TabBarUnloaded;
+            SizeChanged -= TabBarSizeChanged;
         }
 
         private static void OnItemsChanged(BindableObject bindable, object oldValue, object newValue)
@@ -508,7 +566,8 @@
             foreach (var item in tabBar.stackLayout.Children)
             {
                 var grid = item as Grid;
-                var image = grid.Children[0] as BitmapIcon;
+                var stackLayout = grid.Children[0] as StackLayout;
+                var image = stackLayout.Children[0] as BitmapIcon;
 
                 image.TintColor = newValue as Color;
             }

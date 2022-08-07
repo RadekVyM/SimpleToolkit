@@ -66,7 +66,8 @@ namespace Radek.SimpleShell.Controls.Handlers
 
         private static void MapTintColor(BitmapIconHandler handler, BitmapIcon image)
         {
-            handler.PlatformView.Foreground = image.TintColor.ToPlatform();
+            if (image.TintColor is not null)
+                handler.PlatformView.Foreground = image.TintColor.ToPlatform();
         }
 
         void OnSetImageSource(WImageSource obj)
