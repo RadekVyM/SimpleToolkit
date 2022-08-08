@@ -1,6 +1,5 @@
 ﻿namespace Radek.SimpleShell.Controls
 {
-    // TODO: Inherit TabBar from Border?
     public partial class TabBar : ContentView, IView
     {
         private HorizontalStackLayout stackLayout;
@@ -22,9 +21,17 @@
                 double width = double.NaN;
 
                 if (double.IsNaN(ItemWidthRequest) && !IsScrollable && DesignLanguage is not DesignLanguage.Fluent)
-                    width = Math.Floor(Width / (Items?.Count() ?? 1));
+                {
+                    var count = stackLayout?.Children?.Count ?? 1;
+                    count = count == 0 ? 1 : count;
+                    width = Math.Max(Math.Floor(Width / count), realMinimumItemWidth);
+                }
                 if (!double.IsNaN(ItemWidthRequest) && !IsScrollable)
-                    width = Math.Min(Math.Max(ItemWidthRequest, realMinimumItemWidth), Math.Floor(Width / (Items?.Count() ?? 1)));
+                {
+                    var count = stackLayout?.Children?.Count ?? 1;
+                    count = count == 0 ? 1 : count;
+                    width = Math.Min(Math.Max(ItemWidthRequest, realMinimumItemWidth), Math.Floor(Width / count));
+                }
                 if (!double.IsNaN(ItemWidthRequest) && IsScrollable)
                     width = Math.Max(ItemWidthRequest, realMinimumItemWidth);
 
@@ -37,9 +44,13 @@
         private FontAttributes labelSelectionAttributes;
         private StackOrientation itemStackLayoutOrientation = StackOrientation.Vertical;
 
+        private IList<Grid> allItemViews = new List<Grid>();
+        private IList<Grid> hiddenItems = new List<Grid>();
+
         public event TabViewItemSelectedEventHandler ItemSelected;
 
         public static readonly BindableProperty ItemsProperty = BindableProperty.Create(nameof(Items), typeof(IEnumerable<BaseShellItem>), typeof(TabBar), propertyChanged: OnItemsChanged);
+        public static readonly BindableProperty HiddenItemsProperty = BindableProperty.Create(nameof(HiddenItems), typeof(IReadOnlyList<BaseShellItem>), typeof(TabBar), defaultBindingMode: BindingMode.OneWayToSource);
         public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create(nameof(SelectedItem), typeof(BaseShellItem), typeof(TabBar), propertyChanged: OnSelectedItemChanged);
         public static readonly BindableProperty DesignLanguageProperty = BindableProperty.Create(nameof(DesignLanguage), typeof(DesignLanguage), typeof(TabBar), propertyChanged: OnDesignLanguageChanged, defaultValue: DesignLanguage.Material3);
         public static readonly BindableProperty ItemWidthRequestProperty = BindableProperty.Create(nameof(ItemWidthRequest), typeof(double), typeof(TabBar), propertyChanged: OnItemWidthRequestChanged, defaultValue: double.NaN);
@@ -55,6 +66,12 @@
         {
             get => (IEnumerable<BaseShellItem>)GetValue(ItemsProperty);
             set => SetValue(ItemsProperty, value);
+        }
+
+        public virtual IReadOnlyList<BaseShellItem> HiddenItems
+        {
+            get => (IReadOnlyList<BaseShellItem>)GetValue(HiddenItemsProperty);
+            private set => SetValue(HiddenItemsProperty, value);
         }
 
         public virtual BaseShellItem SelectedItem
@@ -249,7 +266,7 @@
             Content = rootGrid;
         }
 
-        private IEnumerable<IView> CreateItemViews(IEnumerable<BaseShellItem> items)
+        private IEnumerable<Grid> CreateItemViews(IEnumerable<BaseShellItem> items)
         {
             foreach (var item in items)
             {
@@ -273,6 +290,7 @@
                 var button = new Button
                 {
                     HorizontalOptions = LayoutOptions.Fill,
+                    VerticalOptions = LayoutOptions.Fill,
                     HeightRequest = tabBarHeight,
                     BackgroundColor = Colors.Transparent,
                     BorderWidth = 0,
@@ -365,7 +383,6 @@
             {
                 var grid = item as Grid;
                 var stackLayout = grid.Children[0] as StackLayout;
-                var button = grid.Children[1] as Button;
                 var image = stackLayout.Children[0] as BitmapIcon;
                 var label = stackLayout.Children[1] as Label;
 
@@ -373,7 +390,6 @@
 
                 grid.HeightRequest = tabBarHeight;
                 grid.WidthRequest = itemWidth;
-                button.HeightRequest = tabBarHeight;
                 label.TextTransform = labelTextTransform;
                 label.TextColor = IsSelected(shellItem) ? TextSelectionColor : TextColor;
                 label.FontSize = fontSize;
@@ -403,6 +419,11 @@
                     stackLayout.Padding = itemStackLayoutPadding;
             }
 
+            var visibleItemsChanged = UpdateHiddenItems();
+
+            if (visibleItemsChanged)
+                UpdateSizeOfItems();
+
             InvalidateGraphicsView();
         }
 
@@ -413,24 +434,96 @@
 
             var itemViews = CreateItemViews(items);
 
-            foreach (var view in stackLayout.Children)
+            foreach (var view in allItemViews)
             {
-                var grid = view as Grid;
-                var button = grid.Children[1] as Button;
+                var button = view.Children[1] as Button;
 
                 button.Clicked -= ItemButtonClicked;
             }
+
             stackLayout.Children.Clear();
+            var count = stackLayout.Children.Count;
 
             foreach (var view in itemViews)
             {
-                var grid = view as Grid;
-                var button = grid.Children[1] as Button;
+                var button = view.Children[1] as Button;
 
                 button.Clicked += ItemButtonClicked;
 
                 stackLayout.Children.Add(view);
             }
+
+            allItemViews = itemViews.ToList();
+        }
+
+        private void UpdateSizeOfItems()
+        {
+            foreach (var item in stackLayout.Children)
+            {
+                var grid = item as Grid;
+                grid.HeightRequest = tabBarHeight;
+                grid.WidthRequest = itemWidth;
+            }
+        }
+
+        private bool UpdateHiddenItems()
+        {
+            bool changed = false;
+            double totalWidth = 0;
+            bool remove = false;
+            List<Grid> hidden = new List<Grid>();
+
+            for (int i = 0; i < stackLayout.Children.Count; i++)
+            {
+                var view = stackLayout.Children[i] as Grid;
+                totalWidth += DesignLanguage is DesignLanguage.Fluent ? view.Width : itemWidth;
+
+                if (remove)
+                {
+                    changed = true;
+                    hidden.Add(view);
+                }
+                else if (totalWidth > Width)
+                {
+                    remove = true;
+                    hidden.Add(view);
+                }
+            }
+
+            if (stackLayout.Children.Count < allItemViews.Count)
+            {
+                totalWidth = DesignLanguage is DesignLanguage.Fluent ? totalWidth : stackLayout.Children.Count * realMinimumItemWidth;
+                
+                while (totalWidth < Width)
+                {
+                    var item = hiddenItems.FirstOrDefault();
+
+                    if (item is null)
+                        break;
+
+                    var newTotalWidth = totalWidth + (DesignLanguage is DesignLanguage.Fluent ? item.Width : realMinimumItemWidth);
+                    
+                    if (newTotalWidth > Width)
+                        break;
+
+                    changed = true;
+                    totalWidth = newTotalWidth;
+                    stackLayout.Children.Add(item);
+                    hiddenItems.Remove(item);
+                }
+            }
+
+            if (hidden.Count > 0)
+            {
+                hiddenItems = hidden.Concat(hiddenItems).ToList();
+
+                hidden.ForEach(v => {
+                    stackLayout.Children.Remove(v);
+                });
+            }
+            HiddenItems = hiddenItems.Select(v => v.BindingContext as BaseShellItem).ToList();
+
+            return changed;
         }
 
         private void ItemButtonClicked(object sender, EventArgs e)
@@ -495,26 +588,12 @@
         {
             var tabBar = bindable as TabBar;
 
-            if (tabBar.IsScrollable)
+            if (tabBar.IsScrollable && tabBar.stackLayout is not null && tabBar.scrollView is not null)
             {
-
                 var element = tabBar.stackLayout.Children.Cast<Element>().FirstOrDefault(e => e.BindingContext == newValue);
 
-                //double scrollX = 0;
-                //if (tabBar.stackLayout is not null)
-                //{
-                //    foreach (var child in tabBar.stackLayout.Children)
-                //    {
-                //        var view = child as View;
-
-                //        if (view.BindingContext == newValue)
-                //            break;
-
-                //        scrollX += view.Width;
-                //    }
-                //}
-
-                _ = tabBar.scrollView.ScrollToAsync(element, ScrollToPosition.MakeVisible, true);
+                if (element is not null)
+                    _ = tabBar.scrollView.ScrollToAsync(element, ScrollToPosition.MakeVisible, true);
             }
 
             if (tabBar.DesignLanguage is DesignLanguage.Fluent)

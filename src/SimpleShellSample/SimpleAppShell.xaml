@@ -45,7 +45,7 @@
             <VisualState x:Name="SimplePageState">
                 <VisualState.Setters>
                     <Setter TargetName="addButton" Property="Button.Background" Value="Black"/>
-                    <Setter TargetName="tabBar" Property="Style" Value="{StaticResource Fluent}"/>
+                    <Setter TargetName="tabBar" Property="Style" Value="{StaticResource Material}"/>
                 </VisualState.Setters>
             </VisualState>
             <VisualState x:Name="SimplePageState.FirstYellowDetailPage">
@@ -149,7 +149,18 @@
             ContentTemplate="{DataTemplate pages:PurplePage}"
             Route="PurplePage" />
     </Tab>
-    
+
+    <Tab Title="Gray"
+         Icon="flame_empty.png"
+         controls:SimpleShell.SelectedIcon="flame_filled.png">
+        <ShellContent
+            Title="Gray"
+            Icon="flame_empty.png"
+            controls:SimpleShell.SelectedIcon="flame_filled.png"
+            ContentTemplate="{DataTemplate pages:GrayPage}"
+            Route="GrayPage" />
+    </Tab>
+
     <!--<ShellContent
             Title="Orange"
             ContentTemplate="{DataTemplate pages:OrangePage}"
@@ -210,8 +221,8 @@
             </Border>
 
             <controls:TabBar x:Name="tabBar" Grid.Row="4" 
-                             Items="{Binding Source={x:Reference thisShell}, Path=ShellSections}" 
-                             SelectedItem="{Binding Source={x:Reference thisShell}, Path=CurrentShellSection}" 
+                             Items="{Binding Source={x:Reference thisShell}, Path=ShellContents}" 
+                             SelectedItem="{Binding Source={x:Reference thisShell}, Path=CurrentShellContent}" 
                              ItemsAlignment="Center"
                              IsScrollable="False"
                              ItemSelected="TabView_ItemSelected"/>

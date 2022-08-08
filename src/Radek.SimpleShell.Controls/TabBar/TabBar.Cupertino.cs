@@ -11,7 +11,7 @@
             iconMargin = new Thickness(0, isCompact ? 0 : 8, 0, 0);
             itemStackLayoutSpacing = isCompact ? 8 : 4;
             tabBarHeight = isCompact ? 56 : 64;
-            realMinimumItemWidth = 64;
+            realMinimumItemWidth = 60;
             fontSize = 12;
             labelTextTransform = TextTransform.None;
             labelAttributes = FontAttributes.None;

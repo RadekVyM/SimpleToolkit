@@ -89,6 +89,9 @@
 
                 var flooredPosition = (int)Math.Floor(SelectedItemRelativePosition);
 
+                if (flooredPosition >= Views.Count)
+                    return;
+
                 for (int i = 0; i < flooredPosition; i++)
                 {
                     // IView.Width does not return proper current width of the control
@@ -102,11 +105,11 @@
                 var itemWidth = selectedView.Width;
                 var left = (float)(leftItemsWidth + ((itemWidth - defaultLineWidth) / 2) - ScrollPosition + leftPadding + ((SelectedItemRelativePosition - flooredPosition) * itemWidth));
 
-                var pillRect = new RectF(left, dirtyRect.Height - bottomPadding - lineHeight, defaultLineWidth, lineHeight);
+                var lineRect = new RectF(left, dirtyRect.Height - bottomPadding - lineHeight, defaultLineWidth, lineHeight);
 
-                canvas.SetFillPaint(LineBrush ?? Colors.Black, pillRect);
+                canvas.SetFillPaint(LineBrush ?? Colors.Black, lineRect);
 
-                canvas.FillRoundedRectangle(pillRect, lineHeight / 2);
+                canvas.FillRoundedRectangle(lineRect, lineHeight / 2);
 
                 canvas.RestoreState();
             }

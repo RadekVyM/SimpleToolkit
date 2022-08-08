@@ -9,7 +9,7 @@
             iconMargin = new Thickness(0, 12 + ((32 - iconSize.Height) / 2d), 0, 0);
             itemStackLayoutSpacing = 8;
             tabBarHeight = 76;
-            realMinimumItemWidth = 64;
+            realMinimumItemWidth = 70;
             fontSize = 12;
             labelTextTransform = TextTransform.None;
             labelAttributes = FontAttributes.None;
@@ -48,12 +48,10 @@
 
             public void Draw(ICanvas canvas, RectF dirtyRect)
             {
+                canvas.SaveState();
+
                 if (SelectedItemRelativePosition > -1)
                 {
-                    canvas.SaveState();
-
-                    canvas.ClipRectangle(dirtyRect);
-
                     float leftPadding = 0;
 
                     if (ContainerViewWidth < dirtyRect.Width)
@@ -68,24 +66,32 @@
 
                     double leftItemsWidth = 0;
 
-                    for (int i = 0; i < SelectedItemRelativePosition; i++)
+                    var flooredPosition = (int)Math.Floor(SelectedItemRelativePosition);
+
+                    if (flooredPosition >= Views.Count)
+                        return;
+
+                    for (int i = 0; i < flooredPosition; i++)
                     {
                         var view = Views[i] as Grid;
                         leftItemsWidth += view.Width;
                     }
 
-                    var selectedView = Views[(int)Math.Floor(SelectedItemRelativePosition)] as Grid;
-                    var itemWidth = selectedView.Width;
+                    var selectedView = Views[flooredPosition] as Grid;
+                    var itemWidth = double.IsFinite(selectedView.Width) ? selectedView.Width : 0;
                     var left = (float)(leftItemsWidth + ((itemWidth - pillWidth) / 2) - ScrollPosition + leftPadding);
 
                     var pillRect = new RectF(left, topPadding, pillWidth, pillHeight);
 
+                    System.Diagnostics.Debug.WriteLine(pillRect.ToString());
+
                     canvas.SetFillPaint(PillBrush ?? Colors.Gray, pillRect);
 
                     canvas.FillRoundedRectangle(pillRect, pillHeight / 2);
-
-                    canvas.RestoreState();
+                    canvas.ClipRectangle(dirtyRect);
                 }
+
+                canvas.RestoreState();
             }
         }
     }
