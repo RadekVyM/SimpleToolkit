@@ -45,7 +45,7 @@
             <VisualState x:Name="SimplePageState">
                 <VisualState.Setters>
                     <Setter TargetName="addButton" Property="Button.Background" Value="Black"/>
-                    <Setter TargetName="tabBar" Property="Style" Value="{StaticResource Material}"/>
+                    <Setter TargetName="tabBar" Property="Style" Value="{StaticResource Fluent}"/>
                 </VisualState.Setters>
             </VisualState>
             <VisualState x:Name="SimplePageState.FirstYellowDetailPage">

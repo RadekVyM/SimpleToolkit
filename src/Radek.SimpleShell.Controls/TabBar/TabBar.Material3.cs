@@ -48,48 +48,46 @@
 
             public void Draw(ICanvas canvas, RectF dirtyRect)
             {
+                if (SelectedItemRelativePosition < 0)
+                    return;
+
                 canvas.SaveState();
 
-                if (SelectedItemRelativePosition > -1)
+                float leftPadding = 0;
+
+                if (ContainerViewWidth < dirtyRect.Width)
                 {
-                    float leftPadding = 0;
-
-                    if (ContainerViewWidth < dirtyRect.Width)
+                    leftPadding = Alignment switch
                     {
-                        leftPadding = Alignment switch
-                        {
-                            LayoutAlignment.Center => (float)((dirtyRect.Width - ContainerViewWidth) / 2f),
-                            LayoutAlignment.End => (float)(dirtyRect.Width - ContainerViewWidth),
-                            _ => 0
-                        };
-                    }
-
-                    double leftItemsWidth = 0;
-
-                    var flooredPosition = (int)Math.Floor(SelectedItemRelativePosition);
-
-                    if (flooredPosition >= Views.Count)
-                        return;
-
-                    for (int i = 0; i < flooredPosition; i++)
-                    {
-                        var view = Views[i] as Grid;
-                        leftItemsWidth += view.Width;
-                    }
-
-                    var selectedView = Views[flooredPosition] as Grid;
-                    var itemWidth = double.IsFinite(selectedView.Width) ? selectedView.Width : 0;
-                    var left = (float)(leftItemsWidth + ((itemWidth - pillWidth) / 2) - ScrollPosition + leftPadding);
-
-                    var pillRect = new RectF(left, topPadding, pillWidth, pillHeight);
-
-                    System.Diagnostics.Debug.WriteLine(pillRect.ToString());
-
-                    canvas.SetFillPaint(PillBrush ?? Colors.Gray, pillRect);
-
-                    canvas.FillRoundedRectangle(pillRect, pillHeight / 2);
-                    canvas.ClipRectangle(dirtyRect);
+                        LayoutAlignment.Center => (float)((dirtyRect.Width - ContainerViewWidth) / 2f),
+                        LayoutAlignment.End => (float)(dirtyRect.Width - ContainerViewWidth),
+                        _ => 0
+                    };
                 }
+
+                double leftItemsWidth = 0;
+
+                var flooredPosition = (int)Math.Floor(SelectedItemRelativePosition);
+
+                if (flooredPosition >= Views.Count)
+                    return;
+
+                for (int i = 0; i < flooredPosition; i++)
+                {
+                    var view = Views[i] as Grid;
+                    leftItemsWidth += view.Width;
+                }
+
+                var selectedView = Views[flooredPosition] as Grid;
+                var itemWidth = double.IsFinite(selectedView.Width) ? selectedView.Width : 0;
+                var left = (float)(leftItemsWidth + ((itemWidth - pillWidth) / 2) - ScrollPosition + leftPadding);
+
+                var pillRect = new RectF(left, topPadding, pillWidth, pillHeight);
+
+                canvas.SetFillPaint(PillBrush ?? Colors.Gray, pillRect);
+
+                canvas.FillRoundedRectangle(pillRect, pillHeight / 2);
+                canvas.ClipRectangle(dirtyRect);
 
                 canvas.RestoreState();
             }

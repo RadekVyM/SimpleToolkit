@@ -353,7 +353,7 @@
             UpdateControls();
         }
 
-        private void UpdateControls()
+        private async void UpdateControls()
         {
             HeightRequest = tabBarHeight;
 
@@ -379,7 +379,7 @@
 
             stackLayout.HeightRequest = tabBarHeight;
 
-            foreach (var item in stackLayout.Children)
+            foreach (var item in allItemViews)
             {
                 var grid = item as Grid;
                 var stackLayout = grid.Children[0] as StackLayout;
@@ -411,13 +411,15 @@
                 if (image.Margin != iconMargin)
                     image.Margin = iconMargin;
                 image.TintColor = IsSelected(shellItem) ? IconSelectionColor : IconColor;
-                image.Background = Colors.Red;
 
                 stackLayout.Orientation = itemStackLayoutOrientation;
                 stackLayout.Spacing = image.Source is null && itemStackLayoutOrientation is StackOrientation.Horizontal ? 0 : itemStackLayoutSpacing;
                 if (stackLayout.Padding != itemStackLayoutPadding)
                     stackLayout.Padding = itemStackLayoutPadding;
             }
+
+            // Wait for remeasuring of Width property of all items
+            await Task.Delay(10);
 
             var visibleItemsChanged = UpdateHiddenItems();
 
@@ -442,9 +444,9 @@
             }
 
             stackLayout.Children.Clear();
-            var count = stackLayout.Children.Count;
+            allItemViews = itemViews.ToList();
 
-            foreach (var view in itemViews)
+            foreach (var view in allItemViews)
             {
                 var button = view.Children[1] as Button;
 
@@ -452,13 +454,11 @@
 
                 stackLayout.Children.Add(view);
             }
-
-            allItemViews = itemViews.ToList();
         }
 
         private void UpdateSizeOfItems()
         {
-            foreach (var item in stackLayout.Children)
+            foreach (var item in allItemViews)
             {
                 var grid = item as Grid;
                 grid.HeightRequest = tabBarHeight;

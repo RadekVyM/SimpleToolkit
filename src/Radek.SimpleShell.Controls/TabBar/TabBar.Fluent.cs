@@ -71,6 +71,9 @@
 
             public void Draw(ICanvas canvas, RectF dirtyRect)
             {
+                if (SelectedItemRelativePosition < 0)
+                    return;
+
                 canvas.SaveState();
 
                 float leftPadding = 0;
