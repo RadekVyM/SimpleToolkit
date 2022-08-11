@@ -3,6 +3,7 @@
 using NavFrame = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
 using PlatformPage = Android.Views.View;
 #elif __IOS__ || MACCATALYST
+using UIKit;
 using NavFrame = UIKit.UIView;
 using PlatformPage = UIKit.UIView;
 #elif WINDOWS

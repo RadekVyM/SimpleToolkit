@@ -9,8 +9,8 @@ namespace Radek.SimpleShell.Handlers
     {
         protected override UIView CreatePlatformElement()
         {
-            var container = new UIView();
-            return container;
+            shellSectionContainer = new CustomContentView();
+            return shellSectionContainer;
         }
     }
 }

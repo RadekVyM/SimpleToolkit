@@ -421,10 +421,13 @@
             // Wait for remeasuring of Width property of all items
             await Task.Delay(10);
 
-            var visibleItemsChanged = UpdateHiddenItems();
+            if (!IsScrollable)
+            {
+                var visibleItemsChanged = UpdateHiddenItems();
 
-            if (visibleItemsChanged)
-                UpdateSizeOfItems();
+                if (visibleItemsChanged)
+                    UpdateSizeOfItems();
+            }
 
             InvalidateGraphicsView();
         }

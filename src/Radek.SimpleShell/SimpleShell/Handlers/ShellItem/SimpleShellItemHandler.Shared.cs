@@ -58,7 +58,7 @@ namespace Radek.SimpleShell.Handlers
 
             if (VirtualView.CurrentItem != null)
             {
-                currentShellSectionHandler ??= (SimpleShellSectionHandler)VirtualView.CurrentItem.ToHandler(MauiContext!);
+                currentShellSectionHandler ??= (SimpleShellSectionHandler)VirtualView.CurrentItem.ToHandler(MauiContext);
 
 #if ANDROID
                 if (PlatformView != shellSectionContainer.GetChildAt(0))
@@ -67,7 +67,7 @@ namespace Radek.SimpleShell.Handlers
                     shellSectionContainer.AddView(currentShellSectionHandler.PlatformView);
                 }
 #elif __IOS__ || MACCATALYST
-                if (PlatformView != (UIKit.UIView)shellSectionContainer.Subviews[0])
+                if (PlatformView != (UIKit.UIView)shellSectionContainer.Subviews.FirstOrDefault())
                 {
                     shellSectionContainer.ClearSubviews();
                     shellSectionContainer.AddSubview(currentShellSectionHandler.PlatformView);

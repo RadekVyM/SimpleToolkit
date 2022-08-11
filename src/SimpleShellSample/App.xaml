@@ -19,11 +19,10 @@
             <Style x:Key="YellowPageNavigationButton" TargetType="Button" BasedOn="{StaticResource PageNavigationButton}">
                 <Setter Property="BackgroundColor" Value="DarkGoldenrod"/>
             </Style>
-            
+
             <Style x:Key="GreenPageNavigationButton" TargetType="Button" BasedOn="{StaticResource PageNavigationButton}">
                 <Setter Property="BackgroundColor" Value="DarkGreen"/>
             </Style>
-            
         </ResourceDictionary>
     </Application.Resources>
 </Application>

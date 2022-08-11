@@ -11,7 +11,7 @@ namespace Radek.SimpleShell.Handlers
         {
             CreateNavigationManager();
 
-            var container = new UIView();
+            var container = new CustomContentView();
             return container;
         }
     }
