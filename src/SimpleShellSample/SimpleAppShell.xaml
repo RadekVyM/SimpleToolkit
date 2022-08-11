@@ -9,6 +9,14 @@
     xmlns:pages="clr-namespace:SimpleShellSample.Views.Pages"
     x:Name="thisShell">
 
+
+    <!--Shell.NavBarIsVisible="False"-->
+
+    <!--<Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" Command="{Binding Source={x:Reference thisShell}, Path=BackCommand}"/>
+    </Shell.BackButtonBehavior>-->
+
+
     <ss:SimpleShell.Resources>
         <Style x:Key="Material" TargetType="controls:TabBar">
             <Setter Property="IconColor" Value="#1d192b"/>
@@ -85,12 +93,6 @@
         </VisualStateGroup>
     </VisualStateManager.VisualStateGroups>
 
-    <!--Shell.NavBarIsVisible="False"-->
-
-    <!--<Shell.BackButtonBehavior>
-        <BackButtonBehavior IsVisible="False" Command="{Binding Source={x:Reference thisShell}, Path=BackCommand}"/>
-    </Shell.BackButtonBehavior>-->
-    
     <Shell.TitleView>
         <HorizontalStackLayout Spacing="10" Margin="12,0">
             <Button Text="Back" Clicked="BackButtonClicked" VerticalOptions="Center"/>
@@ -212,7 +214,7 @@
                     </BindableLayout.ItemTemplate>
                 </HorizontalStackLayout>
             </ScrollView>
-            
+
             <Border Grid.Row="3" Stroke="Transparent" StrokeThickness="0">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="10,10,0,0"/>

@@ -3,7 +3,6 @@
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using Microsoft.UI.Xaml.Media.Imaging;
-using IImage = Microsoft.Maui.IImage;
 using WBitmapIcon = Microsoft.UI.Xaml.Controls.BitmapIcon;
 using WImageSource = Microsoft.UI.Xaml.Media.ImageSource;
 
@@ -13,10 +12,7 @@ namespace Radek.SimpleShell.Controls.Handlers
     {
         public static IPropertyMapper<BitmapIcon, BitmapIconHandler> Mapper = new PropertyMapper<BitmapIcon, BitmapIconHandler>(ViewHandler.ViewMapper)
         {
-            [nameof(IImage.Background)] = MapBackground,
-            [nameof(IImage.Aspect)] = MapAspect,
-            [nameof(IImage.IsAnimationPlaying)] = MapIsAnimationPlaying,
-            [nameof(IImage.Source)] = MapSource,
+            [nameof(BitmapIcon.Source)] = MapSource,
             [nameof(BitmapIcon.TintColor)] = MapTintColor,
         };
 
@@ -47,28 +43,7 @@ namespace Radek.SimpleShell.Controls.Handlers
         public override bool NeedsContainer =>
             VirtualView?.Background != null ||
             base.NeedsContainer;
-
-        public static void MapBackground(BitmapIconHandler handler, BitmapIcon image)
-        {
-            handler.UpdateValue(nameof(IViewHandler.ContainerView));
-            handler.PlatformView.UpdateBackground(image);
-        }
-
-        public static void MapAspect(BitmapIconHandler handler, BitmapIcon image) { }
-
-        public static void MapIsAnimationPlaying(BitmapIconHandler handler, BitmapIcon image) { }
-
-        public static void MapSource(BitmapIconHandler handler, BitmapIcon image) =>
-            MapSourceAsync(handler, image).FireAndForget(handler);
-
-        public static Task MapSourceAsync(BitmapIconHandler handler, BitmapIcon image) =>
-            handler.SourceLoader.UpdateImageSourceAsync();
-
-        private static void MapTintColor(BitmapIconHandler handler, BitmapIcon image)
-        {
-            if (image.TintColor is not null)
-                handler.PlatformView.Foreground = image.TintColor.ToPlatform();
-        }
+            
 
         void OnSetImageSource(WImageSource obj)
         {
@@ -76,6 +51,18 @@ namespace Radek.SimpleShell.Controls.Handlers
             {
                 PlatformView.UriSource = bitmapImage.UriSource;
             }
+        }
+
+        public static void MapSource(BitmapIconHandler handler, BitmapIcon image) =>
+            MapSourceAsync(handler, image).FireAndForget(handler);
+
+        public static Task MapSourceAsync(BitmapIconHandler handler, BitmapIcon image) =>
+            handler.SourceLoader.UpdateImageSourceAsync();
+
+        public static void MapTintColor(BitmapIconHandler handler, BitmapIcon image)
+        {
+            if (image.TintColor is not null)
+                handler.PlatformView.Foreground = image.TintColor.ToPlatform();
         }
     }
 }

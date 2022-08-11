@@ -33,7 +33,6 @@ namespace Radek.SimpleShell.Handlers
 
         protected override UIView CreatePlatformView()
         {
-            // TODO: Use Microsoft.Maui.Platform.ContentView if just UIView won't work: ViewHandler<ISimpleNavigationHost, Microsoft.Maui.Platform.ContentView>
             Container = new CustomContentView();
 
             return Container;
@@ -47,7 +46,8 @@ namespace Radek.SimpleShell.Handlers
         }
     }
 
-    public class CustomContentView : UIView
+    // TODO: Clipping to Border shape does not work
+    public class CustomContentView : Microsoft.Maui.Platform.ContentView
     {
         public override void LayoutSubviews()
         {

@@ -1,11 +1,8 @@
-﻿using IImage = Microsoft.Maui.IImage;
-
-namespace Radek.SimpleShell.Controls
+﻿namespace Radek.SimpleShell.Controls
 {
-    // TODO: BitmapIcon should probably not inherit from Image - IsAnimationPlaying and Aspect does not make sense on Windows
-    public class BitmapIcon : Image, IImage
+    public class BitmapIcon : Image
     {
-        public static readonly BindableProperty TintColorProperty = BindableProperty.Create(nameof(TintColor), typeof(Color), typeof(TabBar), defaultValue: Colors.Black);
+        public static readonly BindableProperty TintColorProperty = BindableProperty.Create(nameof(TintColor), typeof(Color), typeof(BitmapIcon), defaultValue: Colors.Black);
 
         public virtual Color TintColor
         {

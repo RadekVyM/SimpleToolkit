@@ -56,10 +56,10 @@
         public static readonly BindableProperty ItemWidthRequestProperty = BindableProperty.Create(nameof(ItemWidthRequest), typeof(double), typeof(TabBar), propertyChanged: OnItemWidthRequestChanged, defaultValue: double.NaN);
         public static readonly BindableProperty ItemsAlignmentProperty = BindableProperty.Create(nameof(ItemsAlignment), typeof(LayoutAlignment), typeof(TabBar), propertyChanged: OnItemsAlignmentChanged, defaultValue: LayoutAlignment.Center);
         public static readonly BindableProperty IsScrollableProperty = BindableProperty.Create(nameof(IsScrollable), typeof(bool), typeof(TabBar), propertyChanged: OnIsScrollableChanged, defaultValue: false);
-        public static readonly BindableProperty IconColorProperty = BindableProperty.Create(nameof(IconColor), typeof(Color), typeof(TabBar), propertyChanged: OnIconColorChanged, defaultValue: null);
-        public static readonly BindableProperty IconSelectionColorProperty = BindableProperty.Create(nameof(IconSelectionColor), typeof(Color), typeof(TabBar), propertyChanged: OnIconColorChanged, defaultValue: null);
+        public static readonly BindableProperty IconColorProperty = BindableProperty.Create(nameof(IconColor), typeof(Color), typeof(TabBar), propertyChanged: OnIconColorChanged, defaultValue: Colors.Black);
+        public static readonly BindableProperty IconSelectionColorProperty = BindableProperty.Create(nameof(IconSelectionColor), typeof(Color), typeof(TabBar), propertyChanged: OnIconSelectionColorChanged, defaultValue: Colors.Black);
         public static readonly BindableProperty TextColorProperty = BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(TabBar), propertyChanged: OnTextColorChanged, defaultValue: Colors.Black);
-        public static readonly BindableProperty TextSelectionColorProperty = BindableProperty.Create(nameof(TextSelectionColor), typeof(Color), typeof(TabBar), propertyChanged: OnTextColorChanged, defaultValue: Colors.Black);
+        public static readonly BindableProperty TextSelectionColorProperty = BindableProperty.Create(nameof(TextSelectionColor), typeof(Color), typeof(TabBar), propertyChanged: OnTextSelectionColorChanged, defaultValue: Colors.Black);
         public static readonly BindableProperty PrimaryBrushProperty = BindableProperty.Create(nameof(PrimaryBrush), typeof(Brush), typeof(TabBar), propertyChanged: OnPrimaryBrushChanged, defaultValue: null);
 
         public virtual IEnumerable<BaseShellItem> Items
@@ -381,15 +381,14 @@
 
             foreach (var item in allItemViews)
             {
-                var grid = item as Grid;
-                var stackLayout = grid.Children[0] as StackLayout;
+                var stackLayout = item.Children[0] as StackLayout;
                 var image = stackLayout.Children[0] as BitmapIcon;
                 var label = stackLayout.Children[1] as Label;
 
-                var shellItem = grid.BindingContext as BaseShellItem;
+                var shellItem = item.BindingContext as BaseShellItem;
 
-                grid.HeightRequest = tabBarHeight;
-                grid.WidthRequest = itemWidth;
+                item.HeightRequest = tabBarHeight;
+                item.WidthRequest = itemWidth;
                 label.TextTransform = labelTextTransform;
                 label.TextColor = IsSelected(shellItem) ? TextSelectionColor : TextColor;
                 label.FontSize = fontSize;
@@ -398,7 +397,7 @@
                 if (IsSelected(shellItem))
                 {
                     var selectedIcon = SimpleShell.GetSelectedIcon(shellItem);
-                    if (selectedIcon is not null)
+                    if (selectedIcon is not null && image.Source != selectedIcon)
                         image.Source = selectedIcon;
                 }
                 else if (image.Source != shellItem.Icon)
@@ -602,7 +601,7 @@
             if (tabBar.DesignLanguage is DesignLanguage.Fluent)
                 await tabBar.AnimateFluentToSelected();
 
-            tabBar.UpdateControls();
+            tabBar.UpdateValuesAccordingToLanguage();
         }
 
         private void ShellItemPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -615,16 +614,16 @@
 
             var shellItem = sender as BaseShellItem;
 
-            foreach (var item in stackLayout)
+            foreach (var item in allItemViews)
             {
-                var grid = item as Grid;
-                var image = grid.Children[0] as Image;
-                var button = grid.Children[1] as Button;
+                var stackLayout = item.Children[0] as StackLayout;
+                var image = stackLayout.Children[0] as BitmapIcon;
+                var label = stackLayout.Children[1] as Label;
 
-                button.Text = shellItem.Title;
+                label.Text = shellItem.Title;
                 image.Source = shellItem.Icon;
 
-                image.ApplyTintToImage(IconColor);
+                image.TintColor = IsSelected(item) ? IconSelectionColor : IconColor;
             }
         }
 
@@ -641,10 +640,9 @@
             if (tabBar.stackLayout is null)
                 return;
 
-            foreach (var item in tabBar.stackLayout.Children)
+            foreach (var item in tabBar.allItemViews)
             {
-                var grid = item as Grid;
-                grid.WidthRequest = (double)newValue;
+                item.WidthRequest = (double)newValue;
             }
 
             tabBar.InvalidateGraphicsView();
@@ -684,13 +682,36 @@
             if (tabBar.stackLayout is null)
                 return;
 
-            foreach (var item in tabBar.stackLayout.Children)
+            foreach (var item in tabBar.allItemViews)
             {
-                var grid = item as Grid;
-                var stackLayout = grid.Children[0] as StackLayout;
+                if (tabBar.IsSelected(item))
+                    continue;
+
+                var stackLayout = item.Children[0] as StackLayout;
                 var image = stackLayout.Children[0] as BitmapIcon;
 
-                image.TintColor = newValue as Color;
+                if (newValue is not null)
+                    image.TintColor = newValue as Color;
+            }
+        }
+
+        private static void OnIconSelectionColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var tabBar = bindable as TabBar;
+
+            if (tabBar.stackLayout is null)
+                return;
+
+            foreach (var item in tabBar.allItemViews)
+            {
+                if (!tabBar.IsSelected(item))
+                    continue;
+
+                var stackLayout = item.Children[0] as StackLayout;
+                var image = stackLayout.Children[0] as BitmapIcon;
+
+                if (newValue is not null)
+                    image.TintColor = newValue as Color;
             }
         }
 
@@ -701,12 +722,34 @@
             if (tabBar.stackLayout is null)
                 return;
 
-            foreach (var item in tabBar.stackLayout.Children)
+            foreach (var item in tabBar.allItemViews)
             {
-                var grid = item as Grid;
-                var button = grid.Children[1] as Button;
+                if (tabBar.IsSelected(item))
+                    continue;
 
-                button.TextColor = newValue as Color;
+                var stackLayout = item.Children[0] as StackLayout;
+                var label = stackLayout.Children[1] as Label;
+
+                label.TextColor = newValue as Color;
+            }
+        }
+
+        private static void OnTextSelectionColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var tabBar = bindable as TabBar;
+
+            if (tabBar.stackLayout is null)
+                return;
+
+            foreach (var item in tabBar.allItemViews)
+            {
+                if (!tabBar.IsSelected(item))
+                    continue;
+
+                var stackLayout = item.Children[0] as StackLayout;
+                var label = stackLayout.Children[1] as Label;
+
+                label.TextColor = newValue as Color;
             }
         }
 
