@@ -1,3 +1,5 @@
+using Radek.SimpleShell.Controls;
+
 namespace SimpleShellSample.Views.Pages;
 
 public partial class YellowPage : ContentPage
@@ -15,5 +17,12 @@ public partial class YellowPage : ContentPage
     private async void Button_Clicked_1(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync($"/{nameof(FirstYellowDetailPage)}/{nameof(SecondYellowDetailPage)}");
+    }
+
+    private void Button_Clicked_2(object sender, EventArgs e)
+    {
+        var button = sender as Button;
+
+        button.ShowAttachedPopover();
     }
 }

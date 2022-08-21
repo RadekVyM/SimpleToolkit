@@ -1,8 +1,5 @@
 ﻿#if __IOS__ || MACCATALYST
 
-using CoreAnimation;
-using CoreGraphics;
-using Microsoft.Maui.Graphics.Platform;
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using UIKit;
@@ -40,7 +37,6 @@ namespace Radek.SimpleShell.Handlers
 
         public virtual void SetContent(UIView view)
         {
-            //view.Frame = PlatformView.Bounds;
             Container.ClearSubviews();
             Container.AddSubview(view);
         }

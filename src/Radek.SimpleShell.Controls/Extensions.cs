@@ -22,50 +22,27 @@ namespace Radek.SimpleShell.Controls
         {
             builder.ConfigureMauiHandlers(handlers =>
             {
-                #if ANDROID || IOS || MACCATALYST || WINDOWS
+#if ANDROID || IOS || MACCATALYST || WINDOWS
                 handlers.AddHandler(typeof(BitmapIcon), typeof(BitmapIconHandler));
-                #endif
+#endif
+#if WINDOWS || ANDROID
+                handlers.AddHandler(typeof(Popover), typeof(PopoverHandler));
+#endif
             });
 
             return builder;
         }
 
-        internal static Image ApplyTintToImage(this Image image, Microsoft.Maui.Graphics.Color color)
+        public static void ShowAttachedPopover(this View parentView)
         {
-#if ANDROID
+            var popover = Popover.GetAttachedPopover(parentView);
+            popover.Show(parentView);
+        }
 
-            var imageView = image.Handler.PlatformView as ImageView;
-            imageView.ClearColorFilter();
-            if (color is not null)
-                imageView.SetColorFilter(color.ToPlatform(), PorterDuff.Mode.SrcIn ?? throw new InvalidOperationException("PorterDuff.Mode.SrcIn should not be null at runtime"));
-
-#elif IOS || MACCATALYST
-
-            var imageView = image.Handler.PlatformView as UIImageView;
-            if (imageView.Image is not null)
-            {
-                if (color is not null)
-                {
-                    imageView.Image = imageView.Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
-                    imageView.TintColor = color.ToPlatform();
-                }
-                else
-                {
-                    imageView.Image = imageView.Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal);
-                }
-            }
-
-#elif WINDOWS
-
-            //var wimage = image.Handler.PlatformView as Microsoft.UI.Xaml.Controls.Image;
-
-            //wimage.Stretch = Microsoft.UI.Xaml.Media.Stretch.Fill;
-
-            //var v = new Microsoft.UI.Xaml.Controls.BitmapIcon();
-
-#endif
-
-            return image;
+        public static void HideAttachedPopover(this View parentView)
+        {
+            var popover = Popover.GetAttachedPopover(parentView);
+            popover.Hide();
         }
 
 #if !WEBVIEW2_MAUI

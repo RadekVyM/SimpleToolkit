@@ -1,10 +1,10 @@
 ﻿namespace Radek.SimpleShell
 {
-    // TODO: It looks like the toolbar is part of ShellSection on iOS. So it is probably missing in my implementation. How to solve it?
+    // TODO: It looks like the toolbar is part of ShellSection on iOS. So it is missing in my implementation. How to solve it?
     // 1) Lets hope that the toolbar will be handled as on Android and Windows when Shell totally transitions to handler architecture
     // 2) Implement it myself in my SimpleShellSectionHandler - This can be a waste of time if 1) comes true
-    // I would wait for transition to handler architecture and than will see
-    // Now I can maybe set default visibility of the toolbar to hidden
+    // I am waiting for transition to handler architecture and then I will see
+    // I have set default visibility of the toolbar to hidden for now
 
     public class SimpleShell : Shell, ISimpleShell
     {
