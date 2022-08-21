@@ -23,8 +23,8 @@
         {
         }
     }
-    // || IOS || MACCATALYST
-#if !(WINDOWS || ANDROID)
+
+#if !(WINDOWS || ANDROID || IOS || MACCATALYST)
 
     public partial class PopoverHandler : Microsoft.Maui.Handlers.ElementHandler<IPopover, object>
     {

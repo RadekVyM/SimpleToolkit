@@ -28,10 +28,10 @@
                     <sc:Popover>
                         <Border Stroke="Transparent" StrokeThickness="0">
                             <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="5"/>
+                                <RoundRectangle CornerRadius="2"/>
                             </Border.StrokeShape>
-                            <VerticalStackLayout Background="White" Padding="10">
-                                <Label Text="Hello realy long text"/>
+                            <VerticalStackLayout Background="Yellow" Padding="10">
+                                <Label Text="Hello really long text"/>
                                 <Label Text="Hello"/>
                                 <Label Text="Hello"/>
                                 <Label Text="Hello"/>

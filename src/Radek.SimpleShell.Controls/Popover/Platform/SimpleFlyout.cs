@@ -4,7 +4,6 @@ using Microsoft.Maui.Platform;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Radek.SimpleShell.Controls.Handlers;
-using LayoutAlignment = Microsoft.Maui.Primitives.LayoutAlignment;
 using WindowsThickness = Microsoft.UI.Xaml.Thickness;
 using XamlStyle = Microsoft.UI.Xaml.Style;
 
@@ -52,7 +51,7 @@ namespace Radek.SimpleShell.Controls.Platform
                 return;
             }
             FlyoutStyle = new(typeof(FlyoutPresenter));
-            SetFlyoutColor();
+            SetFlyoutStyle();
             SetLayout();
             ApplyStyles();
         }
@@ -113,7 +112,7 @@ namespace Radek.SimpleShell.Controls.Platform
             }
         }
 
-        void SetFlyoutColor()
+        void SetFlyoutStyle()
         {
             _ = VirtualView?.Content ?? throw new NullReferenceException(nameof(IPopover.Content));
 
@@ -122,6 +121,9 @@ namespace Radek.SimpleShell.Controls.Platform
             FlyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.PaddingProperty, 0));
             FlyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.BorderThicknessProperty, new WindowsThickness(0)));
             FlyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.BorderBrushProperty, Colors.Transparent.ToWindowsColor()));
+
+            FlyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.MinHeightProperty, 0));
+            FlyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.MinWidthProperty, 0));
         }
 
         void ApplyStyles()

@@ -24,8 +24,6 @@ namespace Radek.SimpleShell.Controls
             {
 #if ANDROID || IOS || MACCATALYST || WINDOWS
                 handlers.AddHandler(typeof(BitmapIcon), typeof(BitmapIconHandler));
-#endif
-#if WINDOWS || ANDROID
                 handlers.AddHandler(typeof(Popover), typeof(PopoverHandler));
 #endif
             });
@@ -47,10 +45,7 @@ namespace Radek.SimpleShell.Controls
 
 #if !WEBVIEW2_MAUI
 
-        internal static async void FireAndForget(
-            this Task task,
-            Action<Exception> errorCallback = null
-            )
+        internal static async void FireAndForget(this Task task, Action<Exception> errorCallback = null)
         {
             try
             {
