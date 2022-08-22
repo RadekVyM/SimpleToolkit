@@ -53,7 +53,6 @@
             <VisualState x:Name="SimplePageState">
                 <VisualState.Setters>
                     <Setter TargetName="addButton" Property="Button.Background" Value="Black"/>
-                    <Setter TargetName="tabBar" Property="Style" Value="{StaticResource Cupertino}"/>
                 </VisualState.Setters>
             </VisualState>
             <VisualState x:Name="SimplePageState.FirstYellowDetailPage">
@@ -64,13 +63,11 @@
             <VisualState x:Name="SimplePageState.GreenPage">
                 <VisualState.Setters>
                     <Setter TargetName="addButton" Property="Button.Background" Value="DarkRed"/>
-                    <Setter TargetName="tabBar" Property="Style" Value="{StaticResource Cupertino}"/>
                 </VisualState.Setters>
             </VisualState>
             <VisualState x:Name="SimplePageState.RedPage">
                 <VisualState.Setters>
                     <Setter TargetName="addButton" Property="Button.Background" Value="DarkRed"/>
-                    <Setter TargetName="tabBar" Property="Style" Value="{StaticResource Cupertino}"/>
                 </VisualState.Setters>
             </VisualState>
             <VisualState x:Name="SimplePageState.FirstGreenDetailPage">
@@ -88,6 +85,23 @@
             <VisualState x:Name="SimplePageTypeState.RootPage">
                 <VisualState.Setters>
                     <Setter TargetName="backButton" Property="Button.IsVisible" Value="false"/>
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+        <VisualStateGroup x:Name="DesignLanguage">
+            <VisualState x:Name="Material3">
+                <VisualState.Setters>
+                    <Setter TargetName="tabBar" Property="View.Style" Value="{StaticResource Material}"/>
+                </VisualState.Setters>
+            </VisualState>
+            <VisualState x:Name="Cupertino">
+                <VisualState.Setters>
+                    <Setter TargetName="tabBar" Property="View.Style" Value="{StaticResource Cupertino}"/>
+                </VisualState.Setters>
+            </VisualState>
+            <VisualState x:Name="Fluent">
+                <VisualState.Setters>
+                    <Setter TargetName="tabBar" Property="View.Style" Value="{StaticResource Fluent}"/>
                 </VisualState.Setters>
             </VisualState>
         </VisualStateGroup>
@@ -109,56 +123,56 @@
     
     <Tab Title="Flame tab" Route="FirstTab"
          Icon="flame_empty.png"
-         controls:SimpleShell.SelectedIcon="flame_filled.png">
+         controls:SimpleIcon.SelectedIcon="flame_filled.png">
         <ShellContent
             Title="Yellow"
             Icon="flame_empty.png"
-            controls:SimpleShell.SelectedIcon="flame_filled.png"
+            controls:SimpleIcon.SelectedIcon="flame_filled.png"
             ContentTemplate="{DataTemplate pages:YellowPage}"
             Route="YellowPage" />
         <ShellContent
             Title="Green"
             Icon="bird_empty.png"
-            controls:SimpleShell.SelectedIcon="bird_filled.png"
+            controls:SimpleIcon.SelectedIcon="bird_filled.png"
             ContentTemplate="{DataTemplate pages:GreenPage}"
             Route="GreenPage" />
     </Tab>
     
     <Tab Title="Case tab" Route="SecondTab"
          Icon="case_empty.png"
-         controls:SimpleShell.SelectedIcon="case_filled.png">
+         controls:SimpleIcon.SelectedIcon="case_filled.png">
         <ShellContent
             Title="Blue"
             Icon="case_empty.png"
-            controls:SimpleShell.SelectedIcon="case_filled.png"
+            controls:SimpleIcon.SelectedIcon="case_filled.png"
             ContentTemplate="{DataTemplate pages:BluePage}"
             Route="BluePage" />
         <ShellContent
             Title="Red"
             Icon="avatar_empty.png"
-            controls:SimpleShell.SelectedIcon="avatar_filled.png"
+            controls:SimpleIcon.SelectedIcon="avatar_filled.png"
             ContentTemplate="{DataTemplate pages:RedPage}"
             Route="RedPage" />
     </Tab>
 
     <Tab Title="Purple"
          Icon="avatar_empty.png"
-         controls:SimpleShell.SelectedIcon="avatar_filled.png">
+         controls:SimpleIcon.SelectedIcon="avatar_filled.png">
         <ShellContent
             Title="Purple"
             Icon="avatar_empty.png"
-            controls:SimpleShell.SelectedIcon="avatar_filled.png"
+            controls:SimpleIcon.SelectedIcon="avatar_filled.png"
             ContentTemplate="{DataTemplate pages:PurplePage}"
             Route="PurplePage" />
     </Tab>
 
     <Tab Title="Gray"
          Icon="flame_empty.png"
-         controls:SimpleShell.SelectedIcon="flame_filled.png">
+         controls:SimpleIcon.SelectedIcon="flame_filled.png">
         <ShellContent
             Title="Gray"
             Icon="flame_empty.png"
-            controls:SimpleShell.SelectedIcon="flame_filled.png"
+            controls:SimpleIcon.SelectedIcon="flame_filled.png"
             ContentTemplate="{DataTemplate pages:GrayPage}"
             Route="GrayPage" />
     </Tab>
@@ -171,7 +185,8 @@
     
     <ss:SimpleShell.Content>
         <Grid x:Name="rootContainer" RowDefinitions="auto, auto, auto, *, auto">
-            <HorizontalStackLayout x:Name="appBar" Spacing="10" Padding="12">
+            <Grid x:Name="appBar" ColumnSpacing="10" Padding="12"
+                  ColumnDefinitions="auto,auto,*,auto">
                 <Button x:Name="backButton" Text="Back" Clicked="BackButtonClicked" VerticalOptions="Center">
                     <VisualStateManager.VisualStateGroups>
                         <!-- If I want to override default VisualStateGroup in Styles.xaml, I have to use VisualStateGroupList. See https://github.com/dotnet/maui/issues/8003 -->
@@ -191,9 +206,36 @@
                         </VisualStateGroupList>
                     </VisualStateManager.VisualStateGroups>
                 </Button>
-                <Button x:Name="addButton" Text="Add" Clicked="Button_Clicked_1" VerticalOptions="Center" BackgroundColor="Black"/>
-                <Label Text="{Binding Source={x:Reference thisShell}, Path=CurrentPage.Title}" VerticalOptions="Center"/>
-            </HorizontalStackLayout>
+                
+                <Button x:Name="addButton" Grid.Column="1"
+                        Text="Add"
+                        Clicked="Button_Clicked_1"
+                        VerticalOptions="Center"
+                        BackgroundColor="Black"/>
+                
+                <Label Grid.Column="2" Text="{Binding Source={x:Reference thisShell}, Path=CurrentPage.Title}" VerticalOptions="Center"/>
+                
+                <Button x:Name="designButton" Grid.Column="3"
+                        Text="Design"
+                        Clicked="DesignButtonClicked"
+                        VerticalOptions="Center"
+                        BackgroundColor="Black">
+                    <controls:Popover.AttachedPopover>
+                        <controls:Popover>
+                            <Border Stroke="Transparent" StrokeThickness="0" Background="White">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10"/>
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Padding="5" Spacing="5">
+                                    <Button Text="Material" Clicked="MaterialButtonClicked"/>
+                                    <Button Text="Cupertino" Clicked="CupertinoButtonClicked"/>
+                                    <Button Text="Fluent" Clicked="FluentButtonClicked"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </controls:Popover>
+                    </controls:Popover.AttachedPopover>
+                </Button>
+            </Grid>
 
             <ScrollView Grid.Row="1" Orientation="Horizontal" Padding="12,0" Margin="0">
                 <HorizontalStackLayout BindableLayout.ItemsSource="{Binding Source={x:Reference thisShell}, Path=CurrentPage.ToolbarItems}" Spacing="10" Margin="0,10">
@@ -227,7 +269,8 @@
                              SelectedItem="{Binding Source={x:Reference thisShell}, Path=CurrentShellContent}" 
                              ItemsAlignment="Center"
                              IsScrollable="False"
-                             ItemSelected="TabView_ItemSelected"/>
+                             ItemSelected="TabView_ItemSelected"
+                             Style="{StaticResource Material}"/>
 
             <!--ItemWidthRequest="{OnPlatform WinUI=200}"-->
 

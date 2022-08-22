@@ -3,6 +3,8 @@
 using Microsoft.Maui.Handlers;
 using Radek.SimpleShell.Controls.Platform;
 
+// Partially based on the .NET MAUI Community Toolkit Popup control - https://github.com/CommunityToolkit/Maui
+
 namespace Radek.SimpleShell.Controls.Handlers
 {
     public partial class PopoverHandler : ElementHandler<IPopover, SimpleFlyout>

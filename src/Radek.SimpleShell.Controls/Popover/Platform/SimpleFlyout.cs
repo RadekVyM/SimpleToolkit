@@ -7,6 +7,8 @@ using Radek.SimpleShell.Controls.Handlers;
 using WindowsThickness = Microsoft.UI.Xaml.Thickness;
 using XamlStyle = Microsoft.UI.Xaml.Style;
 
+// Partially based on the .NET MAUI Community Toolkit Popup control - https://github.com/CommunityToolkit/Maui
+
 namespace Radek.SimpleShell.Controls.Platform
 {
     public class SimpleFlyout : Flyout

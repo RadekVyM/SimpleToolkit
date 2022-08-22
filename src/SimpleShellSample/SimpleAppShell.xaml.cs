@@ -1,4 +1,5 @@
 ﻿using Radek.SimpleShell;
+using Radek.SimpleShell.Controls;
 using SimpleShellSample.Views.Pages;
 using System.Windows.Input;
 
@@ -13,7 +14,7 @@ public partial class SimpleAppShell : SimpleShell
         BackCommand = new Command(async () => {
             await this.GoToAsync("..");
         });
-		
+
         InitializeComponent();
 
         Routing.RegisterRoute(nameof(FirstYellowDetailPage), typeof(FirstYellowDetailPage));
@@ -57,5 +58,29 @@ public partial class SimpleAppShell : SimpleShell
         }
 
         orangeAdded = true;
+    }
+
+    private void DesignButtonClicked(object sender, EventArgs e)
+    {
+        var button = sender as Button;
+        button.ShowAttachedPopover();
+    }
+
+    private void MaterialButtonClicked(object sender, EventArgs e)
+    {
+        VisualStateManager.GoToState(this, "Material3");
+        designButton.HideAttachedPopover();
+    }
+
+    private void CupertinoButtonClicked(object sender, EventArgs e)
+    {
+        VisualStateManager.GoToState(this, "Cupertino");
+        designButton.HideAttachedPopover();
+    }
+
+    private void FluentButtonClicked(object sender, EventArgs e)
+    {
+        VisualStateManager.GoToState(this, "Fluent");
+        designButton.HideAttachedPopover();
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Radek.SimpleShell.Controls
 {
-    public static class SimpleShell
+    public static class SimpleIcon
     {
         public static readonly BindableProperty SelectedIconProperty =
             BindableProperty.CreateAttached("SelectedIcon", typeof(ImageSource), typeof(BaseShellItem), null);

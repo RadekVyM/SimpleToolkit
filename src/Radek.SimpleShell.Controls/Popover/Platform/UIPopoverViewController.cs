@@ -1,11 +1,15 @@
 ﻿#if IOS || MACCATALYST
 
 using CoreGraphics;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Handlers;
+using Foundation;
 using Microsoft.Maui.Platform;
+using ObjCRuntime;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using UIKit;
+
+// Partially based on the .NET MAUI Community Toolkit Popup control - https://github.com/CommunityToolkit/Maui
 
 namespace Radek.SimpleShell.Controls.Platform
 {
@@ -18,7 +22,6 @@ namespace Radek.SimpleShell.Controls.Platform
             this.mauiContext = mauiContext ?? throw new ArgumentNullException(nameof(mauiContext));
         }
 
-        public PageHandler Control { get; private set; }
         public IPopover VirtualView { get; private set; }
 
         internal UIViewController ViewController { get; private set; }
@@ -29,20 +32,16 @@ namespace Radek.SimpleShell.Controls.Platform
 
             //PreferredContentSize = View.SystemLayoutSizeFittingSize(UIView.UILayoutFittingCompressedSize);
 
-            var content = VirtualView.Content;
+            if (VirtualView.Content is null)
+                return;
+
             var measure = VirtualView.Content.Measure(double.PositiveInfinity, double.PositiveInfinity).Request;
             PreferredContentSize = new CGSize(measure.Width, measure.Height);
 
-            // TODO: Remove corner radius - this does not work:
-            View.Superview.Layer.CornerRadius = new System.Runtime.InteropServices.NFloat(0.0f);
-
-            if (Control?.PlatformView is not null)
-                Control.PlatformView.SizeThatFits(new Size(View.Bounds.Width, View.Bounds.Height));
-
-            _ = View ?? throw new InvalidOperationException($"{nameof(View)} cannot be null");
+            foreach (var subview in View.Subviews)
+                subview.Frame = new CGRect(0, 0, View.Bounds.Width, View.Bounds.Height);
         }
 
-        /// <inheritdoc/>
         public override void ViewWillDisappear(bool animated)
         {
             if (ViewController?.View is UIView view)
@@ -75,21 +74,21 @@ namespace Radek.SimpleShell.Controls.Platform
 
             VirtualView = null;
 
+            View.ClearSubviews();
+
             if (PresentationController is UIPopoverPresentationController presentationController)
             {
                 presentationController.Delegate = null;
             }
         }
 
-        [MemberNotNull(nameof(Control), nameof(ViewController))]
-        public void CreateControl(Func<IPopover, PageHandler> func, in IPopover virtualView, in IElement anchor)
+        [MemberNotNull(nameof(ViewController))]
+        public void InitializeView(in IPopover virtualView, in IElement anchor)
         {
-            Control = func(virtualView);
-
             SetPresentationController();
 
             _ = View ?? throw new InvalidOperationException($"{nameof(View)} cannot be null");
-            SetView(View, Control);
+            SetView(View);
 
             _ = ViewController ?? throw new InvalidOperationException($"{nameof(ViewController)} cannot be null");
             AddToCurrentPageViewController(ViewController);
@@ -109,6 +108,11 @@ namespace Radek.SimpleShell.Controls.Platform
             PopoverPresentationController.SourceRect = view.Bounds;
         }
 
+        public void UpdateContent()
+        {
+            SetView(View);
+        }
+
         void SetDimmingBackgroundEffect()
         {
             if (ViewController?.View is UIView view)
@@ -117,27 +121,11 @@ namespace Radek.SimpleShell.Controls.Platform
             }
         }
 
-        void SetView(UIView view, PageHandler control)
+        void SetView(UIView view)
         {
-            view.AddSubview(control.ViewController?.View ?? throw new InvalidOperationException($"{nameof(control.ViewController.View)} cannot be null"));
             view.Bounds = new(0, 0, PreferredContentSize.Width, PreferredContentSize.Height);
-            AddChildViewController(control.ViewController);
-
-            if (VirtualView is not null)
-            {
-                if (Control is null)
-                {
-                    return;
-                }
-
-                var color = Colors.Transparent.ToPlatform();
-                Control.PlatformView.BackgroundColor = color;
-
-                if (Control.ViewController?.View is UIView controlView)
-                {
-                    controlView.BackgroundColor = color;
-                }
-            }
+            view.ClearSubviews();
+            view.AddSubview(VirtualView.Content.ToHandler(mauiContext).PlatformView);
         }
 
         void SetPresentationController()
@@ -147,8 +135,10 @@ namespace Radek.SimpleShell.Controls.Platform
             var presentationController = ((UIPopoverPresentationController)PresentationController);
             presentationController.SourceView = ViewController?.View ?? throw new InvalidOperationException($"{nameof(ViewController.View)} cannot be null");
             presentationController.Delegate = popOverDelegate;
-            //presentationController.PermittedArrowDirections = UIPopoverArrowDirection.Any; // Because of this the popover is above the anchor
             presentationController.PermittedArrowDirections = 0; // Because of this the popover is above the anchor
+            presentationController.BackgroundColor = Colors.Transparent.ToPlatform();
+
+            //presentationController.PopoverBackgroundViewType = typeof(PopoverBackgroundView);
         }
 
         void AddToCurrentPageViewController(UIViewController viewController)
@@ -160,6 +150,50 @@ namespace Radek.SimpleShell.Controls.Platform
         {
             public override UIModalPresentationStyle GetAdaptivePresentationStyle(UIPresentationController forPresentationController) =>
                 UIModalPresentationStyle.None;
+        }
+
+        private class PopoverBackgroundView : UIPopoverBackgroundView
+        {
+            // TODO: Here I can probably change shape of the popover
+            // https://gist.github.com/andyshep/6240110
+            // https://github.com/mattneub/Programming-iOS-Book-Examples/blob/master/bk2ch09p476popovers/ch22p751popovers/MyPopoverBackgroundView.swift
+            // https://stackoverflow.com/questions/29459668/uipopoverbackgroundview-contentviewinsets-must-be-implemented-by-subclassers
+            // https://stackoverflow.com/questions/58468432/ios13-popoverpresentationcontroller-the-border-on-the-arrow-side-is-missing
+
+            [BindingImpl(BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+            [Export("arrowBase")]
+            [SupportedOSPlatform("ios8.0")]
+            [SupportedOSPlatform("maccatalyst8.0.0")]
+            [SupportedOSPlatform("tvos")]
+            public static NFloat GetArrowBase()
+            {
+                throw new NotImplementedException();
+            }
+
+            [BindingImpl(BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+            [Export("arrowHeight")]
+            [SupportedOSPlatform("ios8.0")]
+            [SupportedOSPlatform("maccatalyst8.0.0")]
+            [SupportedOSPlatform("tvos")]
+            public static NFloat GetArrowHeight()
+            {
+                throw new NotImplementedException();
+            }
+
+            [BindingImpl(BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+            [Export("contentViewInsets")]
+            [SupportedOSPlatform("ios8.0")]
+            [SupportedOSPlatform("maccatalyst8.0.0")]
+            [SupportedOSPlatform("tvos")]
+            public static UIEdgeInsets GetContentViewInsets()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void LayoutSubviews()
+            {
+                base.LayoutSubviews();
+            }
         }
     }
 }

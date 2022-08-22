@@ -1,9 +1,9 @@
 ﻿#if IOS || MACCATALYST
 
 using Microsoft.Maui.Handlers;
-using Microsoft.Maui.Platform;
 using Radek.SimpleShell.Controls.Platform;
-using UIKit;
+
+// Partially based on the .NET MAUI Community Toolkit Popup control - https://github.com/CommunityToolkit/Maui
 
 namespace Radek.SimpleShell.Controls.Handlers
 {
@@ -28,10 +28,7 @@ namespace Radek.SimpleShell.Controls.Handlers
 
         private static void MapContent(PopoverHandler handler, IPopover popover)
         {
-            if (handler.PlatformView?.Control?.VirtualView is ContentPage contentPage)
-            {
-                contentPage.Content = popover.Content;
-            }
+            handler.PlatformView.UpdateContent();
         }
 
         private static void MapShow(PopoverHandler handler, IPopover popover, object parentView)
@@ -39,22 +36,7 @@ namespace Radek.SimpleShell.Controls.Handlers
             if (parentView is not IElement anchor)
                 return;
 
-            handler.PlatformView?.CreateControl(CreatePageHandler, popover, anchor);
-
-            static PageHandler CreatePageHandler(IPopover virtualView)
-            {
-                var mauiContext = virtualView.Handler?.MauiContext ?? throw new NullReferenceException(nameof(IMauiContext));
-                var view = virtualView.Content ?? throw new InvalidOperationException($"{nameof(IPopover.Content)} can't be null here.");
-                var contentPage = new ContentPage
-                {
-                    Content = view,
-                    Parent = Application.Current?.MainPage
-                };
-
-                contentPage.SetBinding(BindableObject.BindingContextProperty, new Binding { Source = virtualView, Path = BindableObject.BindingContextProperty.PropertyName });
-
-                return (PageHandler)contentPage.ToHandler(mauiContext);
-            }
+            handler.PlatformView?.InitializeView(popover, anchor);
         }
 
         private static async void MapHide(PopoverHandler handler, IPopover popover, object arg3)
@@ -64,8 +46,7 @@ namespace Radek.SimpleShell.Controls.Handlers
             {
                 await vc.DismissViewControllerAsync(true);
             }
-
-            //handler.DisconnectHandler(handler.PlatformView);
+            handler.PlatformView.CleanUp();
         }
     }
 }

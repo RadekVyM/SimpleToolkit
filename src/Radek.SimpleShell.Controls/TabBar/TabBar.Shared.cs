@@ -396,7 +396,7 @@
 
                 if (IsSelected(shellItem))
                 {
-                    var selectedIcon = SimpleShell.GetSelectedIcon(shellItem);
+                    var selectedIcon = SimpleIcon.GetSelectedIcon(shellItem);
                     if (selectedIcon is not null && image.Source != selectedIcon)
                         image.Source = selectedIcon;
                 }
