@@ -46,7 +46,7 @@ namespace Radek.SimpleShell.Controls.Handlers
             {
                 await vc.DismissViewControllerAsync(true);
             }
-            handler.PlatformView.CleanUp();
+            //handler.PlatformView.CleanUp();
         }
     }
 }

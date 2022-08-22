@@ -1,5 +1,6 @@
 ﻿#if IOS || MACCATALYST
 
+using CoreAnimation;
 using CoreGraphics;
 using Foundation;
 using Microsoft.Maui.Platform;
@@ -25,6 +26,17 @@ namespace Radek.SimpleShell.Controls.Platform
         public IPopover VirtualView { get; private set; }
 
         internal UIViewController ViewController { get; private set; }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            View.Superview.Layer.CornerRadius = 0f;
+            View.Superview.Layer.BackgroundColor = Colors.Transparent.ToCGColor();
+            View.Superview.Layer.ShadowColor = null;
+            View.Superview.Layer.ShadowOpacity = 0f;
+            View.Layer.ShadowColor = null;
+            View.Layer.ShadowOpacity = 0f;
+            base.ViewDidAppear(animated);
+        }
 
         public override void ViewDidLayoutSubviews()
         {
@@ -125,7 +137,10 @@ namespace Radek.SimpleShell.Controls.Platform
         {
             view.Bounds = new(0, 0, PreferredContentSize.Width, PreferredContentSize.Height);
             view.ClearSubviews();
-            view.AddSubview(VirtualView.Content.ToHandler(mauiContext).PlatformView);
+            var subview = VirtualView?.Content?.ToHandler(mauiContext)?.PlatformView;
+
+            if (subview is not null)
+                view.AddSubview(subview);
         }
 
         void SetPresentationController()
@@ -138,7 +153,7 @@ namespace Radek.SimpleShell.Controls.Platform
             presentationController.PermittedArrowDirections = 0; // Because of this the popover is above the anchor
             presentationController.BackgroundColor = Colors.Transparent.ToPlatform();
 
-            //presentationController.PopoverBackgroundViewType = typeof(PopoverBackgroundView);
+            presentationController.PopoverBackgroundViewType = typeof(PopoverBackgroundView);
         }
 
         void AddToCurrentPageViewController(UIViewController viewController)
@@ -154,40 +169,61 @@ namespace Radek.SimpleShell.Controls.Platform
 
         private class PopoverBackgroundView : UIPopoverBackgroundView
         {
-            // TODO: Here I can probably change shape of the popover
-            // https://gist.github.com/andyshep/6240110
-            // https://github.com/mattneub/Programming-iOS-Book-Examples/blob/master/bk2ch09p476popovers/ch22p751popovers/MyPopoverBackgroundView.swift
-            // https://stackoverflow.com/questions/29459668/uipopoverbackgroundview-contentviewinsets-must-be-implemented-by-subclassers
-            // https://stackoverflow.com/questions/58468432/ios13-popoverpresentationcontroller-the-border-on-the-arrow-side-is-missing
-
-            [BindingImpl(BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
-            [Export("arrowBase")]
-            [SupportedOSPlatform("ios8.0")]
-            [SupportedOSPlatform("maccatalyst8.0.0")]
-            [SupportedOSPlatform("tvos")]
-            public static NFloat GetArrowBase()
-            {
-                throw new NotImplementedException();
-            }
-
-            [BindingImpl(BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
             [Export("arrowHeight")]
-            [SupportedOSPlatform("ios8.0")]
-            [SupportedOSPlatform("maccatalyst8.0.0")]
-            [SupportedOSPlatform("tvos")]
-            public static NFloat GetArrowHeight()
+            static new NFloat GetArrowHeight()
             {
-                throw new NotImplementedException();
+                return 0f;
             }
 
-            [BindingImpl(BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
-            [Export("contentViewInsets")]
-            [SupportedOSPlatform("ios8.0")]
-            [SupportedOSPlatform("maccatalyst8.0.0")]
-            [SupportedOSPlatform("tvos")]
-            public static UIEdgeInsets GetContentViewInsets()
+            [Export("arrowBase")]
+            static new NFloat GetArrowBase()
             {
-                throw new NotImplementedException();
+                return 0f;
+            }
+
+            [Export("contentViewInsets")]
+            static new UIEdgeInsets GetContentViewInsets()
+            {
+                return UIEdgeInsets.Zero;
+            }
+
+            [Export("wantsDefaultContentAppearance")]
+            static new bool WantsDefaultContentAppearance
+            {
+                get => false;
+            }
+
+            public override UIPopoverArrowDirection ArrowDirection { get; set; }
+
+            public override NFloat ArrowOffset { get; set; }
+
+
+            public PopoverBackgroundView(IntPtr handle) : base(handle)
+            {
+                ArrowOffset = 0f;
+                ArrowDirection = 0;
+
+                Layer.ShadowColor = Colors.Transparent.ToCGColor();
+                Layer.ShadowOpacity = 0f;
+                Layer.CornerRadius = 0f;
+                Layer.BackgroundColor = Colors.Transparent.ToCGColor();
+                Layer.MasksToBounds = false;
+            }
+
+            public override void DrawLayer(CALayer layer, CGContext context)
+            {
+                layer.ShadowColor = Colors.Transparent.ToCGColor();
+                layer.ShadowOpacity = 0f;
+                layer.BackgroundColor = Colors.Transparent.ToCGColor();
+                layer.CornerRadius = 0f;
+                layer.MasksToBounds = false;
+
+                base.DrawLayer(layer, context);
+            }
+
+            public override void Draw(CGRect rect)
+            {
+                base.Draw(rect);
             }
 
             public override void LayoutSubviews()
