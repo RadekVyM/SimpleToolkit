@@ -18,14 +18,15 @@ namespace Radek.SimpleShell.Controls.Platform
     {
         readonly IMauiContext mauiContext;
 
+        public IPopover VirtualView { get; private set; }
+        internal UIViewController ViewController { get; private set; }
+
+
         public UIPopoverViewController(IMauiContext mauiContext)
         {
             this.mauiContext = mauiContext ?? throw new ArgumentNullException(nameof(mauiContext));
         }
 
-        public IPopover VirtualView { get; private set; }
-
-        internal UIViewController ViewController { get; private set; }
 
         public override void ViewDidAppear(bool animated)
         {
@@ -41,8 +42,6 @@ namespace Radek.SimpleShell.Controls.Platform
         public override void ViewDidLayoutSubviews()
         {
             base.ViewDidLayoutSubviews();
-
-            //PreferredContentSize = View.SystemLayoutSizeFittingSize(UIView.UILayoutFittingCompressedSize);
 
             if (VirtualView.Content is null)
                 return;
@@ -80,18 +79,14 @@ namespace Radek.SimpleShell.Controls.Platform
         public void CleanUp()
         {
             if (VirtualView is null)
-            {
                 return;
-            }
 
             VirtualView = null;
 
             View.ClearSubviews();
 
             if (PresentationController is UIPopoverPresentationController presentationController)
-            {
                 presentationController.Delegate = null;
-            }
         }
 
         [MemberNotNull(nameof(ViewController))]
@@ -111,9 +106,7 @@ namespace Radek.SimpleShell.Controls.Platform
         public void SetLayout(IPopover popover, IElement anchor)
         {
             if (View is null)
-            {
                 return;
-            }
 
             var view = anchor.ToPlatform(popover.Handler?.MauiContext ?? throw new NullReferenceException());
             PopoverPresentationController.SourceView = view;
@@ -125,15 +118,13 @@ namespace Radek.SimpleShell.Controls.Platform
             SetView(View);
         }
 
-        void SetDimmingBackgroundEffect()
+        private void SetDimmingBackgroundEffect()
         {
             if (ViewController?.View is UIView view)
-            {
                 view.Alpha = 1f;
-            }
         }
 
-        void SetView(UIView view)
+        private void SetView(UIView view)
         {
             view.Bounds = new(0, 0, PreferredContentSize.Width, PreferredContentSize.Height);
             view.ClearSubviews();
@@ -143,7 +134,7 @@ namespace Radek.SimpleShell.Controls.Platform
                 view.AddSubview(subview);
         }
 
-        void SetPresentationController()
+        private void SetPresentationController()
         {
             var popOverDelegate = new PopoverDelegate();
 
@@ -156,7 +147,7 @@ namespace Radek.SimpleShell.Controls.Platform
             presentationController.PopoverBackgroundViewType = typeof(PopoverBackgroundView);
         }
 
-        void AddToCurrentPageViewController(UIViewController viewController)
+        private void AddToCurrentPageViewController(UIViewController viewController)
         {
             viewController.PresentViewController(this, true, null);
         }

@@ -13,7 +13,6 @@ namespace Radek.SimpleShell.Controls.Platform
 {
     public class SimpleFlyout : Flyout
     {
-        const double defaultSize = 600;
         readonly IMauiContext mauiContext;
 
         public SimpleFlyout(IMauiContext mauiContext)
@@ -49,10 +48,9 @@ namespace Radek.SimpleShell.Controls.Platform
         public void ConfigureControl()
         {
             if (VirtualView is null)
-            {
                 return;
-            }
-            FlyoutStyle = new(typeof(FlyoutPresenter));
+
+            FlyoutStyle = new XamlStyle(typeof(FlyoutPresenter));
             SetFlyoutStyle();
             SetLayout();
             ApplyStyles();
@@ -87,15 +85,13 @@ namespace Radek.SimpleShell.Controls.Platform
             Hide();
 
             if (Control is not null)
-            {
                 panelCleanUp?.Invoke(Control);
-            }
 
             VirtualView = null;
             Control = null;
         }
 
-        void CreateControl()
+        private void CreateControl()
         {
             if (Control is null && VirtualView?.Content is not null && createControl is not null && VirtualView.Handler is PopoverHandler handler)
             {
@@ -104,17 +100,15 @@ namespace Radek.SimpleShell.Controls.Platform
             }
         }
 
-        void SetLayout()
+        private void SetLayout()
         {
             LightDismissOverlayMode = LightDismissOverlayMode.Off;
 
             if (VirtualView is not null)
-            {
                 Placement = FlyoutPlacementMode.Bottom;
-            }
         }
 
-        void SetFlyoutStyle()
+        private void SetFlyoutStyle()
         {
             _ = VirtualView?.Content ?? throw new NullReferenceException(nameof(IPopover.Content));
 
@@ -128,12 +122,10 @@ namespace Radek.SimpleShell.Controls.Platform
             FlyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.MinWidthProperty, 0));
         }
 
-        void ApplyStyles()
+        private void ApplyStyles()
         {
             if (Control is null)
-            {
                 return;
-            }
 
             FlyoutPresenterStyle = FlyoutStyle;
         }

@@ -38,8 +38,10 @@ namespace Radek.SimpleShell.Controls
         public void Show(View parentView)
         {
             var mauiContext = parentView.Handler.MauiContext;
-            this.Parent = parentView;
 		    var platformPopup = this.ToHandler(mauiContext);
+            
+            Parent = parentView;
+
             platformPopup.Invoke(nameof(IPopover.Show), parentView);
         }
 
@@ -89,7 +91,7 @@ namespace Radek.SimpleShell.Controls
 
         private static void OnContentChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            var popover = (Popover)bindable;
+            var popover = bindable as Popover;
             popover.OnBindingContextChanged();
         }
     }

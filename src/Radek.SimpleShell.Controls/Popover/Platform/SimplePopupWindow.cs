@@ -4,8 +4,6 @@ using Android.Content;
 using Android.Graphics.Drawables;
 using Android.Widget;
 using Microsoft.Maui.Platform;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using AView = Android.Views.View;
 
 namespace Radek.SimpleShell.Controls.Platform
@@ -16,16 +14,18 @@ namespace Radek.SimpleShell.Controls.Platform
 
         public IPopover VirtualView { get; private set; }
 
-        public SimplePopupWindow(Context context, IMauiContext mauiContext)
-            : base(context)
+
+        public SimplePopupWindow(Context context, IMauiContext mauiContext) : base(context)
         {
             this.mauiContext = mauiContext ?? throw new ArgumentNullException(nameof(mauiContext));
 
             OutsideTouchable = true;
             Focusable = true;
             Elevation = 0;
+
             SetBackgroundDrawable(new ColorDrawable(Colors.Transparent.ToPlatform()));
         }
+
 
         public AView SetElement(IPopover element)
         {

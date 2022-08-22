@@ -6,9 +6,10 @@ using Microsoft.UI.Xaml.Controls;
 using WRect = Windows.Foundation.Rect;
 
 // Based on https://github.com/CommunityToolkit/Maui/blob/main/src/CommunityToolkit.Maui.Core/Views/Popup/MauiPopup.android.cs
+
 namespace Radek.SimpleShell.Controls.Platform
 {
-    class WrapperPanel : Panel
+    internal class WrapperPanel : Panel
     {
         readonly View view;
 
@@ -88,12 +89,11 @@ namespace Radek.SimpleShell.Controls.Platform
             return result;
         }
 
-        void OnMeasureInvalidated(object? sender, EventArgs e)
+        private void OnMeasureInvalidated(object? sender, EventArgs e)
         {
             InvalidateMeasure();
         }
     }
 }
-
 
 #endif
