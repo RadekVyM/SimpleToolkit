@@ -209,8 +209,11 @@ namespace Radek.SimpleShell.Controls
             return i;
         }
 
+        // TODO: Update selection of more button - if hidden item is selected, show more button as selected
         private bool IsSelected(BindableObject bindableObject)
         {
+            // (bindableObject == moreButton && hiddenItems.Any(h => h.BindingContext == SelectedItem))
+
             return bindableObject.BindingContext == SelectedItem || bindableObject == SelectedItem;
         }
 
@@ -558,6 +561,7 @@ namespace Radek.SimpleShell.Controls
 
             stackLayout.Children.Remove(moreButton);
 
+            // Find items that should be hidden
             for (int i = 0; i < stackLayout.Children.Count; i++)
             {
                 var view = stackLayout.Children[i] as Grid;
@@ -575,6 +579,7 @@ namespace Radek.SimpleShell.Controls
                 }
             }
 
+            // Try to show some already hidden items
             if (stackLayout.Children.Count < allItemViews.Count && !hidden.Any())
             {
                 totalWidth = DesignLanguage is DesignLanguage.Fluent ? totalWidth : stackLayout.Children.Count * realMinimumItemWidth;
@@ -598,6 +603,7 @@ namespace Radek.SimpleShell.Controls
                     hiddenItems.Remove(item);
                 }
 
+                // Show more button or rest of the already hidden items
                 if (hiddenItems.Any() && ShowButtonAndMenuWhenMoreItemsDoNotFit)
                 {
                     var restItemsWidth = DesignLanguage is DesignLanguage.Fluent ? hiddenItems.Sum(c => (c as View).Width) : hiddenItems.Count * realMinimumItemWidth;
@@ -615,7 +621,8 @@ namespace Radek.SimpleShell.Controls
                 }
             }
             
-            if (ShowButtonAndMenuWhenMoreItemsDoNotFit && addMoreButton)
+            // Hide last item if more button should be shown
+            if (ShowButtonAndMenuWhenMoreItemsDoNotFit && (addMoreButton || hidden.Any()))
             {
                 totalWidth -= DesignLanguage is DesignLanguage.Fluent ? ((hidden.FirstOrDefault() as View)?.Width ?? 0) : currentItemWidth;
 
@@ -628,6 +635,7 @@ namespace Radek.SimpleShell.Controls
                 }
             }
 
+            // Hide items that should be hidden
             if (hidden.Any())
             {
                 hiddenItems = hidden.Concat(hiddenItems).ToList();
@@ -643,6 +651,7 @@ namespace Radek.SimpleShell.Controls
             }
             HiddenItems = hiddenItems.Select(v => v.BindingContext as BaseShellItem).ToList();
 
+            // Show more button
             if (addMoreButton)
             {
                 stackLayout.Children.Add(moreButton);
