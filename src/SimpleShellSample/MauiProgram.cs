@@ -17,11 +17,12 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
+        
+        builder.ConfigureSimpleShellControls();
 
         if (UseSimpleShell)
         {
             builder.AddSimpleShellHandlers();
-            builder.ConfigureSimpleShellControls();
         }
 
         return builder.Build();

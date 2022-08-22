@@ -1,4 +1,6 @@
-﻿namespace Radek.SimpleShell.Controls
+﻿using Microsoft.Maui.Controls;
+
+namespace Radek.SimpleShell.Controls
 {
     public partial class TabBar : ContentView, IView
     {
@@ -43,9 +45,22 @@
         private FontAttributes labelAttributes;
         private FontAttributes labelSelectionAttributes;
         private StackOrientation itemStackLayoutOrientation = StackOrientation.Vertical;
+        private int itemsInStacklayoutCount
+        {
+            get
+            {
+                var count = stackLayout?.Children?.Count ?? 1;
+
+                if (stackLayout?.Children?.Contains(moreButton) == true)
+                    return count - 1;
+
+                return count;
+            }
+        }
 
         private IList<Grid> allItemViews = new List<Grid>();
         private IList<Grid> hiddenItems = new List<Grid>();
+        private Grid moreButton = null;
 
         public event TabViewItemSelectedEventHandler ItemSelected;
 
@@ -61,6 +76,9 @@
         public static readonly BindableProperty TextColorProperty = BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(TabBar), propertyChanged: OnTextColorChanged, defaultValue: Colors.Black);
         public static readonly BindableProperty TextSelectionColorProperty = BindableProperty.Create(nameof(TextSelectionColor), typeof(Color), typeof(TabBar), propertyChanged: OnTextSelectionColorChanged, defaultValue: Colors.Black);
         public static readonly BindableProperty PrimaryBrushProperty = BindableProperty.Create(nameof(PrimaryBrush), typeof(Brush), typeof(TabBar), propertyChanged: OnPrimaryBrushChanged, defaultValue: null);
+        public static readonly BindableProperty ShowButtonAndMenuWhenMoreItemsDoNotFitProperty = BindableProperty.Create(nameof(ShowButtonAndMenuWhenMoreItemsDoNotFit), typeof(bool), typeof(TabBar), propertyChanged: OnShowButtonAndMenuWhenMoreItemsDoNotFitChanged, defaultValue: true); // Naming is hard 😶
+        public static readonly BindableProperty MoreTitleProperty = BindableProperty.Create(nameof(MoreTitle), typeof(string), typeof(TabBar), propertyChanged: OnMoreTitleChanged, defaultValue: "More");
+        public static readonly BindableProperty MoreIconProperty = BindableProperty.Create(nameof(MoreIcon), typeof(ImageSource), typeof(TabBar), propertyChanged: OnMoreIconChanged, defaultValue: null);
 
         public virtual IEnumerable<BaseShellItem> Items
         {
@@ -134,6 +152,24 @@
             set => SetValue(PrimaryBrushProperty, value);
         }
 
+        public virtual bool ShowButtonAndMenuWhenMoreItemsDoNotFit
+        {
+            get => (bool)GetValue(ShowButtonAndMenuWhenMoreItemsDoNotFitProperty);
+            set => SetValue(ShowButtonAndMenuWhenMoreItemsDoNotFitProperty, value);
+        }
+
+        public virtual string MoreTitle
+        {
+            get => (string)GetValue(MoreTitleProperty);
+            set => SetValue(MoreTitleProperty, value);
+        }
+
+        public virtual ImageSource MoreIcon
+        {
+            get => (ImageSource)GetValue(MoreIconProperty);
+            set => SetValue(MoreIconProperty, value);
+        }
+
 
         public TabBar()
         {
@@ -142,6 +178,8 @@
             HandlerChanged += TabBarHandlerChanged;
             Unloaded += TabBarUnloaded;
             SizeChanged += TabBarSizeChanged;
+
+            CreateMoreButton();
         }
 
 
@@ -270,69 +308,83 @@
         {
             foreach (var item in items)
             {
-                var grid = new Grid
-                {
-                    HeightRequest = tabBarHeight,
-                    WidthRequest = itemWidth,
-                    Style = new Style(typeof(Grid)),
-                    BindingContext = item
-                };
-                var stackLayout = new StackLayout
-                {
-                    Padding = itemStackLayoutPadding,
-                    Orientation = itemStackLayoutOrientation,
-                    Spacing = itemStackLayoutSpacing,
-                    HorizontalOptions = LayoutOptions.Center,
-                    VerticalOptions = LayoutOptions.Fill,
-                    Style = new Style(typeof(StackLayout)),
-                    BindingContext = item
-                };
-                var button = new Button
-                {
-                    HorizontalOptions = LayoutOptions.Fill,
-                    VerticalOptions = LayoutOptions.Fill,
-                    HeightRequest = tabBarHeight,
-                    BackgroundColor = Colors.Transparent,
-                    BorderWidth = 0,
-                    Style = new Style(typeof(Button)),
-                    BindingContext = item
-                };
-
-                var label = new Label
-                {
-                    Text = item.Title,
-                    TextColor = TextColor,
-                    FontSize = fontSize,
-                    HorizontalOptions = LayoutOptions.Center,
-                    VerticalOptions = LayoutOptions.Center,
-                    Style = new Style(typeof(Label)),
-                    BindingContext = item
-                };
-                var image = new BitmapIcon
-                {
-                    Source = item.Icon,
-                    HeightRequest = iconSize.Height,
-                    WidthRequest = iconSize.Width,
-                    Margin = iconMargin,
-                    HorizontalOptions = LayoutOptions.Center,
-                    VerticalOptions = LayoutOptions.Center,
-                    Aspect = Aspect.AspectFill,
-                    TintColor = IconColor,
-                    Style = new Style(typeof(BitmapIcon)),
-                    BindingContext = item
-                };
-
-                stackLayout.Children.Add(image);
-                stackLayout.Children.Add(label);
-
-                grid.Children.Add(stackLayout);
-                grid.Children.Add(button);
-
-                CompressedLayout.SetIsHeadless(stackLayout, true);
-                CompressedLayout.SetIsHeadless(grid, true);
-
-                yield return grid;
+                yield return CreateButton(item);
             }
+        }
+
+        private Grid CreateButton(BaseShellItem item)
+        {
+            var grid = new Grid
+            {
+                HeightRequest = tabBarHeight,
+                WidthRequest = itemWidth,
+                Style = new Style(typeof(Grid)),
+                BindingContext = item
+            };
+            var stackLayout = new StackLayout
+            {
+                Padding = itemStackLayoutPadding,
+                Orientation = itemStackLayoutOrientation,
+                Spacing = itemStackLayoutSpacing,
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Fill,
+                Style = new Style(typeof(StackLayout)),
+                BindingContext = item
+            };
+            var button = new Button
+            {
+                HorizontalOptions = LayoutOptions.Fill,
+                VerticalOptions = LayoutOptions.Fill,
+                BackgroundColor = Colors.Transparent,
+                BorderWidth = 0,
+                Style = new Style(typeof(Button)),
+                BindingContext = item
+            };
+
+            var label = new Label
+            {
+                Text = item.Title,
+                TextColor = TextColor,
+                FontSize = fontSize,
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+                Style = new Style(typeof(Label)),
+                BindingContext = item
+            };
+            var image = new BitmapIcon
+            {
+                Source = item.Icon,
+                HeightRequest = iconSize.Height,
+                WidthRequest = iconSize.Width,
+                Margin = iconMargin,
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+                Aspect = Aspect.AspectFill,
+                TintColor = IconColor,
+                Style = new Style(typeof(BitmapIcon)),
+                BindingContext = item
+            };
+
+            stackLayout.Children.Add(image);
+            stackLayout.Children.Add(label);
+
+            grid.Children.Add(stackLayout);
+            grid.Children.Add(button);
+
+            CompressedLayout.SetIsHeadless(stackLayout, true);
+            CompressedLayout.SetIsHeadless(grid, true);
+
+            return grid;
+        }
+
+        private Grid CreateMoreButton()
+        {
+            var shellItem = new BaseShellItem
+            {
+                Title = MoreTitle,
+                Icon = MoreIcon
+            };
+            return moreButton = CreateButton(shellItem);
         }
 
         private void UpdateValuesAccordingToLanguage()
@@ -381,41 +433,10 @@
 
             foreach (var item in allItemViews)
             {
-                var stackLayout = item.Children[0] as StackLayout;
-                var image = stackLayout.Children[0] as BitmapIcon;
-                var label = stackLayout.Children[1] as Label;
-
-                var shellItem = item.BindingContext as BaseShellItem;
-
-                item.HeightRequest = tabBarHeight;
-                item.WidthRequest = itemWidth;
-                label.TextTransform = labelTextTransform;
-                label.TextColor = IsSelected(shellItem) ? TextSelectionColor : TextColor;
-                label.FontSize = fontSize;
-                label.FontAttributes = IsSelected(shellItem) ? labelSelectionAttributes : labelAttributes;
-
-                if (IsSelected(shellItem))
-                {
-                    var selectedIcon = SimpleIcon.GetSelectedIcon(shellItem);
-                    if (selectedIcon is not null && image.Source != selectedIcon)
-                        image.Source = selectedIcon;
-                }
-                else if (image.Source != shellItem.Icon)
-                {
-                    image.Source = shellItem.Icon;
-                }
-
-                image.HeightRequest = iconSize.Height;
-                image.WidthRequest = image.Source is not null ? iconSize.Width : 0;
-                if (image.Margin != iconMargin)
-                    image.Margin = iconMargin;
-                image.TintColor = IsSelected(shellItem) ? IconSelectionColor : IconColor;
-
-                stackLayout.Orientation = itemStackLayoutOrientation;
-                stackLayout.Spacing = image.Source is null && itemStackLayoutOrientation is StackOrientation.Horizontal ? 0 : itemStackLayoutSpacing;
-                if (stackLayout.Padding != itemStackLayoutPadding)
-                    stackLayout.Padding = itemStackLayoutPadding;
+                UpdateButton(item);
             }
+
+            UpdateMoreButton();
 
             // Wait for remeasuring of Width property of all items
             await Task.Delay(10);
@@ -429,6 +450,44 @@
             }
 
             InvalidateGraphicsView();
+        }
+
+        private void UpdateButton(Grid item)
+        {
+            var stackLayout = item.Children[0] as StackLayout;
+            var image = stackLayout.Children[0] as BitmapIcon;
+            var label = stackLayout.Children[1] as Label;
+
+            var shellItem = item.BindingContext as BaseShellItem;
+
+            item.HeightRequest = tabBarHeight;
+            item.WidthRequest = itemWidth;
+            label.TextTransform = labelTextTransform;
+            label.TextColor = IsSelected(shellItem) ? TextSelectionColor : TextColor;
+            label.FontSize = fontSize;
+            label.FontAttributes = IsSelected(shellItem) ? labelSelectionAttributes : labelAttributes;
+
+            if (IsSelected(shellItem))
+            {
+                var selectedIcon = SimpleIcon.GetSelectedIcon(shellItem);
+                if (selectedIcon is not null && image.Source != selectedIcon)
+                    image.Source = selectedIcon;
+            }
+            else if (image.Source != shellItem.Icon)
+            {
+                image.Source = shellItem.Icon;
+            }
+
+            image.HeightRequest = iconSize.Height;
+            image.WidthRequest = image.Source is not null ? iconSize.Width : 0;
+            if (image.Margin != iconMargin)
+                image.Margin = iconMargin;
+            image.TintColor = IsSelected(shellItem) ? IconSelectionColor : IconColor;
+
+            stackLayout.Orientation = itemStackLayoutOrientation;
+            stackLayout.Spacing = image.Source is null && itemStackLayoutOrientation is StackOrientation.Horizontal ? 0 : itemStackLayoutSpacing;
+            if (stackLayout.Padding != itemStackLayoutPadding)
+                stackLayout.Padding = itemStackLayoutPadding;
         }
 
         private void UpdateButtons(IEnumerable<BaseShellItem> items)
@@ -458,6 +517,22 @@
             }
         }
 
+        private void UpdateMoreButton()
+        {
+            if (moreButton is null)
+            {
+                moreButton = CreateMoreButton();
+                return;
+            }
+
+            var shellItem = moreButton.BindingContext as BaseShellItem;
+
+            shellItem.Title = MoreTitle;
+            shellItem.Icon = MoreIcon;
+
+            UpdateButton(moreButton);
+        }
+
         private void UpdateSizeOfItems()
         {
             foreach (var item in allItemViews)
@@ -466,6 +541,9 @@
                 grid.HeightRequest = tabBarHeight;
                 grid.WidthRequest = itemWidth;
             }
+
+            moreButton.HeightRequest = tabBarHeight;
+            moreButton.WidthRequest = itemWidth;
         }
 
         private bool UpdateHiddenItems()
@@ -474,11 +552,16 @@
             double totalWidth = 0;
             bool remove = false;
             List<Grid> hidden = new List<Grid>();
+            double moreButtonWidth = DesignLanguage is DesignLanguage.Fluent ? (moreButton?.Measure(double.PositiveInfinity, double.PositiveInfinity).Request.Width ?? realMinimumItemWidth) : realMinimumItemWidth;
+            double currentItemWidth = itemWidth;
+            bool addMoreButton = false;
+
+            stackLayout.Children.Remove(moreButton);
 
             for (int i = 0; i < stackLayout.Children.Count; i++)
             {
                 var view = stackLayout.Children[i] as Grid;
-                totalWidth += DesignLanguage is DesignLanguage.Fluent ? view.Width : itemWidth;
+                totalWidth += DesignLanguage is DesignLanguage.Fluent ? view.Width : currentItemWidth;
 
                 if (remove)
                 {
@@ -492,10 +575,11 @@
                 }
             }
 
-            if (stackLayout.Children.Count < allItemViews.Count)
+            if (stackLayout.Children.Count < allItemViews.Count && !hidden.Any())
             {
                 totalWidth = DesignLanguage is DesignLanguage.Fluent ? totalWidth : stackLayout.Children.Count * realMinimumItemWidth;
-                
+                totalWidth += ShowButtonAndMenuWhenMoreItemsDoNotFit ? moreButtonWidth : 0;
+
                 while (totalWidth < Width)
                 {
                     var item = hiddenItems.FirstOrDefault();
@@ -513,17 +597,56 @@
                     stackLayout.Children.Add(item);
                     hiddenItems.Remove(item);
                 }
+
+                if (hiddenItems.Any() && ShowButtonAndMenuWhenMoreItemsDoNotFit)
+                {
+                    var restItemsWidth = DesignLanguage is DesignLanguage.Fluent ? hiddenItems.Sum(c => (c as View).Width) : hiddenItems.Count * realMinimumItemWidth;
+
+                    if (restItemsWidth <= Width - (totalWidth - moreButtonWidth))
+                    {
+                        foreach (var item in hiddenItems)
+                            stackLayout.Children.Add(item);
+                        hiddenItems.Clear();
+                    }
+                    else
+                    {
+                        addMoreButton = true;
+                    }
+                }
+            }
+            
+            if (ShowButtonAndMenuWhenMoreItemsDoNotFit && addMoreButton)
+            {
+                totalWidth -= DesignLanguage is DesignLanguage.Fluent ? ((hidden.FirstOrDefault() as View)?.Width ?? 0) : currentItemWidth;
+
+                if (totalWidth + moreButtonWidth > Width)
+                {
+                    var last = stackLayout.Children.Except(hidden).LastOrDefault() as Grid;
+
+                    if (last is not null)
+                        hidden.Insert(0, last);
+                }
             }
 
-            if (hidden.Count > 0)
+            if (hidden.Any())
             {
                 hiddenItems = hidden.Concat(hiddenItems).ToList();
 
                 hidden.ForEach(v => {
                     stackLayout.Children.Remove(v);
                 });
+
+                if (ShowButtonAndMenuWhenMoreItemsDoNotFit)
+                {
+                    addMoreButton = true;
+                }
             }
             HiddenItems = hiddenItems.Select(v => v.BindingContext as BaseShellItem).ToList();
+
+            if (addMoreButton)
+            {
+                stackLayout.Children.Add(moreButton);
+            }
 
             return changed;
         }
@@ -757,6 +880,24 @@
         {
             var tabBar = bindable as TabBar;
             tabBar.InvalidateGraphicsView();
+        }
+
+        private static void OnShowButtonAndMenuWhenMoreItemsDoNotFitChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var tabBar = bindable as TabBar;
+            tabBar.UpdateMoreButton();
+        }
+
+        private static void OnMoreTitleChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var tabBar = bindable as TabBar;
+            tabBar.UpdateMoreButton();
+        }
+
+        private static void OnMoreIconChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var tabBar = bindable as TabBar;
+            tabBar.UpdateMoreButton();
         }
     }
 }
