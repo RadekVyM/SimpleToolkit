@@ -137,7 +137,21 @@
             ContentTemplate="{DataTemplate pages:GreenPage}"
             Route="GreenPage" />
     </Tab>
-    
+
+    <Tab Title="Gray"
+         Icon="flame_empty.png"
+         controls:SimpleIcon.SelectedIcon="https://www.itnetwork.cz/images/63461/mobile/apps_icon.png">
+        <ShellContent
+            Title="Gray"
+            controls:SimpleIcon.SelectedIcon="https://www.itnetwork.cz/images/63461/mobile/apps_icon.png"
+            ContentTemplate="{DataTemplate pages:GrayPage}"
+            Route="GrayPage">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="a" Size="20"/>
+            </ShellContent.Icon>
+        </ShellContent>
+    </Tab>
+
     <Tab Title="Case tab" Route="SecondTab"
          Icon="case_empty.png"
          controls:SimpleIcon.SelectedIcon="case_filled.png">
@@ -164,17 +178,6 @@
             controls:SimpleIcon.SelectedIcon="avatar_filled.png"
             ContentTemplate="{DataTemplate pages:PurplePage}"
             Route="PurplePage" />
-    </Tab>
-
-    <Tab Title="Gray"
-         Icon="flame_empty.png"
-         controls:SimpleIcon.SelectedIcon="flame_filled.png">
-        <ShellContent
-            Title="Gray"
-            Icon="flame_empty.png"
-            controls:SimpleIcon.SelectedIcon="flame_filled.png"
-            ContentTemplate="{DataTemplate pages:GrayPage}"
-            Route="GrayPage" />
     </Tab>
 
     <!--<ShellContent

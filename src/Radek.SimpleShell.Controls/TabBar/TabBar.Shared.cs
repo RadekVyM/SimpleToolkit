@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-
-namespace Radek.SimpleShell.Controls
+﻿namespace Radek.SimpleShell.Controls
 {
     public partial class TabBar : ContentView, IView
     {
@@ -40,11 +38,6 @@ namespace Radek.SimpleShell.Controls
                 return width;
             }
         }
-        private double scrollPosition = 0;
-        private TextTransform labelTextTransform;
-        private FontAttributes labelAttributes;
-        private FontAttributes labelSelectionAttributes;
-        private StackOrientation itemStackLayoutOrientation = StackOrientation.Vertical;
         private int itemsInStacklayoutCount
         {
             get
@@ -57,6 +50,11 @@ namespace Radek.SimpleShell.Controls
                 return count;
             }
         }
+        private double scrollPosition = 0;
+        private TextTransform labelTextTransform;
+        private FontAttributes labelAttributes;
+        private FontAttributes labelSelectionAttributes;
+        private StackOrientation itemStackLayoutOrientation = StackOrientation.Vertical;
 
         private IList<Grid> allItemViews = new List<Grid>();
         private IList<Grid> hiddenItems = new List<Grid>();
@@ -552,16 +550,113 @@ namespace Radek.SimpleShell.Controls
         private bool UpdateHiddenItems()
         {
             bool changed = false;
-            double totalWidth = 0;
-            bool remove = false;
-            List<Grid> hidden = new List<Grid>();
-            double moreButtonWidth = DesignLanguage is DesignLanguage.Fluent ? (moreButton?.Measure(double.PositiveInfinity, double.PositiveInfinity).Request.Width ?? realMinimumItemWidth) : realMinimumItemWidth;
-            double currentItemWidth = itemWidth;
             bool addMoreButton = false;
+            double totalWidth = 0;
+            double currentItemWidth = itemWidth;
+            double moreButtonWidth = DesignLanguage is DesignLanguage.Fluent ? (moreButton?.Measure(double.PositiveInfinity, double.PositiveInfinity).Request.Width ?? realMinimumItemWidth) : realMinimumItemWidth;
+            List<Grid> hidden = new List<Grid>();
 
             stackLayout.Children.Remove(moreButton);
 
             // Find items that should be hidden
+            FindNewHiddenItems(ref changed, ref totalWidth, hidden, currentItemWidth);
+
+            // Try to show some already hidden items
+            if (stackLayout.Children.Count < allItemViews.Count && !hidden.Any())
+            {
+                TryShowHiddenItems(ref changed, ref totalWidth, ref addMoreButton, moreButtonWidth);
+            }
+
+            // Hide last item if more button should be shown
+            if (ShowButtonAndMenuWhenMoreItemsDoNotFit && (addMoreButton || hidden.Any()))
+            {
+                totalWidth -= DesignLanguage is DesignLanguage.Fluent ? ((hidden.FirstOrDefault() as View)?.Width ?? 0) : currentItemWidth;
+
+                if (totalWidth + moreButtonWidth > Width)
+                {
+                    var last = stackLayout.Children.Except(hidden).LastOrDefault() as Grid;
+
+                    if (last is not null)
+                        hidden.Insert(0, last);
+                }
+            }
+
+            // Hide items that should be hidden
+            addMoreButton = HideItems(hidden) || addMoreButton;
+
+            // Show more button
+            if (addMoreButton)
+                stackLayout.Children.Add(moreButton);
+
+            return changed;
+        }
+
+        private bool HideItems(List<Grid> hidden)
+        {
+            bool addMoreButton = false;
+
+            if (hidden.Any())
+            {
+                hiddenItems = hidden.Concat(hiddenItems).ToList();
+
+                hidden.ForEach(v =>
+                {
+                    stackLayout.Children.Remove(v);
+                });
+
+                if (ShowButtonAndMenuWhenMoreItemsDoNotFit)
+                    addMoreButton = true;
+            }
+            HiddenItems = hiddenItems.Select(v => v.BindingContext as BaseShellItem).ToList();
+
+            return addMoreButton;
+        }
+
+        private void TryShowHiddenItems(ref bool changed, ref double totalWidth, ref bool addMoreButton, double moreButtonWidth)
+        {
+            totalWidth = DesignLanguage is DesignLanguage.Fluent ? totalWidth : stackLayout.Children.Count * realMinimumItemWidth;
+            totalWidth += ShowButtonAndMenuWhenMoreItemsDoNotFit ? moreButtonWidth : 0;
+
+            while (totalWidth < Width)
+            {
+                var item = hiddenItems.FirstOrDefault();
+
+                if (item is null)
+                    break;
+
+                var newTotalWidth = totalWidth + (DesignLanguage is DesignLanguage.Fluent ? item.Width : realMinimumItemWidth);
+
+                if (newTotalWidth > Width)
+                    break;
+
+                changed = true;
+                totalWidth = newTotalWidth;
+                stackLayout.Children.Add(item);
+                hiddenItems.Remove(item);
+            }
+
+            // Show more button or rest of the already hidden items
+            if (hiddenItems.Any() && ShowButtonAndMenuWhenMoreItemsDoNotFit)
+            {
+                var restItemsWidth = DesignLanguage is DesignLanguage.Fluent ? hiddenItems.Sum(c => (c as View).Width) : hiddenItems.Count * realMinimumItemWidth;
+
+                if (restItemsWidth <= Width - (totalWidth - moreButtonWidth))
+                {
+                    foreach (var item in hiddenItems)
+                        stackLayout.Children.Add(item);
+                    hiddenItems.Clear();
+                }
+                else
+                {
+                    addMoreButton = true;
+                }
+            }
+        }
+
+        private void FindNewHiddenItems(ref bool changed, ref double totalWidth, List<Grid> hidden, double currentItemWidth)
+        {
+            bool remove = false;
+
             for (int i = 0; i < stackLayout.Children.Count; i++)
             {
                 var view = stackLayout.Children[i] as Grid;
@@ -578,87 +673,9 @@ namespace Radek.SimpleShell.Controls
                     hidden.Add(view);
                 }
             }
-
-            // Try to show some already hidden items
-            if (stackLayout.Children.Count < allItemViews.Count && !hidden.Any())
-            {
-                totalWidth = DesignLanguage is DesignLanguage.Fluent ? totalWidth : stackLayout.Children.Count * realMinimumItemWidth;
-                totalWidth += ShowButtonAndMenuWhenMoreItemsDoNotFit ? moreButtonWidth : 0;
-
-                while (totalWidth < Width)
-                {
-                    var item = hiddenItems.FirstOrDefault();
-
-                    if (item is null)
-                        break;
-
-                    var newTotalWidth = totalWidth + (DesignLanguage is DesignLanguage.Fluent ? item.Width : realMinimumItemWidth);
-                    
-                    if (newTotalWidth > Width)
-                        break;
-
-                    changed = true;
-                    totalWidth = newTotalWidth;
-                    stackLayout.Children.Add(item);
-                    hiddenItems.Remove(item);
-                }
-
-                // Show more button or rest of the already hidden items
-                if (hiddenItems.Any() && ShowButtonAndMenuWhenMoreItemsDoNotFit)
-                {
-                    var restItemsWidth = DesignLanguage is DesignLanguage.Fluent ? hiddenItems.Sum(c => (c as View).Width) : hiddenItems.Count * realMinimumItemWidth;
-
-                    if (restItemsWidth <= Width - (totalWidth - moreButtonWidth))
-                    {
-                        foreach (var item in hiddenItems)
-                            stackLayout.Children.Add(item);
-                        hiddenItems.Clear();
-                    }
-                    else
-                    {
-                        addMoreButton = true;
-                    }
-                }
-            }
-            
-            // Hide last item if more button should be shown
-            if (ShowButtonAndMenuWhenMoreItemsDoNotFit && (addMoreButton || hidden.Any()))
-            {
-                totalWidth -= DesignLanguage is DesignLanguage.Fluent ? ((hidden.FirstOrDefault() as View)?.Width ?? 0) : currentItemWidth;
-
-                if (totalWidth + moreButtonWidth > Width)
-                {
-                    var last = stackLayout.Children.Except(hidden).LastOrDefault() as Grid;
-
-                    if (last is not null)
-                        hidden.Insert(0, last);
-                }
-            }
-
-            // Hide items that should be hidden
-            if (hidden.Any())
-            {
-                hiddenItems = hidden.Concat(hiddenItems).ToList();
-
-                hidden.ForEach(v => {
-                    stackLayout.Children.Remove(v);
-                });
-
-                if (ShowButtonAndMenuWhenMoreItemsDoNotFit)
-                {
-                    addMoreButton = true;
-                }
-            }
-            HiddenItems = hiddenItems.Select(v => v.BindingContext as BaseShellItem).ToList();
-
-            // Show more button
-            if (addMoreButton)
-            {
-                stackLayout.Children.Add(moreButton);
-            }
-
-            return changed;
         }
+
+        #region Event callbacks
 
         private void ItemButtonClicked(object sender, EventArgs e)
         {
@@ -908,5 +925,7 @@ namespace Radek.SimpleShell.Controls
             var tabBar = bindable as TabBar;
             tabBar.UpdateMoreButton();
         }
+
+        #endregion
     }
 }
