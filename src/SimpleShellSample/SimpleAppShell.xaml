@@ -187,9 +187,9 @@
     
     
     <ss:SimpleShell.Content>
-        <Grid x:Name="rootContainer" RowDefinitions="auto, auto, auto, *, auto">
+        <Grid x:Name="rootContainer" RowDefinitions="auto, auto, *, auto">
             <Grid x:Name="appBar" ColumnSpacing="10" Padding="12"
-                  ColumnDefinitions="auto,auto,*,auto">
+                  ColumnDefinitions="auto, auto, *, auto, auto">
                 <Button x:Name="backButton" Text="Back" Clicked="BackButtonClicked" VerticalOptions="Center">
                     <VisualStateManager.VisualStateGroups>
                         <!-- If I want to override default VisualStateGroup in Styles.xaml, I have to use VisualStateGroupList. See https://github.com/dotnet/maui/issues/8003 -->
@@ -220,7 +220,7 @@
                 
                 <Button x:Name="designButton" Grid.Column="3"
                         Text="Design"
-                        Clicked="DesignButtonClicked"
+                        Clicked="ShowPopoverButtonClicked"
                         VerticalOptions="Center"
                         BackgroundColor="Black">
                     <controls:Popover.AttachedPopover>
@@ -238,19 +238,19 @@
                         </controls:Popover>
                     </controls:Popover.AttachedPopover>
                 </Button>
+
+                <Button x:Name="toolbarItemsButton" Grid.Column="4"
+                        Text="👋"
+                        Clicked="ShowPopoverButtonClicked"
+                        VerticalOptions="Center"
+                        BackgroundColor="Black">
+                    <controls:Popover.AttachedPopover>
+                        <controls:ListPopover Items="{Binding Source={x:Reference thisShell}, Path=CurrentPage.ToolbarItems}" Background="White"/>
+                    </controls:Popover.AttachedPopover>
+                </Button>
             </Grid>
 
             <ScrollView Grid.Row="1" Orientation="Horizontal" Padding="12,0" Margin="0">
-                <HorizontalStackLayout BindableLayout.ItemsSource="{Binding Source={x:Reference thisShell}, Path=CurrentPage.ToolbarItems}" Spacing="10" Margin="0,10">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate x:DataType="ToolbarItem">
-                            <Button Text="{Binding Text}" TextColor="White" Background="DarkCyan" VerticalOptions="Center" Command="{Binding Command}" CommandParameter="{Binding CommandParameter}"/>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </HorizontalStackLayout>
-            </ScrollView>
-
-            <ScrollView Grid.Row="2" Orientation="Horizontal" Padding="12,0" Margin="0">
                 <HorizontalStackLayout VerticalOptions="Center" Spacing="10" BindableLayout.ItemsSource="{Binding Source={x:Reference thisShell}, Path=CurrentShellSection.Items}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="BaseShellItem">
@@ -260,14 +260,14 @@
                 </HorizontalStackLayout>
             </ScrollView>
 
-            <Border Grid.Row="3" Stroke="Transparent" StrokeThickness="0">
+            <Border Grid.Row="2" Stroke="Transparent" StrokeThickness="0">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="10,10,0,0"/>
                 </Border.StrokeShape>
                 <ss:SimpleNavigationHost/>
             </Border>
 
-            <controls:TabBar x:Name="tabBar" Grid.Row="4" 
+            <controls:TabBar x:Name="tabBar" Grid.Row="3" 
                              Items="{Binding Source={x:Reference thisShell}, Path=ShellContents}" 
                              SelectedItem="{Binding Source={x:Reference thisShell}, Path=CurrentShellContent}" 
                              ItemsAlignment="Center"

@@ -19,7 +19,7 @@
             <Image x:Name="netImage" Source="https://www.itnetwork.cz/images/63461/mobile/apps_icon.png" Aspect="AspectFit"/>
             <Image Aspect="AspectFit">
                 <Image.Source>
-                    <FontImageSource Glyph="a" Size="10"/>
+                    <FontImageSource Glyph="a"/>
                 </Image.Source>
             </Image>
         </HorizontalStackLayout>

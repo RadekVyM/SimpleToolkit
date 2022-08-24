@@ -6,15 +6,15 @@ using UIKit;
 
 namespace Radek.SimpleShell.Controls.Handlers
 {
-    public class BitmapIconHandler : ViewHandler<BitmapIcon, UIImageView>
+    public class IconHandler : ViewHandler<Icon, UIImageView>
     {
-        public static IPropertyMapper<BitmapIcon, BitmapIconHandler> Mapper = new PropertyMapper<BitmapIcon, BitmapIconHandler>(ViewHandler.ViewMapper)
+        public static IPropertyMapper<Icon, IconHandler> Mapper = new PropertyMapper<Icon, IconHandler>(ViewHandler.ViewMapper)
         {
-            [nameof(BitmapIcon.Source)] = MapSource,
-            [nameof(BitmapIcon.TintColor)] = MapTintColor,
+            [nameof(Icon.Source)] = MapSource,
+            [nameof(Icon.TintColor)] = MapTintColor,
         };
 
-        public static CommandMapper<BitmapIcon, BitmapIconHandler> CommandMapper = new(ViewHandler.ViewCommandMapper)
+        public static CommandMapper<Icon, IconHandler> CommandMapper = new(ViewHandler.ViewCommandMapper)
         {
         };
 
@@ -22,11 +22,11 @@ namespace Radek.SimpleShell.Controls.Handlers
         public ImageSourcePartLoader SourceLoader =>
             _imageSourcePartLoader ??= new ImageSourcePartLoader(this, () => VirtualView, OnSetImageSource);
 
-        public BitmapIconHandler() : base(Mapper)
+        public IconHandler() : base(Mapper)
         {
         }
 
-        public BitmapIconHandler(IPropertyMapper mapper) : base(mapper ?? Mapper)
+        public IconHandler(IPropertyMapper mapper) : base(mapper ?? Mapper)
         {
         }
 
@@ -65,7 +65,7 @@ namespace Radek.SimpleShell.Controls.Handlers
         void OnSetImageSource(UIImage obj)
         {
             PlatformView.Image = obj.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
-            if (VirtualView is BitmapIcon bitmapIcon)
+            if (VirtualView is Icon bitmapIcon)
                 PlatformView.TintColor = bitmapIcon.TintColor.ToPlatform();
         }
 
@@ -86,18 +86,18 @@ namespace Radek.SimpleShell.Controls.Handlers
         {
             // SourceManager is not public
             //if (SourceLoader.SourceManager.IsResolutionDependent)
-            UpdateValue(nameof(BitmapIcon.Source));
+            UpdateValue(nameof(Icon.Source));
         }
 
-        public static void MapSource(BitmapIconHandler handler, BitmapIcon image) =>
+        public static void MapSource(IconHandler handler, Icon image) =>
             MapSourceAsync(handler, image).FireAndForget(handler);
 
-        public static Task MapSourceAsync(BitmapIconHandler handler, BitmapIcon image) =>
+        public static Task MapSourceAsync(IconHandler handler, Icon image) =>
             handler.SourceLoader.UpdateImageSourceAsync();
 
-        public static void MapTintColor(BitmapIconHandler handler, BitmapIcon image)
+        public static void MapTintColor(IconHandler handler, Icon image)
         {
-            if (image is BitmapIcon bitmapIcon)
+            if (image is Icon bitmapIcon)
             {
                 handler.ApplyTint(bitmapIcon.TintColor);
             }

@@ -32,7 +32,7 @@ public partial class SimpleAppShell : SimpleShell
             await this.GoToAsync($"///{shellItem.Route}");
     }
 
-    private async void TabView_ItemSelected(object sender, Radek.SimpleShell.Controls.TabViewItemSelectedEventArgs e)
+    private async void TabView_ItemSelected(object sender, Radek.SimpleShell.Controls.TabItemSelectedEventArgs e)
     {
         if (!CurrentState.Location.OriginalString.Contains(e.ShellItem.Route))
             await this.GoToAsync($"///{e.ShellItem.Route}");
@@ -60,7 +60,7 @@ public partial class SimpleAppShell : SimpleShell
         orangeAdded = true;
     }
 
-    private void DesignButtonClicked(object sender, EventArgs e)
+    private void ShowPopoverButtonClicked(object sender, EventArgs e)
     {
         var button = sender as Button;
         button.ShowAttachedPopover();

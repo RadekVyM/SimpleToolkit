@@ -60,7 +60,7 @@
         private IList<Grid> hiddenItems = new List<Grid>();
         private Grid moreButton = null;
 
-        public event TabViewItemSelectedEventHandler ItemSelected;
+        public event TabItemSelectedEventHandler ItemSelected;
 
         public static readonly BindableProperty ItemsProperty = BindableProperty.Create(nameof(Items), typeof(IEnumerable<BaseShellItem>), typeof(TabBar), propertyChanged: OnItemsChanged);
         public static readonly BindableProperty HiddenItemsProperty = BindableProperty.Create(nameof(HiddenItems), typeof(IReadOnlyList<BaseShellItem>), typeof(TabBar), defaultBindingMode: BindingMode.OneWayToSource);
@@ -352,7 +352,7 @@
                 Style = new Style(typeof(Label)),
                 BindingContext = item
             };
-            var image = new BitmapIcon
+            var image = new Icon
             {
                 Source = item.Icon,
                 HeightRequest = iconSize.Height,
@@ -360,9 +360,8 @@
                 Margin = iconMargin,
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center,
-                Aspect = Aspect.AspectFill,
                 TintColor = IconColor,
-                Style = new Style(typeof(BitmapIcon)),
+                Style = new Style(typeof(Icon)),
                 BindingContext = item
             };
 
@@ -456,7 +455,7 @@
         private void UpdateButton(Grid item)
         {
             var stackLayout = item.Children[0] as StackLayout;
-            var image = stackLayout.Children[0] as BitmapIcon;
+            var image = stackLayout.Children[0] as Icon;
             var label = stackLayout.Children[1] as Label;
 
             var shellItem = item.BindingContext as BaseShellItem;
@@ -493,7 +492,7 @@
 
         private void UpdateButtons(IEnumerable<BaseShellItem> items)
         {
-            if (stackLayout is null || items is null || !items.Any())
+            if (stackLayout is null || items is null)
                 return;
 
             var itemViews = CreateItemViews(items);
@@ -538,9 +537,8 @@
         {
             foreach (var item in allItemViews)
             {
-                var grid = item as Grid;
-                grid.HeightRequest = tabBarHeight;
-                grid.WidthRequest = itemWidth;
+                item.HeightRequest = tabBarHeight;
+                item.WidthRequest = itemWidth;
             }
 
             moreButton.HeightRequest = tabBarHeight;
@@ -681,7 +679,7 @@
         {
             var button = sender as Button;
 
-            ItemSelected?.Invoke(sender, new TabViewItemSelectedEventArgs
+            ItemSelected?.Invoke(sender, new TabItemSelectedEventArgs
             {
                 ShellItem = button.BindingContext as BaseShellItem
             });
@@ -766,7 +764,7 @@
             foreach (var item in allItemViews)
             {
                 var stackLayout = item.Children[0] as StackLayout;
-                var image = stackLayout.Children[0] as BitmapIcon;
+                var image = stackLayout.Children[0] as Icon;
                 var label = stackLayout.Children[1] as Label;
 
                 label.Text = shellItem.Title;
@@ -837,7 +835,7 @@
                     continue;
 
                 var stackLayout = item.Children[0] as StackLayout;
-                var image = stackLayout.Children[0] as BitmapIcon;
+                var image = stackLayout.Children[0] as Icon;
 
                 if (newValue is not null)
                     image.TintColor = newValue as Color;
@@ -857,7 +855,7 @@
                     continue;
 
                 var stackLayout = item.Children[0] as StackLayout;
-                var image = stackLayout.Children[0] as BitmapIcon;
+                var image = stackLayout.Children[0] as Icon;
 
                 if (newValue is not null)
                     image.TintColor = newValue as Color;

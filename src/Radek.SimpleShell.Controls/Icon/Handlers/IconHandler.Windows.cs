@@ -2,27 +2,24 @@
 
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media.Imaging;
 using WBitmapIcon = Microsoft.UI.Xaml.Controls.BitmapIcon;
-using WImageSource = Microsoft.UI.Xaml.Media.ImageSource;
 using WBorder = Microsoft.UI.Xaml.Controls.Border;
 
 namespace Radek.SimpleShell.Controls.Handlers
 {
-    public class BitmapIconHandler : ViewHandler<BitmapIcon, WBorder>, IElementHandler
+    public class IconHandler : ViewHandler<Icon, WBorder>, IElementHandler
     {
         private WBitmapIcon bitmapIcon;
         private FontIcon fontIcon;
 
-        public static IPropertyMapper<BitmapIcon, BitmapIconHandler> Mapper = new PropertyMapper<BitmapIcon, BitmapIconHandler>(ViewHandler.ViewMapper)
+        public static IPropertyMapper<Icon, IconHandler> Mapper = new PropertyMapper<Icon, IconHandler>(ViewHandler.ViewMapper)
         {
-            [nameof(BitmapIcon.Source)] = MapSource,
-            [nameof(BitmapIcon.TintColor)] = MapTintColor,
+            [nameof(Icon.Source)] = MapSource,
+            [nameof(Icon.TintColor)] = MapTintColor,
         };
 
-        public static CommandMapper<BitmapIcon, BitmapIconHandler> CommandMapper = new(ViewHandler.ViewCommandMapper)
+        public static CommandMapper<Icon, IconHandler> CommandMapper = new(ViewHandler.ViewCommandMapper)
         {
         };
 
@@ -31,11 +28,11 @@ namespace Radek.SimpleShell.Controls.Handlers
             base.NeedsContainer;
 
 
-        public BitmapIconHandler() : base(Mapper)
+        public IconHandler() : base(Mapper)
         {
         }
 
-        public BitmapIconHandler(IPropertyMapper mapper) : base(mapper ?? Mapper)
+        public IconHandler(IPropertyMapper mapper) : base(mapper ?? Mapper)
         {
         }
 
@@ -58,12 +55,12 @@ namespace Radek.SimpleShell.Controls.Handlers
             return container;
         }
 
-        public static void MapSource(BitmapIconHandler handler, BitmapIcon image)
+        public static void MapSource(IconHandler handler, Icon image)
         {
             MapSourceAsync(handler, image).FireAndForget(handler);
         }
 
-        public static Task MapSourceAsync(BitmapIconHandler handler, BitmapIcon image)
+        public static Task MapSourceAsync(IconHandler handler, Icon image)
         {
             var iconSource = image.Source.ToIconSource(handler.MauiContext);
 
@@ -87,7 +84,7 @@ namespace Radek.SimpleShell.Controls.Handlers
             return Task.CompletedTask;
         }
 
-        public static void MapTintColor(BitmapIconHandler handler, BitmapIcon image)
+        public static void MapTintColor(IconHandler handler, Icon image)
         {
             if (image.TintColor is not null)
             {

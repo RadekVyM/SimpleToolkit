@@ -6,7 +6,7 @@
              Title="YellowPage">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="First ToolBarItem" Order="Secondary"/>
+        <ToolbarItem Text="First ToolBarItem" Order="Secondary" IconImageSource="case_empty.png"/>
         <ToolbarItem Text="Second ToolBarItem" Order="Secondary"/>
         <ToolbarItem Text="Third ToolBarItem" Order="Secondary"/>
         <ToolbarItem Text="Fourth ToolBarItem" Order="Secondary"/>

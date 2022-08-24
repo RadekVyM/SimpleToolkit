@@ -10,15 +10,15 @@ using Color = Microsoft.Maui.Graphics.Color;
 
 namespace Radek.SimpleShell.Controls.Handlers
 {
-    public partial class BitmapIconHandler : ViewHandler<BitmapIcon, ImageView>
+    public partial class IconHandler : ViewHandler<Icon, ImageView>
     {
-        public static IPropertyMapper<BitmapIcon, BitmapIconHandler> Mapper = new PropertyMapper<BitmapIcon, BitmapIconHandler>(ViewHandler.ViewMapper)
+        public static IPropertyMapper<Icon, IconHandler> Mapper = new PropertyMapper<Icon, IconHandler>(ViewHandler.ViewMapper)
         {
-            [nameof(BitmapIcon.Source)] = MapSource,
-            [nameof(BitmapIcon.TintColor)] = MapTintColor,
+            [nameof(Icon.Source)] = MapSource,
+            [nameof(Icon.TintColor)] = MapTintColor,
         };
 
-        public static CommandMapper<BitmapIcon, BitmapIconHandler> CommandMapper = new(ViewHandler.ViewCommandMapper)
+        public static CommandMapper<Icon, IconHandler> CommandMapper = new(ViewHandler.ViewCommandMapper)
         {
         };
 
@@ -26,11 +26,11 @@ namespace Radek.SimpleShell.Controls.Handlers
         public ImageSourcePartLoader SourceLoader =>
             _imageSourcePartLoader ??= new ImageSourcePartLoader(this, () => VirtualView, OnSetImageSource);
 
-        public BitmapIconHandler() : base(Mapper)
+        public IconHandler() : base(Mapper)
         {
         }
 
-        public BitmapIconHandler(IPropertyMapper mapper) : base(mapper ?? Mapper)
+        public IconHandler(IPropertyMapper mapper) : base(mapper ?? Mapper)
         {
         }
 
@@ -88,13 +88,13 @@ namespace Radek.SimpleShell.Controls.Handlers
                 PlatformView.SetColorFilter(color.ToPlatform(), PorterDuff.Mode.SrcIn ?? throw new InvalidOperationException("PorterDuff.Mode.SrcIn should not be null at runtime"));
         }
 
-        public static void MapSource(BitmapIconHandler handler, BitmapIcon image) =>
+        public static void MapSource(IconHandler handler, Icon image) =>
             MapSourceAsync(handler, image).FireAndForget(handler);
 
-        public static Task MapSourceAsync(BitmapIconHandler handler, BitmapIcon image) =>
+        public static Task MapSourceAsync(IconHandler handler, Icon image) =>
             handler.SourceLoader.UpdateImageSourceAsync();
 
-        public static void MapTintColor(BitmapIconHandler handler, BitmapIcon image)
+        public static void MapTintColor(IconHandler handler, Icon image)
         {
             handler.ApplyTint(image.TintColor);
         }

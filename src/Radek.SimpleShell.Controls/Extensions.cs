@@ -23,7 +23,7 @@ namespace Radek.SimpleShell.Controls
             builder.ConfigureMauiHandlers(handlers =>
             {
 #if ANDROID || IOS || MACCATALYST || WINDOWS
-                handlers.AddHandler(typeof(BitmapIcon), typeof(BitmapIconHandler));
+                handlers.AddHandler(typeof(Icon), typeof(IconHandler));
                 handlers.AddHandler(typeof(Popover), typeof(PopoverHandler));
 #endif
             });
