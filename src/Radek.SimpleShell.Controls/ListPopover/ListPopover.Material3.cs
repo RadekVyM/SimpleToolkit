@@ -4,10 +4,19 @@
     {
         private void UpdateValuesToMaterial3()
         {
-            fontSize = 12;
-            iconSize = new Size(16, 16);
-            iconMargin = new Thickness(5);
-            labelMargin = new Thickness(0, 0, 5, 0);
+            fontSize = 14;
+            containerCornerRadius = 4;
+            listItemHeight = 48;
+            iconSize = new Size(20, 20);
+            iconMargin = new Thickness(12, 0, 0, 0);
+            labelMargin = new Thickness(12, 0, 12, 0);
+            stackLayoutPadding = new Thickness(0, 8, 0, 8);
+            containerShadow = new Shadow
+            {
+                Brush = Colors.Black,
+                Opacity = 0.4f,
+                Radius = 2,
+            };
         }
     }
 }

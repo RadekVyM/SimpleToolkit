@@ -1,5 +1,7 @@
 ﻿using Microsoft.Maui.Platform;
 
+// TODO: Popover placement - this should be possible on Android and Windows
+
 namespace Radek.SimpleShell.Controls
 {
     public interface IPopover : IElement

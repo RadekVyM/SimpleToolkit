@@ -1,17 +1,26 @@
 ﻿using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Shapes;
 
 namespace Radek.SimpleShell.Controls
 {
+    // TODO: A11y
+
+    [ContentProperty(nameof(Items))]
     public partial class ListPopover : Popover
     {
         private Border rootBorder;
+        private ScrollView scrollView;
         private VerticalStackLayout stackLayout;
         private IEnumerable<ListItem> listItems = new List<ListItem>();
         private IList<Grid> allItemViews = new List<Grid>();
         private double fontSize;
+        private double containerCornerRadius;
+        private double listItemHeight;
         private Size iconSize;
         private Thickness iconMargin;
         private Thickness labelMargin;
+        private Thickness stackLayoutPadding;
+        private Shadow containerShadow;
         private bool iconsAreVisible = true;
 
         public static readonly BindableProperty ItemsProperty = BindableProperty.Create(nameof(Items), typeof(IEnumerable<object>), typeof(ListPopover), propertyChanged: OnItemsChanged);
@@ -19,8 +28,10 @@ namespace Radek.SimpleShell.Controls
         public static readonly BindableProperty IconColorProperty = BindableProperty.Create(nameof(IconColor), typeof(Color), typeof(ListPopover), propertyChanged: OnIconColorChanged, defaultValue: Colors.Black);
         public static readonly BindableProperty TextColorProperty = BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(ListPopover), propertyChanged: OnTextColorChanged, defaultValue: Colors.Black);
         public static readonly BindableProperty BackgroundProperty = BindableProperty.Create(nameof(Background), typeof(Brush), typeof(ListPopover), propertyChanged: OnBackgroundChanged, defaultValue: null);
+        public static readonly BindableProperty MinimumWidthRequestProperty = BindableProperty.Create(nameof(MinimumWidthRequest), typeof(double), typeof(ListPopover), propertyChanged: OnMinimumWidthRequestChanged, defaultValue: default(double));
+        public static readonly BindableProperty MaximumWidthRequestProperty = BindableProperty.Create(nameof(MaximumWidthRequest), typeof(double), typeof(ListPopover), propertyChanged: OnMaximumWidthRequestChanged, defaultValue: default(double));
 
-        public event TabItemSelectedEventHandler ItemSelected;
+        public event ListPopoverItemSelectedEventHandler ItemSelected;
 
         public virtual IEnumerable<object> Items
         {
@@ -52,6 +63,18 @@ namespace Radek.SimpleShell.Controls
             set => SetValue(BackgroundProperty, value);
         }
 
+        public virtual double MinimumWidthRequest
+        {
+            get => (double)GetValue(MinimumWidthRequestProperty);
+            set => SetValue(MinimumWidthRequestProperty, value);
+        }
+
+        public virtual double MaximumWidthRequest
+        {
+            get => (double)GetValue(MaximumWidthRequestProperty);
+            set => SetValue(MaximumWidthRequestProperty, value);
+        }
+
 
         public ListPopover() : base()
         {
@@ -67,15 +90,29 @@ namespace Radek.SimpleShell.Controls
                 StrokeThickness = 0,
                 Stroke = Colors.Transparent,
                 Background = Background,
-                Shadow = null,
+                Shadow = containerShadow,
+                StrokeShape = new RoundRectangle
+                {
+                    CornerRadius = containerCornerRadius
+                },
                 Style = new Style(typeof(Border))
+            };
+            scrollView = new ScrollView
+            {
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.Start,
+                Style = new Style(typeof(ScrollView))
             };
             stackLayout = new VerticalStackLayout
             {
+                Padding = stackLayoutPadding,
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.Start,
                 Style = new Style(typeof(VerticalStackLayout))
             };
 
-            rootBorder.Content = stackLayout;
+            scrollView.Content = stackLayout;
+            rootBorder.Content = scrollView;
 
             CompressedLayout.SetIsHeadless(stackLayout, true);
 
@@ -92,13 +129,16 @@ namespace Radek.SimpleShell.Controls
 
         private Grid CreateButton(ListItem item)
         {
+            // I have to do weird stuff here to have sizing sort of working - layouts are just broken:
+            // https://github.com/dotnet/maui/issues/7531
+            
             var grid = new Grid
             {
                 ColumnDefinitions = new ColumnDefinitionCollection(
-                    new ColumnDefinition(new GridLength(0)),
                     new ColumnDefinition(GridLength.Auto)),
+                HorizontalOptions = LayoutOptions.Fill,
                 Style = new Style(typeof(Grid)),
-                BindingContext = item,
+                BindingContext = item
             };
             var button = new Button
             {
@@ -109,7 +149,18 @@ namespace Radek.SimpleShell.Controls
                 BorderWidth = 0,
                 CornerRadius = 0,
                 Style = new Style(typeof(Button)),
-                BindingContext = item
+                BindingContext = item,
+            };
+
+            var innerGrid = new Grid
+            {
+                ColumnDefinitions = new ColumnDefinitionCollection(
+                    new ColumnDefinition(GridLength.Auto),
+                    new ColumnDefinition(GridLength.Auto)),
+                HorizontalOptions = LayoutOptions.Fill,
+                VerticalOptions = LayoutOptions.Fill,
+                Style = new Style(typeof(Grid)),
+                BindingContext = item,
             };
 
             var label = new Label
@@ -135,23 +186,34 @@ namespace Radek.SimpleShell.Controls
                 BindingContext = item
             };
 
-            grid.Children.Add(image);
-            grid.Children.Add(label);
+            innerGrid.Children.Add(image);
+            innerGrid.Children.Add(label);
 
+            Grid.SetColumn(image, 0);
+            Grid.SetColumn(label, 1);
+
+            grid.Children.Add(innerGrid);
             grid.Children.Add(button);
 
             grid.SizeChanged += GridSizeChanged;
 
-            Grid.SetColumn(image, 0);
-            Grid.SetColumn(label, 1);
-            Grid.SetColumnSpan(button, 3);
+            CompressedLayout.SetIsHeadless(grid, true);
+            CompressedLayout.SetIsHeadless(innerGrid, true);
 
             static void GridSizeChanged(object sender, EventArgs e)
             {
                 var grid = sender as Grid;
-                var button = grid.Children[2] as Button;
+                var innerGrid = grid.Children[0] as Grid;
 
-                button.WidthRequest = grid.Width;
+                if (grid.Width != -1)
+                {
+                    // If I set WidthRequest of a button here, the button disappears
+
+                    // This is weird but this makes it somewhat work (at least on Windows - on Android innerGrid does not fill whole space)
+                    innerGrid.WidthRequest = grid.Width;
+                    grid.ColumnDefinitions = new ColumnDefinitionCollection(
+                        new ColumnDefinition(GridLength.Auto));
+                }
             }
 
             return grid;
@@ -180,6 +242,15 @@ namespace Radek.SimpleShell.Controls
             if (rootBorder is null || stackLayout is null)
                 return;
 
+            rootBorder.Background = Background;
+            rootBorder.Shadow = containerShadow;
+            rootBorder.Margin = new Thickness(containerShadow?.Radius ?? 0);
+            rootBorder.StrokeShape = new RoundRectangle
+            {
+                CornerRadius = containerCornerRadius
+            };
+            stackLayout.Padding = stackLayoutPadding;
+
             foreach (var item in allItemViews)
             {
                 UpdateButton(item);
@@ -188,12 +259,11 @@ namespace Radek.SimpleShell.Controls
 
         private void UpdateButton(Grid item)
         {
-            item.ColumnDefinitions = new ColumnDefinitionCollection(
-                new ColumnDefinition(iconsAreVisible ? new GridLength(iconSize.Width + iconMargin.HorizontalThickness) : new GridLength(0)),
-                new ColumnDefinition(GridLength.Auto));
+            item.HeightRequest = listItemHeight;
 
-            var image = item.Children[0] as Icon;
-            var label = item.Children[1] as Label;
+            var stackLayout = item.Children[0] as Grid;
+            var image = stackLayout.Children[0] as Icon;
+            var label = stackLayout.Children[1] as Label;
 
             var listItem = item.BindingContext as ListItem;
 
@@ -220,7 +290,7 @@ namespace Radek.SimpleShell.Controls
 
             foreach (var view in allItemViews)
             {
-                var button = view.Children[2] as Button;
+                var button = view.Children[1] as Button;
 
                 button.Clicked -= ItemButtonClicked;
             }
@@ -230,7 +300,7 @@ namespace Radek.SimpleShell.Controls
 
             foreach (var view in allItemViews)
             {
-                var button = view.Children[2] as Button;
+                var button = view.Children[1] as Button;
 
                 button.Clicked += ItemButtonClicked;
 
@@ -288,9 +358,9 @@ namespace Radek.SimpleShell.Controls
         {
             var button = sender as Button;
 
-            ItemSelected?.Invoke(sender, new TabItemSelectedEventArgs
+            ItemSelected?.Invoke(sender, new ListPopoverItemSelectedEventArgs
             {
-                ShellItem = button.BindingContext as BaseShellItem
+                Item = (button.BindingContext as ListItem).Item
             });
         }
 
@@ -307,8 +377,9 @@ namespace Radek.SimpleShell.Controls
 
             foreach (var item in allItemViews)
             {
-                var image = item.Children[0] as Icon;
-                var label = item.Children[1] as Label;
+                var stackLayout = item.Children[0] as Grid;
+                var image = stackLayout.Children[0] as Icon;
+                var label = stackLayout.Children[1] as Label;
 
                 label.Text = titleIcon.Title;
                 image.Source = titleIcon.Icon;
@@ -362,7 +433,8 @@ namespace Radek.SimpleShell.Controls
 
             foreach (var item in listPopover.allItemViews)
             {
-                var image = item.Children[0] as Icon;
+                var stackLayout = item.Children[0] as Grid;
+                var image = stackLayout.Children[0] as Icon;
 
                 if (newValue is not null)
                     image.TintColor = newValue as Color;
@@ -378,7 +450,8 @@ namespace Radek.SimpleShell.Controls
 
             foreach (var item in listPopover.allItemViews)
             {
-                var label = item.Children[1] as Label;
+                var stackLayout = item.Children[0] as Grid;
+                var label = stackLayout.Children[1] as Label;
 
                 label.TextColor = newValue as Color;
             }
@@ -388,6 +461,20 @@ namespace Radek.SimpleShell.Controls
         {
             var listPopover = bindable as ListPopover;
             listPopover.rootBorder.Background = newValue as Brush;
+        }
+
+        private static void OnMinimumWidthRequestChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var listPopover = bindable as ListPopover;
+            listPopover.scrollView.MinimumWidthRequest = (double)newValue;
+            listPopover.stackLayout.MinimumWidthRequest = (double)newValue;
+        }
+
+        private static void OnMaximumWidthRequestChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var listPopover = bindable as ListPopover;
+            listPopover.scrollView.MaximumWidthRequest = (double)newValue;
+            listPopover.stackLayout.MaximumWidthRequest = (double)newValue;
         }
 
         private record ListItem(string Title, ImageSource Icon, object Item);

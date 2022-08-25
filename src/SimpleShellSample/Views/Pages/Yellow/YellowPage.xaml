@@ -6,10 +6,10 @@
              Title="YellowPage">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="First ToolBarItem" Order="Secondary" IconImageSource="case_empty.png"/>
-        <ToolbarItem Text="Second ToolBarItem" Order="Secondary"/>
-        <ToolbarItem Text="Third ToolBarItem" Order="Secondary"/>
-        <ToolbarItem Text="Fourth ToolBarItem" Order="Secondary"/>
+        <ToolbarItem Text="Revert" Order="Secondary" IconImageSource="case_empty.png"/>
+        <ToolbarItem Text="Settings" Order="Secondary" IconImageSource="flame_empty.png"/>
+        <ToolbarItem Text="Send Feedback" Order="Secondary"/>
+        <ToolbarItem Text="Help" Order="Secondary" IconImageSource="avatar_empty.png"/>
     </ContentPage.ToolbarItems>
     
     <Grid BackgroundColor="Goldenrod">

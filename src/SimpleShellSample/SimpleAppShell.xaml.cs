@@ -17,6 +17,25 @@ public partial class SimpleAppShell : SimpleShell
 
         InitializeComponent();
 
+        designLanguagesListPopover.Items = new List<DesignLanguageItem>
+        {
+            new DesignLanguageItem("Material3", () =>
+            {
+                VisualStateManager.GoToState(this, "Material3");
+                designButton.HideAttachedPopover();
+            }),
+            new DesignLanguageItem("Cupertino", () =>
+            {
+                VisualStateManager.GoToState(this, "Cupertino");
+                designButton.HideAttachedPopover();
+            }),
+            new DesignLanguageItem("Fluent", () =>
+            {
+                VisualStateManager.GoToState(this, "Fluent");
+                designButton.HideAttachedPopover();
+            }),
+        };  
+
         Routing.RegisterRoute(nameof(FirstYellowDetailPage), typeof(FirstYellowDetailPage));
         Routing.RegisterRoute(nameof(SecondYellowDetailPage), typeof(SecondYellowDetailPage));
         Routing.RegisterRoute(nameof(ThirdYellowDetailPage), typeof(ThirdYellowDetailPage));
@@ -66,21 +85,16 @@ public partial class SimpleAppShell : SimpleShell
         button.ShowAttachedPopover();
     }
 
-    private void MaterialButtonClicked(object sender, EventArgs e)
+    private void DesignLanguagesListPopoverItemSelected(object sender, ListPopoverItemSelectedEventArgs e)
     {
-        VisualStateManager.GoToState(this, "Material3");
-        designButton.HideAttachedPopover();
+        if (e.Item is DesignLanguageItem designLanguageItem)
+        {
+            designLanguageItem.Action?.Invoke();
+        }
     }
 
-    private void CupertinoButtonClicked(object sender, EventArgs e)
+    private record DesignLanguageItem(string Title, Action Action)
     {
-        VisualStateManager.GoToState(this, "Cupertino");
-        designButton.HideAttachedPopover();
-    }
-
-    private void FluentButtonClicked(object sender, EventArgs e)
-    {
-        VisualStateManager.GoToState(this, "Fluent");
-        designButton.HideAttachedPopover();
+        public override string ToString() => Title;
     }
 }

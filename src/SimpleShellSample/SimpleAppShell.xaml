@@ -210,42 +210,44 @@
                     </VisualStateManager.VisualStateGroups>
                 </Button>
                 
-                <Button x:Name="addButton" Grid.Column="1"
-                        Text="Add"
-                        Clicked="Button_Clicked_1"
-                        VerticalOptions="Center"
-                        BackgroundColor="Black"/>
+                <Button 
+                    x:Name="addButton" Grid.Column="1"
+                    Text="Add"
+                    Clicked="Button_Clicked_1"
+                    VerticalOptions="Center"
+                    BackgroundColor="Black"/>
                 
                 <Label Grid.Column="2" Text="{Binding Source={x:Reference thisShell}, Path=CurrentPage.Title}" VerticalOptions="Center"/>
                 
-                <Button x:Name="designButton" Grid.Column="3"
-                        Text="Design"
-                        Clicked="ShowPopoverButtonClicked"
-                        VerticalOptions="Center"
-                        BackgroundColor="Black">
+                <Button 
+                    x:Name="designButton" Grid.Column="3"
+                    Text="Design"
+                    Clicked="ShowPopoverButtonClicked"
+                    VerticalOptions="Center"
+                    BackgroundColor="Black">
                     <controls:Popover.AttachedPopover>
-                        <controls:Popover>
-                            <Border Stroke="Transparent" StrokeThickness="0" Background="White">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="10"/>
-                                </Border.StrokeShape>
-                                <VerticalStackLayout Padding="5" Spacing="5">
-                                    <Button Text="Material" Clicked="MaterialButtonClicked"/>
-                                    <Button Text="Cupertino" Clicked="CupertinoButtonClicked"/>
-                                    <Button Text="Fluent" Clicked="FluentButtonClicked"/>
-                                </VerticalStackLayout>
-                            </Border>
-                        </controls:Popover>
+                        <controls:ListPopover
+                            x:Name="designLanguagesListPopover"
+                            Background="#edf1e4"
+                            TextColor="#191c18"
+                            IconColor="#191c18"
+                            ItemSelected="DesignLanguagesListPopoverItemSelected"
+                            MinimumWidthRequest="112" MaximumWidthRequest="280"/>
                     </controls:Popover.AttachedPopover>
                 </Button>
 
-                <Button x:Name="toolbarItemsButton" Grid.Column="4"
-                        Text="👋"
-                        Clicked="ShowPopoverButtonClicked"
-                        VerticalOptions="Center"
-                        BackgroundColor="Black">
+                <Button 
+                    x:Name="toolbarItemsButton" Grid.Column="4"
+                    Text="👋"
+                    Clicked="ShowPopoverButtonClicked"
+                    VerticalOptions="Center"
+                    BackgroundColor="Black">
                     <controls:Popover.AttachedPopover>
-                        <controls:ListPopover Items="{Binding Source={x:Reference thisShell}, Path=CurrentPage.ToolbarItems}" Background="White"/>
+                        <controls:ListPopover 
+                            Items="{Binding Source={x:Reference thisShell}, Path=CurrentPage.ToolbarItems}"
+                            Background="#edf1e4"
+                            TextColor="#191c18"
+                            IconColor="#191c18"/>
                     </controls:Popover.AttachedPopover>
                 </Button>
             </Grid>
@@ -267,13 +269,14 @@
                 <ss:SimpleNavigationHost/>
             </Border>
 
-            <controls:TabBar x:Name="tabBar" Grid.Row="3" 
-                             Items="{Binding Source={x:Reference thisShell}, Path=ShellContents}" 
-                             SelectedItem="{Binding Source={x:Reference thisShell}, Path=CurrentShellContent}" 
-                             ItemsAlignment="Center"
-                             IsScrollable="False"
-                             ItemSelected="TabView_ItemSelected"
-                             Style="{StaticResource Material}"/>
+            <controls:TabBar 
+                x:Name="tabBar" Grid.Row="3" 
+                Items="{Binding Source={x:Reference thisShell}, Path=ShellContents}" 
+                SelectedItem="{Binding Source={x:Reference thisShell}, Path=CurrentShellContent}" 
+                ItemsAlignment="Center"
+                IsScrollable="False"
+                ItemSelected="TabView_ItemSelected"
+                Style="{StaticResource Material}"/>
 
             <!--ItemWidthRequest="{OnPlatform WinUI=200}"-->
 

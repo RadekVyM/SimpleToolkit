@@ -1,8 +1,8 @@
 ﻿namespace Radek.SimpleShell.Controls
 {
-    public delegate void ListPopoverItemClickedEventHandler(object sender, ListPopoverItemClickedEventArgs e);
+    public delegate void ListPopoverItemSelectedEventHandler(object sender, ListPopoverItemSelectedEventArgs e);
 
-    public class ListPopoverItemClickedEventArgs : EventArgs
+    public class ListPopoverItemSelectedEventArgs : EventArgs
     {
         public object Item { get; internal set; }
     }

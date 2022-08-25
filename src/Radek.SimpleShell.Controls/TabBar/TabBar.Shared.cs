@@ -1,5 +1,7 @@
 ﻿namespace Radek.SimpleShell.Controls
 {
+    // TODO: A11y
+
     public partial class TabBar : ContentView, IView
     {
         private HorizontalStackLayout stackLayout;
