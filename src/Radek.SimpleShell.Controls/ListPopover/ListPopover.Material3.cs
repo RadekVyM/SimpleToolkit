@@ -11,12 +11,6 @@
             iconMargin = new Thickness(12, 0, 0, 0);
             labelMargin = new Thickness(12, 0, 12, 0);
             stackLayoutPadding = new Thickness(0, 8, 0, 8);
-            containerShadow = new Shadow
-            {
-                Brush = Colors.Black,
-                Opacity = 0.4f,
-                Radius = 2,
-            };
         }
     }
 }

@@ -321,6 +321,7 @@
             {
                 HeightRequest = tabBarHeight,
                 WidthRequest = itemWidth,
+                Background = Colors.Transparent,
                 Style = new Style(typeof(Grid)),
                 BindingContext = item
             };
@@ -332,15 +333,6 @@
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Fill,
                 Style = new Style(typeof(StackLayout)),
-                BindingContext = item
-            };
-            var button = new Button
-            {
-                HorizontalOptions = LayoutOptions.Fill,
-                VerticalOptions = LayoutOptions.Fill,
-                BackgroundColor = Colors.Transparent,
-                BorderWidth = 0,
-                Style = new Style(typeof(Button)),
                 BindingContext = item
             };
 
@@ -371,7 +363,6 @@
             stackLayout.Children.Add(label);
 
             grid.Children.Add(stackLayout);
-            grid.Children.Add(button);
 
             CompressedLayout.SetIsHeadless(stackLayout, true);
             CompressedLayout.SetIsHeadless(grid, true);
@@ -501,9 +492,7 @@
 
             foreach (var view in allItemViews)
             {
-                var button = view.Children[1] as Button;
-
-                button.Clicked -= ItemButtonClicked;
+                view.GestureRecognizers.Clear();
             }
 
             stackLayout.Children.Clear();
@@ -511,9 +500,10 @@
 
             foreach (var view in allItemViews)
             {
-                var button = view.Children[1] as Button;
+                var tapGestureRecognizer = new TapGestureRecognizer();
+                tapGestureRecognizer.Tapped += ItemClicked;
 
-                button.Clicked += ItemButtonClicked;
+                view.GestureRecognizers.Add(tapGestureRecognizer);
 
                 stackLayout.Children.Add(view);
             }
@@ -677,13 +667,13 @@
 
         #region Event callbacks
 
-        private void ItemButtonClicked(object sender, EventArgs e)
+        private void ItemClicked(object sender, EventArgs e)
         {
-            var button = sender as Button;
+            var view = sender as Grid;
 
             ItemSelected?.Invoke(sender, new TabItemSelectedEventArgs
             {
-                ShellItem = button.BindingContext as BaseShellItem
+                ShellItem = view.BindingContext as BaseShellItem
             });
         }
 

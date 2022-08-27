@@ -37,7 +37,7 @@ namespace Radek.SimpleShell.Controls
         }
 
 
-        public void Show(View parentView)
+        public virtual void Show(View parentView)
         {
             var mauiContext = parentView.Handler.MauiContext;
 		    var platformPopup = this.ToHandler(mauiContext);
@@ -47,7 +47,7 @@ namespace Radek.SimpleShell.Controls
             platformPopup.Invoke(nameof(IPopover.Show), parentView);
         }
 
-        public void Hide()
+        public virtual void Hide()
         {
             Handler.Invoke(nameof(IPopover.Hide));
         }
