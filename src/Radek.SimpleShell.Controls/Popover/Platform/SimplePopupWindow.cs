@@ -2,9 +2,13 @@
 
 using Android.Content;
 using Android.Graphics.Drawables;
+using Android.Views;
 using Android.Widget;
+using Java.Lang;
 using Microsoft.Maui.Platform;
+using System.ComponentModel;
 using AView = Android.Views.View;
+using Math = System.Math;
 
 namespace Radek.SimpleShell.Controls.Platform
 {
@@ -45,6 +49,28 @@ namespace Radek.SimpleShell.Controls.Platform
                 return;
             }
 
+            var content = VirtualView.Content.ToPlatform(mauiContext);
+
+            // Height and Width have to be set to not show the PopupWindow outside of screen bounds
+
+            var measure = (VirtualView.Content as IView).Measure(double.PositiveInfinity, double.PositiveInfinity);
+            var width = (int)Math.Round(measure.Width * DeviceDisplay.Current.MainDisplayInfo.Density);
+            var height = (int)Math.Round(measure.Height * DeviceDisplay.Current.MainDisplayInfo.Density);
+
+            //content.Measure(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
+
+            //content.Post(() =>
+            //{
+            //    VirtualView.Content.Layout(new Rect(0, 0, width, height));
+            //});
+
+            if (width != 0 || height != 0)
+            {
+                Width = width;
+                Height = height;
+                VirtualView.Content.Layout(new Rect(0, 0, width, height));
+            }
+
             if (anchor is not null)
             {
                 var platformAnchor = anchor.ToPlatform(mauiContext);
@@ -73,8 +99,8 @@ namespace Radek.SimpleShell.Controls.Platform
             if (popup.Content is null)
                 return;
 
-            var container = popup.Content.ToPlatform(mauiContext);
-            ContentView = container;
+            var content = popup.Content.ToPlatform(mauiContext);
+            ContentView = content;
         }
     }
 }

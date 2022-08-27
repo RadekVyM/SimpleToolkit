@@ -1,4 +1,6 @@
-﻿namespace Radek.SimpleShell.Controls
+﻿using Microsoft.Maui.Controls;
+
+namespace Radek.SimpleShell.Controls
 {
     // TODO: A11y
 
@@ -9,6 +11,8 @@
         private GraphicsView graphicsView;
         private ScrollView scrollView;
         private Border border;
+        private Grid moreButton = null;
+        private ListPopover moreItemsPopover;
         private Size iconSize;
         private Thickness iconMargin;
         private Thickness itemStackLayoutPadding;
@@ -60,9 +64,9 @@
 
         private IList<Grid> allItemViews = new List<Grid>();
         private IList<Grid> hiddenItems = new List<Grid>();
-        private Grid moreButton = null;
 
         public event TabItemSelectedEventHandler ItemSelected;
+        public event EventHandler MoreButtonClicked;
 
         public static readonly BindableProperty ItemsProperty = BindableProperty.Create(nameof(Items), typeof(IEnumerable<BaseShellItem>), typeof(TabBar), propertyChanged: OnItemsChanged);
         public static readonly BindableProperty HiddenItemsProperty = BindableProperty.Create(nameof(HiddenItems), typeof(IReadOnlyList<BaseShellItem>), typeof(TabBar), defaultBindingMode: BindingMode.OneWayToSource);
@@ -179,7 +183,9 @@
             Unloaded += TabBarUnloaded;
             SizeChanged += TabBarSizeChanged;
 
+            SetUpBaseStructure();
             CreateMoreButton();
+            CreateMoreItemsPopover();
         }
 
 
@@ -377,7 +383,33 @@
                 Title = MoreTitle,
                 Icon = MoreIcon
             };
-            return moreButton = CreateButton(shellItem);
+
+            moreButton = CreateButton(shellItem);
+
+            if (moreItemsPopover is not null)
+            {
+                Popover.SetAttachedPopover(moreButton, moreItemsPopover);
+            }
+
+            return moreButton;
+        }
+
+        private ListPopover CreateMoreItemsPopover()
+        {
+            moreItemsPopover = new ListPopover
+            {
+                Background = Background,
+                DesignLanguage = DesignLanguage
+            };
+
+            moreItemsPopover.ItemSelected += MoreItemsPopoverItemSelected;
+
+            if (moreButton is not null)
+            {
+                Popover.SetAttachedPopover(moreButton, moreItemsPopover);
+            }
+
+            return moreItemsPopover;
         }
 
         private void UpdateValuesAccordingToLanguage()
@@ -523,6 +555,13 @@
             shellItem.Icon = MoreIcon;
 
             UpdateButton(moreButton);
+
+            moreButton.GestureRecognizers.Clear();
+
+            var tapGestureRecognizer = new TapGestureRecognizer();
+            tapGestureRecognizer.Tapped += MoreItemClicked;
+
+            moreButton.GestureRecognizers.Add(tapGestureRecognizer);
         }
 
         private void UpdateSizeOfItems()
@@ -677,6 +716,31 @@
             });
         }
 
+        private async void MoreItemClicked(object sender, EventArgs e)
+        {
+            var view = sender as Grid;
+
+            moreItemsPopover.IconColor = IconColor;
+            moreItemsPopover.TextColor = TextColor;
+            moreItemsPopover.DesignLanguage = DesignLanguage;
+            moreItemsPopover.Background = Background;
+            moreItemsPopover.Items = hiddenItems.Select(i => i.BindingContext).ToList();
+
+            moreButton.ShowAttachedPopover();
+
+            MoreButtonClicked?.Invoke(sender, EventArgs.Empty);
+        }
+
+        private void MoreItemsPopoverItemSelected(object sender, ListPopoverItemSelectedEventArgs e)
+        {
+            ItemSelected?.Invoke(sender, new TabItemSelectedEventArgs
+            {
+                ShellItem = e.Item as BaseShellItem
+            });
+
+            moreButton.HideAttachedPopover();
+        }
+
         private void TabBarSizeChanged(object sender, EventArgs e)
         {
             UpdateValuesAccordingToLanguage();
@@ -684,7 +748,6 @@
 
         private void TabBarHandlerChanged(object sender, EventArgs e)
         {
-            SetUpBaseStructure();
             UpdateButtons(Items);
             UpdateValuesAccordingToLanguage();
         }

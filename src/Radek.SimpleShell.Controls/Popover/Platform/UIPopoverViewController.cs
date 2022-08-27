@@ -3,6 +3,7 @@
 using CoreAnimation;
 using CoreGraphics;
 using Foundation;
+using Microsoft.Maui.Controls;
 using Microsoft.Maui.Platform;
 using ObjCRuntime;
 using System.Diagnostics.CodeAnalysis;
@@ -39,18 +40,26 @@ namespace Radek.SimpleShell.Controls.Platform
             base.ViewDidAppear(animated);
         }
 
+        public override void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+
+            //var measure = VirtualView.Content.Measure(double.PositiveInfinity, double.PositiveInfinity).Request;
+            var measure = (VirtualView.Content as IView).Measure(double.PositiveInfinity, double.PositiveInfinity); // These two are different
+            PreferredContentSize = new CGSize(measure.Width, measure.Height);
+
+            foreach (var subview in View.Subviews)
+            {
+                subview.SizeToFit();
+            }
+        }
+
         public override void ViewDidLayoutSubviews()
         {
             base.ViewDidLayoutSubviews();
 
             if (VirtualView.Content is null)
                 return;
-
-            var measure = VirtualView.Content.Measure(double.PositiveInfinity, double.PositiveInfinity).Request;
-            PreferredContentSize = new CGSize(measure.Width, measure.Height);
-
-            foreach (var subview in View.Subviews)
-                subview.Frame = new CGRect(0, 0, View.Bounds.Width, View.Bounds.Height);
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -89,9 +98,13 @@ namespace Radek.SimpleShell.Controls.Platform
                 presentationController.Delegate = null;
         }
 
+        Microsoft.Maui.Controls.Grid contentView = null;
+
         [MemberNotNull(nameof(ViewController))]
         public void InitializeView(in IPopover virtualView, in IElement anchor)
         {
+            UpdateContainerGrid(virtualView);
+
             SetPresentationController();
 
             _ = View ?? throw new InvalidOperationException($"{nameof(View)} cannot be null");
@@ -115,7 +128,26 @@ namespace Radek.SimpleShell.Controls.Platform
 
         public void UpdateContent()
         {
+            UpdateContainerGrid(VirtualView);
+
             SetView(View);
+        }
+
+        private void UpdateContainerGrid(IPopover virtualView)
+        {
+            if (contentView?.Children.Any() == true)
+                contentView.Children.Clear();
+
+            // I do not understand how sizing on iOS works. This is only hopefully working solution I came up with
+            contentView = new Microsoft.Maui.Controls.Grid
+            {
+                HorizontalOptions = LayoutOptions.Start,
+                VerticalOptions = LayoutOptions.Start,
+                RowDefinitions = new RowDefinitionCollection(new RowDefinition(GridLength.Auto)),
+                ColumnDefinitions = new ColumnDefinitionCollection(new ColumnDefinition(GridLength.Auto)),
+            };
+
+            contentView.Children.Add(virtualView.Content);
         }
 
         private void SetDimmingBackgroundEffect()
@@ -126,9 +158,8 @@ namespace Radek.SimpleShell.Controls.Platform
 
         private void SetView(UIView view)
         {
-            view.Bounds = new(0, 0, PreferredContentSize.Width, PreferredContentSize.Height);
             view.ClearSubviews();
-            var subview = VirtualView?.Content?.ToHandler(mauiContext)?.PlatformView;
+            var subview = contentView?.ToHandler(mauiContext)?.PlatformView;
 
             if (subview is not null)
                 view.AddSubview(subview);

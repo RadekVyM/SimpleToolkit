@@ -147,7 +147,6 @@ namespace Radek.SimpleShell.Controls
                 Style = new Style(typeof(Grid)),
                 BindingContext = item,
             };
-            // TODO: Replace Button with GestureRecognizer
             
             var innerGrid = new Grid
             {
