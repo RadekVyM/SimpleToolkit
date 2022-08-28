@@ -34,7 +34,9 @@ public partial class SimpleAppShell : SimpleShell
                 VisualStateManager.GoToState(this, "Fluent");
                 designButton.HideAttachedPopover();
             }),
-        };  
+        };
+
+        VisualStateManager.GoToState(this, "Material3");
 
         Routing.RegisterRoute(nameof(FirstYellowDetailPage), typeof(FirstYellowDetailPage));
         Routing.RegisterRoute(nameof(SecondYellowDetailPage), typeof(SecondYellowDetailPage));

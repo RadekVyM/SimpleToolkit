@@ -8,6 +8,8 @@ namespace Radek.SimpleShell.Controls
     public partial class ListPopover : Popover
     {
         private Border rootBorder;
+        private Grid rootGrid;
+        private GraphicsView graphicsView;
         private ScrollView scrollView;
         private VerticalStackLayout stackLayout;
         private IEnumerable<ListItem> listItems = new List<ListItem>();
@@ -20,12 +22,15 @@ namespace Radek.SimpleShell.Controls
         private Thickness labelMargin;
         private Thickness stackLayoutPadding;
         private bool iconsAreVisible = true;
+        private double scrollPosition;
 
         public static readonly BindableProperty ItemsProperty = BindableProperty.Create(nameof(Items), typeof(IEnumerable<object>), typeof(ListPopover), propertyChanged: OnItemsChanged);
+        public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(ListPopover), propertyChanged: OnSelectedItemChanged);
         public static readonly BindableProperty DesignLanguageProperty = BindableProperty.Create(nameof(DesignLanguage), typeof(DesignLanguage), typeof(ListPopover), propertyChanged: OnDesignLanguageChanged, defaultValue: DesignLanguage.Material3);
         public static readonly BindableProperty IconColorProperty = BindableProperty.Create(nameof(IconColor), typeof(Color), typeof(ListPopover), propertyChanged: OnIconColorChanged, defaultValue: Colors.Black);
         public static readonly BindableProperty TextColorProperty = BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(ListPopover), propertyChanged: OnTextColorChanged, defaultValue: Colors.Black);
         public static readonly BindableProperty BackgroundProperty = BindableProperty.Create(nameof(Background), typeof(Brush), typeof(ListPopover), propertyChanged: OnBackgroundChanged, defaultValue: null);
+        public static readonly BindableProperty SelectionBrushProperty = BindableProperty.Create(nameof(SelectionBrush), typeof(Brush), typeof(ListPopover), propertyChanged: OnSelectionBrushChanged, defaultValue: null);
         public static readonly BindableProperty MinimumWidthRequestProperty = BindableProperty.Create(nameof(MinimumWidthRequest), typeof(double), typeof(ListPopover), propertyChanged: OnMinimumWidthRequestChanged, defaultValue: View.MinimumWidthRequestProperty.DefaultValue);
         public static readonly BindableProperty MaximumWidthRequestProperty = BindableProperty.Create(nameof(MaximumWidthRequest), typeof(double), typeof(ListPopover), propertyChanged: OnMaximumWidthRequestChanged, defaultValue: View.MaximumWidthRequestProperty.DefaultValue);
 
@@ -35,6 +40,12 @@ namespace Radek.SimpleShell.Controls
         {
             get => (IEnumerable<object>)GetValue(ItemsProperty);
             set => SetValue(ItemsProperty, value);
+        }
+
+        public virtual object SelectedItem
+        {
+            get => GetValue(SelectedItemProperty);
+            set => SetValue(SelectedItemProperty, value);
         }
 
         public virtual DesignLanguage DesignLanguage
@@ -59,6 +70,12 @@ namespace Radek.SimpleShell.Controls
         {
             get => (Brush)GetValue(BackgroundProperty);
             set => SetValue(BackgroundProperty, value);
+        }
+
+        public virtual Brush SelectionBrush
+        {
+            get => (Brush)GetValue(SelectionBrushProperty);
+            set => SetValue(SelectionBrushProperty, value);
         }
 
         public virtual double MinimumWidthRequest
@@ -89,6 +106,46 @@ namespace Radek.SimpleShell.Controls
             }
         }
 
+        private int GetSelectedItemIndex()
+        {
+            int i = -1;
+
+            if (Items?.Contains(SelectedItem) == true)
+            {
+                foreach (var item in Items)
+                {
+                    i++;
+                    if (IsSelected(item))
+                        break;
+                }
+            }
+
+            return i;
+        }
+
+        private bool IsSelected(object item)
+        {
+            return item == SelectedItem || (item is BindableObject bindableObject && bindableObject.BindingContext == item);
+        }
+
+        private void InvalidateGraphicsView()
+        {
+            switch (DesignLanguage)
+            {
+                case DesignLanguage.Cupertino:
+                    UpdateDrawableToCupertino();
+                    break;
+                case DesignLanguage.Material3:
+                    UpdateDrawableToMaterial3();
+                    break;
+                case DesignLanguage.Fluent:
+                    UpdateDrawableToFluent();
+                    break;
+            }
+
+            graphicsView?.Invalidate();
+        }
+
         private void SetUpBaseStructure()
         {
             rootBorder = new Border
@@ -102,6 +159,14 @@ namespace Radek.SimpleShell.Controls
                     CornerRadius = containerCornerRadius
                 },
                 Style = new Style(typeof(Border))
+            };
+            rootGrid = new Grid
+            {
+                Style = new Style(typeof(Grid))
+            };
+            graphicsView = new GraphicsView
+            {
+                Style = new Style(typeof(GraphicsView))
             };
             scrollView = new ScrollView
             {
@@ -117,9 +182,14 @@ namespace Radek.SimpleShell.Controls
                 Style = new Style(typeof(VerticalStackLayout))
             };
 
+            rootBorder.Content = rootGrid;
+            rootGrid.Children.Add(graphicsView);
+            rootGrid.Children.Add(scrollView);
             scrollView.Content = stackLayout;
-            rootBorder.Content = scrollView;
 
+            scrollView.Scrolled += ScrollViewScrolled;
+
+            CompressedLayout.SetIsHeadless(rootGrid, true);
             CompressedLayout.SetIsHeadless(stackLayout, true);
 
             Content = rootBorder;
@@ -147,7 +217,7 @@ namespace Radek.SimpleShell.Controls
                 Style = new Style(typeof(Grid)),
                 BindingContext = item,
             };
-            
+
             var innerGrid = new Grid
             {
                 ColumnDefinitions = new ColumnDefinitionCollection(
@@ -164,6 +234,7 @@ namespace Radek.SimpleShell.Controls
                 Text = item.Title,
                 TextColor = TextColor,
                 FontSize = fontSize,
+                LineBreakMode = LineBreakMode.TailTruncation,
                 HorizontalOptions = LayoutOptions.Fill,
                 VerticalOptions = LayoutOptions.Center,
                 Style = new Style(typeof(Label)),
@@ -230,6 +301,8 @@ namespace Radek.SimpleShell.Controls
             {
                 UpdateButton(item);
             }
+
+            InvalidateGraphicsView();
         }
 
         private void UpdateButton(Grid item)
@@ -328,6 +401,12 @@ namespace Radek.SimpleShell.Controls
             UpdateValuesAccordingToLanguage();
         }
 
+        private void ScrollViewScrolled(object sender, ScrolledEventArgs e)
+        {
+            scrollPosition = e.ScrollX;
+            InvalidateGraphicsView();
+        }
+
         private void ItemClicked(object sender, EventArgs e)
         {
             var item = sender as Grid;
@@ -392,6 +471,13 @@ namespace Radek.SimpleShell.Controls
             listPopover.UpdateIconsVisibility(listPopover.listItems);
         }
 
+        private static void OnSelectedItemChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var listPopover = bindable as ListPopover;
+
+            listPopover.UpdateValuesAccordingToLanguage();
+        }
+
         private static void OnDesignLanguageChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var listPopover = bindable as ListPopover;
@@ -435,6 +521,13 @@ namespace Radek.SimpleShell.Controls
         {
             var listPopover = bindable as ListPopover;
             listPopover.rootBorder.Background = newValue as Brush;
+            listPopover.InvalidateGraphicsView();
+        }
+
+        private static void OnSelectionBrushChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var listPopover = bindable as ListPopover;
+            listPopover.InvalidateGraphicsView();
         }
 
         private static void OnMinimumWidthRequestChanged(BindableObject bindable, object oldValue, object newValue)
@@ -442,6 +535,7 @@ namespace Radek.SimpleShell.Controls
             var listPopover = bindable as ListPopover;
             listPopover.scrollView.MinimumWidthRequest = (double)newValue;
             listPopover.stackLayout.MinimumWidthRequest = (double)newValue;
+            listPopover.InvalidateGraphicsView();
         }
 
         private static void OnMaximumWidthRequestChanged(BindableObject bindable, object oldValue, object newValue)
@@ -449,6 +543,7 @@ namespace Radek.SimpleShell.Controls
             var listPopover = bindable as ListPopover;
             listPopover.scrollView.MaximumWidthRequest = (double)newValue;
             listPopover.stackLayout.MaximumWidthRequest = (double)newValue;
+            listPopover.InvalidateGraphicsView();
         }
 
         private record ListItem(string Title, ImageSource Icon, object Item);

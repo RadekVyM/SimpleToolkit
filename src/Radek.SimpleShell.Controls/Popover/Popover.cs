@@ -36,7 +36,6 @@ namespace Radek.SimpleShell.Controls
             view.SetValue(AttachedPopoverProperty, value);
         }
 
-
         public virtual void Show(View parentView)
         {
             var mauiContext = parentView.Handler.MauiContext;

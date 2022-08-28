@@ -347,6 +347,7 @@ namespace Radek.SimpleShell.Controls
                 Text = item.Title,
                 TextColor = TextColor,
                 FontSize = fontSize,
+                LineBreakMode = LineBreakMode.TailTruncation,
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center,
                 Style = new Style(typeof(Label)),
@@ -527,6 +528,7 @@ namespace Radek.SimpleShell.Controls
                 view.GestureRecognizers.Clear();
             }
 
+            hiddenItems.Clear();
             stackLayout.Children.Clear();
             allItemViews = itemViews.ToList();
 
@@ -716,7 +718,7 @@ namespace Radek.SimpleShell.Controls
             });
         }
 
-        private async void MoreItemClicked(object sender, EventArgs e)
+        private void MoreItemClicked(object sender, EventArgs e)
         {
             var view = sender as Grid;
 
@@ -724,7 +726,9 @@ namespace Radek.SimpleShell.Controls
             moreItemsPopover.TextColor = TextColor;
             moreItemsPopover.DesignLanguage = DesignLanguage;
             moreItemsPopover.Background = Background;
+            moreItemsPopover.SelectionBrush = PrimaryBrush;
             moreItemsPopover.Items = hiddenItems.Select(i => i.BindingContext).ToList();
+            moreItemsPopover.SelectedItem = SelectedItem;
 
             moreButton.ShowAttachedPopover();
 

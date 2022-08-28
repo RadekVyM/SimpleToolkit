@@ -12,6 +12,7 @@ namespace Radek.SimpleShell.Controls.Handlers
     {
         private WBitmapIcon bitmapIcon;
         private FontIcon fontIcon;
+        private double fontSize;
 
         public static IPropertyMapper<Icon, IconHandler> Mapper = new PropertyMapper<Icon, IconHandler>(ViewHandler.ViewMapper)
         {
@@ -50,19 +51,30 @@ namespace Radek.SimpleShell.Controls.Handlers
                 VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center,
             };
 
+            fontIcon.SizeChanged += FontIconSizeChanged;
+
             var container = new WBorder();
 
             return container;
         }
 
-        public static void MapSource(IconHandler handler, Icon image)
+        private void FontIconSizeChanged(object sender, Microsoft.UI.Xaml.SizeChangedEventArgs e)
         {
-            MapSourceAsync(handler, image).FireAndForget(handler);
+            // Fit glyph to the View
+            if (VirtualView.Height is not -1 && VirtualView.Width is not -1)
+            {
+                fontIcon.FontSize = Math.Min(fontSize, Math.Min(VirtualView.Height, VirtualView.Width));
+            }
         }
 
-        public static Task MapSourceAsync(IconHandler handler, Icon image)
+        public static void MapSource(IconHandler handler, Icon icon)
         {
-            var iconSource = image.Source.ToIconSource(handler.MauiContext);
+            MapSourceAsync(handler, icon).FireAndForget(handler);
+        }
+
+        public static Task MapSourceAsync(IconHandler handler, Icon icon)
+        {
+            var iconSource = icon.Source.ToIconSource(handler.MauiContext);
 
             if (iconSource is BitmapIconSource bitmapIconSource)
             {
@@ -72,7 +84,7 @@ namespace Radek.SimpleShell.Controls.Handlers
             else if (iconSource is FontIconSource fontIconSource)
             {
                 handler.fontIcon.FontFamily = fontIconSource.FontFamily;
-                handler.fontIcon.FontSize = fontIconSource.FontSize;
+                handler.fontIcon.FontSize = handler.fontSize = fontIconSource.FontSize;
                 handler.fontIcon.FontStyle = fontIconSource.FontStyle;
                 handler.fontIcon.FontWeight = fontIconSource.FontWeight;
                 handler.fontIcon.Glyph = fontIconSource.Glyph;
@@ -84,11 +96,11 @@ namespace Radek.SimpleShell.Controls.Handlers
             return Task.CompletedTask;
         }
 
-        public static void MapTintColor(IconHandler handler, Icon image)
+        public static void MapTintColor(IconHandler handler, Icon icon)
         {
-            if (image.TintColor is not null)
+            if (icon.TintColor is not null)
             {
-                var color = image.TintColor.ToPlatform();
+                var color = icon.TintColor.ToPlatform();
 
                 handler.bitmapIcon.Foreground = color;
                 handler.fontIcon.Foreground = color;

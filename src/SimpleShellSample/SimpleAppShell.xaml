@@ -18,7 +18,7 @@
 
 
     <ss:SimpleShell.Resources>
-        <Style x:Key="Material" TargetType="controls:TabBar">
+        <Style x:Key="MaterialTabbar" TargetType="controls:TabBar">
             <Setter Property="IconColor" Value="#1d192b"/>
             <Setter Property="IconSelectionColor" Value="#1d192b"/>
             <Setter Property="TextColor" Value="#1d192b"/>
@@ -28,7 +28,7 @@
             <Setter Property="DesignLanguage" Value="Material3"/>
         </Style>
 
-        <Style x:Key="Cupertino" TargetType="controls:TabBar">
+        <Style x:Key="CupertinoTabbar" TargetType="controls:TabBar">
             <Setter Property="IconColor" Value="#999a99"/>
             <Setter Property="IconSelectionColor" Value="#0279fc"/>
             <Setter Property="TextColor" Value="#999a99"/>
@@ -36,8 +36,8 @@
             <Setter Property="Background" Value="#ffffff"/>
             <Setter Property="DesignLanguage" Value="Cupertino"/>
         </Style>
-        
-        <Style x:Key="Fluent" TargetType="controls:TabBar">
+
+        <Style x:Key="FluentTabbar" TargetType="controls:TabBar">
             <Setter Property="IconColor" Value="Black"/>
             <Setter Property="IconSelectionColor" Value="Black"/>
             <Setter Property="TextColor" Value="Black"/>
@@ -91,17 +91,47 @@
         <VisualStateGroup x:Name="DesignLanguage">
             <VisualState x:Name="Material3">
                 <VisualState.Setters>
-                    <Setter TargetName="tabBar" Property="View.Style" Value="{StaticResource Material}"/>
+                    <Setter TargetName="tabBar" Property="View.Style" Value="{StaticResource MaterialTabbar}"/>
+
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.IconColor" Value="#1d192b"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.TextColor" Value="#1d192b"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.Background" Value="#f3edf7"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.DesignLanguage" Value="Material3"/>
+
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.IconColor" Value="#1d192b"/>
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.TextColor" Value="#1d192b"/>
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.Background" Value="#f3edf7"/>
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.DesignLanguage" Value="Material3"/>
                 </VisualState.Setters>
             </VisualState>
             <VisualState x:Name="Cupertino">
                 <VisualState.Setters>
-                    <Setter TargetName="tabBar" Property="View.Style" Value="{StaticResource Cupertino}"/>
+                    <Setter TargetName="tabBar" Property="View.Style" Value="{StaticResource CupertinoTabbar}"/>
+
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.IconColor" Value="Black"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.TextColor" Value="Black"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.Background" Value="#ffffff"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.DesignLanguage" Value="Cupertino"/>
+
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.IconColor" Value="Black"/>
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.TextColor" Value="Black"/>
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.Background" Value="#ffffff"/>
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.DesignLanguage" Value="Cupertino"/>
                 </VisualState.Setters>
             </VisualState>
             <VisualState x:Name="Fluent">
                 <VisualState.Setters>
-                    <Setter TargetName="tabBar" Property="View.Style" Value="{StaticResource Fluent}"/>
+                    <Setter TargetName="tabBar" Property="View.Style" Value="{StaticResource FluentTabbar}"/>
+
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.IconColor" Value="Black"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.TextColor" Value="Black"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.Background" Value="#f3f3f3"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.DesignLanguage" Value="Fluent"/>
+
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.IconColor" Value="Black"/>
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.TextColor" Value="Black"/>
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.Background" Value="#f3f3f3"/>
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.DesignLanguage" Value="Fluent"/>
                 </VisualState.Setters>
             </VisualState>
         </VisualStateGroup>
@@ -228,9 +258,6 @@
                     <controls:Popover.AttachedPopover>
                         <controls:ListPopover
                             x:Name="designLanguagesListPopover"
-                            Background="#edf1e4"
-                            TextColor="#191c18"
-                            IconColor="#191c18"
                             ItemSelected="DesignLanguagesListPopoverItemSelected"
                             MinimumWidthRequest="112" MaximumWidthRequest="280"/>
                     </controls:Popover.AttachedPopover>
@@ -243,11 +270,9 @@
                     VerticalOptions="Center"
                     BackgroundColor="Black">
                     <controls:Popover.AttachedPopover>
-                        <controls:ListPopover 
-                            Items="{Binding Source={x:Reference thisShell}, Path=CurrentPage.ToolbarItems}"
-                            Background="#edf1e4"
-                            TextColor="#191c18"
-                            IconColor="#191c18"/>
+                        <controls:ListPopover
+                            x:Name="toolbarItemsPopover"
+                            Items="{Binding Source={x:Reference thisShell}, Path=CurrentPage.ToolbarItems}"/>
                     </controls:Popover.AttachedPopover>
                 </Button>
             </Grid>
@@ -276,7 +301,7 @@
                 ItemsAlignment="Center"
                 IsScrollable="False"
                 ItemSelected="TabView_ItemSelected"
-                Style="{StaticResource Material}"/>
+                Style="{StaticResource MaterialTabbar}"/>
 
             <!--ItemWidthRequest="{OnPlatform WinUI=200}"-->
 

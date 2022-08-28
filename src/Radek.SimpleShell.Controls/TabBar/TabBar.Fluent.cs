@@ -58,7 +58,7 @@
         private class FluentDrawable : IDrawable
         {
             private float bottomPadding = 4f;
-            private float lineHeight = 4f;
+            private float lineThickness = 4f;
             private float defaultLineWidth = 16f;
 
             public double AnimationProgress { get; set; }
@@ -108,11 +108,11 @@
                 var itemWidth = selectedView.Width;
                 var left = (float)(leftItemsWidth + ((itemWidth - defaultLineWidth) / 2) - ScrollPosition + leftPadding + ((SelectedItemRelativePosition - flooredPosition) * itemWidth));
 
-                var lineRect = new RectF(left, dirtyRect.Height - bottomPadding - lineHeight, defaultLineWidth, lineHeight);
+                var lineRect = new RectF(left, dirtyRect.Height - bottomPadding - lineThickness, defaultLineWidth, lineThickness);
 
                 canvas.SetFillPaint(LineBrush ?? Colors.Black, lineRect);
 
-                canvas.FillRoundedRectangle(lineRect, lineHeight / 2);
+                canvas.FillRoundedRectangle(lineRect, lineThickness / 2);
 
                 canvas.RestoreState();
             }
