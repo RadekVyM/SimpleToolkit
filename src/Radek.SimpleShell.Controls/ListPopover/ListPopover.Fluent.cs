@@ -8,7 +8,7 @@ namespace Radek.SimpleShell.Controls
         {
             fontSize = 14;
             containerCornerRadius = 10;
-            listItemHeight = 48;
+            listItemHeight = 46;
             iconSize = new Size(16, 16);
             iconMargin = new Thickness(16, 0, 0, 0);
             labelMargin = new Thickness(16, 0, 16, 0);
@@ -64,7 +64,7 @@ namespace Radek.SimpleShell.Controls
 
                 canvas.FillRoundedRectangle(rect, selectionCornerRadius);
 
-                RectF pillRect = new Rect(rect.X, rect.Y + (rect.Height * 0.3), lineThickness, rect.Height * 0.4);
+                RectF pillRect = new Rect(rect.X, rect.Y + (rect.Height / 4), lineThickness, rect.Height / 2);
                 canvas.SetFillPaint(SelectionBrush, pillRect);
 
                 canvas.FillRoundedRectangle(pillRect, lineThickness / 2);

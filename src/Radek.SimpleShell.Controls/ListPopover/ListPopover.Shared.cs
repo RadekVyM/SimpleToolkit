@@ -1,4 +1,5 @@
-﻿using Microsoft.Maui.Controls.Shapes;
+﻿using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Shapes;
 
 namespace Radek.SimpleShell.Controls
 {
@@ -148,8 +149,10 @@ namespace Radek.SimpleShell.Controls
 
         private void SetUpBaseStructure()
         {
-            rootBorder = new Border
+            rootBorder = new Border // Bug: Border does not shrink if its content does on iOS
             {
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.Start,
                 StrokeThickness = 0,
                 Stroke = Colors.Transparent,
                 Background = Background,
@@ -162,16 +165,23 @@ namespace Radek.SimpleShell.Controls
             };
             rootGrid = new Grid
             {
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.Start,
+                BackgroundColor = Colors.Transparent,
+                RowDefinitions = new RowDefinitionCollection(new RowDefinition(GridLength.Auto)),
+                ColumnDefinitions = new ColumnDefinitionCollection(new ColumnDefinition(GridLength.Auto)),
                 Style = new Style(typeof(Grid))
             };
-            graphicsView = new GraphicsView
+            graphicsView = new GraphicsView // Bug: GraphicsView does not want to shrink when StackLayout does on iOS
             {
+                Background = Colors.Transparent,
                 Style = new Style(typeof(GraphicsView))
             };
             scrollView = new ScrollView
             {
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start,
+                BackgroundColor = Colors.Transparent,
                 Style = new Style(typeof(ScrollView))
             };
             stackLayout = new VerticalStackLayout
@@ -179,9 +189,13 @@ namespace Radek.SimpleShell.Controls
                 Padding = stackLayoutPadding,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start,
+                BackgroundColor = Colors.Transparent,
                 Style = new Style(typeof(VerticalStackLayout))
             };
 
+#if IOS
+            stackLayout.SizeChanged += StackLayoutViewSizeChanged;
+#endif
             rootBorder.Content = rootGrid;
             rootGrid.Children.Add(graphicsView);
             rootGrid.Children.Add(scrollView);
@@ -194,6 +208,23 @@ namespace Radek.SimpleShell.Controls
 
             Content = rootBorder;
         }
+
+#if IOS
+        private void StackLayoutViewSizeChanged(object sender, EventArgs e)
+        {
+            // Workaround of the bug
+            if (scrollView.Width > 0 && scrollView.Height > 0 && stackLayout.Width > 0 && stackLayout.Height > 0)
+            {
+                graphicsView.HeightRequest = double.NaN;
+                graphicsView.WidthRequest = double.NaN;
+                var size = (scrollView as IView).Measure(double.PositiveInfinity, double.PositiveInfinity);
+                (graphicsView as IView).Measure(double.PositiveInfinity, double.PositiveInfinity);
+
+                graphicsView.HeightRequest = size.Height;
+                graphicsView.WidthRequest = size.Width;
+            }
+        }
+#endif
 
         private IEnumerable<Grid> CreateItemViews(IEnumerable<ListItem> listItems)
         {

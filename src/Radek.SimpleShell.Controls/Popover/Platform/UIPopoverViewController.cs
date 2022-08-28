@@ -3,12 +3,9 @@
 using CoreAnimation;
 using CoreGraphics;
 using Foundation;
-using Microsoft.Maui.Controls;
 using Microsoft.Maui.Platform;
-using ObjCRuntime;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 using UIKit;
 
 // Partially based on the .NET MAUI Community Toolkit Popup control - https://github.com/CommunityToolkit/Maui
