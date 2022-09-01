@@ -17,11 +17,11 @@ namespace SimpleToolkit.SimpleShell.Playground
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            builder.ConfigureSimpleToolkit();
+            builder.UseSimpleToolkit();
 
             if (UseSimpleShell)
             {
-                builder.ConfigureSimpleShell();
+                builder.UseSimpleShell();
             }
 
             return builder.Build();

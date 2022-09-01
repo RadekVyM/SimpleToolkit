@@ -61,6 +61,8 @@ namespace SimpleToolkit.SimpleShell.Controls
         private FontAttributes labelAttributes;
         private FontAttributes labelSelectionAttributes;
         private StackOrientation itemStackLayoutOrientation = StackOrientation.Vertical;
+        private bool isMoreButtonShown = false;
+        private bool isMoreLabelVisible = true;
 
         private IList<Grid> allItemViews = new List<Grid>();
         private IList<Grid> hiddenItems = new List<Grid>();
@@ -80,7 +82,8 @@ namespace SimpleToolkit.SimpleShell.Controls
         public static readonly BindableProperty TextColorProperty = BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(TabBar), propertyChanged: OnTextColorChanged, defaultValue: Colors.Black);
         public static readonly BindableProperty TextSelectionColorProperty = BindableProperty.Create(nameof(TextSelectionColor), typeof(Color), typeof(TabBar), propertyChanged: OnTextSelectionColorChanged, defaultValue: Colors.Black);
         public static readonly BindableProperty PrimaryBrushProperty = BindableProperty.Create(nameof(PrimaryBrush), typeof(Brush), typeof(TabBar), propertyChanged: OnPrimaryBrushChanged, defaultValue: null);
-        public static readonly BindableProperty ShowButtonAndMenuWhenMoreItemsDoNotFitProperty = BindableProperty.Create(nameof(ShowButtonAndMenuWhenMoreItemsDoNotFit), typeof(bool), typeof(TabBar), propertyChanged: OnShowButtonAndMenuWhenMoreItemsDoNotFitChanged, defaultValue: true); // Naming is hard 😶
+        public static readonly BindableProperty ShowButtonWhenMoreItemsDoNotFitProperty = BindableProperty.Create(nameof(ShowButtonWhenMoreItemsDoNotFit), typeof(bool), typeof(TabBar), propertyChanged: OnShowButtonWhenMoreItemsDoNotFitChanged, defaultValue: true); // Naming is hard 😶
+        public static readonly BindableProperty ShowMenuOnMoreButtonClickProperty = BindableProperty.Create(nameof(ShowMenuOnMoreButtonClick), typeof(bool), typeof(TabBar), propertyChanged: OnShowMenuOnMoreButtonClickChanged, defaultValue: true); // Naming is hard 😶
         public static readonly BindableProperty MoreTitleProperty = BindableProperty.Create(nameof(MoreTitle), typeof(string), typeof(TabBar), propertyChanged: OnMoreTitleChanged, defaultValue: "More");
         public static readonly BindableProperty MoreIconProperty = BindableProperty.Create(nameof(MoreIcon), typeof(ImageSource), typeof(TabBar), propertyChanged: OnMoreIconChanged, defaultValue: null);
 
@@ -156,10 +159,16 @@ namespace SimpleToolkit.SimpleShell.Controls
             set => SetValue(PrimaryBrushProperty, value);
         }
 
-        public virtual bool ShowButtonAndMenuWhenMoreItemsDoNotFit
+        public virtual bool ShowButtonWhenMoreItemsDoNotFit
         {
-            get => (bool)GetValue(ShowButtonAndMenuWhenMoreItemsDoNotFitProperty);
-            set => SetValue(ShowButtonAndMenuWhenMoreItemsDoNotFitProperty, value);
+            get => (bool)GetValue(ShowButtonWhenMoreItemsDoNotFitProperty);
+            set => SetValue(ShowButtonWhenMoreItemsDoNotFitProperty, value);
+        }
+
+        public virtual bool ShowMenuOnMoreButtonClick
+        {
+            get => (bool)GetValue(ShowMenuOnMoreButtonClickProperty);
+            set => SetValue(ShowMenuOnMoreButtonClickProperty, value);
         }
 
         public virtual string MoreTitle
@@ -485,6 +494,7 @@ namespace SimpleToolkit.SimpleShell.Controls
             var label = stackLayout.Children[1] as Label;
 
             var shellItem = item.BindingContext as BaseShellItem;
+            var isMoreButton = item == moreButton;
 
             item.HeightRequest = tabBarHeight;
             item.WidthRequest = itemWidth;
@@ -492,6 +502,10 @@ namespace SimpleToolkit.SimpleShell.Controls
             label.TextColor = IsSelected(shellItem) ? TextSelectionColor : TextColor;
             label.FontSize = fontSize;
             label.FontAttributes = IsSelected(shellItem) ? labelSelectionAttributes : labelAttributes;
+            label.IsVisible = !isMoreButton || isMoreLabelVisible;
+
+            if (isMoreButton)
+            { }
 
             if (IsSelected(shellItem))
             {
@@ -505,7 +519,7 @@ namespace SimpleToolkit.SimpleShell.Controls
             }
 
             image.HeightRequest = iconSize.Height;
-            image.WidthRequest = image.Source is not null ? iconSize.Width : 0;
+            image.WidthRequest = image.Source is not null || isMoreButton ? iconSize.Width : 0;
             if (image.Margin != iconMargin)
                 image.Margin = iconMargin;
             image.TintColor = IsSelected(shellItem) ? IconSelectionColor : IconColor;
@@ -558,6 +572,12 @@ namespace SimpleToolkit.SimpleShell.Controls
 
             UpdateButton(moreButton);
 
+            foreach (var recognizer in moreButton.GestureRecognizers)
+            {
+                if (recognizer is TapGestureRecognizer tapRecognizer)
+                    tapRecognizer.Tapped -= MoreItemClicked;
+            }
+
             moreButton.GestureRecognizers.Clear();
 
             var tapGestureRecognizer = new TapGestureRecognizer();
@@ -599,7 +619,7 @@ namespace SimpleToolkit.SimpleShell.Controls
             }
 
             // Hide last item if more button should be shown
-            if (ShowButtonAndMenuWhenMoreItemsDoNotFit && (addMoreButton || hidden.Any()))
+            if (ShowButtonWhenMoreItemsDoNotFit && (addMoreButton || hidden.Any()))
             {
                 totalWidth -= DesignLanguage is DesignLanguage.Fluent ? ((hidden.FirstOrDefault() as View)?.Width ?? 0) : currentItemWidth;
 
@@ -619,6 +639,8 @@ namespace SimpleToolkit.SimpleShell.Controls
             if (addMoreButton)
                 stackLayout.Children.Add(moreButton);
 
+            isMoreButtonShown = addMoreButton;
+
             return changed;
         }
 
@@ -635,7 +657,7 @@ namespace SimpleToolkit.SimpleShell.Controls
                     stackLayout.Children.Remove(v);
                 });
 
-                if (ShowButtonAndMenuWhenMoreItemsDoNotFit)
+                if (ShowButtonWhenMoreItemsDoNotFit)
                     addMoreButton = true;
             }
             HiddenItems = hiddenItems.Select(v => v.BindingContext as BaseShellItem).ToList();
@@ -646,7 +668,7 @@ namespace SimpleToolkit.SimpleShell.Controls
         private void TryShowHiddenItems(ref bool changed, ref double totalWidth, ref bool addMoreButton, double moreButtonWidth)
         {
             totalWidth = DesignLanguage is DesignLanguage.Fluent ? totalWidth : stackLayout.Children.Count * realMinimumItemWidth;
-            totalWidth += ShowButtonAndMenuWhenMoreItemsDoNotFit ? moreButtonWidth : 0;
+            totalWidth += ShowButtonWhenMoreItemsDoNotFit ? moreButtonWidth : 0;
 
             while (totalWidth < Width)
             {
@@ -667,7 +689,7 @@ namespace SimpleToolkit.SimpleShell.Controls
             }
 
             // Show more button or rest of the already hidden items
-            if (hiddenItems.Any() && ShowButtonAndMenuWhenMoreItemsDoNotFit)
+            if (hiddenItems.Any() && ShowButtonWhenMoreItemsDoNotFit)
             {
                 var restItemsWidth = DesignLanguage is DesignLanguage.Fluent ? hiddenItems.Sum(c => (c as View).Width) : hiddenItems.Count * realMinimumItemWidth;
 
@@ -720,6 +742,11 @@ namespace SimpleToolkit.SimpleShell.Controls
 
         private void MoreItemClicked(object sender, EventArgs e)
         {
+            MoreButtonClicked?.Invoke(sender, EventArgs.Empty);
+
+            if (!ShowMenuOnMoreButtonClick)
+                return;
+
             var view = sender as Grid;
 
             moreItemsPopover.IconColor = IconColor;
@@ -733,8 +760,6 @@ namespace SimpleToolkit.SimpleShell.Controls
             moreItemsPopover.SelectedItem = SelectedItem;
 
             moreButton.ShowAttachedPopover();
-
-            MoreButtonClicked?.Invoke(sender, EventArgs.Empty);
         }
 
         private void MoreItemsPopoverItemSelected(object sender, ListPopoverItemSelectedEventArgs e)
@@ -967,10 +992,20 @@ namespace SimpleToolkit.SimpleShell.Controls
             tabBar.InvalidateGraphicsView();
         }
 
-        private static void OnShowButtonAndMenuWhenMoreItemsDoNotFitChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void OnShowButtonWhenMoreItemsDoNotFitChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var tabBar = bindable as TabBar;
             tabBar.UpdateMoreButton();
+        }
+
+        private static void OnShowMenuOnMoreButtonClickChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var tabBar = bindable as TabBar;
+
+            if (newValue is false)
+            {
+                tabBar.moreButton.HideAttachedPopover();
+            }
         }
 
         private static void OnMoreTitleChanged(BindableObject bindable, object oldValue, object newValue)

@@ -17,6 +17,7 @@
             labelAttributes = FontAttributes.None;
             labelSelectionAttributes = FontAttributes.None;
             itemStackLayoutOrientation = isCompact ? StackOrientation.Horizontal : StackOrientation.Vertical;
+            isMoreLabelVisible = true;
         }
 
         private void UpdateDrawableToCupertino()

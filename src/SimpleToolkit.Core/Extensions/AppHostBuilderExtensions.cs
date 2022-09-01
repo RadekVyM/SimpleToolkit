@@ -4,7 +4,7 @@ namespace SimpleToolkit.Core
 {
     public static class AppHostBuilderExtensions
     {
-        public static MauiAppBuilder ConfigureSimpleToolkit(this MauiAppBuilder builder)
+        public static MauiAppBuilder UseSimpleToolkit(this MauiAppBuilder builder)
         {
             builder.ConfigureMauiHandlers(handlers =>
             {
