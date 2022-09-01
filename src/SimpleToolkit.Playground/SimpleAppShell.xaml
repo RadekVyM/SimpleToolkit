@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<shell:SimpleShell
+    x:Class="SimpleToolkit.SimpleShell.Playground.SimpleAppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:SimpleToolkit.SimpleShell.Playground"
+    xmlns:core="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
+    xmlns:shell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
+    xmlns:controls="clr-namespace:SimpleToolkit.SimpleShell.Controls;assembly=SimpleToolkit.SimpleShell.Controls"
+    xmlns:pages="clr-namespace:SimpleToolkit.SimpleShell.Playground.Views.Pages"
+    x:Name="thisShell">
+
+    <!--Shell.NavBarIsVisible="False"-->
+
+    <!--<Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" Command="{Binding Source={x:Reference thisShell}, Path=BackCommand}"/>
+    </Shell.BackButtonBehavior>-->
+
+
+    <shell:SimpleShell.Resources>
+        <Style x:Key="MaterialTabbar" TargetType="controls:TabBar">
+            <Setter Property="IconColor" Value="#1d192b"/>
+            <Setter Property="IconSelectionColor" Value="#1d192b"/>
+            <Setter Property="TextColor" Value="#1d192b"/>
+            <Setter Property="TextSelectionColor" Value="#1d192b"/>
+            <Setter Property="Background" Value="#f3edf7"/>
+            <Setter Property="PrimaryBrush" Value="#e8def8"/>
+            <Setter Property="DesignLanguage" Value="Material3"/>
+        </Style>
+
+        <Style x:Key="CupertinoTabbar" TargetType="controls:TabBar">
+            <Setter Property="IconColor" Value="#999a99"/>
+            <Setter Property="IconSelectionColor" Value="#0279fc"/>
+            <Setter Property="TextColor" Value="#999a99"/>
+            <Setter Property="TextSelectionColor" Value="#0279fc"/>
+            <Setter Property="Background" Value="#ffffff"/>
+            <Setter Property="DesignLanguage" Value="Cupertino"/>
+        </Style>
+
+        <Style x:Key="FluentTabbar" TargetType="controls:TabBar">
+            <Setter Property="IconColor" Value="Black"/>
+            <Setter Property="IconSelectionColor" Value="Black"/>
+            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="TextSelectionColor" Value="Black"/>
+            <Setter Property="Background" Value="#f3f3f3"/>
+            <Setter Property="PrimaryBrush" Value="#3b4c73"/>
+            <Setter Property="DesignLanguage" Value="Fluent"/>
+        </Style>
+    </shell:SimpleShell.Resources>
+
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="SimplePageStates">
+            <VisualState x:Name="SimplePageState">
+                <VisualState.Setters>
+                    <Setter TargetName="addButton" Property="Button.Background" Value="Black"/>
+                </VisualState.Setters>
+            </VisualState>
+            <VisualState x:Name="SimplePageState.FirstYellowDetailPage">
+                <VisualState.Setters>
+                    <Setter TargetName="addButton" Property="Button.Background" Value="Goldenrod"/>
+                </VisualState.Setters>
+            </VisualState>
+            <VisualState x:Name="SimplePageState.GreenPage">
+                <VisualState.Setters>
+                    <Setter TargetName="addButton" Property="Button.Background" Value="DarkRed"/>
+                </VisualState.Setters>
+            </VisualState>
+            <VisualState x:Name="SimplePageState.RedPage">
+                <VisualState.Setters>
+                    <Setter TargetName="addButton" Property="Button.Background" Value="DarkRed"/>
+                </VisualState.Setters>
+            </VisualState>
+            <VisualState x:Name="SimplePageState.FirstGreenDetailPage">
+                <VisualState.Setters>
+                    <Setter TargetName="addButton" Property="Button.Background" Value="Green"/>
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+        <VisualStateGroup x:Name="SimplePageTypeStates">
+            <VisualState x:Name="SimplePageTypeState.RegisteredPage">
+                <VisualState.Setters>
+                    <Setter TargetName="backButton" Property="Button.IsVisible" Value="true"/>
+                </VisualState.Setters>
+            </VisualState>
+            <VisualState x:Name="SimplePageTypeState.RootPage">
+                <VisualState.Setters>
+                    <Setter TargetName="backButton" Property="Button.IsVisible" Value="false"/>
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+        <VisualStateGroup x:Name="DesignLanguage">
+            <VisualState x:Name="Material3">
+                <VisualState.Setters>
+                    <Setter TargetName="tabBar" Property="View.Style" Value="{StaticResource MaterialTabbar}"/>
+
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.IconColor" Value="#1d192b"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.TextColor" Value="#1d192b"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.Background" Value="#f3edf7"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.DesignLanguage" Value="Material3"/>
+
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.IconColor" Value="#1d192b"/>
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.TextColor" Value="#1d192b"/>
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.Background" Value="#f3edf7"/>
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.DesignLanguage" Value="Material3"/>
+                </VisualState.Setters>
+            </VisualState>
+            <VisualState x:Name="Cupertino">
+                <VisualState.Setters>
+                    <Setter TargetName="tabBar" Property="View.Style" Value="{StaticResource CupertinoTabbar}"/>
+
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.IconColor" Value="Black"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.TextColor" Value="Black"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.Background" Value="#ffffff"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.DesignLanguage" Value="Cupertino"/>
+
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.IconColor" Value="Black"/>
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.TextColor" Value="Black"/>
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.Background" Value="#ffffff"/>
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.DesignLanguage" Value="Cupertino"/>
+                </VisualState.Setters>
+            </VisualState>
+            <VisualState x:Name="Fluent">
+                <VisualState.Setters>
+                    <Setter TargetName="tabBar" Property="View.Style" Value="{StaticResource FluentTabbar}"/>
+
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.IconColor" Value="Black"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.TextColor" Value="Black"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.Background" Value="#f3f3f3"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.DesignLanguage" Value="Fluent"/>
+
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.IconColor" Value="Black"/>
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.TextColor" Value="Black"/>
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.Background" Value="#f3f3f3"/>
+                    <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.DesignLanguage" Value="Fluent"/>
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+
+    <Shell.TitleView>
+        <HorizontalStackLayout Spacing="10" Margin="12,0">
+            <Button Text="Back" Clicked="BackButtonClicked" VerticalOptions="Center"/>
+            <Button Text="Add" Clicked="Button_Clicked_1" VerticalOptions="Center"/>
+            <Label Text="{Binding Source={x:Reference thisShell}, Path=CurrentPage.Title}" VerticalOptions="Center"/>
+        </HorizontalStackLayout>
+    </Shell.TitleView>
+
+
+    <Shell.SearchHandler>
+        <SearchHandler Placeholder="Hello..."/>
+    </Shell.SearchHandler>
+
+
+    <Tab Title="Flame tab" Route="FirstTab"
+         Icon="flame_empty.png"
+         controls:SimpleIcon.SelectedIcon="flame_filled.png">
+        <ShellContent
+            Title="Yellow"
+            Icon="flame_empty.png"
+            controls:SimpleIcon.SelectedIcon="flame_filled.png"
+            ContentTemplate="{DataTemplate pages:YellowPage}"
+            Route="YellowPage" />
+        <ShellContent
+            Title="Green"
+            Icon="bird_empty.png"
+            controls:SimpleIcon.SelectedIcon="bird_filled.png"
+            ContentTemplate="{DataTemplate pages:GreenPage}"
+            Route="GreenPage" />
+    </Tab>
+
+    <Tab Title="Gray"
+         Icon="flame_empty.png"
+         controls:SimpleIcon.SelectedIcon="https://www.itnetwork.cz/images/63461/mobile/apps_icon.png">
+        <ShellContent
+            Title="Gray"
+            controls:SimpleIcon.SelectedIcon="https://www.itnetwork.cz/images/63461/mobile/apps_icon.png"
+            ContentTemplate="{DataTemplate pages:GrayPage}"
+            Route="GrayPage">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="a" Size="20"/>
+            </ShellContent.Icon>
+        </ShellContent>
+    </Tab>
+
+    <Tab Title="Case tab" Route="SecondTab"
+         Icon="case_empty.png"
+         controls:SimpleIcon.SelectedIcon="case_filled.png">
+        <ShellContent
+            Title="Blue"
+            Icon="case_empty.png"
+            controls:SimpleIcon.SelectedIcon="case_filled.png"
+            ContentTemplate="{DataTemplate pages:BluePage}"
+            Route="BluePage" />
+        <ShellContent
+            Title="Red"
+            Icon="avatar_empty.png"
+            controls:SimpleIcon.SelectedIcon="avatar_filled.png"
+            ContentTemplate="{DataTemplate pages:RedPage}"
+            Route="RedPage" />
+    </Tab>
+
+    <Tab Title="Purple"
+         Icon="avatar_empty.png"
+         controls:SimpleIcon.SelectedIcon="avatar_filled.png">
+        <ShellContent
+            Title="Purple"
+            Icon="avatar_empty.png"
+            controls:SimpleIcon.SelectedIcon="avatar_filled.png"
+            ContentTemplate="{DataTemplate pages:PurplePage}"
+            Route="PurplePage" />
+    </Tab>
+
+    <!--<ShellContent
+            Title="Orange"
+            ContentTemplate="{DataTemplate pages:OrangePage}"
+            Route="OrangePage" />-->
+
+
+    <shell:SimpleShell.Content>
+        <Grid x:Name="rootContainer" RowDefinitions="auto, auto, *, auto">
+            <Grid x:Name="appBar" ColumnSpacing="10" Padding="12"
+                  ColumnDefinitions="auto, auto, *, auto, auto">
+                <Button x:Name="backButton" Text="Back" Clicked="BackButtonClicked" VerticalOptions="Center">
+                    <VisualStateManager.VisualStateGroups>
+                        <!-- If I want to override default VisualStateGroup in Styles.xaml, I have to use VisualStateGroupList. See https://github.com/dotnet/maui/issues/8003 -->
+                        <VisualStateGroupList>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <VisualState.Setters>
+                                        <Setter Property="Scale" Value="1" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <VisualState.Setters>
+                                        <Setter Property="Scale" Value="0.95" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateGroupList>
+                    </VisualStateManager.VisualStateGroups>
+                </Button>
+
+                <Button 
+                    x:Name="addButton" Grid.Column="1"
+                    Text="Add"
+                    Clicked="Button_Clicked_1"
+                    VerticalOptions="Center"
+                    BackgroundColor="Black"/>
+
+                <Label Grid.Column="2" Text="{Binding Source={x:Reference thisShell}, Path=CurrentPage.Title}" VerticalOptions="Center"/>
+
+                <Button 
+                    x:Name="designButton" Grid.Column="3"
+                    Text="Design"
+                    Clicked="ShowPopoverButtonClicked"
+                    VerticalOptions="Center"
+                    BackgroundColor="Black">
+                    <core:Popover.AttachedPopover>
+                        <controls:ListPopover
+                            x:Name="designLanguagesListPopover"
+                            ItemSelected="DesignLanguagesListPopoverItemSelected"
+                            MinimumWidthRequest="112" MaximumWidthRequest="280"/>
+                    </core:Popover.AttachedPopover>
+                </Button>
+
+                <Button 
+                    x:Name="toolbarItemsButton" Grid.Column="4"
+                    Text="👋"
+                    Clicked="ShowPopoverButtonClicked"
+                    VerticalOptions="Center"
+                    BackgroundColor="Black">
+                    <core:Popover.AttachedPopover>
+                        <controls:ListPopover
+                            x:Name="toolbarItemsPopover"
+                            Items="{Binding Source={x:Reference thisShell}, Path=CurrentPage.ToolbarItems}"/>
+                    </core:Popover.AttachedPopover>
+                </Button>
+            </Grid>
+
+            <ScrollView Grid.Row="1" Orientation="Horizontal" Padding="12,0" Margin="0">
+                <HorizontalStackLayout VerticalOptions="Center" Spacing="10" BindableLayout.ItemsSource="{Binding Source={x:Reference thisShell}, Path=CurrentShellSection.Items}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="BaseShellItem">
+                            <Button Text="{Binding Title}" Clicked="Button_Clicked" Background="DarkCyan"/>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </HorizontalStackLayout>
+            </ScrollView>
+
+            <Border Grid.Row="2" Stroke="Transparent" StrokeThickness="0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,0,0"/>
+                </Border.StrokeShape>
+                <shell:SimpleNavigationHost/>
+            </Border>
+
+            <controls:TabBar 
+                x:Name="tabBar" Grid.Row="3" 
+                Items="{Binding Source={x:Reference thisShell}, Path=ShellContents}" 
+                SelectedItem="{Binding Source={x:Reference thisShell}, Path=CurrentShellContent}" 
+                ItemsAlignment="Center"
+                IsScrollable="False"
+                ItemSelected="TabView_ItemSelected"
+                Style="{StaticResource MaterialTabbar}"/>
+
+            <!--ItemWidthRequest="{OnPlatform WinUI=200}"-->
+
+        </Grid>
+    </shell:SimpleShell.Content>
+
+</shell:SimpleShell>
