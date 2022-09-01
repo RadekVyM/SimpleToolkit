@@ -723,7 +723,9 @@ namespace SimpleToolkit.SimpleShell.Controls
             var view = sender as Grid;
 
             moreItemsPopover.IconColor = IconColor;
+            moreItemsPopover.IconSelectionColor = IconSelectionColor;
             moreItemsPopover.TextColor = TextColor;
+            moreItemsPopover.TextSelectionColor = TextSelectionColor;
             moreItemsPopover.DesignLanguage = DesignLanguage;
             moreItemsPopover.Background = Background;
             moreItemsPopover.SelectionBrush = PrimaryBrush;

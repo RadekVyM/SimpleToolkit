@@ -29,7 +29,9 @@ namespace SimpleToolkit.SimpleShell.Controls
         public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(ListPopover), propertyChanged: OnSelectedItemChanged);
         public static readonly BindableProperty DesignLanguageProperty = BindableProperty.Create(nameof(DesignLanguage), typeof(DesignLanguage), typeof(ListPopover), propertyChanged: OnDesignLanguageChanged, defaultValue: DesignLanguage.Material3);
         public static readonly BindableProperty IconColorProperty = BindableProperty.Create(nameof(IconColor), typeof(Color), typeof(ListPopover), propertyChanged: OnIconColorChanged, defaultValue: Colors.Black);
+        public static readonly BindableProperty IconSelectionColorProperty = BindableProperty.Create(nameof(IconSelectionColor), typeof(Color), typeof(ListPopover), propertyChanged: OnIconSelectionColorChanged, defaultValue: Colors.Black);
         public static readonly BindableProperty TextColorProperty = BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(ListPopover), propertyChanged: OnTextColorChanged, defaultValue: Colors.Black);
+        public static readonly BindableProperty TextSelectionColorProperty = BindableProperty.Create(nameof(TextSelectionColor), typeof(Color), typeof(ListPopover), propertyChanged: OnTextSelectionColorChanged, defaultValue: Colors.Black);
         public static readonly BindableProperty BackgroundProperty = BindableProperty.Create(nameof(Background), typeof(Brush), typeof(ListPopover), propertyChanged: OnBackgroundChanged, defaultValue: null);
         public static readonly BindableProperty SelectionBrushProperty = BindableProperty.Create(nameof(SelectionBrush), typeof(Brush), typeof(ListPopover), propertyChanged: OnSelectionBrushChanged, defaultValue: null);
         public static readonly BindableProperty MinimumWidthRequestProperty = BindableProperty.Create(nameof(MinimumWidthRequest), typeof(double), typeof(ListPopover), propertyChanged: OnMinimumWidthRequestChanged, defaultValue: View.MinimumWidthRequestProperty.DefaultValue);
@@ -61,10 +63,22 @@ namespace SimpleToolkit.SimpleShell.Controls
             set => SetValue(IconColorProperty, value);
         }
 
+        public virtual Color IconSelectionColor
+        {
+            get => (Color)GetValue(IconSelectionColorProperty);
+            set => SetValue(IconSelectionColorProperty, value);
+        }
+
         public virtual Color TextColor
         {
             get => (Color)GetValue(TextColorProperty);
             set => SetValue(TextColorProperty, value);
+        }
+
+        public virtual Color TextSelectionColor
+        {
+            get => (Color)GetValue(TextSelectionColorProperty);
+            set => SetValue(TextSelectionColorProperty, value);
         }
 
         public virtual Brush Background
@@ -126,7 +140,8 @@ namespace SimpleToolkit.SimpleShell.Controls
 
         private bool IsSelected(object item)
         {
-            return item == SelectedItem || (item is BindableObject bindableObject && bindableObject.BindingContext == item);
+            return item == SelectedItem
+                || (item is BindableObject bindableObject && bindableObject.BindingContext is ListItem listItem && listItem.Item == SelectedItem);
         }
 
         private void InvalidateGraphicsView()
@@ -149,7 +164,7 @@ namespace SimpleToolkit.SimpleShell.Controls
 
         private void SetUpBaseStructure()
         {
-            rootBorder = new Border // Bug: Border does not shrink if its content does on iOS
+            rootBorder = new Border // Bug: Border does not shrink when its content does on iOS - see https://github.com/dotnet/maui/issues/9825
             {
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start,
@@ -172,7 +187,7 @@ namespace SimpleToolkit.SimpleShell.Controls
                 ColumnDefinitions = new ColumnDefinitionCollection(new ColumnDefinition(GridLength.Auto)),
                 Style = new Style(typeof(Grid))
             };
-            graphicsView = new GraphicsView // Bug: GraphicsView does not want to shrink when StackLayout does on iOS
+            graphicsView = new GraphicsView // Bug: GraphicsView does not want to shrink when StackLayout does on iOS - see https://github.com/dotnet/maui/issues/9825
             {
                 Background = Colors.Transparent,
                 Style = new Style(typeof(GraphicsView))
@@ -346,7 +361,7 @@ namespace SimpleToolkit.SimpleShell.Controls
 
             var listItem = item.BindingContext as ListItem;
 
-            label.TextColor = TextColor;
+            label.TextColor = IsSelected(item) ? TextSelectionColor : TextColor;
             label.FontSize = fontSize;
             if (label.Margin != labelMargin)
                 label.Margin = labelMargin;
@@ -357,7 +372,7 @@ namespace SimpleToolkit.SimpleShell.Controls
             image.WidthRequest = iconSize.Width;
             if (image.Margin != iconMargin)
                 image.Margin = iconMargin;
-            image.TintColor = IconColor;
+            image.TintColor = IsSelected(item) ? IconSelectionColor : IconColor;
         }
 
         private void UpdateButtons(IEnumerable<ListItem> items)
@@ -524,6 +539,9 @@ namespace SimpleToolkit.SimpleShell.Controls
 
             foreach (var item in listPopover.allItemViews)
             {
+                if (listPopover.IsSelected(item))
+                    continue;
+
                 var grid = item.Children[0] as Grid;
                 var image = grid.Children[0] as Icon;
 
@@ -541,10 +559,54 @@ namespace SimpleToolkit.SimpleShell.Controls
 
             foreach (var item in listPopover.allItemViews)
             {
+                if (listPopover.IsSelected(item))
+                    continue;
+
+                var grid = item.Children[0] as Grid;
+                var label = grid.Children[1] as Label;
+                
+                if (newValue is not null)
+                    label.TextColor = newValue as Color;
+            }
+        }
+
+        private static void OnIconSelectionColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var listPopover = bindable as ListPopover;
+
+            if (listPopover.stackLayout is null)
+                return;
+
+            foreach (var item in listPopover.allItemViews)
+            {
+                if (!listPopover.IsSelected(item))
+                    continue;
+
+                var grid = item.Children[0] as Grid;
+                var image = grid.Children[0] as Icon;
+
+                if (newValue is not null)
+                    image.TintColor = newValue as Color;
+            }
+        }
+
+        private static void OnTextSelectionColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var listPopover = bindable as ListPopover;
+
+            if (listPopover.stackLayout is null)
+                return;
+
+            foreach (var item in listPopover.allItemViews)
+            {
+                if (!listPopover.IsSelected(item))
+                    continue;
+
                 var grid = item.Children[0] as Grid;
                 var label = grid.Children[1] as Label;
 
-                label.TextColor = newValue as Color;
+                if (newValue is not null)
+                    label.TextColor = newValue as Color;
             }
         }
 
