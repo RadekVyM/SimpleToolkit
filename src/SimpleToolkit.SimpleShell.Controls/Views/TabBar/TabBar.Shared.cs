@@ -11,7 +11,7 @@ namespace SimpleToolkit.SimpleShell.Controls
         private GraphicsView graphicsView;
         private ScrollView scrollView;
         private Border border;
-        private Grid moreButton = null;
+        private ContentButton moreButton = null;
         private ListPopover moreItemsPopover;
         private Size iconSize;
         private Thickness iconMargin;
@@ -64,8 +64,8 @@ namespace SimpleToolkit.SimpleShell.Controls
         private bool isMoreButtonShown = false;
         private bool isMoreLabelVisible = true;
 
-        private IList<Grid> allItemViews = new List<Grid>();
-        private IList<Grid> hiddenItems = new List<Grid>();
+        private IList<ContentButton> allItemViews = new List<ContentButton>();
+        private IList<ContentButton> hiddenItems = new List<ContentButton>();
 
         public event TabItemSelectedEventHandler ItemSelected;
         public event EventHandler MoreButtonClicked;
@@ -322,7 +322,7 @@ namespace SimpleToolkit.SimpleShell.Controls
             Content = rootGrid;
         }
 
-        private IEnumerable<Grid> CreateItemViews(IEnumerable<BaseShellItem> items)
+        private IEnumerable<ContentButton> CreateItemViews(IEnumerable<BaseShellItem> items)
         {
             foreach (var item in items)
             {
@@ -330,12 +330,18 @@ namespace SimpleToolkit.SimpleShell.Controls
             }
         }
 
-        private Grid CreateButton(BaseShellItem item)
+        private ContentButton CreateButton(BaseShellItem item)
         {
-            var grid = new Grid
+            var button = new ContentButton
             {
+                Background = Colors.Transparent,
                 HeightRequest = tabBarHeight,
                 WidthRequest = itemWidth,
+                Style = new Style(typeof(ContentButton)),
+                BindingContext = item
+            };
+            var grid = new Grid
+            {
                 Background = Colors.Transparent,
                 Style = new Style(typeof(Grid)),
                 BindingContext = item
@@ -380,13 +386,15 @@ namespace SimpleToolkit.SimpleShell.Controls
 
             grid.Children.Add(stackLayout);
 
+            button.Content = grid;
+
             CompressedLayout.SetIsHeadless(stackLayout, true);
             CompressedLayout.SetIsHeadless(grid, true);
 
-            return grid;
+            return button;
         }
 
-        private Grid CreateMoreButton()
+        private ContentButton CreateMoreButton()
         {
             var shellItem = new BaseShellItem
             {
@@ -487,17 +495,18 @@ namespace SimpleToolkit.SimpleShell.Controls
             InvalidateGraphicsView();
         }
 
-        private void UpdateButton(Grid item)
+        private void UpdateButton(ContentButton button)
         {
-            var stackLayout = item.Children[0] as StackLayout;
+            var grid = button.Content as Grid;
+            var stackLayout = grid.Children[0] as StackLayout;
             var image = stackLayout.Children[0] as Icon;
             var label = stackLayout.Children[1] as Label;
 
-            var shellItem = item.BindingContext as BaseShellItem;
-            var isMoreButton = item == moreButton;
+            var shellItem = button.BindingContext as BaseShellItem;
+            var isMoreButton = button == moreButton;
 
-            item.HeightRequest = tabBarHeight;
-            item.WidthRequest = itemWidth;
+            button.HeightRequest = tabBarHeight;
+            button.WidthRequest = itemWidth;
             label.TextTransform = labelTextTransform;
             label.TextColor = IsSelected(shellItem) ? TextSelectionColor : TextColor;
             label.FontSize = fontSize;
@@ -539,7 +548,7 @@ namespace SimpleToolkit.SimpleShell.Controls
 
             foreach (var view in allItemViews)
             {
-                view.GestureRecognizers.Clear();
+                view.Clicked -= ItemClicked;
             }
 
             hiddenItems.Clear();
@@ -548,10 +557,7 @@ namespace SimpleToolkit.SimpleShell.Controls
 
             foreach (var view in allItemViews)
             {
-                var tapGestureRecognizer = new TapGestureRecognizer();
-                tapGestureRecognizer.Tapped += ItemClicked;
-
-                view.GestureRecognizers.Add(tapGestureRecognizer);
+                view.Clicked += ItemClicked;
 
                 stackLayout.Children.Add(view);
             }
@@ -572,18 +578,8 @@ namespace SimpleToolkit.SimpleShell.Controls
 
             UpdateButton(moreButton);
 
-            foreach (var recognizer in moreButton.GestureRecognizers)
-            {
-                if (recognizer is TapGestureRecognizer tapRecognizer)
-                    tapRecognizer.Tapped -= MoreItemClicked;
-            }
-
-            moreButton.GestureRecognizers.Clear();
-
-            var tapGestureRecognizer = new TapGestureRecognizer();
-            tapGestureRecognizer.Tapped += MoreItemClicked;
-
-            moreButton.GestureRecognizers.Add(tapGestureRecognizer);
+            moreButton.Clicked -= MoreItemClicked;
+            moreButton.Clicked += MoreItemClicked;
         }
 
         private void UpdateSizeOfItems()
@@ -604,8 +600,8 @@ namespace SimpleToolkit.SimpleShell.Controls
             bool addMoreButton = false;
             double totalWidth = 0;
             double currentItemWidth = itemWidth;
-            double moreButtonWidth = DesignLanguage is DesignLanguage.Fluent ? (moreButton?.Measure(double.PositiveInfinity, double.PositiveInfinity).Request.Width ?? realMinimumItemWidth) : realMinimumItemWidth;
-            List<Grid> hidden = new List<Grid>();
+            double moreButtonWidth = DesignLanguage is DesignLanguage.Fluent ? ((moreButton as IView)?.Measure(double.PositiveInfinity, double.PositiveInfinity).Width ?? realMinimumItemWidth) : realMinimumItemWidth;
+            List<ContentButton> hidden = new List<ContentButton>();
 
             stackLayout.Children.Remove(moreButton);
 
@@ -625,7 +621,7 @@ namespace SimpleToolkit.SimpleShell.Controls
 
                 if (totalWidth + moreButtonWidth > Width)
                 {
-                    var last = stackLayout.Children.Except(hidden).LastOrDefault() as Grid;
+                    var last = stackLayout.Children.Except(hidden).LastOrDefault() as ContentButton;
 
                     if (last is not null)
                         hidden.Insert(0, last);
@@ -644,7 +640,7 @@ namespace SimpleToolkit.SimpleShell.Controls
             return changed;
         }
 
-        private bool HideItems(List<Grid> hidden)
+        private bool HideItems(List<ContentButton> hidden)
         {
             bool addMoreButton = false;
 
@@ -706,13 +702,13 @@ namespace SimpleToolkit.SimpleShell.Controls
             }
         }
 
-        private void FindNewHiddenItems(ref bool changed, ref double totalWidth, List<Grid> hidden, double currentItemWidth)
+        private void FindNewHiddenItems(ref bool changed, ref double totalWidth, List<ContentButton> hidden, double currentItemWidth)
         {
             bool remove = false;
 
             for (int i = 0; i < stackLayout.Children.Count; i++)
             {
-                var view = stackLayout.Children[i] as Grid;
+                var view = stackLayout.Children[i] as ContentButton;
                 totalWidth += DesignLanguage is DesignLanguage.Fluent ? view.Width : currentItemWidth;
 
                 if (remove)
@@ -732,7 +728,7 @@ namespace SimpleToolkit.SimpleShell.Controls
 
         private void ItemClicked(object sender, EventArgs e)
         {
-            var view = sender as Grid;
+            var view = sender as ContentButton;
 
             ItemSelected?.Invoke(sender, new TabItemSelectedEventArgs
             {
@@ -747,7 +743,7 @@ namespace SimpleToolkit.SimpleShell.Controls
             if (!ShowMenuOnMoreButtonClick)
                 return;
 
-            var view = sender as Grid;
+            var view = sender as ContentButton;
 
             moreItemsPopover.IconColor = IconColor;
             moreItemsPopover.IconSelectionColor = IconSelectionColor;
@@ -849,7 +845,8 @@ namespace SimpleToolkit.SimpleShell.Controls
 
             foreach (var item in allItemViews)
             {
-                var stackLayout = item.Children[0] as StackLayout;
+                var grid = item.Content as Grid;
+                var stackLayout = grid.Children[0] as StackLayout;
                 var image = stackLayout.Children[0] as Icon;
                 var label = stackLayout.Children[1] as Label;
 
@@ -920,7 +917,8 @@ namespace SimpleToolkit.SimpleShell.Controls
                 if (tabBar.IsSelected(item))
                     continue;
 
-                var stackLayout = item.Children[0] as StackLayout;
+                var grid = item.Content as Grid;
+                var stackLayout = grid.Children[0] as StackLayout;
                 var image = stackLayout.Children[0] as Icon;
 
                 if (newValue is not null)
@@ -940,7 +938,8 @@ namespace SimpleToolkit.SimpleShell.Controls
                 if (!tabBar.IsSelected(item))
                     continue;
 
-                var stackLayout = item.Children[0] as StackLayout;
+                var grid = item.Content as Grid;
+                var stackLayout = grid.Children[0] as StackLayout;
                 var image = stackLayout.Children[0] as Icon;
 
                 if (newValue is not null)
@@ -960,7 +959,8 @@ namespace SimpleToolkit.SimpleShell.Controls
                 if (tabBar.IsSelected(item))
                     continue;
 
-                var stackLayout = item.Children[0] as StackLayout;
+                var grid = item.Content as Grid;
+                var stackLayout = grid.Children[0] as StackLayout;
                 var label = stackLayout.Children[1] as Label;
 
                 label.TextColor = newValue as Color;
@@ -979,7 +979,8 @@ namespace SimpleToolkit.SimpleShell.Controls
                 if (!tabBar.IsSelected(item))
                     continue;
 
-                var stackLayout = item.Children[0] as StackLayout;
+                var grid = item.Content as Grid;
+                var stackLayout = grid.Children[0] as StackLayout;
                 var label = stackLayout.Children[1] as Label;
 
                 label.TextColor = newValue as Color;

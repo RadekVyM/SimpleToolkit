@@ -14,7 +14,7 @@ namespace SimpleToolkit.SimpleShell.Controls
         private ScrollView scrollView;
         private VerticalStackLayout stackLayout;
         private IEnumerable<ListItem> listItems = new List<ListItem>();
-        private IList<Grid> allItemViews = new List<Grid>();
+        private IList<ContentButton> allItemViews = new List<ContentButton>();
         private double fontSize;
         private double containerCornerRadius;
         private double listItemHeight;
@@ -241,7 +241,7 @@ namespace SimpleToolkit.SimpleShell.Controls
         }
 #endif
 
-        private IEnumerable<Grid> CreateItemViews(IEnumerable<ListItem> listItems)
+        private IEnumerable<ContentButton> CreateItemViews(IEnumerable<ListItem> listItems)
         {
             foreach (var item in listItems)
             {
@@ -249,11 +249,18 @@ namespace SimpleToolkit.SimpleShell.Controls
             }
         }
 
-        private Grid CreateButton(ListItem item)
+        private ContentButton CreateButton(ListItem item)
         {
             // I have to do weird stuff here to have sizing sort of working - layouts are just broken:
             // https://github.com/dotnet/maui/issues/7531
-            
+
+            var button = new ContentButton
+            {
+                Background = Colors.Transparent,
+                Style = new Style(typeof(ContentButton)),
+                BindingContext = item,
+            };
+
             var grid = new Grid
             {
                 ColumnDefinitions = new ColumnDefinitionCollection(
@@ -307,10 +314,12 @@ namespace SimpleToolkit.SimpleShell.Controls
 
             grid.Children.Add(innerGrid);
 
+            button.Content = grid;
+
             //CompressedLayout.SetIsHeadless(grid, true);
             CompressedLayout.SetIsHeadless(innerGrid, true);
 
-            return grid;
+            return button;
         }
 
         private void UpdateValuesAccordingToLanguage()
@@ -351,17 +360,18 @@ namespace SimpleToolkit.SimpleShell.Controls
             InvalidateGraphicsView();
         }
 
-        private void UpdateButton(Grid item)
+        private void UpdateButton(ContentButton button)
         {
-            item.HeightRequest = listItemHeight;
+            button.HeightRequest = listItemHeight;
 
-            var innerGrid = item.Children[0] as Grid;
+            var grid = button.Content as Grid;
+            var innerGrid = grid.Children[0] as Grid;
             var image = innerGrid.Children[0] as Icon;
             var label = innerGrid.Children[1] as Label;
 
-            var listItem = item.BindingContext as ListItem;
+            var listItem = button.BindingContext as ListItem;
 
-            label.TextColor = IsSelected(item) ? TextSelectionColor : TextColor;
+            label.TextColor = IsSelected(button) ? TextSelectionColor : TextColor;
             label.FontSize = fontSize;
             if (label.Margin != labelMargin)
                 label.Margin = labelMargin;
@@ -372,7 +382,7 @@ namespace SimpleToolkit.SimpleShell.Controls
             image.WidthRequest = iconSize.Width;
             if (image.Margin != iconMargin)
                 image.Margin = iconMargin;
-            image.TintColor = IsSelected(item) ? IconSelectionColor : IconColor;
+            image.TintColor = IsSelected(button) ? IconSelectionColor : IconColor;
         }
 
         private void UpdateButtons(IEnumerable<ListItem> items)
@@ -384,7 +394,7 @@ namespace SimpleToolkit.SimpleShell.Controls
 
             foreach (var view in allItemViews)
             {
-                view.GestureRecognizers.Clear();
+                view.Clicked -= ItemClicked;
             }
 
             stackLayout.Children.Clear();
@@ -392,10 +402,7 @@ namespace SimpleToolkit.SimpleShell.Controls
 
             foreach (var view in allItemViews)
             {
-                var tapGestureRecognizer = new TapGestureRecognizer();
-                tapGestureRecognizer.Tapped += ItemClicked;
-
-                view.GestureRecognizers.Add(tapGestureRecognizer);
+                view.Clicked += ItemClicked;
 
                 stackLayout.Children.Add(view);
             }
@@ -455,7 +462,7 @@ namespace SimpleToolkit.SimpleShell.Controls
 
         private void ItemClicked(object sender, EventArgs e)
         {
-            var item = sender as Grid;
+            var item = sender as ContentButton;
 
             ItemSelected?.Invoke(sender, new ListPopoverItemSelectedEventArgs
             {
@@ -476,9 +483,10 @@ namespace SimpleToolkit.SimpleShell.Controls
 
             foreach (var item in allItemViews)
             {
-                var grid = item.Children[0] as Grid;
-                var image = grid.Children[0] as Icon;
-                var label = grid.Children[1] as Label;
+                var grid = item.Content as Grid;
+                var innerGrid = grid.Children[0] as Grid;
+                var image = innerGrid.Children[0] as Icon;
+                var label = innerGrid.Children[1] as Label;
 
                 label.Text = titleIcon.Title;
                 image.Source = titleIcon.Icon;
@@ -542,8 +550,9 @@ namespace SimpleToolkit.SimpleShell.Controls
                 if (listPopover.IsSelected(item))
                     continue;
 
-                var grid = item.Children[0] as Grid;
-                var image = grid.Children[0] as Icon;
+                var grid = item.Content as Grid;
+                var innerGrid = grid.Children[0] as Grid;
+                var image = innerGrid.Children[0] as Icon;
 
                 if (newValue is not null)
                     image.TintColor = newValue as Color;
@@ -562,8 +571,9 @@ namespace SimpleToolkit.SimpleShell.Controls
                 if (listPopover.IsSelected(item))
                     continue;
 
-                var grid = item.Children[0] as Grid;
-                var label = grid.Children[1] as Label;
+                var grid = item.Content as Grid;
+                var innerGrid = grid.Children[0] as Grid;
+                var label = innerGrid.Children[1] as Label;
                 
                 if (newValue is not null)
                     label.TextColor = newValue as Color;
@@ -582,8 +592,9 @@ namespace SimpleToolkit.SimpleShell.Controls
                 if (!listPopover.IsSelected(item))
                     continue;
 
-                var grid = item.Children[0] as Grid;
-                var image = grid.Children[0] as Icon;
+                var grid = item.Content as Grid;
+                var innerGrid = grid.Children[0] as Grid;
+                var image = innerGrid.Children[0] as Icon;
 
                 if (newValue is not null)
                     image.TintColor = newValue as Color;
@@ -602,8 +613,9 @@ namespace SimpleToolkit.SimpleShell.Controls
                 if (!listPopover.IsSelected(item))
                     continue;
 
-                var grid = item.Children[0] as Grid;
-                var label = grid.Children[1] as Label;
+                var grid = item.Content as Grid;
+                var innerGrid = grid.Children[0] as Grid;
+                var label = innerGrid.Children[1] as Label;
 
                 if (newValue is not null)
                     label.TextColor = newValue as Color;
