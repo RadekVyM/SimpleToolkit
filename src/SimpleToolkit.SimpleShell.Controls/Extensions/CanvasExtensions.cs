@@ -18,6 +18,16 @@
 
         public static void FillHorizontalMoreIcon(this ICanvas canvas, RectF rect, float dotRadius)
         {
+            HorizontalMoreIcon(canvas, rect, dotRadius, canvas.FillRoundedRectangle);
+        }
+
+        public static void DrawHorizontalMoreIcon(this ICanvas canvas, RectF rect, float dotRadius)
+        {
+            HorizontalMoreIcon(canvas, rect, dotRadius, canvas.DrawRoundedRectangle);
+        }
+
+        private static void HorizontalMoreIcon(this ICanvas canvas, RectF rect, float dotRadius, Action<float, float, float, float, float> action)
+        {
             int numberOfDots = 3;
             float width = dotRadius * 2;
             float left = 0;
@@ -25,7 +35,7 @@
 
             for (int i = 0; i < numberOfDots; i++)
             {
-                canvas.FillRoundedRectangle(rect.Left + left, rect.Top + top, width, width, dotRadius);
+                action(rect.Left + left, rect.Top + top, width, width, dotRadius);
                 left += width + ((rect.Width - (3f * width)) / 2f);
             }
         }

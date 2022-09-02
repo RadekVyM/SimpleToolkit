@@ -62,6 +62,8 @@
             private set => SetValue(ShellContentsProperty, value);
         }
 
+        public new SimpleShell Current => Shell.Current as SimpleShell;
+
 
         public SimpleShell()
         {

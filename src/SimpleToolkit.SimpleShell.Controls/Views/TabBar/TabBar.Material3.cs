@@ -26,7 +26,11 @@ namespace SimpleToolkit.SimpleShell.Controls
                 return;
 
             if (graphicsView.Drawable is not Material3Drawable drawable)
+            {
+                if (graphicsView.Drawable is IDisposable disposable)
+                    disposable.Dispose();
                 graphicsView.Drawable = drawable = new Material3Drawable();
+            }
 
             var selectedIndex = GetSelectedItemIndex();
 
@@ -43,7 +47,7 @@ namespace SimpleToolkit.SimpleShell.Controls
             drawable.IconMargin = iconMargin;
         }
 
-        private class Material3Drawable : IDrawable
+        private class Material3Drawable : IDrawable, IDisposable
         {
             private float dotRadius = 1.5f;
             private float pillHeight = 32;
@@ -61,6 +65,13 @@ namespace SimpleToolkit.SimpleShell.Controls
             public bool IsSelectedHiddenItem { get; set; }
             public Size IconSize { get; set; }
             public Thickness IconMargin { get; set; }
+
+            public void Dispose()
+            {
+                Views = null;
+                IconColor = null;
+                PillBrush = null;
+            }
 
             public void Draw(ICanvas canvas, RectF dirtyRect)
             {

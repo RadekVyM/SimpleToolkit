@@ -26,7 +26,12 @@ namespace SimpleToolkit.SimpleShell.Controls
                 return;
 
             if (graphicsView.Drawable is not FluentDrawable drawable)
+            {
+                if (graphicsView.Drawable is IDisposable disposable)
+                    disposable.Dispose();
+
                 graphicsView.Drawable = drawable = new FluentDrawable();
+            }
 
             var selectedIndex = GetSelectedItemIndex();
 
@@ -80,7 +85,7 @@ namespace SimpleToolkit.SimpleShell.Controls
             await Task.Delay((int)animationLength);
         }
 
-        private class FluentDrawable : IDrawable
+        private class FluentDrawable : IDrawable, IDisposable
         {
             private float dotRadius = 1.2f;
             private float bottomPadding = 4f;
@@ -99,6 +104,13 @@ namespace SimpleToolkit.SimpleShell.Controls
             public bool IsSelectedHiddenItem { get; set; }
             public Size IconSize { get; set; }
             public Thickness IconMargin { get; set; }
+
+            public void Dispose()
+            {
+                Views = null;
+                IconColor = null;
+                LineBrush = null;
+            }
 
             public void Draw(ICanvas canvas, RectF dirtyRect)
             {

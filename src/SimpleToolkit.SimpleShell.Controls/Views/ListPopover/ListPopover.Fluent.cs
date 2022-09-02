@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Graphics;
-
-namespace SimpleToolkit.SimpleShell.Controls
+﻿namespace SimpleToolkit.SimpleShell.Controls
 {
     public partial class ListPopover
     {
