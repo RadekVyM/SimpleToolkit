@@ -37,11 +37,13 @@ namespace SimpleToolkit.Core.Handlers
             base.ViewDidAppear(animated);
         }
 
-        public override void ViewWillAppear(bool animated)
+        public override void ViewDidLayoutSubviews()
         {
-            base.ViewWillAppear(animated);
+            base.ViewDidLayoutSubviews();
 
-            //var measure = VirtualView.Content.Measure(double.PositiveInfinity, double.PositiveInfinity).Request;
+            if (VirtualView.Content is null)
+                return;
+
             var measure = (VirtualView.Content as IView).Measure(double.PositiveInfinity, double.PositiveInfinity); // These two are different
             PreferredContentSize = new CGSize(measure.Width, measure.Height);
 
@@ -49,14 +51,6 @@ namespace SimpleToolkit.Core.Handlers
             {
                 subview.SizeToFit();
             }
-        }
-
-        public override void ViewDidLayoutSubviews()
-        {
-            base.ViewDidLayoutSubviews();
-
-            if (VirtualView.Content is null)
-                return;
         }
 
         public override void ViewWillDisappear(bool animated)

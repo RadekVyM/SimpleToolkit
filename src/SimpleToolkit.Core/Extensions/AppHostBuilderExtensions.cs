@@ -10,6 +10,7 @@ namespace SimpleToolkit.Core
             {
                 handlers.AddHandler(typeof(Icon), typeof(IconHandler));
                 handlers.AddHandler(typeof(Popover), typeof(PopoverHandler));
+                handlers.AddHandler(typeof(ContentButton), typeof(ContentButtonHandler));
             });
 
             return builder;

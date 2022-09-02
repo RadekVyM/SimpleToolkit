@@ -21,7 +21,7 @@ public partial class YellowPage : ContentPage
 
     private void Button_Clicked_2(object sender, EventArgs e)
     {
-        var button = sender as Button;
+        var button = sender as View;
 
         button.ShowAttachedPopover();
     }

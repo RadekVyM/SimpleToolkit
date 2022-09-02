@@ -20,12 +20,15 @@ namespace SimpleToolkit.Core
 
         public static Popover GetAttachedPopover(BindableObject view)
         {
+            _ = view ?? throw new ArgumentNullException(nameof(view));
             return (Popover)view.GetValue(AttachedPopoverProperty);
         }
 
-        public static void SetAttachedPopover(BindableObject view, Popover value)
+        public static void SetAttachedPopover(BindableObject view, Popover popover)
         {
-            view.SetValue(AttachedPopoverProperty, value);
+            _ = view ?? throw new ArgumentNullException(nameof(view));
+            _ = popover ?? throw new ArgumentNullException(nameof(popover));
+            view.SetValue(AttachedPopoverProperty, popover);
         }
 
         public virtual void Show(View parentView)
