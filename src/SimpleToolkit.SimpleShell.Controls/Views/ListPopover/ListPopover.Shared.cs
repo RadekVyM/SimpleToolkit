@@ -1,10 +1,9 @@
-﻿using Microsoft.Maui.Controls.Shapes;
+﻿using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
+using Microsoft.Maui.Controls.Shapes;
 using SimpleToolkit.Core;
 
 namespace SimpleToolkit.SimpleShell.Controls
 {
-    // TODO: A11y
-
     [ContentProperty(nameof(Items))]
     public partial class ListPopover : Popover
     {
@@ -314,7 +313,9 @@ namespace SimpleToolkit.SimpleShell.Controls
 
             button.Content = grid;
 
-            //CompressedLayout.SetIsHeadless(grid, true);
+            SemanticProperties.SetDescription(button, item.Title);
+
+            CompressedLayout.SetIsHeadless(grid, true);
             CompressedLayout.SetIsHeadless(innerGrid, true);
 
             return button;
@@ -488,6 +489,8 @@ namespace SimpleToolkit.SimpleShell.Controls
 
                 label.Text = titleIcon.Title;
                 image.Source = titleIcon.Icon;
+
+                SemanticProperties.SetDescription(item, titleIcon.Title);
             }
 
             UpdateIconsVisibility(listItems);

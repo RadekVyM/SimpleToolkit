@@ -2,8 +2,6 @@
 
 namespace SimpleToolkit.SimpleShell.Controls
 {
-    // TODO: A11y
-
     public partial class TabBar : ContentView, IView
     {
         private HorizontalStackLayout stackLayout;
@@ -224,11 +222,8 @@ namespace SimpleToolkit.SimpleShell.Controls
             return i;
         }
 
-        // TODO: Update selection of more button - if hidden item is selected, show more button as selected
         private bool IsSelected(BindableObject bindableObject)
         {
-            // (bindableObject == moreButton && hiddenItems.Any(h => h.BindingContext == SelectedItem))
-
             return bindableObject.BindingContext == SelectedItem || bindableObject == SelectedItem;
         }
 
@@ -387,6 +382,8 @@ namespace SimpleToolkit.SimpleShell.Controls
             grid.Children.Add(stackLayout);
 
             button.Content = grid;
+
+            SemanticProperties.SetDescription(button, item.Title);
 
             CompressedLayout.SetIsHeadless(stackLayout, true);
             CompressedLayout.SetIsHeadless(grid, true);
@@ -854,6 +851,8 @@ namespace SimpleToolkit.SimpleShell.Controls
                 image.Source = shellItem.Icon;
 
                 image.TintColor = IsSelected(item) ? IconSelectionColor : IconColor;
+
+                SemanticProperties.SetDescription(item, shellItem.Title);
             }
         }
 
