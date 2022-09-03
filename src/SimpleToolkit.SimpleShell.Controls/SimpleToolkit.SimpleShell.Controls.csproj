@@ -15,20 +15,36 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+		
+		<PackageId>SimpleToolkit.SimpleShell.Controls</PackageId>
+		<Title>SimpleToolkit.SimpleShell.Controls</Title>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageTags>MAUI, Controls, Shell, Navigation</PackageTags>
+		<Authors>RadekVyM</Authors>
+		<PackageOutputPath>..\..\packages</PackageOutputPath>
+		<VersionPrefix>1.0.0</VersionPrefix>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Folder Include="Platforms\Android\" />
-	  <Folder Include="Platforms\iOS\" />
-	  <Folder Include="Platforms\MacCatalyst\" />
-	  <Folder Include="Platforms\Windows\" />
-	  <Folder Include="Views\AppBar\" />
-	  <Folder Include="Converters\" />
-	  <Folder Include="Views\TabView\" />
+		<Folder Include="Platforms\Android\" />
+		<Folder Include="Platforms\iOS\" />
+		<Folder Include="Platforms\MacCatalyst\" />
+		<Folder Include="Platforms\Windows\" />
+		<Folder Include="Views\AppBar\" />
+		<Folder Include="Converters\" />
+		<Folder Include="Views\TabView\" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\SimpleToolkit.Core\SimpleToolkit.Core.csproj" />
+		<PackageReference Include="SimpleToolkit.Core" Version="1.*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 
 </Project>

@@ -65,8 +65,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\SimpleToolkit.SimpleShell.Controls\SimpleToolkit.SimpleShell.Controls.csproj" />
-	  <ProjectReference Include="..\SimpleToolkit.SimpleShell\SimpleToolkit.SimpleShell.csproj" />
+		<PackageReference Include="SimpleToolkit.SimpleShell.Controls" Version="1.*" />
+		<PackageReference Include="SimpleToolkit.SimpleShell" Version="1.*" />
 	</ItemGroup>
 
 	<ItemGroup>

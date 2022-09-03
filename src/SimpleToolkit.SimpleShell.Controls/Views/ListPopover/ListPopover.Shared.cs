@@ -260,7 +260,7 @@ namespace SimpleToolkit.SimpleShell.Controls
                 Style = new Style(typeof(ContentButton)),
                 BindingContext = item,
             };
-
+            // TODO: Try to remove this one Grid
             var grid = new Grid
             {
                 ColumnDefinitions = new ColumnDefinitionCollection(
@@ -270,7 +270,6 @@ namespace SimpleToolkit.SimpleShell.Controls
                 Style = new Style(typeof(Grid)),
                 BindingContext = item,
             };
-
             var innerGrid = new Grid
             {
                 ColumnDefinitions = new ColumnDefinitionCollection(
@@ -281,7 +280,6 @@ namespace SimpleToolkit.SimpleShell.Controls
                 Style = new Style(typeof(Grid)),
                 BindingContext = item,
             };
-
             var label = new Label
             {
                 Text = item.Title,
