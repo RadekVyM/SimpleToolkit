@@ -1,16 +1,14 @@
-# SimpleToolkit
-
-<img src="./images/logo_with_background.svg" width="40" height="40">
+# <img src="./images/logo_with_background.svg" width="40" height="22"> SimpleToolkit
 
 SimpleToolkit is a .NET MAUI library of helpers and simple, easily customizable controls.
 
 The library consists of three packages:
 
-- [SimpleToolkit.Core](#simpletoolkit.core)
+- [SimpleToolkit.Core](#simpletoolkitcore)
 
-- [SimpleToolkit.SimpleShell](#simpletoolkit.simpleshell)
+- [SimpleToolkit.SimpleShell](#simpletoolkitsimpleshell)
 
-- [SimpleToolkit.SimpleShell.Controls](#simpletoolkit.simpleshell.controls)
+- [SimpleToolkit.SimpleShell.Controls](#simpletoolkitsimpleshellcontrols)
 
 > ⚠ **Warning:** Long-term support is not guaranteed. Use at your own Risk.
 
@@ -43,6 +41,8 @@ Here are some of my samples that were built using this library:
 
 ## SimpleToolkit.Core
 
+![SimpleToolkit.Core](https://img.shields.io/nuget/dt/SimpleToolkit.Core)
+
 SimpleToolkit.Core package is a set of simple .NET MAUI controls and helpers.
 
 > The package does not depend on any other packages.
@@ -71,9 +71,9 @@ Output:
     <img src="./images/readme/stars.png" data-canonical-src="./images/readme/stars.png" />
 </p>
 
-#### Imlementation
+#### Implementation details
 
-The `Icon` class is inherited from .NET MAUI `Image` class, but behind the scenes is implemented in the same way as .NET MAUI `Image` only on Android and iOS. WinUI implementation is backed by `BitmapIcon` and `FontIcon` controls. Because of that the control supports only these image sources on Windows:
+The `Icon` class is inherited from .NET MAUI `Image` class, but behind the scenes is implemented in the same way as .NET MAUI `Image` only on Android and iOS. WinUI implementation is based on `BitmapIcon` and `FontIcon` controls. Because of that the control supports only these image sources on Windows:
 
 - `FileImageSource`
 - `UriImageSource`
@@ -116,9 +116,9 @@ Output:
     <img src="./images/readme/star_button.png" data-canonical-src="./images/readme/star_button.png" />
 </p>
 
-#### Imlementation
+#### Implementation details
 
-The `ContentButton` class is inherited from .NET MAUI `ContentView` control. The `ContentButton` has these events and properties in addition to `ContentView`s events and properties:
+The `ContentButton` class is inherited from .NET MAUI `ContentView` control. The `ContentButton` has these events in addition to `ContentView`s events and properties:
 
 - `Clicked` - an event that fires when the button is clicked
 - `Pressed` - an event that fires when the button is pressed
@@ -128,7 +128,29 @@ The `ContentButton` class is inherited from .NET MAUI `ContentView` control. The
 
 The `Popover` allows you to display custom popovers (flyouts) anchored to any control.
 
+```xml
+
+```
+
+In code behind:
+
+```csharp
+
+```
+
+Output:
+
+<p align="center">
+    <img src="./images/readme/star_button.png" data-canonical-src="./images/readme/star_button.png" />
+</p>
+
+#### Implementation details
+
+The `Popover` itself does not support any styling because.
+
 ## SimpleToolkit.SimpleShell
+
+![SimpleToolkit.SimpleShell](https://img.shields.io/nuget/dt/SimpleToolkit.SimpleShell)
 
 SimpleToolkit.SimpleShell package provides you a simplified implementation of .NET MAUI `Shell` that allows you to easily create custom navigation experiences in your .NET MAUI applications. 
 
@@ -148,6 +170,8 @@ builder.UseSimpleShell();
 `SimpleShell` is a simplified implementation of .NET MAUI `Shell`. This is the hilight of the library.
 
 ## SimpleToolkit.SimpleShell.Controls
+
+![SimpleToolkit.SimpleShell.Controls](https://img.shields.io/nuget/dt/SimpleToolkit.SimpleShell.Controls)
 
 The SimpleToolkit.SimpleShell.Controls is a collection of ready-to-use navigation related controls (not only) for SimpleShell
 
