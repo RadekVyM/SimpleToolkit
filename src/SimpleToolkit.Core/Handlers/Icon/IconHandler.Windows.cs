@@ -84,7 +84,11 @@ namespace SimpleToolkit.Core.Handlers
             else if (iconSource is FontIconSource fontIconSource)
             {
                 handler.fontIcon.FontFamily = fontIconSource.FontFamily;
-                handler.fontIcon.FontSize = handler.fontSize = fontIconSource.FontSize;
+                handler.fontSize = fontIconSource.FontSize;
+                if (icon.Height is not -1 && icon.Width is not -1)
+                    handler.fontIcon.FontSize = Math.Min(fontIconSource.FontSize, Math.Min(icon.Height, icon.Width));
+                else
+                    handler.fontIcon.FontSize = fontIconSource.FontSize;
                 handler.fontIcon.FontStyle = fontIconSource.FontStyle;
                 handler.fontIcon.FontWeight = fontIconSource.FontWeight;
                 handler.fontIcon.Glyph = fontIconSource.Glyph;

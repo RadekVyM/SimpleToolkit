@@ -167,8 +167,6 @@ namespace SimpleToolkit.SimpleShell.Controls
             {
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start,
-                StrokeThickness = 0,
-                Stroke = Colors.Transparent,
                 Background = Background,
                 Shadow = null,
                 StrokeShape = new RoundRectangle
@@ -626,7 +624,10 @@ namespace SimpleToolkit.SimpleShell.Controls
         private static void OnBackgroundChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var listPopover = bindable as ListPopover;
-            listPopover.rootBorder.Background = newValue as Brush;
+            var newBrush = newValue as Brush;
+
+            listPopover.rootBorder.Stroke = newBrush.OffsetBrushColorValue(-0.05f);
+            listPopover.rootBorder.Background = newBrush;
             listPopover.InvalidateGraphicsView();
         }
 

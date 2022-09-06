@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage x:Class="SimpleToolkit.SimpleShell.Playground.Views.Pages.ContentButtonPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:SimpleToolkit.SimpleShell.Playground.Views.Pages"
+             xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core">
+
+    <VerticalStackLayout
+        HorizontalOptions="Center" VerticalOptions="Center">
+        <simpleCore:ContentButton Clicked="StarButtonClicked">
+            <Border Background="Orange">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="6"/>
+                </Border.StrokeShape>
+                <HorizontalStackLayout Padding="12,10" Spacing="10">
+                    <simpleCore:Icon
+                        Source="star.png" TintColor="White"
+                        VerticalOptions="Center"
+                        HeightRequest="18" WidthRequest="18"/>
+                    <Label
+                        Text="Star this repo" TextColor="White"
+                        FontAttributes="Bold"
+                        VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </Border>
+        </simpleCore:ContentButton>
+    </VerticalStackLayout>
+</ContentPage>

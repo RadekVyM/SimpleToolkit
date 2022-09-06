@@ -49,6 +49,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Fonts\Font-Awesome-Solid.otf" />
+	  <None Remove="Resources\Images\arrow_left.svg" />
 	  <None Remove="Resources\Images\avatar_empty.png" />
 	  <None Remove="Resources\Images\avatar_filled.png" />
 	  <None Remove="Resources\Images\bird_empty.png" />
@@ -90,11 +92,17 @@
 		<MauiXaml Update="Views\Pages\BluePage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\Pages\ContentButtonPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\Pages\GrayPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Pages\Green\FirstGreenDetailPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Pages\IconPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Pages\OrangePage.xaml">
 			<Generator>MSBuild:Compile</Generator>

@@ -44,7 +44,7 @@ namespace SimpleToolkit.SimpleShell.Playground
             Routing.RegisterRoute(nameof(FirstGreenDetailPage), typeof(FirstGreenDetailPage));
         }
 
-        private async void Button_Clicked(object sender, EventArgs e)
+        private async void ShellItemButtonClicked(object sender, EventArgs e)
         {
             var button = sender as Button;
             var shellItem = button.BindingContext as BaseShellItem;
@@ -53,7 +53,7 @@ namespace SimpleToolkit.SimpleShell.Playground
                 await this.GoToAsync($"///{shellItem.Route}");
         }
 
-        private async void TabView_ItemSelected(object sender, TabItemSelectedEventArgs e)
+        private async void TabBarItemSelected(object sender, TabItemSelectedEventArgs e)
         {
             if (!CurrentState.Location.OriginalString.Contains(e.ShellItem.Route))
                 await this.GoToAsync($"///{e.ShellItem.Route}");
@@ -66,7 +66,7 @@ namespace SimpleToolkit.SimpleShell.Playground
 
         private bool orangeAdded = false;
 
-        private void Button_Clicked_1(object sender, EventArgs e)
+        private void AddButtonClicked(object sender, EventArgs e)
         {
             if (!orangeAdded)
             {
@@ -76,6 +76,8 @@ namespace SimpleToolkit.SimpleShell.Playground
                     Route = nameof(OrangePage),
                     ContentTemplate = new DataTemplate(typeof(OrangePage))
                 });
+
+                addButton.IsVisible = false;
             }
 
             orangeAdded = true;
@@ -83,7 +85,7 @@ namespace SimpleToolkit.SimpleShell.Playground
 
         private void ShowPopoverButtonClicked(object sender, EventArgs e)
         {
-            var button = sender as Button;
+            var button = sender as View;
             button.ShowAttachedPopover();
         }
 

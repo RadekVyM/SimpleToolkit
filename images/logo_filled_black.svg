@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="90.000015mm"
+   height="90.000008mm"
+   viewBox="0 0 90.000015 90.000008"
+   version="1.1"
+   id="svg12954"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   sodipodi:docname="logo filled black.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview12956"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="2.4088664"
+     inkscape:cx="76.384476"
+     inkscape:cy="185.14933"
+     inkscape:window-width="2400"
+     inkscape:window-height="1271"
+     inkscape:window-x="-9"
+     inkscape:window-y="-4"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs12951" />
+  <g
+     inkscape:label="Vrstva 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="rect3232-0"
+       style="fill:#000000;fill-opacity:1;stroke-width:2.64353"
+       d="m 54.980571,0 c 2.49443,0 2.50301,-7.7999888e-4 3.81754,1.30187 29.81205,29.54252 0,0 29.81205,29.54252 1.40492,1.39222 1.38983,1.40673 1.38983,3.91095 0,2.50422 -2.4299,5.24466 -5.18914,5.24466 h -29.83028 c -2.75924,0 -4.98057,-2.2348 -4.98057,-5.01076 V 5.01076 C 50.000001,2.2348 52.486151,0 54.980571,0 Z"
+       sodipodi:nodetypes="zsszssssz" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect2117-55"
+       width="40"
+       height="40"
+       x="50.000015"
+       y="50.000008"
+       rx="5"
+       ry="5" />
+    <path
+       id="rect2117-1-4"
+       style="fill:#000000;fill-opacity:1;stroke-width:1.93073"
+       d="M 4.889584,50 C 2.562414,50 0.17849396,51.68167 0.04465396,53.71166 -1.079376,70.76007 19.240201,91.0799 36.288811,89.95532 c 2.02991,-0.1339 3.71119,-2.51773 3.71119,-4.84486 V 55.01593 C 40.000001,52.23723 37.763261,50 34.984521,50 Z"
+       sodipodi:nodetypes="saassss" />
+    <circle
+       style="fill:#000000;fill-opacity:1;stroke-width:2.11593"
+       id="path2221-0"
+       cx="20"
+       cy="20.000008"
+       r="20" />
+  </g>
+</svg>

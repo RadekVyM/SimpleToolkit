@@ -1,7 +1,6 @@
 ﻿#if IOS || MACCATALYST
 
 using Foundation;
-using JavaScriptCore;
 using Microsoft.Maui.Handlers;
 using UIKit;
 
@@ -17,20 +16,42 @@ namespace SimpleToolkit.Core.Handlers
 
             platformView.AccessibilityTraits = UIAccessibilityTrait.Button;
 
-            platformView.AddGestureRecognizer(new UICustomGestureRecognizer(g =>
+            //platformView.AddGestureRecognizer(new UICustomGestureRecognizer(g =>
+            //{
+            //    var location = g.LocationInView(g.View);
+
+            //    System.Diagnostics.Debug.WriteLine("👋");
+
+            //    switch (g.State)
+            //    {
+            //        case UIGestureRecognizerState.Began:
+            //            virtualView.OnPressed(new Point(location.X, location.Y));
+            //            break;
+            //        case UIGestureRecognizerState.Ended:
+            //            virtualView.OnReleased(new Point(location.X, location.Y));
+            //            virtualView.OnClicked();
+            //            break;
+            //        case UIGestureRecognizerState.Failed:
+            //            virtualView.OnReleased(new Point(location.X, location.Y));
+            //            break;
+            //    }
+            //}));
+
+            platformView.AddGestureRecognizer(new UITapGestureRecognizer(g =>
             {
                 var location = g.LocationInView(g.View);
 
+                System.Diagnostics.Debug.WriteLine("👋");
+
                 switch (g.State)
                 {
-                    case UIGestureRecognizerState.Began:
-                        virtualView.OnPressed(new Point(location.X, location.Y));
-                        break;
                     case UIGestureRecognizerState.Ended:
+                        virtualView.OnPressed(new Point(location.X, location.Y));
                         virtualView.OnReleased(new Point(location.X, location.Y));
                         virtualView.OnClicked();
                         break;
                     case UIGestureRecognizerState.Failed:
+                        virtualView.OnPressed(new Point(location.X, location.Y));
                         virtualView.OnReleased(new Point(location.X, location.Y));
                         break;
                 }
@@ -39,7 +60,8 @@ namespace SimpleToolkit.Core.Handlers
             return platformView;
         }
 
-        protected class UICustomGestureRecognizer : UIGestureRecognizer
+        // TODO: Find out why my gesture recognizer conflicts with scrolling in ScrollView
+        protected class UICustomGestureRecognizer : UITapGestureRecognizer
         {
             private Action<UICustomGestureRecognizer> action;
 
@@ -62,6 +84,22 @@ namespace SimpleToolkit.Core.Handlers
                 base.TouchesEnded(touches, evt);
 
                 State = UIGestureRecognizerState.Ended;
+
+                action?.Invoke(this);
+
+                State = UIGestureRecognizerState.Possible;
+            }
+
+            public override void TouchesMoved(NSSet touches, UIEvent evt)
+            {
+                base.TouchesMoved(touches, evt);
+
+                UITouch touch = touches.AnyObject as UITouch;
+
+                if (touch is not null && !View.Frame.Contains(touch.LocationInView(View)))
+                {
+                    State = UIGestureRecognizerState.Cancelled;
+                }
 
                 action?.Invoke(this);
             }
