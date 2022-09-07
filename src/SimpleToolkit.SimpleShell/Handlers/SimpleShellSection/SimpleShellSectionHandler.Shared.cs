@@ -1,4 +1,4 @@
-﻿using Microsoft.Maui.Handlers;
+﻿using SimpleToolkit.SimpleShell.Extensions;
 using SimpleToolkit.SimpleShell.NavigationManager;
 #if ANDROID
 using PageContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
@@ -12,30 +12,28 @@ using PageContainer = System.Object;
 
 namespace SimpleToolkit.SimpleShell.Handlers
 {
-#if ANDROID || __IOS__ || MACCATALYST || WINDOWS
-
-    public partial class SimpleShellSectionHandler
+    public partial class SimpleShellSectionHandler : IAppearanceObserver
     {
+        public static PropertyMapper<ShellSection, SimpleShellSectionHandler> Mapper =
+            new PropertyMapper<ShellSection, SimpleShellSectionHandler>(ElementMapper)
+            {
+                [nameof(ShellSection.CurrentItem)] = MapCurrentItem,
+            };
+
+        public static CommandMapper<ShellSection, SimpleShellSectionHandler> CommandMapper =
+            new CommandMapper<ShellSection, SimpleShellSectionHandler>(ElementCommandMapper)
+            {
+                [nameof(IStackNavigation.RequestNavigation)] = RequestNavigation
+            };
+
         protected SimpleStackNavigationManager navigationManager;
         protected ShellSection shellSection;
 
-        public static PropertyMapper<ShellSection, SimpleShellSectionHandler> Mapper =
-                new PropertyMapper<ShellSection, SimpleShellSectionHandler>(ElementMapper)
-                {
-                    [nameof(ShellSection.CurrentItem)] = MapCurrentItem,
-                };
-
-        public static CommandMapper<ShellSection, SimpleShellSectionHandler> CommandMapper =
-                new CommandMapper<ShellSection, SimpleShellSectionHandler>(ElementCommandMapper)
-                {
-                    [nameof(IStackNavigation.RequestNavigation)] = RequestNavigation
-                };
 
         public SimpleShellSectionHandler(IPropertyMapper mapper, CommandMapper commandMapper)
             : base(mapper ?? Mapper, commandMapper ?? CommandMapper)
         {
         }
-
 
         public SimpleShellSectionHandler() : base(Mapper, CommandMapper)
         {
@@ -44,7 +42,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         public override void SetVirtualView(IElement view)
         {
-            if (shellSection != null)
+            if (shellSection is not null)
             {
                 ((IShellSectionController)shellSection).NavigationRequested -= OnNavigationRequested;
                 ((IShellController)shellSection.FindParentOfType<SimpleShell>()).RemoveAppearanceObserver(this);
@@ -53,7 +51,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
             // If we've already connected to the navigation manager
             // then we need to make sure to disconnect and connect up to 
             // the new incoming virtual view
-            if (navigationManager?.StackNavigation != null &&
+            if (navigationManager?.StackNavigation is not null &&
                 navigationManager.StackNavigation != view)
             {
                 navigationManager.Disconnect(navigationManager.StackNavigation, PlatformView);
@@ -67,11 +65,15 @@ namespace SimpleToolkit.SimpleShell.Handlers
             base.SetVirtualView(view);
 
             shellSection = (ShellSection)view;
-            if (shellSection != null)
+            if (shellSection is not null)
             {
                 ((IShellSectionController)shellSection).NavigationRequested += OnNavigationRequested;
                 ((IShellController)shellSection.FindParentOfType<SimpleShell>()).AddAppearanceObserver(this, shellSection);
             }
+        }
+
+        public virtual void OnAppearanceChanged(ShellAppearance appearance)
+        {
         }
 
         protected override void ConnectHandler(PageContainer platformView)
@@ -96,39 +98,30 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         protected virtual void SyncNavigationStack(bool animated)
         {
-            // TODO: There is another bug. Maybe try to compare the NavigationStack with current Shell (or VirtualView) state
-            //var shell = VirtualView.FindParentOfType<SimpleShell>();
-            //var state = shell.CurrentState;
-
-            List<IView> pageStack = new List<IView>()
+            var pageStack = new List<IView>()
             {
                 (VirtualView.CurrentItem as IShellContentController).GetOrCreateContent()
             };
 
-            // When navigating from subtab with a navigation stack to another subtab in the same tab, there is NavigationStack of previous subtab in VirtualView.Navigation
+            // When navigating from a subtab with a navigation stack to another subtab in the same tab, there is a NavigationStack of the previous subtab in VirtualView.Navigation
             if (currentShellContent == VirtualView.CurrentItem && !navigationStackCanBeAdded) // This is just a workaround of the bug in Shell
                 for (var i = 1; i < VirtualView.Navigation.NavigationStack.Count; i++)
                 {
                     pageStack.Add(VirtualView.Navigation.NavigationStack[i]);
                 }
 
-            navigationStackCanBeAdded = currentShellContent != null && VirtualView.Navigation.NavigationStack.Count > 1 && currentShellContent != VirtualView.CurrentItem; // This is just a workaround of the bug in Shell
+            navigationStackCanBeAdded = currentShellContent is not null && VirtualView.Navigation.NavigationStack.Count > 1 && currentShellContent != VirtualView.CurrentItem; // This is just a workaround of the bug in Shell
             currentShellContent = VirtualView.CurrentItem; // This is just a workaround of the bug in Shell
 
             // The point of this is to push the shell navigation over to using the INavigationStack
             // work flow. Ideally we rewrite all the push/pop/etc.. parts inside ShellSection.cs
             // to just use INavigationStack but that will be easier once all platforms are using
             // ShellHandler
-            (VirtualView as IStackNavigation)
-                .RequestNavigation(new NavigationRequest(pageStack, animated));
+            (VirtualView as IStackNavigation).RequestNavigation(new NavigationRequest(pageStack, animated));
         }
 
         protected virtual SimpleStackNavigationManager CreateNavigationManager() =>
             navigationManager ??= new SimpleStackNavigationManager(MauiContext ?? throw new InvalidOperationException("MauiContext cannot be null"));
-
-        public void OnAppearanceChanged(ShellAppearance appearance)
-        {
-        }
 
         public static void RequestNavigation(SimpleShellSectionHandler handler, IStackNavigation view, object arg3)
         {
@@ -147,21 +140,4 @@ namespace SimpleToolkit.SimpleShell.Handlers
             handler.SyncNavigationStack(false);
         }
     }
-
-#else
-
-    public partial class SimpleShellSectionHandler : ElementHandler<ShellSection, System.Object>
-    {
-        public SimpleShellSectionHandler(IPropertyMapper mapper, CommandMapper commandMapper)
-            : base(mapper, commandMapper)
-        {
-        }
-
-        protected override System.Object CreatePlatformElement()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-#endif
 }

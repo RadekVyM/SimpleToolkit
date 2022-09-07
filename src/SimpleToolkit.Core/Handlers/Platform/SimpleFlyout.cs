@@ -12,20 +12,20 @@ namespace SimpleToolkit.Core.Handlers
 {
     public class SimpleFlyout : Flyout
     {
-        readonly IMauiContext mauiContext;
+        private readonly IMauiContext mauiContext;
+        private Action<Panel> panelCleanUp;
+        private Func<PopoverHandler, Panel> createControl;
 
+        internal Panel Control { get; set; }
+        internal XamlStyle FlyoutStyle { get; private set; } = new(typeof(FlyoutPresenter));
+        public IPopover VirtualView { get; private set; }
+        
+        
         public SimpleFlyout(IMauiContext mauiContext)
         {
             this.mauiContext = mauiContext ?? throw new ArgumentNullException(nameof(mauiContext));
         }
 
-        public IPopover VirtualView { get; private set; }
-
-        internal Panel Control { get; set; }
-        internal XamlStyle FlyoutStyle { get; private set; } = new(typeof(FlyoutPresenter));
-
-        Action<Panel> panelCleanUp;
-        Func<PopoverHandler, Panel> createControl;
 
         public void SetElement(IPopover element)
         {

@@ -1,11 +1,16 @@
-﻿namespace SimpleToolkit.SimpleShell
+﻿using SimpleToolkit.SimpleShell.Extensions;
+
+namespace SimpleToolkit.SimpleShell
 {
     // TODO: It looks like the toolbar is part of ShellSection on iOS. So it is missing in my implementation. How to solve it?
     // 1) Lets hope that the toolbar will be handled as on Android and Windows when Shell totally transitions to handler architecture
     // 2) Implement it myself in my SimpleShellSectionHandler - This can be a waste of time if 1) comes true
     // I am waiting for transition to handler architecture and then I will see
     // I have set default visibility of the toolbar to hidden for now
-
+    
+    /// <summary>
+    /// An implementation of <see cref="Shell"/> that lets you define your custom navigation experience. 
+    /// </summary>
     public class SimpleShell : Shell, ISimpleShell
     {
         const string PageStateNamePrefix = "SimplePageState";
@@ -26,6 +31,8 @@
         public static readonly BindableProperty ShellSectionsProperty = BindableProperty.Create(nameof(ShellSections), typeof(IReadOnlyList<ShellSection>), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
         public static readonly BindableProperty ShellContentsProperty = BindableProperty.Create(nameof(ShellContents), typeof(IReadOnlyList<ShellContent>), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
 
+        public static new SimpleShell Current => Shell.Current as SimpleShell;
+
         public virtual IView Content
         {
             get => (IView)GetValue(ContentProperty);
@@ -35,34 +42,32 @@
         public new Page CurrentPage
         {
             get => (Page)GetValue(CurrentPageProperty);
-            private set => SetValue(CurrentPageProperty, value);
+            protected set => SetValue(CurrentPageProperty, value);
         }
 
         public ShellContent CurrentShellContent
         {
             get => (ShellContent)GetValue(CurrentShellContentProperty);
-            private set => SetValue(CurrentShellContentProperty, value);
+            protected set => SetValue(CurrentShellContentProperty, value);
         }
 
         public ShellSection CurrentShellSection
         {
             get => (ShellSection)GetValue(CurrentShellSectionProperty);
-            private set => SetValue(CurrentShellSectionProperty, value);
+            protected set => SetValue(CurrentShellSectionProperty, value);
         }
 
         public IReadOnlyList<ShellSection> ShellSections
         {
             get => (IReadOnlyList<ShellSection>)GetValue(ShellSectionsProperty);
-            private set => SetValue(ShellSectionsProperty, value);
+            protected set => SetValue(ShellSectionsProperty, value);
         }
 
         public IReadOnlyList<ShellContent> ShellContents
         {
             get => (IReadOnlyList<ShellContent>)GetValue(ShellContentsProperty);
-            private set => SetValue(ShellContentsProperty, value);
+            protected set => SetValue(ShellContentsProperty, value);
         }
-
-        public new SimpleShell Current => Shell.Current as SimpleShell;
 
 
         public SimpleShell()
@@ -104,25 +109,49 @@
                 VisualStateManager.GoToState(this, statePrefix);
         }
 
-        private void SimpleShellDescendantChanged(object sender, ElementEventArgs e)
+        private void SetDefaultShellPropertyValues()
         {
-            // Update collections if logical structure of Shell is changed
-            if (e.Element is BaseShellItem)
+            if (defaultShellPropertyValuesSet)
+                return;
+
+            if (!IsSet(Shell.BackButtonBehaviorProperty))
             {
-                ShellSections = GetShellSections().ToList();
-                ShellContents = GetShellContents().ToList();
+                Shell.SetBackButtonBehavior(this, new BackButtonBehavior { IsVisible = false });
             }
+            if (!IsSet(Shell.NavBarIsVisibleProperty))
+            {
+                Shell.SetNavBarIsVisible(this, false);
+            }
+
+            defaultShellPropertyValuesSet = true;
         }
 
-        private void SimpleShellLoaded(object sender, EventArgs e)
+        private IEnumerable<ShellSection> GetShellSections()
         {
-            SetDefaultShellPropertyValues();
-            UpdateVisualStates();
+            var list = new HashSet<ShellSection>();
 
-            ShellSections = GetShellSections().ToList();
-            ShellContents = GetShellContents().ToList();
-            DescendantAdded += SimpleShellDescendantChanged;
-            DescendantRemoved += SimpleShellDescendantChanged;
+            foreach (var shellItem in Items)
+            {
+                var shellSections = shellItem.GetShellSections();
+                foreach (var section in shellSections)
+                    list.Add(section);
+            }
+
+            return list;
+        }
+
+        private IEnumerable<ShellContent> GetShellContents()
+        {
+            var list = new HashSet<ShellContent>();
+
+            foreach (var shellItem in Items)
+            {
+                var shellContents = shellItem.GetShellContents();
+                foreach (var content in shellContents)
+                    list.Add(content);
+            }
+
+            return list;
         }
 
         private void SimpleShellNavigated(object sender, ShellNavigatedEventArgs e)
@@ -145,21 +174,25 @@
             UpdateVisualStates();
         }
 
-        private void SetDefaultShellPropertyValues()
+        private void SimpleShellDescendantChanged(object sender, ElementEventArgs e)
         {
-            if (defaultShellPropertyValuesSet)
-                return;
-
-            if (!IsSet(Shell.BackButtonBehaviorProperty))
+            // Update collections if logical structure of the shell changes
+            if (e.Element is BaseShellItem)
             {
-                Shell.SetBackButtonBehavior(this, new BackButtonBehavior { IsVisible = false });
+                ShellSections = GetShellSections().ToList();
+                ShellContents = GetShellContents().ToList();
             }
-            if (!IsSet(Shell.NavBarIsVisibleProperty))
-            {
-                Shell.SetNavBarIsVisible(this, false);
-            }
+        }
 
-            defaultShellPropertyValuesSet = true;
+        private void SimpleShellLoaded(object sender, EventArgs e)
+        {
+            SetDefaultShellPropertyValues();
+            UpdateVisualStates();
+
+            ShellSections = GetShellSections().ToList();
+            ShellContents = GetShellContents().ToList();
+            DescendantAdded += SimpleShellDescendantChanged;
+            DescendantRemoved += SimpleShellDescendantChanged;
         }
 
         private void SimpleShellUnloaded(object sender, EventArgs e)
@@ -177,81 +210,6 @@
             {
                 simpleShell.UpdateVisualStates();
             }
-        }
-
-        private IEnumerable<ShellSection> GetShellSections()
-        {
-            var list = new HashSet<ShellSection>();
-
-            foreach (var shellItem in Items)
-            {
-                var shellSections = GetShellSections(shellItem);
-                foreach (var section in shellSections)
-                    list.Add(section);
-            }
-
-            return list;
-        }
-
-        private IEnumerable<ShellSection> GetShellSections(BaseShellItem baseShellItem)
-        {
-            var list = new HashSet<ShellSection>();
-
-            if (baseShellItem is ShellSection shellSection)
-            {
-                list.Add(shellSection);
-            }
-            else if (baseShellItem is ShellItem shellItem)
-            {
-                foreach (var item in shellItem.Items)
-                {
-                    var shellSections = GetShellSections(item);
-                    foreach (var section in shellSections)
-                        list.Add(section);
-                }
-            }
-
-            return list;
-        }
-
-        private IEnumerable<ShellContent> GetShellContents()
-        {
-            var list = new HashSet<ShellContent>();
-
-            foreach (var shellItem in Items)
-            {
-                var shellContents = GetShellContents(shellItem);
-                foreach (var content in shellContents)
-                    list.Add(content);
-            }
-
-            return list;
-        }
-
-        private IEnumerable<ShellContent> GetShellContents(BaseShellItem baseShellItem)
-        {
-            var list = new HashSet<ShellContent>();
-
-            if (baseShellItem is ShellContent shellContent)
-            {
-                list.Add(shellContent);
-            }
-            else if (baseShellItem is ShellItem shellItem)
-            {
-                foreach (var item in shellItem.Items)
-                {
-                    var shellContents = GetShellContents(item);
-                    foreach (var content in shellContents)
-                        list.Add(content);
-                }
-            }
-            else if (baseShellItem is ShellSection shellSection)
-            {
-                foreach (var content in shellSection.Items)
-                    list.Add(content);
-            }
-
-            return list;
         }
     }
 }

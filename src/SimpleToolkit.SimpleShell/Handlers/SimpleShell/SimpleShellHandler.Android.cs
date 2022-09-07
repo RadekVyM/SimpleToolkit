@@ -1,7 +1,6 @@
 ﻿#if ANDROID
 
 using Microsoft.Maui.Handlers;
-using Microsoft.Maui.Platform;
 using AView = Android.Views.View;
 
 namespace SimpleToolkit.SimpleShell.Handlers
@@ -10,7 +9,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
     {
         protected virtual AView GetNavigationHostContent()
         {
-            return (navigationHost?.Handler as SimpleNavigationHostHandler)?.Container.GetChildAt(0);
+            return (navigationHost?.Handler as SimpleNavigationHostHandler)?.Container?.GetChildAt(0);
         }
     }
 }

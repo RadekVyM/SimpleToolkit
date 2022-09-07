@@ -2,7 +2,10 @@
 
 namespace SimpleToolkit.SimpleShell.Controls
 {
-    public partial class TabBar : ContentView, IView
+    /// <summary>
+    /// Tab bar that is styled according to the selected <see cref="DesignLanguage"/>.
+    /// </summary>
+    public partial class TabBar : ContentView, IView, ITabBar
     {
         private HorizontalStackLayout stackLayout;
         private Grid rootGrid;
@@ -515,7 +518,7 @@ namespace SimpleToolkit.SimpleShell.Controls
 
             if (IsSelected(shellItem))
             {
-                var selectedIcon = SimpleIcon.GetSelectedIcon(shellItem);
+                var selectedIcon = SimpleShellIcon.GetSelectedIcon(shellItem);
                 if (selectedIcon is not null && image.Source != selectedIcon)
                     image.Source = selectedIcon;
             }
@@ -834,7 +837,7 @@ namespace SimpleToolkit.SimpleShell.Controls
         {
             if (e.PropertyName != BaseShellItem.TitleProperty.PropertyName && e.PropertyName != BaseShellItem.IconProperty.PropertyName)
                 return;
-            
+
             if (stackLayout is null)
                 return;
 

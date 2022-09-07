@@ -22,9 +22,14 @@ namespace SimpleToolkit.Core.Handlers
         {
         };
 
-        ImageSourcePartLoader _imageSourcePartLoader;
+        ImageSourcePartLoader imageSourcePartLoader;
         public ImageSourcePartLoader SourceLoader =>
-            _imageSourcePartLoader ??= new ImageSourcePartLoader(this, () => VirtualView, OnSetImageSource);
+            imageSourcePartLoader ??= new ImageSourcePartLoader(this, () => VirtualView, OnSetImageSource);
+
+        public override bool NeedsContainer =>
+            VirtualView?.Background != null ||
+            base.NeedsContainer;
+
 
         public IconHandler() : base(Mapper)
         {
@@ -33,6 +38,7 @@ namespace SimpleToolkit.Core.Handlers
         public IconHandler(IPropertyMapper mapper) : base(mapper ?? Mapper)
         {
         }
+
 
         protected override ImageView CreatePlatformView()
         {
@@ -74,11 +80,7 @@ namespace SimpleToolkit.Core.Handlers
             base.PlatformArrange(frame);
         }
 
-        public override bool NeedsContainer =>
-            VirtualView?.Background != null ||
-            base.NeedsContainer;
-
-        void OnSetImageSource(Drawable obj) =>
+        private void OnSetImageSource(Drawable obj) =>
             PlatformView.SetImageDrawable(obj);
 
         private void ApplyTint(Color color)
@@ -88,16 +90,14 @@ namespace SimpleToolkit.Core.Handlers
                 PlatformView.SetColorFilter(color.ToPlatform(), PorterDuff.Mode.SrcIn ?? throw new InvalidOperationException("PorterDuff.Mode.SrcIn should not be null at runtime"));
         }
 
-        public static void MapSource(IconHandler handler, Icon image) =>
-            MapSourceAsync(handler, image).FireAndForget(handler);
+        public static void MapSource(IconHandler handler, Icon icon) =>
+            MapSourceAsync(handler, icon).FireAndForget(handler);
 
-        public static Task MapSourceAsync(IconHandler handler, Icon image) =>
+        public static Task MapSourceAsync(IconHandler handler, Icon icon) =>
             handler.SourceLoader.UpdateImageSourceAsync();
 
-        public static void MapTintColor(IconHandler handler, Icon image)
-        {
-            handler.ApplyTint(image.TintColor);
-        }
+        public static void MapTintColor(IconHandler handler, Icon icon) =>
+            handler.ApplyTint(icon.TintColor);
     }
 }
 

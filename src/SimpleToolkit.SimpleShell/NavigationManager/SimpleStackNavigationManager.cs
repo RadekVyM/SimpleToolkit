@@ -25,10 +25,12 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
         public IStackNavigation StackNavigation { get; protected set; }
         public IReadOnlyList<IView> NavigationStack { get; protected set; } = new List<IView>();
 
+
         public SimpleStackNavigationManager(IMauiContext mauiContext)
         {
             this.mauiContext = mauiContext;
         }
+
 
         public virtual void Connect(IStackNavigation navigationView, NavFrame navigationFrame)
         {
@@ -102,7 +104,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             return pageView;
         }
 
-        void FireNavigationFinished()
+        private void FireNavigationFinished()
         {
             StackNavigation?.NavigationFinished(NavigationStack);
         }

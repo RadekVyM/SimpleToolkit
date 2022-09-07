@@ -1,10 +1,22 @@
 ﻿namespace SimpleToolkit.Core
 {
+    /// <summary>
+    /// Button that can hold whatever content you want.
+    /// </summary>
     [ContentProperty(nameof(Content))]
     public class ContentButton : ContentView, IContentButton
     {
+        /// <summary>
+        /// Event that fires when the button is clicked.
+        /// </summary>
         public event EventHandler Clicked;
+        /// <summary>
+        /// Event that fires when the button is pressed.
+        /// </summary>
         public event EventHandler<ContentButtonEventArgs> Pressed;
+        /// <summary>
+        /// Event that fires when the button is released.
+        /// </summary>
         public event EventHandler<ContentButtonEventArgs> Released;
 
         public virtual void OnClicked()

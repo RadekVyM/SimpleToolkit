@@ -1,19 +1,20 @@
-﻿using Microsoft.Maui.Handlers;
+﻿#if ANDROID || IOS || MACCATALYST || WINDOWS
+
+using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
+using SimpleToolkit.SimpleShell.Extensions;
 #if ANDROID
 using PlatformShell = Android.Views.View;
-#elif __IOS__ || MACCATALYST
+#elif IOS || MACCATALYST
 using PlatformShell = UIKit.UIView;
 #elif WINDOWS
 using PlatformShell = Microsoft.UI.Xaml.FrameworkElement;
-#elif (NETSTANDARD || !PLATFORM) || (NET6_0_OR_GREATER && !IOS && !ANDROID && !TIZEN)
+#else
 using PlatformShell = System.Object;
 #endif
 
 namespace SimpleToolkit.SimpleShell.Handlers
 {
-#if ANDROID || __IOS__ || MACCATALYST || WINDOWS
-
     public partial class SimpleShellHandler
     {
         public static IPropertyMapper<ISimpleShell, SimpleShellHandler> Mapper = new PropertyMapper<ISimpleShell, SimpleShellHandler>(ViewHandler.ViewMapper)
@@ -43,10 +44,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         protected override PlatformShell CreatePlatformView()
         {
-            if (VirtualView.Content is null)
-            {
-                throw new ArgumentNullException("Content property cannot be null");
-            }
+            _ = VirtualView.Content ?? throw new ArgumentNullException("Content property cannot be null");
 
             var content = VirtualView.Content.ToPlatform(MauiContext);
 
@@ -90,26 +88,11 @@ namespace SimpleToolkit.SimpleShell.Handlers
             return itemHandler;
         }
 
-        private static void MapCurrentItem(SimpleShellHandler handler, ISimpleShell shell)
+        public static void MapCurrentItem(SimpleShellHandler handler, ISimpleShell shell)
         {
             handler.SwitchShellItem(shell.CurrentItem, true);
         }
     }
-
-#else
-
-    public partial class SimpleShellHandler : ElementHandler<ISimpleShell, System.Object>
-    {
-        public SimpleShellHandler(IPropertyMapper mapper, CommandMapper commandMapper)
-            : base(mapper, commandMapper)
-        {
-        }
-
-        protected override System.Object CreatePlatformElement()
-        {
-            throw new NotImplementedException();
-        }
-    }
+}
 
 #endif
-}

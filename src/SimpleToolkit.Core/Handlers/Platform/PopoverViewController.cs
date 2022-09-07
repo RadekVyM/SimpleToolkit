@@ -12,15 +12,15 @@ using UIKit;
 
 namespace SimpleToolkit.Core.Handlers
 {
-    public class UIPopoverViewController : UIViewController
+    public class PopoverViewController : UIViewController
     {
-        readonly IMauiContext mauiContext;
+        private readonly IMauiContext mauiContext;
 
-        public IPopover VirtualView { get; private set; }
         internal UIViewController ViewController { get; private set; }
+        public IPopover VirtualView { get; private set; }
 
 
-        public UIPopoverViewController(IMauiContext mauiContext)
+        public PopoverViewController(IMauiContext mauiContext)
         {
             this.mauiContext = mauiContext ?? throw new ArgumentNullException(nameof(mauiContext));
         }
@@ -28,6 +28,7 @@ namespace SimpleToolkit.Core.Handlers
 
         public override void ViewDidAppear(bool animated)
         {
+            // Remove all the default styling of the popover container
             View.Superview.Layer.CornerRadius = 0f;
             View.Superview.Layer.BackgroundColor = Colors.Transparent.ToCGColor();
             View.Superview.Layer.ShadowColor = null;
@@ -44,7 +45,7 @@ namespace SimpleToolkit.Core.Handlers
             if (VirtualView.Content is null)
                 return;
 
-            var measure = (VirtualView.Content as IView).Measure(double.PositiveInfinity, double.PositiveInfinity); // These two are different
+            var measure = (VirtualView.Content as IView).Measure(double.PositiveInfinity, double.PositiveInfinity);
             PreferredContentSize = new CGSize(measure.Width, measure.Height);
 
             foreach (var subview in View.Subviews)
@@ -129,7 +130,7 @@ namespace SimpleToolkit.Core.Handlers
             if (contentView?.Children.Any() == true)
                 contentView.Children.Clear();
 
-            // I do not understand how sizing on iOS works. This is only hopefully working solution I came up with
+            // I do not understand how sizing on iOS works. This is the only hopefully working solution I came up with
             contentView = new Microsoft.Maui.Controls.Grid
             {
                 HorizontalOptions = LayoutOptions.Start,
@@ -180,6 +181,7 @@ namespace SimpleToolkit.Core.Handlers
                 UIModalPresentationStyle.None;
         }
 
+        // Helps to remove default styling of the popover container
         private class PopoverBackgroundView : UIPopoverBackgroundView
         {
             [Export("arrowHeight")]

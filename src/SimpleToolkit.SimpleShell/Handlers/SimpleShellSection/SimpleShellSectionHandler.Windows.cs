@@ -5,7 +5,7 @@ using WFrame = Microsoft.UI.Xaml.Controls.Frame;
 
 namespace SimpleToolkit.SimpleShell.Handlers
 {
-    public partial class SimpleShellSectionHandler : ElementHandler<ShellSection, WFrame>, IAppearanceObserver
+    public partial class SimpleShellSectionHandler : ElementHandler<ShellSection, WFrame>
     {
         protected override WFrame CreatePlatformElement()
         {

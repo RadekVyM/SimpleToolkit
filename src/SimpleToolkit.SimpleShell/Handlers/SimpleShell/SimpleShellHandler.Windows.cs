@@ -1,7 +1,6 @@
 ﻿#if WINDOWS
 
 using Microsoft.Maui.Handlers;
-using Microsoft.Maui.Platform;
 using WFrameworkElement = Microsoft.UI.Xaml.FrameworkElement;
 
 namespace SimpleToolkit.SimpleShell.Handlers

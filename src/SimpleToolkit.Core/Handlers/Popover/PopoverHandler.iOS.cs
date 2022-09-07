@@ -6,20 +6,20 @@ using Microsoft.Maui.Handlers;
 
 namespace SimpleToolkit.Core.Handlers
 {
-    public partial class PopoverHandler : ElementHandler<IPopover, UIPopoverViewController>
+    public partial class PopoverHandler : ElementHandler<IPopover, PopoverViewController>
     {
-        protected override UIPopoverViewController CreatePlatformElement()
+        protected override PopoverViewController CreatePlatformElement()
         {
-            return new UIPopoverViewController(MauiContext);
+            return new PopoverViewController(MauiContext);
         }
 
-        protected override void ConnectHandler(UIPopoverViewController platformView)
+        protected override void ConnectHandler(PopoverViewController platformView)
         {
             base.ConnectHandler(platformView);
             platformView.SetElement(VirtualView);
         }
 
-        protected override void DisconnectHandler(UIPopoverViewController platformView)
+        protected override void DisconnectHandler(PopoverViewController platformView)
         {
             base.DisconnectHandler(platformView);
             platformView.CleanUp();

@@ -4,6 +4,11 @@ namespace SimpleToolkit.SimpleShell
 {
     public static class AppHostBuilderExtensions
     {
+        /// <summary>
+        /// Configures the SimpleToolkit.SimpleShell package.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
         public static MauiAppBuilder UseSimpleShell(this MauiAppBuilder builder)
         {
             builder.ConfigureMauiHandlers(handlers =>

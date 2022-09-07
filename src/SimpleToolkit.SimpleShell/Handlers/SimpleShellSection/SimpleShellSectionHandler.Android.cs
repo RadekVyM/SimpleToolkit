@@ -6,16 +6,17 @@ using AView = Android.Views.View;
 
 namespace SimpleToolkit.SimpleShell.Handlers
 {
-    public partial class SimpleShellItemHandler : ElementHandler<ShellItem, CustomFrameLayout>, IAppearanceObserver
+    public partial class SimpleShellSectionHandler : ElementHandler<ShellSection, CustomFrameLayout>
     {
         protected override CustomFrameLayout CreatePlatformElement()
         {
-            shellSectionContainer = new CustomFrameLayout(MauiContext.Context)
+            CreateNavigationManager();
+            var container = new CustomFrameLayout(MauiContext.Context)
             {
                 Id = AView.GenerateViewId()
             };
 
-            return shellSectionContainer;
+            return container;
         }
     }
 }

@@ -2,9 +2,8 @@
 {
     internal static class RoutingExtensions
     {
-        const string ImplicitPrefix = "IMPL_";
-        const string DefaultPrefix = "D_FAULT_";
-        internal const string PathSeparator = "/";
+        private const string ImplicitPrefix = "IMPL_";
+        private const string DefaultPrefix = "D_FAULT_";
 
         public static bool IsImplicit(BindableObject source)
         {

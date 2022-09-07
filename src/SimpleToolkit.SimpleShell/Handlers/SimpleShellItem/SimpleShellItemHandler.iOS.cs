@@ -1,11 +1,11 @@
-﻿#if __IOS__ || MACCATALYST
+﻿#if IOS || MACCATALYST
 
 using Microsoft.Maui.Handlers;
 using UIKit;
 
 namespace SimpleToolkit.SimpleShell.Handlers
 {
-    public partial class SimpleShellItemHandler : ElementHandler<ShellItem, UIView>, IAppearanceObserver
+    public partial class SimpleShellItemHandler : ElementHandler<ShellItem, UIView>
     {
         protected override UIView CreatePlatformElement()
         {

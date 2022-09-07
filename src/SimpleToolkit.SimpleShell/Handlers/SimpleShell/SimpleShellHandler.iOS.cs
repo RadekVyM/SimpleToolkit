@@ -1,4 +1,4 @@
-﻿#if __IOS__ || MACCATALYST
+﻿#if IOS || MACCATALYST
 
 using Microsoft.Maui.Handlers;
 using UIKit;

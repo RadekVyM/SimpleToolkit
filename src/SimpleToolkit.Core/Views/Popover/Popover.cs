@@ -4,6 +4,9 @@
 
 namespace SimpleToolkit.Core
 {
+    /// <summary>
+    /// Popover that can be anchored to a view.
+    /// </summary>
     [ContentProperty(nameof(Content))]
     public class Popover : Element, IPopover
     {
@@ -18,16 +21,25 @@ namespace SimpleToolkit.Core
             set => SetValue(ContentProperty, value);
         }
 
+        /// <summary>
+        /// Returns a popover that is attached to the view.
+        /// </summary>
+        /// <param name="view">The view to which the popover is attached.</param>
+        /// <returns>The popover that is attached to the view.</returns>
         public static Popover GetAttachedPopover(BindableObject view)
         {
             _ = view ?? throw new ArgumentNullException(nameof(view));
             return (Popover)view.GetValue(AttachedPopoverProperty);
         }
 
+        /// <summary>
+        /// Attaches the popover to the view.
+        /// </summary>
+        /// <param name="view">The view to which the popover will be attached.</param>
+        /// <param name="popover">The popover that will be attached to the view.</param>
         public static void SetAttachedPopover(BindableObject view, Popover popover)
         {
             _ = view ?? throw new ArgumentNullException(nameof(view));
-            _ = popover ?? throw new ArgumentNullException(nameof(popover));
             view.SetValue(AttachedPopoverProperty, popover);
         }
 

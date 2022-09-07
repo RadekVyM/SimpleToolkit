@@ -1,10 +1,7 @@
-﻿using Microsoft.Maui.Handlers;
-using Microsoft.Maui.Platform;
+﻿using Microsoft.Maui.Platform;
 #if ANDROID
-using Microsoft.Maui.Controls.Platform.Compatibility;
-using Google.Android.Material.Navigation;
 using SectionContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
-#elif __IOS__ || MACCATALYST
+#elif IOS || MACCATALYST
 using SectionContainer = UIKit.UIView;
 #elif WINDOWS
 using SectionContainer = Microsoft.UI.Xaml.Controls.Border;
@@ -14,9 +11,7 @@ using SectionContainer = System.Object;
 
 namespace SimpleToolkit.SimpleShell.Handlers
 {
-#if ANDROID || __IOS__ || MACCATALYST || WINDOWS
-
-    public partial class SimpleShellItemHandler
+    public partial class SimpleShellItemHandler : IAppearanceObserver
     {
         protected SectionContainer shellSectionContainer;
         protected ShellSection currentShellSection;
@@ -44,38 +39,25 @@ namespace SimpleToolkit.SimpleShell.Handlers
         }
 
 
+        public virtual void OnAppearanceChanged(ShellAppearance appearance)
+        {
+        }
+
         protected void UpdateCurrentItem()
         {
             if (currentShellSection == VirtualView.CurrentItem)
                 return;
 
-            if (currentShellSection != null)
-            {
+            if (currentShellSection is not null)
                 currentShellSection.PropertyChanged -= OnCurrentShellSectionPropertyChanged;
-            }
 
             currentShellSection = VirtualView.CurrentItem;
 
-            if (VirtualView.CurrentItem != null)
+            if (VirtualView.CurrentItem is not null)
             {
                 currentShellSectionHandler ??= (SimpleShellSectionHandler)VirtualView.CurrentItem.ToHandler(MauiContext);
 
-#if ANDROID
-                if (PlatformView != shellSectionContainer.GetChildAt(0))
-                {
-                    shellSectionContainer.RemoveAllViews();
-                    shellSectionContainer.AddView(currentShellSectionHandler.PlatformView);
-                }
-#elif __IOS__ || MACCATALYST
-                if (PlatformView != (UIKit.UIView)shellSectionContainer.Subviews.FirstOrDefault())
-                {
-                    shellSectionContainer.ClearSubviews();
-                    shellSectionContainer.AddSubview(currentShellSectionHandler.PlatformView);
-                }
-#elif WINDOWS
-                if (PlatformView != (Microsoft.UI.Xaml.Controls.Frame)shellSectionContainer.Child)
-                    shellSectionContainer.Child = currentShellSectionHandler.PlatformView;
-#endif
+                UpdateShellSectionContainerContent();
 
                 if (currentShellSectionHandler.VirtualView != VirtualView.CurrentItem)
                     currentShellSectionHandler.SetVirtualView(VirtualView.CurrentItem);
@@ -84,44 +66,41 @@ namespace SimpleToolkit.SimpleShell.Handlers
             //UpdateSearchHandler();
             //MapMenuItems();
 
-            if (currentShellSection != null)
-            {
+            if (currentShellSection is not null)
                 currentShellSection.PropertyChanged += OnCurrentShellSectionPropertyChanged;
+        }
+
+        private void UpdateShellSectionContainerContent()
+        {
+#if ANDROID
+            if (PlatformView != shellSectionContainer.GetChildAt(0))
+            {
+                shellSectionContainer.RemoveAllViews();
+                shellSectionContainer.AddView(currentShellSectionHandler.PlatformView);
             }
+#elif IOS || MACCATALYST
+            if (PlatformView != (UIKit.UIView)shellSectionContainer.Subviews.FirstOrDefault())
+            {
+                shellSectionContainer.ClearSubviews();
+                shellSectionContainer.AddSubview(currentShellSectionHandler.PlatformView);
+            }
+#elif WINDOWS
+            if (PlatformView != (Microsoft.UI.Xaml.Controls.Frame)shellSectionContainer.Child)
+                shellSectionContainer.Child = currentShellSectionHandler.PlatformView;
+#endif
         }
 
-        void OnCurrentShellSectionPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void OnCurrentShellSectionPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-
         }
 
-        public void OnAppearanceChanged(ShellAppearance appearance)
+        public static void MapTabBarIsVisible(SimpleShellItemHandler handler, ShellItem item)
         {
         }
 
-        private static void MapTabBarIsVisible(SimpleShellItemHandler handler, ShellItem item)
-        {
-        }
-
-        private static void MapCurrentItem(SimpleShellItemHandler handler, ShellItem item)
+        public static void MapCurrentItem(SimpleShellItemHandler handler, ShellItem item)
         {
             handler.UpdateCurrentItem();
         }
     }
-
-#else
-
-    public partial class SimpleShellItemHandler : ElementHandler<ShellItem, System.Object>
-    {
-        public SimpleShellItemHandler(IPropertyMapper mapper, CommandMapper commandMapper)
-            : base(mapper, commandMapper)
-        {
-        }
-
-        protected override System.Object CreatePlatformElement()
-        {
-            throw new NotImplementedException();
-        }
-    }
-#endif
 }

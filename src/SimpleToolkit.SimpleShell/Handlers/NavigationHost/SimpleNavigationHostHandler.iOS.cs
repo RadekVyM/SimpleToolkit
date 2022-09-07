@@ -16,6 +16,9 @@ namespace SimpleToolkit.SimpleShell.Handlers
         {
         };
 
+        public UIView Container { get; protected set; }
+
+
         public SimpleNavigationHostHandler(IPropertyMapper mapper, CommandMapper commandMapper)
             : base(mapper ?? Mapper, commandMapper ?? CommandMapper)
         {
@@ -26,12 +29,10 @@ namespace SimpleToolkit.SimpleShell.Handlers
         {
         }
 
-        public UIView Container { get; protected set; }
 
         protected override UIView CreatePlatformView()
         {
             Container = new CustomContentView();
-
             return Container;
         }
 
@@ -39,20 +40,6 @@ namespace SimpleToolkit.SimpleShell.Handlers
         {
             Container.ClearSubviews();
             Container.AddSubview(view);
-        }
-    }
-
-    // TODO: Clipping to Border shape does not work
-    public class CustomContentView : Microsoft.Maui.Platform.ContentView
-    {
-        public override void LayoutSubviews()
-        {
-            base.LayoutSubviews();
-
-            foreach (var subview in Subviews)
-            {
-                subview.Frame = Bounds;
-            }
         }
     }
 }

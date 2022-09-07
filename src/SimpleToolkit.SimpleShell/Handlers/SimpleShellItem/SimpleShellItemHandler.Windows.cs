@@ -1,12 +1,11 @@
 ﻿#if WINDOWS
-// || (NETSTANDARD || !PLATFORM) || (NET6_0_OR_GREATER && !IOS && !ANDROID && !TIZEN)
 
 using Microsoft.Maui.Handlers;
 using WBorder = Microsoft.UI.Xaml.Controls.Border;
 
 namespace SimpleToolkit.SimpleShell.Handlers
 {
-    public partial class SimpleShellItemHandler : ElementHandler<ShellItem, WBorder>, IAppearanceObserver
+    public partial class SimpleShellItemHandler : ElementHandler<ShellItem, WBorder>
     {
         protected override WBorder CreatePlatformElement()
         {

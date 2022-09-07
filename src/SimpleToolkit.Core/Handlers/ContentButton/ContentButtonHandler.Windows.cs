@@ -41,20 +41,16 @@ namespace SimpleToolkit.Core.Handlers
 
         protected override SimpleContentPanel CreatePlatformView()
         {
-            if (VirtualView == null)
-            {
-                throw new InvalidOperationException($"{nameof(VirtualView)} must be set to create a LayoutView");
-            }
+            _ = VirtualView ?? throw new InvalidOperationException($"{nameof(VirtualView)} must be set to create a SimpleContentPanel");
 
             var view = new SimpleContentPanel
             {
                 CrossPlatformMeasure = VirtualView.CrossPlatformMeasure,
-                CrossPlatformArrange = VirtualView.CrossPlatformArrange
+                CrossPlatformArrange = VirtualView.CrossPlatformArrange,
+                IsTabStop = true,
+                UseSystemFocusVisuals = true,
+                FocusVisualMargin = new Microsoft.UI.Xaml.Thickness(-3)
             };
-
-            view.IsTabStop = true;
-            view.UseSystemFocusVisuals = true;
-            view.FocusVisualMargin = new Microsoft.UI.Xaml.Thickness(-3);
 
             return view;
         }
@@ -86,7 +82,7 @@ namespace SimpleToolkit.Core.Handlers
             base.ConnectHandler(platformView);
         }
 
-        void OnPointerPressed(object sender, PointerRoutedEventArgs e)
+        private void OnPointerPressed(object sender, PointerRoutedEventArgs e)
         {
             var position = e.GetCurrentPoint(PlatformView).Position;
 
@@ -95,7 +91,7 @@ namespace SimpleToolkit.Core.Handlers
             VirtualView.OnPressed(new Point(position.X, position.Y));
         }
 
-        void OnPointerReleased(object sender, PointerRoutedEventArgs e)
+        private void OnPointerReleased(object sender, PointerRoutedEventArgs e)
         {
             var position = e.GetCurrentPoint(PlatformView).Position;
 
@@ -106,7 +102,7 @@ namespace SimpleToolkit.Core.Handlers
             alreadyReleased = true;
         }
 
-        void OnPointerExited(object sender, PointerRoutedEventArgs e)
+        private void OnPointerExited(object sender, PointerRoutedEventArgs e)
         {
             var position = e.GetCurrentPoint(PlatformView).Position;
 
@@ -125,9 +121,9 @@ namespace SimpleToolkit.Core.Handlers
                 alreadyReleased = false;
 
                 VirtualView.OnPressed(new Point(position.X, position.Y));
-                VirtualView.OnClicked();
                 if (!alreadyReleased)
                     VirtualView.OnReleased(new Point(position.X, position.Y));
+                VirtualView.OnClicked();
 
                 alreadyReleased = true;
             }

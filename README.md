@@ -45,11 +45,9 @@ Here are some of my samples that were built using this library:
 
 SimpleToolkit.Core package is a set of simple .NET MAUI controls and helpers.
 
-> The package does not depend on any other packages.
-
 ### Getting Started
 
-In order to use the SimpleToolkit.Core you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
+In order to use SimpleToolkit.Core you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
 
 ```csharp
 builder.UseSimpleToolkit();
@@ -88,7 +86,7 @@ These `Image` properties are not supported at all:
 
 ### ContentButton
 
-The `ContentButton` is just a button that can hold whatever content you want. 
+`ContentButton` is just a button that can hold whatever content you want. 
 
 ```xml
 <simpleCore:ContentButton Clicked="StarButtonClicked">
@@ -152,14 +150,11 @@ The `Popover` itself does not support any styling because.
 
 ![SimpleToolkit.SimpleShell](https://img.shields.io/nuget/dt/SimpleToolkit.SimpleShell)
 
-SimpleToolkit.SimpleShell package provides you a simplified implementation of .NET MAUI `Shell` that allows you to easily create custom navigation experiences in your .NET MAUI applications. 
-
-
-> The package does not depend on any other packages.
+SimpleToolkit.SimpleShell package provides you a simplified implementation of .NET MAUI `Shell` that lets you easily create a custom navigation experience in your .NET MAUI applications.
 
 ### Getting Started
 
-In order to use the SimpleToolkit.Core you need to call the `UseSimpleShell()` extension method in your `MauiProgram.cs` file:
+In order to use SimpleToolkit.SimpleShell you need to call the `UseSimpleShell()` extension method in your `MauiProgram.cs` file:
 
 ```csharp
 builder.UseSimpleShell();
@@ -167,17 +162,17 @@ builder.UseSimpleShell();
 
 ### SimpleShell
 
-`SimpleShell` is a simplified implementation of .NET MAUI `Shell`. This is the hilight of the library.
+`SimpleShell` is a simplified implementation of .NET MAUI `Shell`. 
 
 ## SimpleToolkit.SimpleShell.Controls
 
 ![SimpleToolkit.SimpleShell.Controls](https://img.shields.io/nuget/dt/SimpleToolkit.SimpleShell.Controls)
 
-The SimpleToolkit.SimpleShell.Controls is a collection of ready-to-use navigation related controls (not only) for SimpleShell
+SimpleToolkit.SimpleShell.Controls is a collection of ready-to-use, navigation-related controls (not only) for `SimpleShell`.
 
 ### Getting Started
 
-In order to use the SimpleToolkit.Core you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
+In order to use SimpleToolkit.SimpleShell.Controls you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
 
 ```csharp
 builder.UseSimpleToolkit();

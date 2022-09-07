@@ -1,11 +1,13 @@
-﻿using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
-using Microsoft.Maui.Controls.Shapes;
+﻿using Microsoft.Maui.Controls.Shapes;
 using SimpleToolkit.Core;
 
 namespace SimpleToolkit.SimpleShell.Controls
 {
+    /// <summary>
+    /// <see cref="Popover"/> containing a list of items that is styled according to the selected <see cref="DesignLanguage"/>.
+    /// </summary>
     [ContentProperty(nameof(Items))]
-    public partial class ListPopover : Popover
+    public partial class ListPopover : Popover, IListPopover
     {
         private Border rootBorder;
         private Grid rootGrid;
@@ -573,7 +575,7 @@ namespace SimpleToolkit.SimpleShell.Controls
                 var grid = item.Content as Grid;
                 var innerGrid = grid.Children[0] as Grid;
                 var label = innerGrid.Children[1] as Label;
-                
+
                 if (newValue is not null)
                     label.TextColor = newValue as Color;
             }
@@ -626,7 +628,7 @@ namespace SimpleToolkit.SimpleShell.Controls
             var listPopover = bindable as ListPopover;
             var newBrush = newValue as Brush;
 
-            listPopover.rootBorder.Stroke = newBrush.OffsetBrushColorValue(-0.05f);
+            listPopover.rootBorder.Stroke = newBrush.OffsetBrushColorValue(-0.1f);
             listPopover.rootBorder.Background = newBrush;
             listPopover.InvalidateGraphicsView();
         }
