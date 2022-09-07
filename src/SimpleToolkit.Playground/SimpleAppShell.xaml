@@ -148,13 +148,25 @@
     <Tab
         Title="Buttons"
         Icon="flame_empty.png"
-        controls:SimpleShellIcon.SelectedIcon="bird_filled.png">
+        controls:SimpleShellIcon.SelectedIcon="flame_filled.png">
         <ShellContent
             Title="Buttons"
             Icon="flame_empty.png"
-            controls:SimpleShellIcon.SelectedIcon="bird_filled.png"
+            controls:SimpleShellIcon.SelectedIcon="flame_filled.png"
             ContentTemplate="{DataTemplate pages:ContentButtonPage}"
             Route="ContentButtonPage"/>
+    </Tab>
+
+    <Tab
+        Title="Popovers"
+        Icon="bird_empty.png"
+        controls:SimpleShellIcon.SelectedIcon="bird_filled.png">
+        <ShellContent
+            Title="Popovers"
+            Icon="bird_empty.png"
+            controls:SimpleShellIcon.SelectedIcon="bird_filled.png"
+            ContentTemplate="{DataTemplate pages:PopoverPage}"
+            Route="PopoverPage"/>
     </Tab>
 
     <Tab Title="Flame tab" Route="FirstTab"
@@ -317,5 +329,57 @@
 
         </Grid>
     </shell:SimpleShell.Content>
+
+    <!--<ShellContent
+        Title="Icons"
+        Icon="icon.png"
+        ContentTemplate="{DataTemplate pages:IconPage}"
+        Route="IconPage"/>
+
+    <ShellContent
+        Title="Buttons"
+        Icon="button.png"
+        ContentTemplate="{DataTemplate pages:ContentButtonPage}"
+        Route="ContentButtonPage"/>
+
+    <ShellContent
+        Title="Popovers"
+        Icon="popover.png"
+        ContentTemplate="{DataTemplate pages:PopoverPage}"
+        Route="PopoverPage"/>
+
+    <shell:SimpleShell.Content>
+        <Grid
+            RowDefinitions="50, *, 50">
+            <Button
+                Clicked="BackButtonClicked"
+                Text="Back"
+                Margin="20,5"
+                HorizontalOptions="Start"
+                Background="DarkOrange"/>
+            <Label
+                Margin="20,5"
+                HorizontalOptions="Center" VerticalOptions="Center"
+                Text="{Binding CurrentShellContent.Title, Source={x:Reference thisShell}}"
+                FontAttributes="Bold" FontSize="18"/>
+            <shell:SimpleNavigationHost
+                Grid.Row="1"/>
+            <HorizontalStackLayout
+                Grid.Row="2"
+                Margin="20,5" Spacing="10"
+                HorizontalOptions="Center"
+                BindableLayout.ItemsSource="{Binding ShellContents, Source={x:Reference thisShell}}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate
+                        x:DataType="BaseShellItem">
+                        <Button
+                            Clicked="ShellItemButtonClicked"
+                            Background="DarkOrange"
+                            Text="{Binding Title}"/>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </HorizontalStackLayout>
+        </Grid>
+    </shell:SimpleShell.Content>-->
 
 </shell:SimpleShell>

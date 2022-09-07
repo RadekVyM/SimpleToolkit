@@ -18,23 +18,23 @@ namespace SimpleToolkit.SimpleShell.Playground
             InitializeComponent();
 
             designLanguagesListPopover.Items = new List<DesignLanguageItem>
-        {
-            new DesignLanguageItem("Material3", () =>
             {
-                VisualStateManager.GoToState(this, "Material3");
-                designButton.HideAttachedPopover();
-            }),
-            new DesignLanguageItem("Cupertino", () =>
-            {
-                VisualStateManager.GoToState(this, "Cupertino");
-                designButton.HideAttachedPopover();
-            }),
-            new DesignLanguageItem("Fluent", () =>
-            {
-                VisualStateManager.GoToState(this, "Fluent");
-                designButton.HideAttachedPopover();
-            }),
-        };
+                new DesignLanguageItem("Material3", () =>
+                {
+                    VisualStateManager.GoToState(this, "Material3");
+                    designButton.HideAttachedPopover();
+                }),
+                new DesignLanguageItem("Cupertino", () =>
+                {
+                    VisualStateManager.GoToState(this, "Cupertino");
+                    designButton.HideAttachedPopover();
+                }),
+                new DesignLanguageItem("Fluent", () =>
+                {
+                    VisualStateManager.GoToState(this, "Fluent");
+                    designButton.HideAttachedPopover();
+                }),
+            };
 
             VisualStateManager.GoToState(this, "Material3");
 

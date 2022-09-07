@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage x:Class="SimpleToolkit.SimpleShell.Playground.Views.Pages.PopoverPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:SimpleToolkit.SimpleShell.Playground.Views.Pages"
+             xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
+             
+             Title="Popovers">
+
+    <Button
+        VerticalOptions="Center" HorizontalOptions="Center"
+        Clicked="ButtonClicked"
+        Text="Show popover"
+        Background="Orange">
+        <simpleCore:Popover.AttachedPopover>
+            <simpleCore:Popover>
+                <Border
+                    Background="DarkOrange">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="6"/>
+                    </Border.StrokeShape>
+
+                    <VerticalStackLayout Padding="12,10" Spacing="10">
+                        <simpleCore:Icon
+                            Source="star.png" TintColor="White"
+                            VerticalOptions="Center"
+                            HeightRequest="25" WidthRequest="25"/>
+                        <Label
+                            Text="Star this repo" TextColor="White"
+                            FontAttributes="Bold"
+                            VerticalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+            </simpleCore:Popover>
+        </simpleCore:Popover.AttachedPopover>
+    </Button>
+</ContentPage>
