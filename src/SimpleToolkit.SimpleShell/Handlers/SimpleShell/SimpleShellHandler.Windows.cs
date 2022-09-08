@@ -1,0 +1,17 @@
+﻿#if WINDOWS
+
+using Microsoft.Maui.Handlers;
+using WFrameworkElement = Microsoft.UI.Xaml.FrameworkElement;
+
+namespace SimpleToolkit.SimpleShell.Handlers
+{
+    public partial class SimpleShellHandler : ViewHandler<ISimpleShell, WFrameworkElement>
+    {
+        protected virtual WFrameworkElement GetNavigationHostContent()
+        {
+            return (navigationHost?.Handler as SimpleNavigationHostHandler)?.Container?.Child as WFrameworkElement;
+        }
+    }
+}
+
+#endif

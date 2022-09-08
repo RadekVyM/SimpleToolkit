@@ -11,7 +11,7 @@ namespace SimpleToolkit.Core.Handlers
 {
     public class SimplePopupWindow : PopupWindow
     {
-        readonly IMauiContext mauiContext;
+        private readonly IMauiContext mauiContext;
 
         public IPopover VirtualView { get; private set; }
 
@@ -46,14 +46,11 @@ namespace SimpleToolkit.Core.Handlers
                 return;
             }
 
-            var content = VirtualView.Content.ToPlatform(mauiContext);
-
-            // Height and Width have to be set to not show the PopupWindow outside of screen bounds
-
             var measure = (VirtualView.Content as IView).Measure(double.PositiveInfinity, double.PositiveInfinity);
             var width = (int)Math.Round(measure.Width * DeviceDisplay.Current.MainDisplayInfo.Density);
             var height = (int)Math.Round(measure.Height * DeviceDisplay.Current.MainDisplayInfo.Density);
 
+            //var content = VirtualView.Content.ToPlatform(mauiContext);
             //content.Measure(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
 
             //content.Post(() =>
@@ -61,6 +58,7 @@ namespace SimpleToolkit.Core.Handlers
             //    VirtualView.Content.Layout(new Rect(0, 0, width, height));
             //});
 
+            // Height and Width have to be set to not show the PopupWindow outside of screen bounds
             if (width != 0 || height != 0)
             {
                 Width = width;

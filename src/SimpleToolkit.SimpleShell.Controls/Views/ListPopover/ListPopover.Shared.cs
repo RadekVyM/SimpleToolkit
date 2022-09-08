@@ -3,10 +3,11 @@ using SimpleToolkit.Core;
 
 namespace SimpleToolkit.SimpleShell.Controls
 {
-    // TODO: A11y
-
+    /// <summary>
+    /// <see cref="Popover"/> containing a list of items that is styled according to the selected <see cref="DesignLanguage"/>.
+    /// </summary>
     [ContentProperty(nameof(Items))]
-    public partial class ListPopover : Popover
+    public partial class ListPopover : Popover, IListPopover
     {
         private Border rootBorder;
         private Grid rootGrid;
@@ -168,8 +169,6 @@ namespace SimpleToolkit.SimpleShell.Controls
             {
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start,
-                StrokeThickness = 0,
-                Stroke = Colors.Transparent,
                 Background = Background,
                 Shadow = null,
                 StrokeShape = new RoundRectangle
@@ -260,7 +259,7 @@ namespace SimpleToolkit.SimpleShell.Controls
                 Style = new Style(typeof(ContentButton)),
                 BindingContext = item,
             };
-
+            // TODO: Try to remove this one Grid
             var grid = new Grid
             {
                 ColumnDefinitions = new ColumnDefinitionCollection(
@@ -270,7 +269,6 @@ namespace SimpleToolkit.SimpleShell.Controls
                 Style = new Style(typeof(Grid)),
                 BindingContext = item,
             };
-
             var innerGrid = new Grid
             {
                 ColumnDefinitions = new ColumnDefinitionCollection(
@@ -281,7 +279,6 @@ namespace SimpleToolkit.SimpleShell.Controls
                 Style = new Style(typeof(Grid)),
                 BindingContext = item,
             };
-
             var label = new Label
             {
                 Text = item.Title,
@@ -316,7 +313,9 @@ namespace SimpleToolkit.SimpleShell.Controls
 
             button.Content = grid;
 
-            //CompressedLayout.SetIsHeadless(grid, true);
+            SemanticProperties.SetDescription(button, item.Title);
+
+            CompressedLayout.SetIsHeadless(grid, true);
             CompressedLayout.SetIsHeadless(innerGrid, true);
 
             return button;
@@ -490,6 +489,8 @@ namespace SimpleToolkit.SimpleShell.Controls
 
                 label.Text = titleIcon.Title;
                 image.Source = titleIcon.Icon;
+
+                SemanticProperties.SetDescription(item, titleIcon.Title);
             }
 
             UpdateIconsVisibility(listItems);
@@ -574,7 +575,7 @@ namespace SimpleToolkit.SimpleShell.Controls
                 var grid = item.Content as Grid;
                 var innerGrid = grid.Children[0] as Grid;
                 var label = innerGrid.Children[1] as Label;
-                
+
                 if (newValue is not null)
                     label.TextColor = newValue as Color;
             }
@@ -625,7 +626,10 @@ namespace SimpleToolkit.SimpleShell.Controls
         private static void OnBackgroundChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var listPopover = bindable as ListPopover;
-            listPopover.rootBorder.Background = newValue as Brush;
+            var newBrush = newValue as Brush;
+
+            listPopover.rootBorder.Stroke = newBrush.OffsetBrushColorValue(-0.1f);
+            listPopover.rootBorder.Background = newBrush;
             listPopover.InvalidateGraphicsView();
         }
 

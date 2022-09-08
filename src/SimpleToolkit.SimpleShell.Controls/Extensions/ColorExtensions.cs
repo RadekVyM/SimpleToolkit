@@ -6,7 +6,7 @@
         {
             if (brush is SolidColorBrush solidColorBrush)
             {
-                return new SolidColorBrush(solidColorBrush.Color.OffsetColorValue(valueOffset));
+                return new SolidColorBrush(solidColorBrush.Color?.OffsetColorValue(valueOffset));
             }
             else if (brush is LinearGradientBrush linearGradientBrush)
             {
@@ -26,7 +26,7 @@
 
             foreach (var stop in stops)
             {
-                stops.Add(new GradientStop(stop.Color.OffsetColorValue(valueOffset), stop.Offset));
+                stops.Add(new GradientStop(stop.Color?.OffsetColorValue(valueOffset), stop.Offset));
             }
 
             return newStops;

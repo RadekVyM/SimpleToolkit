@@ -46,6 +46,8 @@ namespace SimpleToolkit.SimpleShell.Controls
             drawable.IsSelectedHiddenItem = isMoreButtonShown && selectedIndex == stackLayout.Count - 1;
             drawable.IconSize = iconSize;
             drawable.IconMargin = iconMargin;
+            drawable.AnimationProgressDone = 0;
+            drawable.AnimationProgressRest = 0;
         }
 
         private async Task AnimateFluentToSelected()
@@ -73,13 +75,20 @@ namespace SimpleToolkit.SimpleShell.Controls
             if (toPosition < stackLayout.Count - 1)
                 drawable.IsSelectedHiddenItem = false;
 
+            var needsToBeTraveled = toPosition - fromPosition;
+            drawable.AnimationDirection = needsToBeTraveled > 0;
+            needsToBeTraveled = Math.Abs(needsToBeTraveled);
+
             var animation = new Animation(v =>
             {
                 drawable.SelectedItemRelativePosition = v;
-                drawable.AnimationProgress = Math.Abs((toPosition - fromPosition) / v);
+                drawable.AnimationProgressDone = Math.Abs(v - fromPosition);
+                drawable.AnimationProgressRest = needsToBeTraveled - drawable.AnimationProgressDone;
+
                 graphicsView.Invalidate();
             }, fromPosition, toPosition);
 
+            graphicsView.AbortAnimation("FluentLineAnimation");
             animation.Commit(graphicsView, "FluentLineAnimation", length: animationLength, easing: Easing.SinInOut);
 
             await Task.Delay((int)animationLength);
@@ -92,7 +101,9 @@ namespace SimpleToolkit.SimpleShell.Controls
             private float lineThickness = 4f;
             private float defaultLineWidth = 16f;
 
-            public double AnimationProgress { get; set; }
+            public bool AnimationDirection { get; set; } // left == false
+            public double AnimationProgressDone { get; set; }
+            public double AnimationProgressRest { get; set; }
             public Color IconColor { get; set; }
             public Brush LineBrush { get; set; }
             public IList<IView> Views { get; set; }
@@ -157,6 +168,8 @@ namespace SimpleToolkit.SimpleShell.Controls
                 canvas.RestoreState();
             }
 
+            RectF lastLineRect;
+
             private void DrawLine(ICanvas canvas, RectF dirtyRect, float leftPadding)
             {
                 double leftItemsWidth = 0;
@@ -177,9 +190,11 @@ namespace SimpleToolkit.SimpleShell.Controls
 
                 var selectedView = Views[flooredPosition] as View;
                 var itemWidth = selectedView.Width;
-                var left = (float)(leftItemsWidth + ((itemWidth - defaultLineWidth) / 2) - ScrollPosition + leftPadding + ((SelectedItemRelativePosition - flooredPosition) * itemWidth));
+                var defaultLeft = (float)(leftItemsWidth + ((itemWidth - defaultLineWidth) / 2) - ScrollPosition + leftPadding);
+                var left = (float)(defaultLeft + ((SelectedItemRelativePosition - flooredPosition) * itemWidth));
+                var width = defaultLineWidth;
 
-                var lineRect = new RectF(left, dirtyRect.Height - bottomPadding - lineThickness, defaultLineWidth, lineThickness);
+                var lineRect = lastLineRect = new RectF(left, dirtyRect.Height - bottomPadding - lineThickness, width, lineThickness);
 
                 canvas.SetFillPaint(LineBrush ?? Colors.Black, lineRect);
 

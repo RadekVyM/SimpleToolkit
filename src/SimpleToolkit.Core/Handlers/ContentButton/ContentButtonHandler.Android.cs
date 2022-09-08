@@ -2,10 +2,8 @@
 
 using Android.Views;
 using Android.Views.Accessibility;
-using Microsoft.Maui.Controls;
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
-using static Android.Icu.Text.Transliterator;
 using static Android.Views.View;
 
 namespace SimpleToolkit.Core.Handlers
@@ -24,7 +22,6 @@ namespace SimpleToolkit.Core.Handlers
             platformView.Clickable = true;
             var v = platformView.NextFocusDownId;
 
-            //platformView.KeyPress += PlatformViewKeyPress;
             platformView.Touch += PlatformViewTouch;
             platformView.Click += PlatformViewClick;
 
@@ -94,33 +91,6 @@ namespace SimpleToolkit.Core.Handlers
             }
         }
         
-        private void PlatformViewKeyPress(object sender, KeyEventArgs e)
-        {
-            if (sender is not Android.Views.View view)
-                return;
-
-            if (!IsRightKey(e.KeyCode))
-                return;
-
-            var position = new Point(view.Width / 2f, view.Height / 2f);
-
-            switch (e.Event.Action)
-            {
-                case Android.Views.KeyEventActions.Down:
-                    virtualView.OnPressed(position);
-                    break;
-                case Android.Views.KeyEventActions.Up:
-                    virtualView.OnReleased(position);
-                    virtualView.OnClicked();
-                    break;
-            }
-
-            bool IsRightKey(Android.Views.Keycode keycode)
-            {
-                return keycode == Android.Views.Keycode.Space || keycode == Android.Views.Keycode.Enter;
-            }
-        }
-
         private class ButtonAccessibilityDelegate : AccessibilityDelegate
         {
             public override void OnInitializeAccessibilityNodeInfo(Android.Views.View host, AccessibilityNodeInfo info)

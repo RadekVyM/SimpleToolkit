@@ -12,13 +12,14 @@ namespace SimpleToolkit.Core.Handlers
 {
     public class SimpleContentPanel : Panel
     {
-        readonly Path borderPath;
-        IShape borderShape;
+        private readonly Path borderPath;
+        private IShape borderShape;
 
         internal Path BorderPath => borderPath;
         internal Func<double, double, Size> CrossPlatformMeasure { get; set; }
         internal Func<Microsoft.Maui.Graphics.Rect, Size> CrossPlatformArrange { get; set; }
         internal Action Clicked { get; set; }
+
 
         public SimpleContentPanel()
         {
@@ -28,6 +29,24 @@ namespace SimpleToolkit.Core.Handlers
             SizeChanged += ContentPanelSizeChanged;
         }
 
+
+        public void UpdateBackground(Paint background)
+        {
+            if (borderPath == null)
+                return;
+
+            borderPath.UpdateBackground(background);
+        }
+
+        public void UpdateBorderShape(IShape borderShape)
+        {
+            this.borderShape = borderShape;
+
+            if (borderPath == null)
+                return;
+
+            borderPath.UpdateBorderShape(this.borderShape, ActualWidth, ActualHeight);
+        }
 
         protected override AutomationPeer OnCreateAutomationPeer()
         {
@@ -92,23 +111,6 @@ namespace SimpleToolkit.Core.Handlers
             }
         }
 
-        public void UpdateBackground(Paint background)
-        {
-            if (borderPath == null)
-                return;
-
-            borderPath.UpdateBackground(background);
-        }
-
-        public void UpdateBorderShape(IShape borderShape)
-        {
-            this.borderShape = borderShape;
-
-            if (borderPath == null)
-                return;
-
-            borderPath.UpdateBorderShape(this.borderShape, ActualWidth, ActualHeight);
-        }
 
         private class ContentButtonAutomationPeer : FrameworkElementAutomationPeer, IInvokeProvider
         {

@@ -1,6 +1,6 @@
-﻿namespace SimpleToolkit.SimpleShell
+﻿namespace SimpleToolkit.SimpleShell.Extensions
 {
-    internal static class Extensions
+    internal static class ElementExtensions
     {
         public static SimpleNavigationHost FindSimpleNavigationHost(this IView view)
         {

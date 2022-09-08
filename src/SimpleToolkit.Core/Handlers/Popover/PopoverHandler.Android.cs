@@ -29,10 +29,10 @@ namespace SimpleToolkit.Core.Handlers
 
         public static void MapShow(PopoverHandler handler, IPopover popover, object parentView)
         {
-            if (parentView is IElement anchor)
-            {
-                handler.PlatformView.Show(anchor);
-            }
+            if (parentView is not IElement anchor)
+                return;
+                
+            handler.PlatformView.Show(anchor);
         }
 
         public static void MapHide(PopoverHandler handler, IPopover popover, object arg3)

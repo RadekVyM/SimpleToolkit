@@ -11,8 +11,11 @@ namespace SimpleToolkit.Core.Handlers
 {
     internal class WrapperPanel : Panel
     {
-        readonly View view;
-
+        private readonly View view;
+        private readonly FrameworkElement frameworkElement;
+        private IPlatformViewHandler handler => view.Handler as IPlatformViewHandler;
+        
+        
         public WrapperPanel(View view, IMauiContext mauiContext)
         {
             ArgumentNullException.ThrowIfNull(view);
@@ -21,25 +24,21 @@ namespace SimpleToolkit.Core.Handlers
             this.view = view;
             this.view.MeasureInvalidated += OnMeasureInvalidated;
 
-            FrameworkElement = view.ToPlatform(mauiContext);
-            Children.Add(FrameworkElement);
+            frameworkElement = view.ToPlatform(mauiContext);
+            Children.Add(frameworkElement);
 
             // make sure we re-measure once the template is applied
 
-            FrameworkElement.Loaded += (sender, args) =>
+            frameworkElement.Loaded += (sender, args) =>
             {
                 // If the view is a layout (stacklayout, grid, etc) we need to trigger a layout pass
                 // with all the controls in a consistent native state (i.e., loaded) so they'll actually
                 // have Bounds set
-                Handler?.PlatformView?.InvalidateMeasure(View);
+                handler?.PlatformView?.InvalidateMeasure(view);
                 InvalidateMeasure();
             };
         }
 
-        IView View => view;
-        IPlatformViewHandler? Handler => View.Handler as IPlatformViewHandler;
-
-        FrameworkElement FrameworkElement { get; }
 
         public void CleanUp()
         {
@@ -49,7 +48,7 @@ namespace SimpleToolkit.Core.Handlers
         protected override global::Windows.Foundation.Size ArrangeOverride(global::Windows.Foundation.Size finalSize)
         {
             view.Frame = new Rect(0, 0, finalSize.Width, finalSize.Height);
-            FrameworkElement?.Arrange(new WRect(0, 0, finalSize.Width, finalSize.Height));
+            frameworkElement?.Arrange(new WRect(0, 0, finalSize.Width, finalSize.Height));
 
             if (view.Width <= 0 || view.Height <= 0)
             {
@@ -67,9 +66,9 @@ namespace SimpleToolkit.Core.Handlers
 
         protected override global::Windows.Foundation.Size MeasureOverride(global::Windows.Foundation.Size availableSize)
         {
-            FrameworkElement.Measure(availableSize);
+            frameworkElement.Measure(availableSize);
 
-            var request = FrameworkElement.DesiredSize;
+            var request = frameworkElement.DesiredSize;
 
             if (request.Height < 0)
             {

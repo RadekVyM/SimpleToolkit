@@ -46,36 +46,16 @@
             <Setter Property="PrimaryBrush" Value="#3b4c73"/>
             <Setter Property="DesignLanguage" Value="Fluent"/>
         </Style>
+
+        <Style x:Key="AppBarIcon" TargetType="core:Icon">
+            <Setter Property="TintColor" Value="#3b3b3b"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="HeightRequest" Value="20"/>
+            <Setter Property="WidthRequest" Value="20"/>
+        </Style>
     </shell:SimpleShell.Resources>
 
     <VisualStateManager.VisualStateGroups>
-        <VisualStateGroup x:Name="SimplePageStates">
-            <VisualState x:Name="SimplePageState">
-                <VisualState.Setters>
-                    <Setter TargetName="addButton" Property="Button.Background" Value="Black"/>
-                </VisualState.Setters>
-            </VisualState>
-            <VisualState x:Name="SimplePageState.FirstYellowDetailPage">
-                <VisualState.Setters>
-                    <Setter TargetName="addButton" Property="Button.Background" Value="Goldenrod"/>
-                </VisualState.Setters>
-            </VisualState>
-            <VisualState x:Name="SimplePageState.GreenPage">
-                <VisualState.Setters>
-                    <Setter TargetName="addButton" Property="Button.Background" Value="DarkRed"/>
-                </VisualState.Setters>
-            </VisualState>
-            <VisualState x:Name="SimplePageState.RedPage">
-                <VisualState.Setters>
-                    <Setter TargetName="addButton" Property="Button.Background" Value="DarkRed"/>
-                </VisualState.Setters>
-            </VisualState>
-            <VisualState x:Name="SimplePageState.FirstGreenDetailPage">
-                <VisualState.Setters>
-                    <Setter TargetName="addButton" Property="Button.Background" Value="Green"/>
-                </VisualState.Setters>
-            </VisualState>
-        </VisualStateGroup>
         <VisualStateGroup x:Name="SimplePageTypeStates">
             <VisualState x:Name="SimplePageTypeState.RegisteredPage">
                 <VisualState.Setters>
@@ -140,7 +120,7 @@
     <Shell.TitleView>
         <HorizontalStackLayout Spacing="10" Margin="12,0">
             <Button Text="Back" Clicked="BackButtonClicked" VerticalOptions="Center"/>
-            <Button Text="Add" Clicked="Button_Clicked_1" VerticalOptions="Center"/>
+            <Button Text="Add" Clicked="AddButtonClicked" VerticalOptions="Center"/>
             <Label Text="{Binding Source={x:Reference thisShell}, Path=CurrentPage.Title}" VerticalOptions="Center"/>
         </HorizontalStackLayout>
     </Shell.TitleView>
@@ -151,29 +131,67 @@
     </Shell.SearchHandler>
 
 
+    <Tab Title="Icons">
+        <Tab.Icon>
+            <FontImageSource Glyph="&#xf053;" FontFamily="FontAwesomeSolid" Size="44"/>
+        </Tab.Icon>
+        <ShellContent
+            Title="Icons"
+            ContentTemplate="{DataTemplate pages:IconPage}"
+            Route="IconPage">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="&#xf86d;" FontFamily="FontAwesomeSolid" Size="18"/>
+            </ShellContent.Icon>
+        </ShellContent>
+    </Tab>
+
+    <Tab
+        Title="Buttons"
+        Icon="flame_empty.png"
+        controls:SimpleShellIcon.SelectedIcon="flame_filled.png">
+        <ShellContent
+            Title="Buttons"
+            Icon="flame_empty.png"
+            controls:SimpleShellIcon.SelectedIcon="flame_filled.png"
+            ContentTemplate="{DataTemplate pages:ContentButtonPage}"
+            Route="ContentButtonPage"/>
+    </Tab>
+
+    <Tab
+        Title="Popovers"
+        Icon="bird_empty.png"
+        controls:SimpleShellIcon.SelectedIcon="bird_filled.png">
+        <ShellContent
+            Title="Popovers"
+            Icon="bird_empty.png"
+            controls:SimpleShellIcon.SelectedIcon="bird_filled.png"
+            ContentTemplate="{DataTemplate pages:PopoverPage}"
+            Route="PopoverPage"/>
+    </Tab>
+
     <Tab Title="Flame tab" Route="FirstTab"
          Icon="flame_empty.png"
-         controls:SimpleIcon.SelectedIcon="flame_filled.png">
+         controls:SimpleShellIcon.SelectedIcon="flame_filled.png">
         <ShellContent
             Title="Yellow"
             Icon="flame_empty.png"
-            controls:SimpleIcon.SelectedIcon="flame_filled.png"
+            controls:SimpleShellIcon.SelectedIcon="flame_filled.png"
             ContentTemplate="{DataTemplate pages:YellowPage}"
             Route="YellowPage" />
         <ShellContent
             Title="Green"
             Icon="bird_empty.png"
-            controls:SimpleIcon.SelectedIcon="bird_filled.png"
+            controls:SimpleShellIcon.SelectedIcon="bird_filled.png"
             ContentTemplate="{DataTemplate pages:GreenPage}"
             Route="GreenPage" />
     </Tab>
 
     <Tab Title="Gray"
          Icon="flame_empty.png"
-         controls:SimpleIcon.SelectedIcon="https://www.itnetwork.cz/images/63461/mobile/apps_icon.png">
+         controls:SimpleShellIcon.SelectedIcon="https://www.itnetwork.cz/images/63461/mobile/apps_icon.png">
         <ShellContent
             Title="Gray"
-            controls:SimpleIcon.SelectedIcon="https://www.itnetwork.cz/images/63461/mobile/apps_icon.png"
+            controls:SimpleShellIcon.SelectedIcon="https://www.itnetwork.cz/images/63461/mobile/apps_icon.png"
             ContentTemplate="{DataTemplate pages:GrayPage}"
             Route="GrayPage">
             <ShellContent.Icon>
@@ -184,108 +202,112 @@
 
     <Tab Title="Case tab" Route="SecondTab"
          Icon="case_empty.png"
-         controls:SimpleIcon.SelectedIcon="case_filled.png">
+         controls:SimpleShellIcon.SelectedIcon="case_filled.png">
         <ShellContent
             Title="Blue"
             Icon="case_empty.png"
-            controls:SimpleIcon.SelectedIcon="case_filled.png"
+            controls:SimpleShellIcon.SelectedIcon="case_filled.png"
             ContentTemplate="{DataTemplate pages:BluePage}"
             Route="BluePage" />
         <ShellContent
             Title="Red"
             Icon="avatar_empty.png"
-            controls:SimpleIcon.SelectedIcon="avatar_filled.png"
+            controls:SimpleShellIcon.SelectedIcon="avatar_filled.png"
             ContentTemplate="{DataTemplate pages:RedPage}"
             Route="RedPage" />
     </Tab>
 
     <Tab Title="Purple"
          Icon="avatar_empty.png"
-         controls:SimpleIcon.SelectedIcon="avatar_filled.png">
+         controls:SimpleShellIcon.SelectedIcon="avatar_filled.png">
         <ShellContent
             Title="Purple"
             Icon="avatar_empty.png"
-            controls:SimpleIcon.SelectedIcon="avatar_filled.png"
+            controls:SimpleShellIcon.SelectedIcon="avatar_filled.png"
             ContentTemplate="{DataTemplate pages:PurplePage}"
             Route="PurplePage" />
     </Tab>
-
-    <!--<ShellContent
-            Title="Orange"
-            ContentTemplate="{DataTemplate pages:OrangePage}"
-            Route="OrangePage" />-->
-
-
+    
     <shell:SimpleShell.Content>
         <Grid x:Name="rootContainer" RowDefinitions="auto, auto, *, auto">
-            <Grid x:Name="appBar" ColumnSpacing="10" Padding="12"
-                  ColumnDefinitions="auto, auto, *, auto, auto">
-                <Button x:Name="backButton" Text="Back" Clicked="BackButtonClicked" VerticalOptions="Center">
-                    <VisualStateManager.VisualStateGroups>
-                        <!-- If I want to override default VisualStateGroup in Styles.xaml, I have to use VisualStateGroupList. See https://github.com/dotnet/maui/issues/8003 -->
-                        <VisualStateGroupList>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Normal">
-                                    <VisualState.Setters>
-                                        <Setter Property="Scale" Value="1" />
-                                    </VisualState.Setters>
-                                </VisualState>
-                                <VisualState x:Name="Pressed">
-                                    <VisualState.Setters>
-                                        <Setter Property="Scale" Value="0.95" />
-                                    </VisualState.Setters>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateGroupList>
-                    </VisualStateManager.VisualStateGroups>
-                </Button>
+            <Grid
+                x:Name="appBar"
+                Padding="12"
+                ColumnSpacing="10"
+                ColumnDefinitions="auto, *, auto, auto, auto">
+                
+                <core:ContentButton
+                    x:Name="backButton"
+                    Background="Transparent"
+                    Clicked="BackButtonClicked"
+                    VerticalOptions="Center">
+                    <core:Icon Style="{StaticResource AppBarIcon}">
+                        <core:Icon.Source>
+                            <FontImageSource Glyph="&#xf053;" FontFamily="FontAwesomeSolid" Size="44"/>
+                        </core:Icon.Source>
+                    </core:Icon>
+                </core:ContentButton>
 
-                <Button 
-                    x:Name="addButton" Grid.Column="1"
-                    Text="Add"
-                    Clicked="Button_Clicked_1"
-                    VerticalOptions="Center"
-                    BackgroundColor="Black"/>
+                <Label
+                    Grid.Column="0" Grid.ColumnSpan="5"
+                    Margin="60,0"
+                    Text="{Binding Source={x:Reference thisShell}, Path=CurrentPage.Title}"
+                    FontSize="15" FontAttributes="Bold"
+                    VerticalOptions="Center" HorizontalOptions="Center"
+                    HorizontalTextAlignment="Center"/>
 
-                <Label Grid.Column="2" Text="{Binding Source={x:Reference thisShell}, Path=CurrentPage.Title}" VerticalOptions="Center"/>
+                <core:ContentButton
+                    x:Name="addButton"
+                    Grid.Column="2"
+                    Background="Transparent"
+                    Clicked="AddButtonClicked"
+                    VerticalOptions="Center">
+                    <core:Icon Style="{StaticResource AppBarIcon}">
+                        <core:Icon.Source>
+                            <FontImageSource Glyph="&#x2b;" FontFamily="FontAwesomeSolid" Size="44"/>
+                        </core:Icon.Source>
+                    </core:Icon>
+                </core:ContentButton>
 
-                <Button 
-                    x:Name="designButton" Grid.Column="3"
-                    Text="Design"
+                <core:ContentButton
+                    x:Name="designButton"
+                    Grid.Column="3"
+                    Background="Transparent"
                     Clicked="ShowPopoverButtonClicked"
-                    VerticalOptions="Center"
-                    BackgroundColor="Black">
+                    VerticalOptions="Center">
                     <core:Popover.AttachedPopover>
                         <controls:ListPopover
                             x:Name="designLanguagesListPopover"
                             ItemSelected="DesignLanguagesListPopoverItemSelected"
                             MinimumWidthRequest="112" MaximumWidthRequest="280"/>
                     </core:Popover.AttachedPopover>
-                </Button>
+                    
+                    <core:Icon Style="{StaticResource AppBarIcon}">
+                        <core:Icon.Source>
+                            <FontImageSource Glyph="&#xf53f;" FontFamily="FontAwesomeSolid" Size="44"/>
+                        </core:Icon.Source>
+                    </core:Icon>
+                </core:ContentButton>
 
-                <Button 
-                    x:Name="toolbarItemsButton" Grid.Column="4"
-                    Text="👋"
+                <core:ContentButton
+                    x:Name="toolbarItemsButton"
+                    Grid.Column="4"
+                    Background="Transparent"
                     Clicked="ShowPopoverButtonClicked"
-                    VerticalOptions="Center"
-                    BackgroundColor="Black">
+                    VerticalOptions="Center">
                     <core:Popover.AttachedPopover>
                         <controls:ListPopover
                             x:Name="toolbarItemsPopover"
                             Items="{Binding Source={x:Reference thisShell}, Path=CurrentPage.ToolbarItems}"/>
                     </core:Popover.AttachedPopover>
-                </Button>
+                    
+                    <core:Icon Style="{StaticResource AppBarIcon}">
+                        <core:Icon.Source>
+                            <FontImageSource Glyph="&#xf142;" FontFamily="FontAwesomeSolid" Size="44"/>
+                        </core:Icon.Source>
+                    </core:Icon>
+                </core:ContentButton>
             </Grid>
-
-            <ScrollView Grid.Row="1" Orientation="Horizontal" Padding="12,0" Margin="0">
-                <HorizontalStackLayout VerticalOptions="Center" Spacing="10" BindableLayout.ItemsSource="{Binding Source={x:Reference thisShell}, Path=CurrentShellSection.Items}">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate x:DataType="BaseShellItem">
-                            <Button Text="{Binding Title}" Clicked="Button_Clicked" Background="DarkCyan"/>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </HorizontalStackLayout>
-            </ScrollView>
 
             <Border Grid.Row="2" Stroke="Transparent" StrokeThickness="0">
                 <Border.StrokeShape>
@@ -300,12 +322,64 @@
                 SelectedItem="{Binding Source={x:Reference thisShell}, Path=CurrentShellContent}" 
                 ItemsAlignment="Center"
                 IsScrollable="False"
-                ItemSelected="TabView_ItemSelected"
+                ItemSelected="TabBarItemSelected"
                 Style="{StaticResource MaterialTabbar}"/>
 
             <!--ItemWidthRequest="{OnPlatform WinUI=200}"-->
 
         </Grid>
     </shell:SimpleShell.Content>
+
+    <!--<ShellContent
+        Title="Icons"
+        Icon="icon.png"
+        ContentTemplate="{DataTemplate pages:IconPage}"
+        Route="IconPage"/>
+
+    <ShellContent
+        Title="Buttons"
+        Icon="button.png"
+        ContentTemplate="{DataTemplate pages:ContentButtonPage}"
+        Route="ContentButtonPage"/>
+
+    <ShellContent
+        Title="Popovers"
+        Icon="popover.png"
+        ContentTemplate="{DataTemplate pages:PopoverPage}"
+        Route="PopoverPage"/>
+
+    <shell:SimpleShell.Content>
+        <Grid
+            RowDefinitions="50, *, 50">
+            <Button
+                Clicked="BackButtonClicked"
+                Text="Back"
+                Margin="20,5"
+                HorizontalOptions="Start"
+                Background="DarkOrange"/>
+            <Label
+                Margin="20,5"
+                HorizontalOptions="Center" VerticalOptions="Center"
+                Text="{Binding CurrentShellContent.Title, Source={x:Reference thisShell}}"
+                FontAttributes="Bold" FontSize="18"/>
+            <shell:SimpleNavigationHost
+                Grid.Row="1"/>
+            <HorizontalStackLayout
+                Grid.Row="2"
+                Margin="20,5" Spacing="10"
+                HorizontalOptions="Center"
+                BindableLayout.ItemsSource="{Binding ShellContents, Source={x:Reference thisShell}}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate
+                        x:DataType="BaseShellItem">
+                        <Button
+                            Clicked="ShellItemButtonClicked"
+                            Background="DarkOrange"
+                            Text="{Binding Title}"/>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </HorizontalStackLayout>
+        </Grid>
+    </shell:SimpleShell.Content>-->
 
 </shell:SimpleShell>

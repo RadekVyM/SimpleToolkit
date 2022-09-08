@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SimpleToolkit.SimpleShell.Playground.Views.Pages.FirstGreenDetailPage"
              Title="FirstGreenDetailPage">
-    <Grid BackgroundColor="ForestGreen">
+    <!--<Grid BackgroundColor="ForestGreen">
         <Label
             FontSize="20"
             Text="First green detail page"
@@ -14,5 +14,10 @@
             HorizontalOptions="Center" />
 
         <Button Text="Go to red page" Clicked="Button_Clicked" Style="{StaticResource GreenPageNavigationButton}"/>
-    </Grid>
+    </Grid>-->
+
+    <Label
+        Text="Thank you!"
+        HorizontalOptions="Center" VerticalOptions="Center"
+        FontSize="20"/>
 </ContentPage>

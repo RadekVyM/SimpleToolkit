@@ -16,6 +16,9 @@ namespace SimpleToolkit.SimpleShell.Handlers
         {
         };
 
+        public CustomFrameLayout Container { get; protected set; }
+
+
         public SimpleNavigationHostHandler(IPropertyMapper mapper, CommandMapper commandMapper)
             : base(mapper ?? Mapper, commandMapper ?? CommandMapper)
         {
@@ -26,12 +29,10 @@ namespace SimpleToolkit.SimpleShell.Handlers
         {
         }
 
-        public CustomFrameLayout Container { get; protected set; }
 
         protected override CustomFrameLayout CreatePlatformView()
         {
             Container = new CustomFrameLayout(MauiContext.Context);
-
             return Container;
         }
 
