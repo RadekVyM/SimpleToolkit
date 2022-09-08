@@ -1,4 +1,4 @@
-# <img src="./images/logo_with_background.svg" width="40" height="22"> SimpleToolkit
+# <img src="./images/logo_with_background.svg" width="40" height="25"> SimpleToolkit
 
 SimpleToolkit is a .NET MAUI library of helpers and simple, easily customizable controls.
 
@@ -10,7 +10,7 @@ The library consists of three packages:
 
 - [SimpleToolkit.SimpleShell.Controls](#simpletoolkitsimpleshellcontrols)
 
-> ⚠ **Warning:** Long-term support is not guaranteed. Use at your own Risk.
+> ⚠ **Warning:** Long-term support is not guaranteed. Use at your own risk.
 
 ## Samples
 
@@ -43,11 +43,11 @@ Here are some of my samples that were built using this library:
 
 [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.Core.svg?label=NuGet)](https://www.nuget.org/packages/SimpleToolkit.Core/)
 
-*SimpleToolkit.Core* package is a set of simple .NET MAUI controls and helpers.
+The *SimpleToolkit.Core* package is a set of simple .NET MAUI controls and helpers.
 
 ### Getting Started
 
-In order to use *SimpleToolkit.Core* you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
+In order to use *SimpleToolkit.Core*, you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
 
 ```csharp
 builder.UseSimpleToolkit();
@@ -55,7 +55,7 @@ builder.UseSimpleToolkit();
 
 ### Icon
 
-Thanks to the `Icon` control you are able to display a tinted image.
+Thanks to the `Icon` control, you are able to display a tinted image:
 
 ```xml
 <simpleCore:Icon Source="star.png"/>
@@ -71,7 +71,7 @@ Output:
 
 #### Implementation details
 
-The `Icon` class is inherited from the .NET MAUI `Image` class, but behind the scenes is implemented in the same way as .NET MAUI `Image` only on Android and iOS. WinUI implementation is based on `BitmapIcon` and `FontIcon` controls. Because of that the control supports only these image sources on Windows:
+The `Icon` class is inherited from the .NET MAUI `Image` class, but behind the scenes it is implemented in the same way as .NET MAUI `Image` only on Android and iOS. WinUI implementation is based on `BitmapIcon` and `FontIcon` controls. Because of that, the control supports only these image sources on Windows:
 
 - `FileImageSource`
 - `UriImageSource`
@@ -86,7 +86,7 @@ These `Image` properties are not supported at all:
 
 ### ContentButton
 
-`ContentButton` is just a button that can hold whatever content you want. 
+`ContentButton` is just a button that can hold whatever content you want:
 
 ```xml
 <simpleCore:ContentButton Clicked="StarButtonClicked">
@@ -116,7 +116,7 @@ Output:
 
 #### Implementation details
 
-The `ContentButton` class is inherited from .NET MAUI `ContentView` control. The `ContentButton` has these events in addition to `ContentView`s events and properties:
+The `ContentButton` class is inherited from the .NET MAUI `ContentView` control. `ContentButton` has these events in addition to `ContentView`s events and properties:
 
 - `Clicked` - an event that fires when the button is clicked
 - `Pressed` - an event that fires when the button is pressed
@@ -124,7 +124,7 @@ The `ContentButton` class is inherited from .NET MAUI `ContentView` control. The
 
 ### Popover
 
-`Popover` allows you to display custom popovers (flyouts) anchored to any control.
+`Popover` allows you to display custom popovers (flyouts) anchored to any control:
 
 ```xml
 <Button
@@ -156,7 +156,7 @@ The `ContentButton` class is inherited from .NET MAUI `ContentView` control. The
 </Button>
 ```
 
-In code behind:
+Code behind:
 
 ```csharp
 private void ButtonClicked(object sender, EventArgs e)
@@ -198,7 +198,7 @@ Output:
 
 #### Implementation details
 
-The `Popover` class is inherited from .NET MAUI `Element`. The `Popover` offers these properties and methods in addition to `Element`s properties and methods:
+The `Popover` class is inherited from the .NET MAUI `Element` class. `Popover` offers these properties and methods in addition to `Element`s properties and methods:
 
 - `Content` - the popover content of type `View`
 - `Show()` - shows the popover anchored to a view you pass as a parameter
@@ -211,7 +211,7 @@ popover.Show(anchorView);
 popover.Hide();
 ```
 
-Popover can be attached to a view using `AttachedPopover` attached property. Such popover can be displayed or hidden (dismissed) calling `ShowAttachedPopover()` and `HideAttachedPopover()` extension methods on the view:
+Popover can be attached to a view using the `AttachedPopover` attached property. Such a popover can be displayed or hidden (dismissed) by calling the `ShowAttachedPopover()` and `HideAttachedPopover()` extension methods on the view:
 
 ```csharp
 button.ShowAttachedPopover();
@@ -222,11 +222,11 @@ button.HideAttachedPopover();
 
 [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.svg?label=NuGet)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell/)
 
-*SimpleToolkit.SimpleShell* package provides you a simplified implementation of .NET MAUI `Shell` that lets you easily create a custom navigation experience in your .NET MAUI applications.
+The *SimpleToolkit.SimpleShell* package provides you with a simplified implementation of .NET MAUI `Shell` that lets you easily create a custom navigation experience in your .NET MAUI applications.
 
 ### Getting Started
 
-In order to use *SimpleToolkit.SimpleShell* you need to call the `UseSimpleShell()` extension method in your `MauiProgram.cs` file:
+In order to use *SimpleToolkit.SimpleShell*, you need to call the `UseSimpleShell()` extension method in your `MauiProgram.cs` file:
 
 ```csharp
 builder.UseSimpleShell();
@@ -234,7 +234,7 @@ builder.UseSimpleShell();
 
 ### SimpleShell
 
-`SimpleShell` is a simplified implementation of .NET MAUI `Shell`. All `SimpleShell` is is just a simple container for your content with ability to put the hosting area for pages wherever you want. Thanks to that you are able to add to your `Shell` application custom tab bars, navigation bars, flyouts, etc. while using great `Shell`, URI-based navigation.
+`SimpleShell` is a simplified implementation of .NET MAUI `Shell`. All `SimpleShell` is is just a simple container for your content with the ability to put the hosting area for pages wherever you want. Thanks to that, you are able to add custom tab bars, navigation bars, flyouts, etc. to your `Shell` application while using great `Shell` URI-based navigation.
 
 ```xml
 <simpleShell:SimpleShell
@@ -301,17 +301,17 @@ builder.UseSimpleShell();
 </simpleShell:SimpleShell>
 ```
 
-As you can see, logical navigation structure is defined with `ShellContent`, `Tab` etc. as in normal .NET MAUI `Shell`. However, visual structure has to be defined manually using `Content` property. Hosting area for pages is represented by the `SimpleNavigationHost` view that can occure in the visual hierarchy **just once**.
+As you can see, the logical navigation structure is defined with `ShellContent`, `Tab`, etc. as in normal .NET MAUI `Shell`. However, visual structure has to be defined manually using the `Content` property. The hosting area for pages is represented by the `SimpleNavigationHost` view that can occur in the visual hierarchy **just once**.
 
-SimpleShell provides you some bindable properties which simplify creation of custom navigation controls:
+SimpleShell provides you with some bindable properties which simplify the creation of custom navigation controls:
 
 - `CurrentPage` - the currently selected `Page`
 - `CurrentShellSection` - the currently selected `ShellSection` (`Tab`)
 - `CurrentShellContent` - the currently selected `ShellContent`
-- `ShellSections` - readonly list of all `ShellSection`s in the shell
-- `ShellContents` - readonly list of all `ShellContent`s in the shell
+- `ShellSections` - read-only list of all `ShellSection`s in the shell
+- `ShellContents` - read-only list of all `ShellContent`s in the shell
 
-Code behind of the sample above:
+The code behind of the XAML sample above:
 
 ```csharp
 private async void TabButtonClicked(object sender, EventArgs e)
@@ -325,7 +325,7 @@ private async void TabButtonClicked(object sender, EventArgs e)
 }
 ```
 
-Navigation between pages works exactly the same as in .NET MAUI `Shell`, just use common `Shell.Current.GoToAsync()`. Pages that are not part of the shell hierarchy can be registered using the `Routing.RegisterRoute()` method.
+Navigation between pages works exactly the same as in .NET MAUI `Shell`, just use the common `Shell.Current.GoToAsync()`. Pages that are not part of the shell hierarchy can be registered using the `Routing.RegisterRoute()` method.
 
 Output:
 
@@ -362,7 +362,7 @@ Output:
 
 #### `ShellSection` states
 
-States in a `SimpleShellSectionState.[ShellSection route]` format:
+States in the `SimpleShellSectionState.[ShellSection route]` format:
 
 ```xml
 <VisualStateManager.VisualStateGroups>
@@ -381,11 +381,11 @@ States in a `SimpleShellSectionState.[ShellSection route]` format:
 </VisualStateManager.VisualStateGroups>
 ```
 
-When user navigates to a tab with a `HomeTab` route, the view named `tabBar` will have a red background, and when to a tab with a `SettingsTab` route, the view named `tabBar` will have a green background. 
+When a user navigates to a tab with a `HomeTab` route, the view named `tabBar` will have a red background, and when to a tab with a `SettingsTab` route, the view named `tabBar` will have a green background. 
 
 #### `ShellContent` states
 
-States in a `SimpleShellContentState.[ShellContent route]` format:
+States in the `SimpleShellContentState.[ShellContent route]` format:
 
 ```xml
 <VisualStateManager.VisualStateGroups>
@@ -404,11 +404,11 @@ States in a `SimpleShellContentState.[ShellContent route]` format:
 </VisualStateManager.VisualStateGroups>
 ```
 
-When user navigates to a `ShellContent` with a `HomePage` route, the view named `tabBar` will have a yellow background, and when to a `ShellContent` with a `SettingsPage` route, the view named `tabBar` will have a blue background.
+When a user navigates to a `ShellContent` with a `HomePage` route, the view named `tabBar` will have a yellow background, and when to a `ShellContent` with a `SettingsPage` route, the view named `tabBar` will have a blue background.
 
 #### Page type states
 
-States in a `SimplePageState.[Page type name]` format:
+States in the `SimplePageState.[Page type name]` format:
 
 ```xml
 <VisualStateManager.VisualStateGroups>
@@ -427,11 +427,11 @@ States in a `SimplePageState.[Page type name]` format:
 </VisualStateManager.VisualStateGroups>
 ```
 
-When user navigates to a `HomePage` page, the view named `tabBar` will have a purple background, and when to a `SettingsPage` page, the view named `tabBar` will have a orange background. 
+When a user navigates to a `HomePage` page, the view named `tabBar` will have a purple background, and when to a `SettingsPage` page, the view named `tabBar` will have a orange background. 
 
 #### Navigation stack states
 
-When user navigates to a that is part of the shell hierarchy, `SimpleShell` goes to the `RootPage` state, otherwise `SimpleShell` goes to the `RegisteredPage`state:
+When a user navigates to a page that is part of the shell hierarchy, `SimpleShell` goes to the `RootPage` state, otherwise `SimpleShell` goes to the `RegisteredPage` state:
 
 ```xml
 <VisualStateManager.VisualStateGroups>
@@ -452,16 +452,16 @@ When user navigates to a that is part of the shell hierarchy, `SimpleShell` goes
 
 #### Why not use `SimpleShell` and use .NET MAUI `Shell` instead
 
-- .NET MAUI `Shell` offers platform-specific appearance.
+- .NET MAUI `Shell` offers a platform-specific appearance.
 - Platform-specific navigation controls that .NET MAUI `Shell` provides probably have better performance than controls composed of multiple .NET MAUI views.
-- A `SimpleShell`-based application may not have as good accessibility in some scenarios due to the lack of platform-specific navigation controls. .NET MAUI `Shell` is accessible out of the box since it uses platform-specific controls.
+- A `SimpleShell`-based application may not have as good accessibility in some scenarios due to the lack of platform-specific navigation controls. .NET MAUI `Shell` should be accessible out of the box since it uses platform-specific controls.
 - Maybe I have implemented something wrong that has a negative impact on the performance, accessibility, or something like that.
 
 #### Implementation details
 
-The `SimpleShell` class is inherited from the .NET MAUI `Shell` class, but all the handlers are implemented from ground up. These handlers are inspired by the WinUI `Shell` handlers.
+The `SimpleShell` class is inherited from the .NET MAUI `Shell` class, but all the handlers are implemented from the ground up. These handlers are inspired by the WinUI `Shell` handlers.
 
-`SimpleShell` currently does not provide any animations. Pages are simply swapped in a container during navigation.
+`SimpleShell` currently does not provide any page transitions. Pages are simply swapped in a container during navigation.
 
 ## SimpleToolkit.SimpleShell.Controls
 
@@ -471,7 +471,7 @@ The `SimpleShell` class is inherited from the .NET MAUI `Shell` class, but all t
 
 ### Getting Started
 
-In order to use *SimpleToolkit.SimpleShell.Controls* you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
+In order to use *SimpleToolkit.SimpleShell.Controls*, you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
 
 ```csharp
 builder.UseSimpleToolkit();
