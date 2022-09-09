@@ -39,7 +39,8 @@ namespace SimpleToolkit.SimpleShell.Handlers
         public virtual void SetContent(AView view)
         {
             Container.RemoveAllViews();
-            Container.AddView(view);
+            if (view is not null)
+                Container.AddView(view);
         }
     }
 }

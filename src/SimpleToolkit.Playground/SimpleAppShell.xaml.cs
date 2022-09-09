@@ -97,6 +97,11 @@ namespace SimpleToolkit.SimpleShell.Playground
             }
         }
 
+        private void SwapButtonClicked(object sender, EventArgs e)
+        {
+            Content = new SimpleNavigationHost();
+        }
+
         private record DesignLanguageItem(string Title, Action Action)
         {
             public override string ToString() => Title;

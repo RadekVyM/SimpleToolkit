@@ -1,4 +1,5 @@
 ﻿using SimpleToolkit.Core;
+using System.Runtime.CompilerServices;
 
 namespace SimpleToolkit.SimpleShell.Controls
 {
@@ -285,6 +286,7 @@ namespace SimpleToolkit.SimpleShell.Controls
             };
             graphicsView = new GraphicsView
             {
+                Background = Colors.Transparent,
                 Style = new Style(typeof(GraphicsView))
             };
             scrollView = new ScrollView
