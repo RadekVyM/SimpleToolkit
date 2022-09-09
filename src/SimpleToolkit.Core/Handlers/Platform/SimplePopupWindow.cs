@@ -3,6 +3,7 @@
 using Android.Content;
 using Android.Graphics.Drawables;
 using Android.Widget;
+using Microsoft.Maui;
 using Microsoft.Maui.Platform;
 using AView = Android.Views.View;
 using Math = System.Math;
@@ -96,6 +97,16 @@ namespace SimpleToolkit.Core.Handlers
 
             var content = popup.Content.ToPlatform(mauiContext);
             ContentView = content;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                VirtualView = null;
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

@@ -13,21 +13,21 @@ namespace SimpleToolkit.SimpleShell.Handlers
 {
     public partial class SimpleShellItemHandler : IAppearanceObserver
     {
+        public static PropertyMapper<ShellItem, SimpleShellItemHandler> Mapper =
+            new PropertyMapper<ShellItem, SimpleShellItemHandler>(ElementMapper)
+            {
+                [nameof(ShellItem.CurrentItem)] = MapCurrentItem,
+                [Shell.TabBarIsVisibleProperty.PropertyName] = MapTabBarIsVisible
+            };
+
+        public static CommandMapper<ShellItem, SimpleShellItemHandler> CommandMapper =
+            new CommandMapper<ShellItem, SimpleShellItemHandler>(ElementCommandMapper);
+
         protected SectionContainer shellSectionContainer;
         protected ShellSection currentShellSection;
         protected SimpleShellSectionHandler currentShellSectionHandler;
 
-        public static PropertyMapper<ShellItem, SimpleShellItemHandler> Mapper =
-                new PropertyMapper<ShellItem, SimpleShellItemHandler>(ElementMapper)
-                {
-                    [nameof(ShellItem.CurrentItem)] = MapCurrentItem,
-                    [Shell.TabBarIsVisibleProperty.PropertyName] = MapTabBarIsVisible
-                };
-
-        public static CommandMapper<ShellItem, SimpleShellItemHandler> CommandMapper =
-                new CommandMapper<ShellItem, SimpleShellItemHandler>(ElementCommandMapper);
-
-
+        
         public SimpleShellItemHandler(IPropertyMapper mapper, CommandMapper commandMapper)
             : base(mapper ?? Mapper, commandMapper ?? CommandMapper)
         {
@@ -92,6 +92,15 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         private void OnCurrentShellSectionPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+        }
+
+        protected override void DisconnectHandler(SectionContainer platformView)
+        {
+            base.DisconnectHandler(platformView);
+
+            shellSectionContainer = null;
+            currentShellSection = null;
+            currentShellSectionHandler = null;
         }
 
         public static void MapTabBarIsVisible(SimpleShellItemHandler handler, ShellItem item)

@@ -82,6 +82,17 @@ namespace SimpleToolkit.Core.Handlers
             base.ConnectHandler(platformView);
         }
 
+        protected override void DisconnectHandler(SimpleContentPanel platformView)
+        {
+            platformView.Dispose();
+            platformView.RemoveHandler(UIElement.PointerPressedEvent, pointerPressedHandler);
+            platformView.RemoveHandler(UIElement.PointerReleasedEvent, pointerReleasedHandler);
+            platformView.RemoveHandler(UIElement.PointerExitedEvent, pointerExitedHandler);
+            platformView.RemoveHandler(UIElement.KeyDownEvent, keyDownHandler);
+
+            base.DisconnectHandler(platformView);
+        }
+
         private void OnPointerPressed(object sender, PointerRoutedEventArgs e)
         {
             var position = e.GetCurrentPoint(PlatformView).Position;

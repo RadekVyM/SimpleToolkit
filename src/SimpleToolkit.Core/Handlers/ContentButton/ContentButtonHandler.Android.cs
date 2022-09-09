@@ -20,12 +20,24 @@ namespace SimpleToolkit.Core.Handlers
 
             platformView.SetAccessibilityDelegate(new ButtonAccessibilityDelegate());
             platformView.Clickable = true;
-            var v = platformView.NextFocusDownId;
 
+            return platformView;
+        }
+
+        protected override void ConnectHandler(ContentViewGroup platformView)
+        {
             platformView.Touch += PlatformViewTouch;
             platformView.Click += PlatformViewClick;
 
-            return platformView;
+            base.ConnectHandler(platformView);
+        }
+
+        protected override void DisconnectHandler(ContentViewGroup platformView)
+        {
+            platformView.Touch -= PlatformViewTouch;
+            platformView.Click -= PlatformViewClick;
+
+            base.DisconnectHandler(platformView);
         }
 
         private void PlatformViewClick(object sender, EventArgs e)

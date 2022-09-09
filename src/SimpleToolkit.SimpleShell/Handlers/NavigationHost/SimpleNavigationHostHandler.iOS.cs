@@ -1,4 +1,4 @@
-﻿#if __IOS__ || MACCATALYST
+﻿#if IOS || MACCATALYST
 
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
@@ -39,7 +39,8 @@ namespace SimpleToolkit.SimpleShell.Handlers
         public virtual void SetContent(UIView view)
         {
             Container.ClearSubviews();
-            Container.AddSubview(view);
+            if (view is not null)
+                Container.AddSubview(view);
         }
     }
 }

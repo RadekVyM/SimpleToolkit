@@ -229,7 +229,9 @@
     </Tab>
     
     <shell:SimpleShell.Content>
-        <Grid x:Name="rootContainer" RowDefinitions="auto, auto, *, auto">
+        <Grid
+            x:Name="rootContainer"
+            RowDefinitions="auto, auto, *, auto">
             <Grid
                 x:Name="appBar"
                 Padding="12"
@@ -268,6 +270,11 @@
                         </core:Icon.Source>
                     </core:Icon>
                 </core:ContentButton>
+
+                <Button
+                    Grid.Column="2"
+                    Clicked="SwapButtonClicked"
+                    Text="Swap"/>
 
                 <core:ContentButton
                     x:Name="designButton"
