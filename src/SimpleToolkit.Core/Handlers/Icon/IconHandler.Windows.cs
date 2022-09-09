@@ -51,11 +51,21 @@ namespace SimpleToolkit.Core.Handlers
                 VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center,
             };
 
-            fontIcon.SizeChanged += FontIconSizeChanged;
-
             var container = new WBorder();
 
             return container;
+        }
+
+        protected override void ConnectHandler(WBorder platformView)
+        {
+            fontIcon.SizeChanged += FontIconSizeChanged;
+            base.ConnectHandler(platformView);
+        }
+
+        protected override void DisconnectHandler(WBorder platformView)
+        {
+            fontIcon.SizeChanged -= FontIconSizeChanged;
+            base.DisconnectHandler(platformView);
         }
 
         private void FontIconSizeChanged(object sender, Microsoft.UI.Xaml.SizeChangedEventArgs e)

@@ -39,8 +39,6 @@ namespace SimpleToolkit.Core.Handlers
             {
                 var location = g.LocationInView(g.View);
 
-                System.Diagnostics.Debug.WriteLine("👋");
-
                 switch (g.State)
                 {
                     case UIGestureRecognizerState.Ended:

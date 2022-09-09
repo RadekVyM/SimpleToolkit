@@ -10,7 +10,7 @@ using Path = Microsoft.UI.Xaml.Shapes.Path;
 
 namespace SimpleToolkit.Core.Handlers
 {
-    public class SimpleContentPanel : Panel
+    public class SimpleContentPanel : Panel, IDisposable
     {
         private readonly Path borderPath;
         private IShape borderShape;
@@ -46,6 +46,14 @@ namespace SimpleToolkit.Core.Handlers
                 return;
 
             borderPath.UpdateBorderShape(this.borderShape, ActualWidth, ActualHeight);
+        }
+
+        public void Dispose()
+        {
+            Clicked = null;
+            CrossPlatformMeasure = null;
+            CrossPlatformArrange = null;
+            SizeChanged -= ContentPanelSizeChanged;
         }
 
         protected override AutomationPeer OnCreateAutomationPeer()
@@ -110,7 +118,6 @@ namespace SimpleToolkit.Core.Handlers
                 Children.Add(borderPath);
             }
         }
-
 
         private class ContentButtonAutomationPeer : FrameworkElementAutomationPeer, IInvokeProvider
         {
