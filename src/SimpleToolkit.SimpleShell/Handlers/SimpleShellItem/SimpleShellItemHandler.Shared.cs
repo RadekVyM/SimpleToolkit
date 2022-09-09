@@ -14,14 +14,14 @@ namespace SimpleToolkit.SimpleShell.Handlers
     public partial class SimpleShellItemHandler : IAppearanceObserver
     {
         public static PropertyMapper<ShellItem, SimpleShellItemHandler> Mapper =
-                new PropertyMapper<ShellItem, SimpleShellItemHandler>(ElementMapper)
-                {
-                    [nameof(ShellItem.CurrentItem)] = MapCurrentItem,
-                    [Shell.TabBarIsVisibleProperty.PropertyName] = MapTabBarIsVisible
-                };
+            new PropertyMapper<ShellItem, SimpleShellItemHandler>(ElementMapper)
+            {
+                [nameof(ShellItem.CurrentItem)] = MapCurrentItem,
+                [Shell.TabBarIsVisibleProperty.PropertyName] = MapTabBarIsVisible
+            };
 
         public static CommandMapper<ShellItem, SimpleShellItemHandler> CommandMapper =
-                new CommandMapper<ShellItem, SimpleShellItemHandler>(ElementCommandMapper);
+            new CommandMapper<ShellItem, SimpleShellItemHandler>(ElementCommandMapper);
 
         protected SectionContainer shellSectionContainer;
         protected ShellSection currentShellSection;
