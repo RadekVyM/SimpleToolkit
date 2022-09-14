@@ -2,13 +2,21 @@
 
 SimpleToolkit is a .NET MAUI library of helpers and simple, easily customizable controls.
 
-The library consists of three packages:
+The library consists of three NuGet packages:
 
-- [SimpleToolkit.Core](#simpletoolkitcore)
+- [SimpleToolkit.Core](#simpletoolkitcore) - set of simple .NET MAUI controls and helpers
 
-- [SimpleToolkit.SimpleShell](#simpletoolkitsimpleshell)
+    [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.Core.svg?label=SimpleToolkit.Core)](https://www.nuget.org/packages/SimpleToolkit.Core/)
 
-- [SimpleToolkit.SimpleShell.Controls](#simpletoolkitsimpleshellcontrols)
+- [SimpleToolkit.SimpleShell](#simpletoolkitsimpleshell) - simplified implementation of .NET MAUI `Shell`
+
+    [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.svg?label=SimpleToolkit.SimpleShell)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell/)
+
+- [SimpleToolkit.SimpleShell.Controls](#simpletoolkitsimpleshellcontrols) - collection of ready-to-use, navigation-related controls
+
+    [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.Controls.svg?label=SimpleToolkit.SimpleShell.Controls)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell.Controls/)
+
+I have split the content of this library into three NuGet packages because there may be people who want to use only the `SimpleShell` control, for example, and do not want to use other controls.
 
 > ⚠ **Warning:** Long-term support is not guaranteed. Use at your own risk.
 
@@ -459,7 +467,7 @@ When a user navigates to a page that is part of the shell hierarchy, `SimpleShel
 
 #### Implementation details
 
-The `SimpleShell` class is inherited from the .NET MAUI `Shell` class, but all the handlers are implemented from the ground up. These handlers are inspired by the WinUI `Shell` handlers.
+The `SimpleShell` class is inherited from the .NET MAUI `Shell` class, but all the handlers are implemented from the ground up. These handlers are inspired by the WinUI version of `Shell` handlers.
 
 `SimpleShell` currently does not provide any page transitions. Pages are simply swapped in a container during navigation.
 
