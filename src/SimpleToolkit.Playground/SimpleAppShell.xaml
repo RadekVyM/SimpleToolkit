@@ -10,12 +10,6 @@
     xmlns:pages="clr-namespace:SimpleToolkit.SimpleShell.Playground.Views.Pages"
     x:Name="thisShell">
 
-    <!--Shell.NavBarIsVisible="False"-->
-
-    <!--<Shell.BackButtonBehavior>
-        <BackButtonBehavior IsVisible="False" Command="{Binding Source={x:Reference thisShell}, Path=BackCommand}"/>
-    </Shell.BackButtonBehavior>-->
-
 
     <shell:SimpleShell.Resources>
         <Style x:Key="MaterialTabbar" TargetType="controls:TabBar">
@@ -331,8 +325,6 @@
                 IsScrollable="False"
                 ItemSelected="TabBarItemSelected"
                 Style="{StaticResource MaterialTabbar}"/>
-
-            <!--ItemWidthRequest="{OnPlatform WinUI=200}"-->
 
         </Grid>
     </shell:SimpleShell.Content>

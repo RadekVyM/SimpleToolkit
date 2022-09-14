@@ -74,9 +74,23 @@ namespace SimpleToolkit.SimpleShell
         {
             Navigated += SimpleShellNavigated;
             Loaded += SimpleShellLoaded;
-            Unloaded += SimpleShellUnloaded;
         }
 
+
+        protected override void OnHandlerChanging(HandlerChangingEventArgs args)
+        {
+            // TODO: If I do not comment this out, I get this exception on Android when I leave the app using the back button and then open the app again:
+            // System.InvalidOperationException: 'Handler is already being set elsewhere'
+            // But it is really weird because it looks like nothing is called in the OnHandlerChanging() method. Page do not even override it
+            // There is also the HandlerChanging event for those who need to do something on handler changing
+
+            //base.OnHandlerChanging(args);
+
+            if (args.OldHandler is not null)
+            {
+                Handler.UpdateValue(nameof(ISimpleShell.Content));
+            }
+        }
 
         private void UpdateVisualStates()
         {
@@ -176,7 +190,7 @@ namespace SimpleToolkit.SimpleShell
 
         private void SimpleShellDescendantChanged(object sender, ElementEventArgs e)
         {
-            // Update collections if logical structure of the shell changes
+            // Update collections if the logical structure of the shell changes
             if (e.Element is BaseShellItem)
             {
                 ShellSections = GetShellSections().ToList();
@@ -193,15 +207,6 @@ namespace SimpleToolkit.SimpleShell
             ShellContents = GetShellContents().ToList();
             DescendantAdded += SimpleShellDescendantChanged;
             DescendantRemoved += SimpleShellDescendantChanged;
-        }
-
-        private void SimpleShellUnloaded(object sender, EventArgs e)
-        {
-            Navigated -= SimpleShellNavigated;
-            Unloaded -= SimpleShellUnloaded;
-            Loaded -= SimpleShellLoaded;
-            DescendantAdded -= SimpleShellDescendantChanged;
-            DescendantRemoved -= SimpleShellDescendantChanged;
         }
 
         private static void OnContentChanged(BindableObject bindable, object oldValue, object newValue)
