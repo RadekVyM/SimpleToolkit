@@ -73,7 +73,7 @@ namespace SimpleToolkit.Core.Handlers
             pointerExitedHandler = new PointerEventHandler(OnPointerExited);
             keyDownHandler = new KeyEventHandler(OnKeyDown);
 
-            platformView.Clicked = VirtualView.OnClicked;
+            //platformView.Clicked = VirtualView.OnClicked;
             platformView.AddHandler(UIElement.PointerPressedEvent, pointerPressedHandler, true);
             platformView.AddHandler(UIElement.PointerReleasedEvent, pointerReleasedHandler, true);
             platformView.AddHandler(UIElement.PointerExitedEvent, pointerExitedHandler, true);
@@ -104,21 +104,23 @@ namespace SimpleToolkit.Core.Handlers
 
         private void OnPointerReleased(object sender, PointerRoutedEventArgs e)
         {
-            var position = e.GetCurrentPoint(PlatformView).Position;
-
-            VirtualView.OnClicked();
             if (!alreadyReleased)
+            {
+                var position = e.GetCurrentPoint(PlatformView).Position;
                 VirtualView.OnReleased(new Point(position.X, position.Y));
+            }
+            VirtualView.OnClicked();
 
             alreadyReleased = true;
         }
 
         private void OnPointerExited(object sender, PointerRoutedEventArgs e)
         {
-            var position = e.GetCurrentPoint(PlatformView).Position;
-
             if (!alreadyReleased)
+            {
+                var position = e.GetCurrentPoint(PlatformView).Position;
                 VirtualView.OnReleased(new Point(position.X, position.Y));
+            }
 
             alreadyReleased = true;
         }
