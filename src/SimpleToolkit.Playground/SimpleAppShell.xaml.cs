@@ -44,6 +44,19 @@ namespace SimpleToolkit.SimpleShell.Playground
             Routing.RegisterRoute(nameof(FirstGreenDetailPage), typeof(FirstGreenDetailPage));
         }
 
+        protected override void OnNavigated(ShellNavigatedEventArgs args)
+        {
+            base.OnNavigated(args);
+
+            var insets = this.Window.AddOnSafeAreaChangedListener(safeAreaPadding =>
+            {
+
+            });
+
+            this.Window.SetStatusBarAppearance(Colors.Crimson, true);
+            this.Window.SetNavigationBarAppearance(Colors.NavajoWhite, false);
+        }
+
         private async void ShellItemButtonClicked(object sender, EventArgs e)
         {
             var button = sender as Button;

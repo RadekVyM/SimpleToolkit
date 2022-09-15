@@ -34,7 +34,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Folder Include="SafeArea\" />
 		<Folder Include="Platforms\Android\" />
 		<Folder Include="Platforms\iOS\" />
 		<Folder Include="Platforms\MacCatalyst\" />
