@@ -2,7 +2,7 @@
 
 namespace SimpleToolkit.Core
 {
-    internal static class Extensions
+    internal static class TaskExtensions
     {
 #if !WEBVIEW2_MAUI
 

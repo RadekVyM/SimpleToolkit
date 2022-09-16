@@ -48,13 +48,10 @@ namespace SimpleToolkit.SimpleShell.Playground
         {
             base.OnNavigated(args);
 
-            var insets = this.Window.AddOnSafeAreaChangedListener(safeAreaPadding =>
+            this.Window.SubscribeSafeAreaChanges(safeAreaPadding =>
             {
-
+                rootContainer.Padding = safeAreaPadding;
             });
-
-            this.Window.SetStatusBarAppearance(Colors.Crimson, true);
-            this.Window.SetNavigationBarAppearance(Colors.NavajoWhite, false);
         }
 
         private async void ShellItemButtonClicked(object sender, EventArgs e)

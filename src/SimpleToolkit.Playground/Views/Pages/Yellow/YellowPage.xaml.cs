@@ -9,6 +9,14 @@ public partial class YellowPage : ContentPage
 		InitializeComponent();
     }
 
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+
+        this.Window.SetStatusBarAppearance(Colors.Crimson);
+        this.Window.SetNavigationBarAppearance(Colors.NavajoWhite, false);
+    }
+
     private async void Button_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(FirstYellowDetailPage));

@@ -22,6 +22,9 @@ namespace SimpleToolkit.SimpleShell.Playground
 
             builder.RenderContentUnderBars();
 
+            builder.SetDefaultStatusBarAppearance(Colors.Transparent, false);
+            builder.SetDefaultNavigationBarAppearance(Colors.Gray, true);
+
             if (UseSimpleShell)
             {
                 builder.UseSimpleShell();

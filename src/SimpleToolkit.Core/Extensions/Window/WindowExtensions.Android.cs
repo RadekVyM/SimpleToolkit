@@ -1,27 +1,26 @@
 ﻿#if ANDROID
+
 using AndroidX.Core.View;
 using AndroidX.AppCompat.App;
 using Android.Views;
 using Android.OS;
 using AView = Android.Views.View;
-using AWindow = Android.Views.Window;
-using MWindow = Microsoft.Maui.Controls.Window;
-#elif IOS
-using UIKit;
-#endif
-
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 
 namespace SimpleToolkit.Core
 {
-    public static class WindowExtensions
+    // https://developer.android.com/develop/ui/views/layout/edge-to-edge
+
+    public static partial class WindowExtensions
     {
-        // https://developer.android.com/develop/ui/views/layout/edge-to-edge
+        private static Color defaultStatusBarColor = Colors.Transparent;
+        private static Color defaultNavigationBarColor = Colors.Transparent;
+        private static bool defaultStatusBarLightElements = true;
+        private static bool defaultNavigationBarLightElements = true;
 
         public static MauiAppBuilder RenderContentUnderBars(this MauiAppBuilder builder)
         {
-#if ANDROID
             WindowHandler.Mapper.AppendToMapping("RenderContentUnderBars", (handler, window) =>
             {
                 var activity = handler.PlatformView as AppCompatActivity;
@@ -33,56 +32,58 @@ namespace SimpleToolkit.Core
             {
                 var activity = handler.PlatformView as AppCompatActivity;
 
+                if (window is not Element elmentWindow)
+                    return;
+
                 // If I use just activity.Window.DecorView, set colors of the bars are overridden.
-                ViewCompat.SetOnApplyWindowInsetsListener((activity.Window.DecorView as ViewGroup).GetChildAt(0), new SimpleOnApplyWindowInsetsListener());
+                ViewCompat.SetOnApplyWindowInsetsListener(
+                    (activity.Window.DecorView as ViewGroup).GetChildAt(0), 
+                    new SimpleOnApplyWindowInsetsListener(elmentWindow.Id, InvokeListenersIfChanged));
             });
-#elif IOS
-            LayoutHandler.Mapper.PrependToMapping("RenderContentUnderBars", (handler, layout) =>
-            {
-                if (layout is Layout realLayout)
-                    realLayout.IgnoreSafeArea = true;
-            });
-#endif
+
             return builder;
         }
 
         public static MauiAppBuilder SetDefaultStatusBarAppearance(this MauiAppBuilder builder, Color color = null, bool lightElements = true)
         {
-#if ANDROID
+            defaultStatusBarColor = color;
+            defaultStatusBarLightElements = lightElements;
+
             WindowHandler.Mapper.AppendToMapping("DefaultStatusBarAppearance", (handler, window) =>
             {
                 window.SetStatusBarAppearance(color, lightElements);
             });
-#endif
+
             return builder;
         }
 
         public static MauiAppBuilder SetDefaultNavigationBarAppearance(this MauiAppBuilder builder, Color color = null, bool lightElements = true)
         {
-#if ANDROID
+            defaultNavigationBarColor = color;
+            defaultStatusBarLightElements = lightElements;
+
             WindowHandler.Mapper.AppendToMapping("DefaultNavigationBarAppearance", (handler, window) =>
             {
                 window.SetNavigationBarAppearance(color, lightElements);
             });
-#endif
+
             return builder;
         }
 
-        public static void SetStatusBarAppearance(this IWindow window, Color color = null, bool lightElements = true)
+        public static void SetStatusBarAppearance(this IWindow window, Color color = null, bool? lightElements = null)
         {
-#if ANDROID
             var activity = window.Handler.PlatformView as AppCompatActivity;
 
             var windowInsetController = ViewCompat.GetWindowInsetsController(activity.Window.DecorView);
             if (windowInsetController is not null)
             {
-                windowInsetController.AppearanceLightStatusBars = !lightElements;
+                windowInsetController.AppearanceLightStatusBars = !(lightElements ?? defaultStatusBarLightElements);
             }
             else if (Build.VERSION.SdkInt < BuildVersionCodes.R)
             {
                 int uiOptions = (int)activity.Window.DecorView.SystemUiVisibility;
 
-                if (!lightElements)
+                if (!(lightElements ?? defaultStatusBarLightElements))
                     uiOptions |= (int)SystemUiFlags.LightStatusBar;
                 else
                     uiOptions &= ~(int)SystemUiFlags.LightStatusBar;
@@ -90,25 +91,23 @@ namespace SimpleToolkit.Core
                 activity.Window.DecorView.SystemUiVisibility = (StatusBarVisibility)uiOptions;
             }
 
-            activity.Window.SetStatusBarColor((color ?? Colors.Transparent).ToPlatform());
-#endif
+            activity.Window.SetStatusBarColor((color ?? defaultStatusBarColor).ToPlatform());
         }
 
-        public static void SetNavigationBarAppearance(this IWindow window, Color color = null, bool lightElements = true)
+        public static void SetNavigationBarAppearance(this IWindow window, Color color = null, bool? lightElements = null)
         {
-#if ANDROID
             var activity = window.Handler.PlatformView as AppCompatActivity;
 
             var windowInsetController = ViewCompat.GetWindowInsetsController(activity.Window.DecorView);
             if (windowInsetController is not null)
             {
-                windowInsetController.AppearanceLightNavigationBars = !lightElements;
+                windowInsetController.AppearanceLightNavigationBars = !(lightElements ?? defaultNavigationBarLightElements);
             }
             else if (Build.VERSION.SdkInt < BuildVersionCodes.R)
             {
                 int uiOptions = (int)activity.Window.DecorView.SystemUiVisibility;
 
-                if (!lightElements)
+                if (!(lightElements ?? defaultNavigationBarLightElements))
                     uiOptions |= (int)SystemUiFlags.LightNavigationBar;
                 else
                     uiOptions &= ~(int)SystemUiFlags.LightNavigationBar;
@@ -116,35 +115,31 @@ namespace SimpleToolkit.Core
                 activity.Window.DecorView.SystemUiVisibility = (StatusBarVisibility)uiOptions;
             }
 
-            activity.Window.SetNavigationBarColor((color ?? Colors.Transparent).ToPlatform());
-#endif
-        }
-
-        public static Thickness AddOnSafeAreaChangedListener(this IWindow window, Action<Thickness> listener)
-        {
-#if ANDROID
-            var platform = window.Handler.PlatformView as AppCompatActivity;
-#elif IOS
-            // Subscribe to DeviceDisplay.Current.MainDisplayInfo.MainDisplayInfoChanged and check orientation changes
-            var uiWindow = window.Handler.PlatformView as UIWindow;
-            var insets = new Thickness(uiWindow.SafeAreaInsets.Left, uiWindow.SafeAreaInsets.Top, uiWindow.SafeAreaInsets.Right, uiWindow.SafeAreaInsets.Bottom);
-
-            return insets;
-#endif
-
-            return new Thickness(0);
+            activity.Window.SetNavigationBarColor((color ?? defaultNavigationBarColor).ToPlatform());
         }
     }
 
-#if ANDROID
     internal class SimpleOnApplyWindowInsetsListener : Java.Lang.Object, IOnApplyWindowInsetsListener
     {
+        private readonly Guid windowId;
+        private readonly Action<Guid, Thickness> action;
+
+        public SimpleOnApplyWindowInsetsListener(Guid windowId, Action<Guid, Thickness> action)
+        {
+            this.windowId = windowId;
+            this.action = action;
+        }
+
         public WindowInsetsCompat OnApplyWindowInsets(AView v, WindowInsetsCompat insets)
         {
-            AndroidX.Core.Graphics.Insets barsInsets = insets.GetInsets(WindowInsetsCompat.Type.SystemBars());
+            var barsInsets = insets.GetInsets(WindowInsetsCompat.Type.SystemBars());
+            var density = DeviceDisplay.MainDisplayInfo.Density;
+
+            action?.Invoke(windowId, new Thickness(barsInsets.Left / density, barsInsets.Top / density, barsInsets.Right / density, barsInsets.Bottom / density));
 
             return insets;
         }
     }
-#endif
 }
+
+#endif
