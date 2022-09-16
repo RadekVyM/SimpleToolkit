@@ -13,8 +13,10 @@ public partial class YellowPage : ContentPage
     {
         base.OnNavigatedTo(args);
 
-        this.Window.SetStatusBarAppearance(Colors.Crimson);
+#if ANDROID
+        this.Window.SetStatusBarAppearance(Colors.Crimson, true);
         this.Window.SetNavigationBarAppearance(Colors.NavajoWhite, false);
+#endif
     }
 
     private async void Button_Clicked(object sender, EventArgs e)

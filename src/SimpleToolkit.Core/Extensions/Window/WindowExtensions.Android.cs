@@ -15,8 +15,8 @@ namespace SimpleToolkit.Core
     public static partial class WindowExtensions
     {
         private static Color defaultStatusBarColor = Colors.Transparent;
-        private static Color defaultNavigationBarColor = Colors.Transparent;
-        private static bool defaultStatusBarLightElements = true;
+        private static Color defaultNavigationBarColor = Colors.Black;
+        private static bool defaultStatusBarLightElements = false;
         private static bool defaultNavigationBarLightElements = true;
 
         public static MauiAppBuilder RenderContentUnderBars(this MauiAppBuilder builder)
@@ -26,6 +26,8 @@ namespace SimpleToolkit.Core
                 var activity = handler.PlatformView as AppCompatActivity;
 
                 WindowCompat.SetDecorFitsSystemWindows(activity.Window, false);
+
+                window.SetStatusBarAppearance();
             });
 
             WindowHandler.Mapper.AppendToMapping("Insets", (handler, window) =>
@@ -60,7 +62,7 @@ namespace SimpleToolkit.Core
         public static MauiAppBuilder SetDefaultNavigationBarAppearance(this MauiAppBuilder builder, Color color = null, bool lightElements = true)
         {
             defaultNavigationBarColor = color;
-            defaultStatusBarLightElements = lightElements;
+            defaultNavigationBarLightElements = lightElements;
 
             WindowHandler.Mapper.AppendToMapping("DefaultNavigationBarAppearance", (handler, window) =>
             {

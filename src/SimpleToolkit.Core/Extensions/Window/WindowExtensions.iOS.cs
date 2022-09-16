@@ -1,8 +1,6 @@
 ﻿#if IOS || MACCATALYST
 
-using Microsoft.Maui.Controls.Platform;
 using Microsoft.Maui.Handlers;
-using Microsoft.Maui.Platform;
 using UIKit;
 
 namespace SimpleToolkit.Core
@@ -51,24 +49,6 @@ namespace SimpleToolkit.Core
 
                 InvokeListenersIfChanged(key, GetInsets(window));
             }
-        }
-
-        public static MauiAppBuilder SetDefaultStatusBarAppearance(this MauiAppBuilder builder, Color color = null, bool lightElements = true)
-        {
-            return builder;
-        }
-
-        public static MauiAppBuilder SetDefaultNavigationBarAppearance(this MauiAppBuilder builder, Color color = null, bool lightElements = true)
-        {
-            return builder;
-        }
-
-        public static void SetStatusBarAppearance(this IWindow window, Color color = null, bool lightElements = true)
-        {
-        }
-
-        public static void SetNavigationBarAppearance(this IWindow window, Color color = null, bool lightElements = true)
-        {
         }
 
         private static Thickness GetInsets(IWindow window)
