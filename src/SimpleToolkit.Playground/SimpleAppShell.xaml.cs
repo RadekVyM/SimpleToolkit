@@ -42,16 +42,18 @@ namespace SimpleToolkit.SimpleShell.Playground
             Routing.RegisterRoute(nameof(SecondYellowDetailPage), typeof(SecondYellowDetailPage));
             Routing.RegisterRoute(nameof(ThirdYellowDetailPage), typeof(ThirdYellowDetailPage));
             Routing.RegisterRoute(nameof(FirstGreenDetailPage), typeof(FirstGreenDetailPage));
+
+            Loaded += SimpleAppShellLoaded;
         }
 
-        protected override void OnNavigated(ShellNavigatedEventArgs args)
+        private void SimpleAppShellLoaded(object sender, EventArgs e)
         {
-            base.OnNavigated(args);
+            this.Window.SubscribeToSafeAreaChanges(OnSafeAreaChanged);
+        }
 
-            this.Window.SubscribeSafeAreaChanges(safeAreaPadding =>
-            {
-                rootContainer.Padding = safeAreaPadding;
-            });
+        private void OnSafeAreaChanged(Thickness safeAreaPadding)
+        {
+            rootContainer.Padding = safeAreaPadding;
         }
 
         private async void ShellItemButtonClicked(object sender, EventArgs e)

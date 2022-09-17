@@ -14,10 +14,14 @@ These are all the controls this package has to offer:
 
 ### Getting Started
 
-In order to use controls listed above, you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
+In order to use the controls listed above, you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
 
 ```csharp
 builder.UseSimpleToolkit();
 ```
 
 ## Helpers
+
+These are all the helpers this package has to offer:
+
+- [Safe area helpers](SafeAreaHelpers.md) - helpers for managing the safe area of an application window

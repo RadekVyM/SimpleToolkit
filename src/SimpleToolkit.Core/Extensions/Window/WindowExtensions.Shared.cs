@@ -5,17 +5,17 @@
         private static readonly Dictionary<Guid, List<Action<Thickness>>> windowSafeAreaListeners = new Dictionary<Guid, List<Action<Thickness>>>();
         private static readonly Dictionary<Guid, Thickness> safeAreas = new Dictionary<Guid, Thickness>();
 
-        public static void SubscribeSafeAreaChanges(this IWindow window, Action<Thickness> listener)
+        public static void SubscribeToSafeAreaChanges(this IWindow window, Action<Thickness> listener)
         {
             if (window is not Element elementWindow)
                 return;
-                
+            
             AddListener(elementWindow.Id, listener);
 
             listener?.Invoke(GetSafeArea(elementWindow.Id));
         }
 
-        public static void UnubscribeSafeAreaChanges(this IWindow window, Action<Thickness> listener)
+        public static void UnsubscribeFromSafeAreaChanges(this IWindow window, Action<Thickness> listener)
         {
             if (window is Element elementWindow)
                 RemoveListener(elementWindow.Id, listener);

@@ -9,7 +9,7 @@ namespace SimpleToolkit.Core
     {
         public static MauiAppBuilder DisplayContentUnderBars(this MauiAppBuilder builder)
         {
-            LayoutHandler.Mapper.PrependToMapping("RenderContentUnderBars", (handler, layout) =>
+            LayoutHandler.Mapper.PrependToMapping("DisplayContentUnderBars", (handler, layout) =>
             {
                 if (layout is Layout realLayout)
                     realLayout.IgnoreSafeArea = true;

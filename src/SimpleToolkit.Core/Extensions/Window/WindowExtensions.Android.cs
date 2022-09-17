@@ -21,7 +21,7 @@ namespace SimpleToolkit.Core
 
         public static MauiAppBuilder DisplayContentUnderBars(this MauiAppBuilder builder)
         {
-            WindowHandler.Mapper.AppendToMapping("RenderContentUnderBars", (handler, window) =>
+            WindowHandler.Mapper.AppendToMapping("DisplayContentUnderBars", (handler, window) =>
             {
                 var activity = handler.PlatformView as AppCompatActivity;
 

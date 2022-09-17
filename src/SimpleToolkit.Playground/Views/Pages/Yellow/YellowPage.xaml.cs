@@ -19,6 +19,11 @@ public partial class YellowPage : ContentPage
 #endif
     }
 
+    protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
+    {
+        base.OnNavigatedFrom(args);
+    }
+
     private async void Button_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(FirstYellowDetailPage));

@@ -1,5 +1,11 @@
 # Icon
 
+In order to use the control, you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
+
+```csharp
+builder.UseSimpleToolkit();
+```
+
 Thanks to the `Icon` control, you are able to display a tinted image:
 
 ```xml

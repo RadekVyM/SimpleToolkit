@@ -1,5 +1,11 @@
 # Popover
 
+In order to use the control, you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
+
+```csharp
+builder.UseSimpleToolkit();
+```
+
 `Popover` allows you to display custom popovers (flyouts) anchored to any control:
 
 ```xml
