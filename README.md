@@ -49,186 +49,22 @@ Here are some of my samples that were built using this library:
 
 ## SimpleToolkit.Core
 
-[![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.Core.svg?label=NuGet)](https://www.nuget.org/packages/SimpleToolkit.Core/)
+[![SimpleToolkit.Core](https://img.shields.io/nuget/v/SimpleToolkit.Core.svg?label=SimpleToolkit.Core)](https://www.nuget.org/packages/SimpleToolkit.Core/)
+[![Documentation](https://img.shields.io/badge/-Documentation%20-green)](./docs/SimpleToolkit.Core)
 
 The *SimpleToolkit.Core* package is a set of simple .NET MAUI controls and helpers.
 
-### Getting Started
+These are all the controls this package has to offer:
 
-In order to use *SimpleToolkit.Core*, you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
+- [Icon](./docs/SimpleToolkit.Core/Icon.md) - control that allows you to display a tinted image
+- [ContentButton](./docs/SimpleToolkit.Core/ContentButton.md) - button that can hold whatever content you want
+- [Popover](./docs/SimpleToolkit.Core/Popover.md) - control that allows you to display custom popovers (flyouts) anchored to any control
 
-```csharp
-builder.UseSimpleToolkit();
-```
-
-### Icon
-
-Thanks to the `Icon` control, you are able to display a tinted image:
-
-```xml
-<simpleCore:Icon Source="star.png"/>
-<simpleCore:Icon Source="star.png" TintColor="Gray"/>
-<simpleCore:Icon Source="star.png" TintColor="Orange"/>
-```
-
-Output:
-
-<p align="center">
-    <img src="./images/readme/stars.png" data-canonical-src="./images/readme/stars.png" />
-</p>
-
-#### Implementation details
-
-The `Icon` class is inherited from the .NET MAUI `Image` class, but behind the scenes it is implemented in the same way as .NET MAUI `Image` only on Android and iOS. WinUI implementation is based on `BitmapIcon` and `FontIcon` controls. Because of that, the control supports only these image sources on Windows:
-
-- `FileImageSource`
-- `UriImageSource`
-- `FontImageSource`
-
-These `Image` properties are not supported at all:
-
-- `Aspect` - the default behavior is `AspectFit`
-- `IsAnimationPlaying`
-- `IsLoading`
-- `IsOpaque`
-
-### ContentButton
-
-`ContentButton` is just a button that can hold whatever content you want:
-
-```xml
-<simpleCore:ContentButton Clicked="StarButtonClicked">
-    <Border Background="Orange">
-        <Border.StrokeShape>
-            <RoundRectangle CornerRadius="6"/>
-        </Border.StrokeShape>
-        <HorizontalStackLayout Padding="12,10" Spacing="10">
-            <simpleCore:Icon
-                Source="star.png" TintColor="White"
-                VerticalOptions="Center"
-                HeightRequest="18" WidthRequest="18"/>
-            <Label
-                Text="Star this repo" TextColor="White"
-                FontAttributes="Bold"
-                VerticalOptions="Center"/>
-        </HorizontalStackLayout>
-    </Border>
-</simpleCore:ContentButton>
-```
-
-Output:
-
-<p align="center">
-    <img src="./images/readme/star_button.png" data-canonical-src="./images/readme/star_button.png" />
-</p>
-
-#### Implementation details
-
-The `ContentButton` class is inherited from the .NET MAUI `ContentView` control. `ContentButton` has these events in addition to `ContentView`s events and properties:
-
-- `Clicked` - an event that fires when the button is clicked
-- `Pressed` - an event that fires when the button is pressed
-- `Released` - an event that fires when the button is released
-
-### Popover
-
-`Popover` allows you to display custom popovers (flyouts) anchored to any control:
-
-```xml
-<Button
-    VerticalOptions="Center" HorizontalOptions="Center"
-    Clicked="ButtonClicked"
-    Text="Show popover"
-    Background="Orange">
-    <simpleCore:Popover.AttachedPopover>
-        <simpleCore:Popover>
-            <Border
-                Background="DarkOrange">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="6"/>
-                </Border.StrokeShape>
-
-                <VerticalStackLayout Padding="12,10" Spacing="10">
-                    <simpleCore:Icon
-                        Source="star.png" TintColor="White"
-                        VerticalOptions="Center"
-                        HeightRequest="25" WidthRequest="25"/>
-                    <Label
-                        Text="Star this repo" TextColor="White"
-                        FontAttributes="Bold"
-                        VerticalOptions="Center"/>
-                </VerticalStackLayout>
-            </Border>
-        </simpleCore:Popover>
-    </simpleCore:Popover.AttachedPopover>
-</Button>
-```
-
-Code behind:
-
-```csharp
-private void ButtonClicked(object sender, EventArgs e)
-{
-    var button = sender as Button;
-
-    button.ShowAttachedPopover();
-}
-```
-
-Output:
-
-<p align="center">
-    <table>
-        <tr>
-            <th>
-                <p align="center">Android</p>
-            </th>
-            <th>
-                <p align="center">iOS</p>
-            </th>
-            <th>
-                <p align="center">Windows</p>
-            </th>
-        </tr>
-        <tr>
-            <td>
-                <img src="./images/readme/android_popover.gif" data-canonical-src="./images/readme/android_popover.gif" width="200"/>
-            </td>
-            <td>
-                <img src="./images/readme/ios_popover.gif" data-canonical-src="./images/readme/android_popover.gif" width="200"/>
-            </td>
-            <td>
-                <img src="./images/readme/windows_popover.gif" data-canonical-src="./images/readme/android_popover.gif" width="200"/>
-            </td>
-        </tr>
-    </table>
-</p>
-
-#### Implementation details
-
-The `Popover` class is inherited from the .NET MAUI `Element` class. `Popover` offers these properties and methods in addition to `Element`s properties and methods:
-
-- `Content` - the popover content of type `View`
-- `Show()` - shows the popover anchored to a view you pass as a parameter
-- `Hide()` - hides the popover
-
-Use of the methods mentioned above:
-
-```csharp
-popover.Show(anchorView);
-popover.Hide();
-```
-
-Popover can be attached to a view using the `AttachedPopover` attached property. Such a popover can be displayed or hidden (dismissed) by calling the `ShowAttachedPopover()` and `HideAttachedPopover()` extension methods on the view:
-
-```csharp
-button.ShowAttachedPopover();
-button.HideAttachedPopover();
-```
+The package also contains some useful helpers for managing safe areas of an application window. For example, there are helpers that allow you to force application content to be displayed behind system bars (status and navigation bars) on Android and iOS. See [documentation](./docs/SimpleToolkit.Core/README.md).
 
 ## SimpleToolkit.SimpleShell
 
-[![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.svg?label=NuGet)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell/)
+[![SimpleToolkit.SimpleShell](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.svg?label=SimpleToolkit.SimpleShell)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell/)
 
 The *SimpleToolkit.SimpleShell* package provides you with a simplified implementation of .NET MAUI `Shell` that lets you easily create a custom navigation experience in your .NET MAUI applications.
 
@@ -473,7 +309,7 @@ The `SimpleShell` class is inherited from the .NET MAUI `Shell` class, but all t
 
 ## SimpleToolkit.SimpleShell.Controls
 
-[![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.Controls.svg?label=NuGet)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell.Controls/)
+[![SimpleToolkit.SimpleShell.Controls](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.Controls.svg?label=SimpleToolkit.SimpleShell.Controls)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell.Controls/)
 
 *SimpleToolkit.SimpleShell.Controls* is a collection of ready-to-use, navigation-related controls (not only) for `SimpleShell`.
 

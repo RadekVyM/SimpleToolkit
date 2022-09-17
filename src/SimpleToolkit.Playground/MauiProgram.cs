@@ -20,7 +20,7 @@ namespace SimpleToolkit.SimpleShell.Playground
 
             builder.UseSimpleToolkit();
 
-            builder.RenderContentUnderBars();
+            builder.DisplayContentUnderBars();
 
             if (UseSimpleShell)
             {

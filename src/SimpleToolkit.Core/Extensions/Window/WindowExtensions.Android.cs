@@ -19,7 +19,7 @@ namespace SimpleToolkit.Core
         private static bool defaultStatusBarLightElements = false;
         private static bool defaultNavigationBarLightElements = true;
 
-        public static MauiAppBuilder RenderContentUnderBars(this MauiAppBuilder builder)
+        public static MauiAppBuilder DisplayContentUnderBars(this MauiAppBuilder builder)
         {
             WindowHandler.Mapper.AppendToMapping("RenderContentUnderBars", (handler, window) =>
             {
