@@ -31,7 +31,7 @@ builder.UseSimpleToolkit();
 Output:
 
 <p align="center">
-    <img src="../../images/readme/star_button.png" data-canonical-src="../../images/readme/star_button.png" />
+    <img src="../images/star_button.png" data-canonical-src="../images/star_button.png" />
 </p>
 
 ## Implementation details

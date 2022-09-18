@@ -12,9 +12,27 @@ builder.DisplayContentUnderBars();
 
 Output:
 
-TODO: images
+<p align="center">
+    <img src="../images/pixel_behind_bars_image.png" data-canonical-src="../images/pixel_behind_bars_image.png" height="500" />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <img src="../images/iphone_behind_bars_image.png" data-canonical-src="../images/iphone_behind_bars_image.png" height="500" />
+</p>
+
+<p align="center">
+    <em><a href="https://www.freepik.com/free-photo/sandy-beach-sunset-sea-with-colorful-clouds-orange-sunlight-vertical-frame-autumn-sunsets-early-autumn-velvet-season-idea-background-splash-screen_31598694.htm#query=maui&position=2&from_view=search">Image by ededchechine</a> on Freepik</em>
+</p>
 
 The method also sets the status bar background color to transparent and the text color to dark on Android to match the look with iOS.
+
+> 
+
+### Implementation details
+
+Different approach is used on each platform:
+
+- **Android** - the method calls the `WindowCompat.SetDecorFitsSystemWindows()` method on each activity that represents a window.
+- **iOS** - the `IgnoreSafeArea` property is set to `true` on each layout that is inherited from the `Layout` class. This overrides set values of this property (in XAML) on all layouts.
+- **Windows** - this feature has not been implemented on Windows yet.
 
 ## Safe area insets
 
@@ -30,11 +48,11 @@ protected override void OnNavigatedTo(NavigatedToEventArgs args)
 
 private void OnSafeAreaChanged(Thickness safeAreaPadding)
 {
-    rootContainer.Padding = safeAreaPadding;
+    this.Padding = safeAreaPadding;
 }
 ```
 
-The `SubscribeToSafeAreaChanges()` method requires a method of type `Action<Thickess>` as a parameter. The passed method will be called every time the safe area of the window changes.
+The `SubscribeToSafeAreaChanges()` method requires a method (listener) of type `Action<Thickess>` as a parameter. The passed method is called every time the safe area of the window changes.
 
 Subscription of the safe area changes can be canceled using the `UnsubscribeFromSafeAreaChanges()` extension method. This method takes as a parameter the method that you want to unsubscribe:
 
@@ -46,3 +64,15 @@ protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
     this.Window.UnsubscribeFromSafeAreaChanges(OnSafeAreaChanged);
 }
 ```
+
+Output:
+
+<p align="center">
+    <img src="../images/pixel_safe_area_image.png" data-canonical-src="../images/pixel_safe_area_image.png" height="500" />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <img src="../images/iphone_safe_area_image.png" data-canonical-src="../images/iphone_safe_area_image.png" height="500" />
+</p>
+
+<p align="center">
+    <em><a href="https://www.freepik.com/free-photo/sandy-beach-sunset-sea-with-colorful-clouds-orange-sunlight-vertical-frame-autumn-sunsets-early-autumn-velvet-season-idea-background-splash-screen_31598694.htm#query=maui&position=2&from_view=search">Image by ededchechine</a> on Freepik</em>
+</p>

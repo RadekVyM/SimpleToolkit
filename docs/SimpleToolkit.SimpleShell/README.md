@@ -124,13 +124,13 @@ Output:
         </tr>
         <tr>
             <td>
-                <img src="../../images/readme/android_simpleshell.gif" data-canonical-src="../../images/readme/android_popover.gif" width="148"/>
+                <img src="../images/android_simpleshell.gif" data-canonical-src="../images/android_popover.gif" width="148"/>
             </td>
             <td>
-                <img src="../../images/readme/ios_simpleshell.gif" data-canonical-src="../../images/readme/android_popover.gif" width="180"/>
+                <img src="../images/ios_simpleshell.gif" data-canonical-src="../images/ios_simpleshell.gif" width="180"/>
             </td>
             <td>
-                <img src="../../images/readme/windows_simpleshell.gif" data-canonical-src="../../images/readme/android_popover.gif" width="280"/>
+                <img src="../images/windows_simpleshell.gif" data-canonical-src="../images/windows_simpleshell.gif" width="280"/>
             </td>
         </tr>
     </table>

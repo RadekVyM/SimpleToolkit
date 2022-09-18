@@ -4,7 +4,7 @@ namespace SimpleToolkit.Core
 {
     public static partial class WindowExtensions
     {
-        public static MauiAppBuilder RenderContentUnderBars(this MauiAppBuilder builder)
+        public static MauiAppBuilder DisplayContentBehindBars(this MauiAppBuilder builder)
         {
             return builder;
         }

@@ -66,13 +66,13 @@ Output:
         </tr>
         <tr>
             <td>
-                <img src="../../images/readme/android_popover.gif" data-canonical-src="../../images/readme/android_popover.gif" width="200"/>
+                <img src="../images/android_popover.gif" data-canonical-src="../images/android_popover.gif" width="200"/>
             </td>
             <td>
-                <img src="../../images/readme/ios_popover.gif" data-canonical-src="../../images/readme/android_popover.gif" width="200"/>
+                <img src="../images/ios_popover.gif" data-canonical-src="../images/android_popover.gif" width="200"/>
             </td>
             <td>
-                <img src="../../images/readme/windows_popover.gif" data-canonical-src="../../images/readme/android_popover.gif" width="200"/>
+                <img src="../images/windows_popover.gif" data-canonical-src="../images/android_popover.gif" width="200"/>
             </td>
         </tr>
     </table>

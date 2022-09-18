@@ -17,7 +17,7 @@ Thanks to the `Icon` control, you are able to display a tinted image:
 Output:
 
 <p align="center">
-    <img src="../../images/readme/stars.png" data-canonical-src="../../images/readme/stars.png" />
+    <img src="../images/stars.png" data-canonical-src="../images/stars.png" />
 </p>
 
 ## Implementation details

@@ -75,7 +75,7 @@ See [documentation](./docs/SimpleToolkit.Core) for more information.
 [![SimpleToolkit.SimpleShell](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.svg?label=SimpleToolkit.SimpleShell)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell/)
 [![Documentation](https://img.shields.io/badge/-Documentation%20-forestgreen)](./docs/SimpleToolkit.SimpleShell)
 
-The *SimpleToolkit.SimpleShell* package provides you with a simplified implementation of .NET MAUI `Shell` that lets you easily create a custom navigation experience in your .NET MAUI applications. The implementation is called simply `SimpleShell`.
+The *SimpleToolkit.SimpleShell* package provides you with a simplified implementation of .NET MAUI `Shell` that lets you easily create a custom navigation experience in your .NET MAUI applications. The implementation is simply called `SimpleShell`.
 
 All `SimpleShell` is is just a simple container for your content with the ability to put the hosting area for pages wherever you want. Thanks to that, you are able to add custom tab bars, navigation bars, flyouts, etc. to your `Shell` application while using great `Shell` URI-based navigation.
 
@@ -84,7 +84,7 @@ All `SimpleShell` is is just a simple container for your content with the abilit
 - .NET MAUI `Shell` offers a platform-specific appearance.
 - Platform-specific navigation controls that .NET MAUI `Shell` provides probably have better performance than controls composed of multiple .NET MAUI views.
 - A `SimpleShell`-based application may not have as good accessibility in some scenarios due to the lack of platform-specific navigation controls. .NET MAUI `Shell` should be accessible out of the box since it uses platform-specific controls.
-- Maybe I have implemented something wrong that has a negative impact on the performance, accessibility, or something like that.
+- Maybe I have implemented something wrong that has a negative impact on the performance, stability, accessibility, or something like that.
 
 See [documentation](./docs/SimpleToolkit.SimpleShell) for more information.
 

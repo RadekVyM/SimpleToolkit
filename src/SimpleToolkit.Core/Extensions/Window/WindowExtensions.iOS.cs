@@ -7,9 +7,9 @@ namespace SimpleToolkit.Core
 {
     public static partial class WindowExtensions
     {
-        public static MauiAppBuilder DisplayContentUnderBars(this MauiAppBuilder builder)
+        public static MauiAppBuilder DisplayContentBehindBars(this MauiAppBuilder builder)
         {
-            LayoutHandler.Mapper.PrependToMapping("DisplayContentUnderBars", (handler, layout) =>
+            LayoutHandler.Mapper.PrependToMapping("DisplayContentBehindBars", (handler, layout) =>
             {
                 if (layout is Layout realLayout)
                     realLayout.IgnoreSafeArea = true;
