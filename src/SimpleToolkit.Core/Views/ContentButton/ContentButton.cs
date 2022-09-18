@@ -1,4 +1,6 @@
-﻿namespace SimpleToolkit.Core
+﻿using System.Windows.Input;
+
+namespace SimpleToolkit.Core
 {
     /// <summary>
     /// Button that can hold whatever content you want.
@@ -6,6 +8,8 @@
     [ContentProperty(nameof(Content))]
     public class ContentButton : ContentView, IContentButton
     {
+        private const string PressedState = "Pressed";
+
         /// <summary>
         /// Event that fires when the button is clicked.
         /// </summary>
@@ -19,14 +23,34 @@
         /// </summary>
         public event EventHandler<ContentButtonEventArgs> Released;
 
+        public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(ContentButton), defaultValue: null);
+        public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(ContentButton), defaultValue: null);
+
+        public virtual ICommand Command
+        {
+            get => (ICommand)GetValue(CommandProperty);
+            set => SetValue(CommandProperty, value);
+        }
+
+        public virtual object CommandParameter
+        {
+            get => GetValue(CommandParameterProperty);
+            set => SetValue(CommandParameterProperty, value);
+        }
+
         public virtual void OnClicked()
         {
             Clicked?.Invoke(this, EventArgs.Empty);
+
+            if (Command?.CanExecute(CommandParameter) == true)
+            {
+                Command?.Execute(CommandParameter);
+            }
         }
 
         public virtual void OnPressed(Point pressPosition)
         {
-            VisualStateManager.GoToState(this, "Pressed");
+            VisualStateManager.GoToState(this, PressedState);
             Pressed?.Invoke(this, new ContentButtonEventArgs
             {
                 InteractionPosition = pressPosition

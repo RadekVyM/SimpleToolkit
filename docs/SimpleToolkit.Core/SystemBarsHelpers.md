@@ -14,7 +14,7 @@ this.Window.SetNavigationBarAppearance(color: Colors.White, lightElements: false
 Appearance of the status bar can be changed using the `SetStatusBarAppearance()` extension method of a window. Appearance of the navigation bar can be changed using the `SetNavigationBarAppearance()` extension method of a window. Both methods take two parameters:
 
 - `color` - new background color of the bar
-- `lightElements` - if text and icons should be ligth or dark
+- `lightElements` - whether text and icons should be light or dark
 
 Output:
 
