@@ -14,8 +14,8 @@ public partial class YellowPage : ContentPage
         base.OnNavigatedTo(args);
 
 #if ANDROID
-        this.Window.SetStatusBarAppearance(Colors.Crimson, true);
-        this.Window.SetNavigationBarAppearance(Colors.NavajoWhite, false);
+        this.Window.SetStatusBarAppearance(color: Colors.Crimson, lightElements: true);
+        this.Window.SetNavigationBarAppearance(color: Colors.NavajoWhite, lightElements: false);
 #endif
     }
 

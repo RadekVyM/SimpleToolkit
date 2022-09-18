@@ -22,13 +22,13 @@ Output:
 
 ## Implementation details
 
-The `Icon` class is inherited from the .NET MAUI `Image` class, but behind the scenes it is implemented in the same way as .NET MAUI `Image` only on Android and iOS. WinUI implementation is based on `BitmapIcon` and `FontIcon` controls. Because of that, the control supports only these image sources on Windows:
+The `Icon` class is inherited from the .NET MAUI `Image` class, but behind the scenes it is implemented in the same way as .NET MAUI `Image` **only** on Android and iOS. WinUI implementation is based on `BitmapIcon` and `FontIcon` controls. Because of that, the control supports only these image sources on Windows:
 
 - `FileImageSource`
 - `UriImageSource`
 - `FontImageSource`
 
-These `Image` properties are not supported at all:
+These `Image` properties are **not supported** at all:
 
 - `Aspect` - the default behavior is `AspectFit`
 - `IsAnimationPlaying`

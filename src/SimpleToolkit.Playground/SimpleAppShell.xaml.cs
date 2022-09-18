@@ -17,24 +17,24 @@ namespace SimpleToolkit.SimpleShell.Playground
 
             InitializeComponent();
 
-            designLanguagesListPopover.Items = new List<DesignLanguageItem>
-            {
-                new DesignLanguageItem("Material3", () =>
-                {
-                    VisualStateManager.GoToState(this, "Material3");
-                    designButton.HideAttachedPopover();
-                }),
-                new DesignLanguageItem("Cupertino", () =>
-                {
-                    VisualStateManager.GoToState(this, "Cupertino");
-                    designButton.HideAttachedPopover();
-                }),
-                new DesignLanguageItem("Fluent", () =>
-                {
-                    VisualStateManager.GoToState(this, "Fluent");
-                    designButton.HideAttachedPopover();
-                }),
-            };
+            //designLanguagesListPopover.Items = new List<DesignLanguageItem>
+            //{
+            //    new DesignLanguageItem("Material3", () =>
+            //    {
+            //        VisualStateManager.GoToState(this, "Material3");
+            //        designButton.HideAttachedPopover();
+            //    }),
+            //    new DesignLanguageItem("Cupertino", () =>
+            //    {
+            //        VisualStateManager.GoToState(this, "Cupertino");
+            //        designButton.HideAttachedPopover();
+            //    }),
+            //    new DesignLanguageItem("Fluent", () =>
+            //    {
+            //        VisualStateManager.GoToState(this, "Fluent");
+            //        designButton.HideAttachedPopover();
+            //    }),
+            //};
 
             VisualStateManager.GoToState(this, "Material3");
 
@@ -89,7 +89,7 @@ namespace SimpleToolkit.SimpleShell.Playground
                     ContentTemplate = new DataTemplate(typeof(OrangePage))
                 });
 
-                addButton.IsVisible = false;
+                //addButton.IsVisible = false;
             }
 
             orangeAdded = true;

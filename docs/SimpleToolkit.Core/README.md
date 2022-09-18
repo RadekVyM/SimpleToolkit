@@ -25,3 +25,4 @@ builder.UseSimpleToolkit();
 These are all the helpers this package has to offer:
 
 - [Safe area helpers](SafeAreaHelpers.md) - helpers for managing the safe area of an application window
+- [System bars helpers](SystemBarsHelpers.md) - helpers for changing the appearance of system bars on Android

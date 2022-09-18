@@ -11,7 +11,7 @@
     x:Name="thisShell">
 
 
-    <shell:SimpleShell.Resources>
+    <!--<shell:SimpleShell.Resources>
         <Style x:Key="MaterialTabbar" TargetType="controls:TabBar">
             <Setter Property="IconColor" Value="#1d192b"/>
             <Setter Property="IconSelectionColor" Value="#1d192b"/>
@@ -339,9 +339,9 @@
                 Style="{StaticResource MaterialTabbar}"/>
 
         </Grid>
-    </shell:SimpleShell.Content>
+    </shell:SimpleShell.Content>-->
 
-    <!--<ShellContent
+    <ShellContent
         Title="Icons"
         Icon="icon.png"
         ContentTemplate="{DataTemplate pages:IconPage}"
@@ -361,6 +361,7 @@
 
     <shell:SimpleShell.Content>
         <Grid
+            x:Name="rootContainer"
             RowDefinitions="50, *, 50">
             <Button
                 Clicked="BackButtonClicked"
@@ -391,6 +392,6 @@
                 </BindableLayout.ItemTemplate>
             </HorizontalStackLayout>
         </Grid>
-    </shell:SimpleShell.Content>-->
+    </shell:SimpleShell.Content>
 
 </shell:SimpleShell>

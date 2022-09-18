@@ -31,17 +31,17 @@ Here are some of my samples that were built using this library:
     <a href="https://github.com/RadekVyM/Gadgets-Store-App"><em>Gadget Store App</em></a>
 </p>
 <p align="center">
-    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-1/main/Images/navbaranimation%20gif%20720.gif" data-canonical-src="https://github.com/RadekVyM/Navbar-Animation-1" height="500" />
+    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-1/main/Images/navbaranimation%20gif%20720.gif" data-canonical-src="https://github.com/RadekVyM/Navbar-Animation-1" width="230" />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-1/main/Images/iphone_navbaranimation_1.png" data-canonical-src="https://github.com/RadekVyM/Navbar-Animation-1" height="500" />
+    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-1/main/Images/iphone_navbaranimation_1.png" data-canonical-src="https://github.com/RadekVyM/Navbar-Animation-1" width="245" />
 </p>
 <p align="center">
     <a href="https://github.com/RadekVyM/Navbar-Animation-1"><em>Navbar Animation #1</em></a>
 </p>
 <p align="center">
-    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-2/main/images/android_navbaranimation_2.gif" data-canonical-src="https://github.com/RadekVyM/Navbar-Animation-2" height="500" />
+    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-2/main/images/android_navbaranimation_2.gif" data-canonical-src="https://github.com/RadekVyM/Navbar-Animation-2" width="230" />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-2/main/images/iphone_navbaranimation_2.png" data-canonical-src="https://github.com/RadekVyM/Navbar-Animation-2" height="500" />
+    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-2/main/images/iphone_navbaranimation_2.png" data-canonical-src="https://github.com/RadekVyM/Navbar-Animation-2" width="245" />
 </p>
 <p align="center">
     <a href="https://github.com/RadekVyM/Navbar-Animation-2"><em>Navbar Animation #2</em></a>
@@ -91,6 +91,7 @@ See [documentation](./docs/SimpleToolkit.SimpleShell) for more information.
 ## SimpleToolkit.SimpleShell.Controls
 
 [![SimpleToolkit.SimpleShell.Controls](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.Controls.svg?label=SimpleToolkit.SimpleShell.Controls)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell.Controls/)
+[![Documentation](https://img.shields.io/badge/-Documentation%20-forestgreen)](./docs/SimpleToolkit.SimpleShell.Controls)
 
 *SimpleToolkit.SimpleShell.Controls* is a collection of ready-to-use, navigation-related controls (not only) for `SimpleShell`.
 
