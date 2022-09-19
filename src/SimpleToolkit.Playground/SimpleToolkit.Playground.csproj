@@ -40,6 +40,7 @@
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
 		<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
+		<MauiImage Update="Resources\Images\sandy_beach.jpg" BaseSize="164,250" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) != 'windows'" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -61,14 +62,15 @@
 	  <None Remove="Resources\Images\flame_filled.png" />
 	  <None Remove="Resources\Images\pizza_empty.png" />
 	  <None Remove="Resources\Images\pizza_filled.png" />
+	  <None Remove="Resources\Images\sandy_beach.jpg" />
 	  <None Remove="Resources\Images\settings.png" />
 	  <None Remove="Resources\Images\speaker.png" />
 	  <None Remove="Resources\Images\star.png" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)'!='DEBUG'">
-		<PackageReference Include="SimpleToolkit.SimpleShell.Controls" Version="1.0.0-preview2" />
-		<PackageReference Include="SimpleToolkit.SimpleShell" Version="1.0.0-preview2" />
+		<PackageReference Include="SimpleToolkit.SimpleShell.Controls" Version="1.0.0" />
+		<PackageReference Include="SimpleToolkit.SimpleShell" Version="1.0.0" />
 	</ItemGroup>
 		
 	<ItemGroup Condition="'$(Configuration)'=='DEBUG'">
@@ -102,6 +104,9 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Pages\IconPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Pages\ImagePage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Pages\OrangePage.xaml">

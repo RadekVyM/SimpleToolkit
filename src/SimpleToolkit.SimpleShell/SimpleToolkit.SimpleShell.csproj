@@ -23,7 +23,7 @@
 		<Authors>RadekVyM</Authors>
 		<PackageOutputPath>..\..\packages</PackageOutputPath>
 		<VersionPrefix>1.0.0</VersionPrefix>
-		<VersionSuffix>-preview2</VersionSuffix>
+		<VersionSuffix></VersionSuffix>
 		<Version>$(VersionPrefix)$(VersionSuffix)</Version>
 		<Description>Simplified implementation of .NET MAUI Shell that is part of SimpleToolkit library.</Description>
 		<PackageProjectUrl>https://github.com/RadekVyM/SimpleToolkit</PackageProjectUrl>

@@ -10,12 +10,6 @@
     xmlns:pages="clr-namespace:SimpleToolkit.SimpleShell.Playground.Views.Pages"
     x:Name="thisShell">
 
-    <!--Shell.NavBarIsVisible="False"-->
-
-    <!--<Shell.BackButtonBehavior>
-        <BackButtonBehavior IsVisible="False" Command="{Binding Source={x:Reference thisShell}, Path=BackCommand}"/>
-    </Shell.BackButtonBehavior>-->
-
 
     <shell:SimpleShell.Resources>
         <Style x:Key="MaterialTabbar" TargetType="controls:TabBar">
@@ -169,6 +163,18 @@
             Route="PopoverPage"/>
     </Tab>
 
+    <Tab
+        Title="Image"
+        Icon="avatar_empty.png"
+        controls:SimpleShellIcon.SelectedIcon="avatar_filled.png">
+        <ShellContent
+            Title="Image"
+            Icon="avatar_empty.png"
+            controls:SimpleShellIcon.SelectedIcon="avatar_filled.png"
+            ContentTemplate="{DataTemplate pages:ImagePage}"
+            Route="ImagePage"/>
+    </Tab>
+    
     <Tab Title="Flame tab" Route="FirstTab"
          Icon="flame_empty.png"
          controls:SimpleShellIcon.SelectedIcon="flame_filled.png">
@@ -241,7 +247,7 @@
                 <core:ContentButton
                     x:Name="backButton"
                     Background="Transparent"
-                    Clicked="BackButtonClicked"
+                    Command="{Binding BackCommand, Source={x:Reference thisShell}}"
                     VerticalOptions="Center">
                     <core:Icon Style="{StaticResource AppBarIcon}">
                         <core:Icon.Source>
@@ -332,8 +338,6 @@
                 ItemSelected="TabBarItemSelected"
                 Style="{StaticResource MaterialTabbar}"/>
 
-            <!--ItemWidthRequest="{OnPlatform WinUI=200}"-->
-
         </Grid>
     </shell:SimpleShell.Content>
 
@@ -357,6 +361,7 @@
 
     <shell:SimpleShell.Content>
         <Grid
+            x:Name="rootContainer"
             RowDefinitions="50, *, 50">
             <Button
                 Clicked="BackButtonClicked"

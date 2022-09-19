@@ -88,7 +88,7 @@ namespace SimpleToolkit.Core.Handlers
             return result;
         }
 
-        private void OnMeasureInvalidated(object? sender, EventArgs e)
+        private void OnMeasureInvalidated(object sender, EventArgs e)
         {
             InvalidateMeasure();
         }

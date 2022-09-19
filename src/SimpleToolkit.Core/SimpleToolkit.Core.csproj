@@ -23,7 +23,7 @@
 		<Authors>RadekVyM</Authors>
 		<PackageOutputPath>..\..\packages</PackageOutputPath>
 		<VersionPrefix>1.0.0</VersionPrefix>
-		<VersionSuffix>-preview2</VersionSuffix>
+		<VersionSuffix></VersionSuffix>
 		<Version>$(VersionPrefix)$(VersionSuffix)</Version>
 		<Description>Collection of simple .NET MAUI controls and helpers that is part of SimpleToolkit library.</Description>
 		<PackageProjectUrl>https://github.com/RadekVyM/SimpleToolkit</PackageProjectUrl>
@@ -34,7 +34,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Folder Include="SafeArea\" />
 		<Folder Include="Platforms\Android\" />
 		<Folder Include="Platforms\iOS\" />
 		<Folder Include="Platforms\MacCatalyst\" />

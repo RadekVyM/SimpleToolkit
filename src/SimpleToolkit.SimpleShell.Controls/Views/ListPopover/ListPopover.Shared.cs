@@ -259,16 +259,6 @@ namespace SimpleToolkit.SimpleShell.Controls
                 Style = new Style(typeof(ContentButton)),
                 BindingContext = item,
             };
-            // TODO: Try to remove this one Grid
-            var grid = new Grid
-            {
-                ColumnDefinitions = new ColumnDefinitionCollection(
-                    new ColumnDefinition(GridLength.Auto)),
-                Background = Colors.Transparent,
-                HorizontalOptions = LayoutOptions.Fill,
-                Style = new Style(typeof(Grid)),
-                BindingContext = item,
-            };
             var innerGrid = new Grid
             {
                 ColumnDefinitions = new ColumnDefinitionCollection(
@@ -309,13 +299,10 @@ namespace SimpleToolkit.SimpleShell.Controls
             Grid.SetColumn(image, 0);
             Grid.SetColumn(label, 1);
 
-            grid.Children.Add(innerGrid);
-
-            button.Content = grid;
+            button.Content = innerGrid;
 
             SemanticProperties.SetDescription(button, item.Title);
 
-            CompressedLayout.SetIsHeadless(grid, true);
             CompressedLayout.SetIsHeadless(innerGrid, true);
 
             return button;
@@ -363,8 +350,7 @@ namespace SimpleToolkit.SimpleShell.Controls
         {
             button.HeightRequest = listItemHeight;
 
-            var grid = button.Content as Grid;
-            var innerGrid = grid.Children[0] as Grid;
+            var innerGrid = button.Content as Grid;
             var image = innerGrid.Children[0] as Icon;
             var label = innerGrid.Children[1] as Label;
 
@@ -482,8 +468,7 @@ namespace SimpleToolkit.SimpleShell.Controls
 
             foreach (var item in allItemViews)
             {
-                var grid = item.Content as Grid;
-                var innerGrid = grid.Children[0] as Grid;
+                var innerGrid = item.Content as Grid;
                 var image = innerGrid.Children[0] as Icon;
                 var label = innerGrid.Children[1] as Label;
 
@@ -551,8 +536,7 @@ namespace SimpleToolkit.SimpleShell.Controls
                 if (listPopover.IsSelected(item))
                     continue;
 
-                var grid = item.Content as Grid;
-                var innerGrid = grid.Children[0] as Grid;
+                var innerGrid = item.Content as Grid;
                 var image = innerGrid.Children[0] as Icon;
 
                 if (newValue is not null)
@@ -572,8 +556,7 @@ namespace SimpleToolkit.SimpleShell.Controls
                 if (listPopover.IsSelected(item))
                     continue;
 
-                var grid = item.Content as Grid;
-                var innerGrid = grid.Children[0] as Grid;
+                var innerGrid = item.Content as Grid;
                 var label = innerGrid.Children[1] as Label;
 
                 if (newValue is not null)
@@ -593,8 +576,7 @@ namespace SimpleToolkit.SimpleShell.Controls
                 if (!listPopover.IsSelected(item))
                     continue;
 
-                var grid = item.Content as Grid;
-                var innerGrid = grid.Children[0] as Grid;
+                var innerGrid = item.Content as Grid;
                 var image = innerGrid.Children[0] as Icon;
 
                 if (newValue is not null)
@@ -614,8 +596,7 @@ namespace SimpleToolkit.SimpleShell.Controls
                 if (!listPopover.IsSelected(item))
                     continue;
 
-                var grid = item.Content as Grid;
-                var innerGrid = grid.Children[0] as Grid;
+                var innerGrid = item.Content as Grid;
                 var label = innerGrid.Children[1] as Label;
 
                 if (newValue is not null)

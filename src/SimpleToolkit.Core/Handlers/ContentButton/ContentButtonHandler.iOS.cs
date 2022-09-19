@@ -1,41 +1,30 @@
 ﻿#if IOS || MACCATALYST
 
-using Foundation;
 using Microsoft.Maui.Handlers;
+using SimpleToolkit.Core.Handlers.Platform;
 using UIKit;
 
 namespace SimpleToolkit.Core.Handlers
 {
     public partial class ContentButtonHandler : ContentViewHandler
     {
+        private bool alreadyReleased = true;
         private IContentButton virtualView => VirtualView as IContentButton;
 
         protected override Microsoft.Maui.Platform.ContentView CreatePlatformView()
         {
-            var platformView = base.CreatePlatformView();
+            _ = VirtualView ?? throw new InvalidOperationException($"{nameof(VirtualView)} must be set to create a {nameof(ButtonContentView)}");
+            _ = MauiContext ?? throw new InvalidOperationException($"{nameof(MauiContext)} cannot be null");
 
-            platformView.AccessibilityTraits = UIAccessibilityTrait.Button;
+            var buttonPlatformView = new ButtonContentView
+            {
+                CrossPlatformMeasure = VirtualView.CrossPlatformMeasure,
+                CrossPlatformArrange = VirtualView.CrossPlatformArrange
+            };
 
-            //platformView.AddGestureRecognizer(new UICustomGestureRecognizer(g =>
-            //{
-            //    var location = g.LocationInView(g.View);
+            buttonPlatformView.AccessibilityTraits = UIAccessibilityTrait.Button;
 
-            //    switch (g.State)
-            //    {
-            //        case UIGestureRecognizerState.Began:
-            //            virtualView.OnPressed(new Point(location.X, location.Y));
-            //            break;
-            //        case UIGestureRecognizerState.Ended:
-            //            virtualView.OnReleased(new Point(location.X, location.Y));
-            //            virtualView.OnClicked();
-            //            break;
-            //        case UIGestureRecognizerState.Failed:
-            //            virtualView.OnReleased(new Point(location.X, location.Y));
-            //            break;
-            //    }
-            //}));
-
-            platformView.AddGestureRecognizer(new UITapGestureRecognizer(g =>
+            buttonPlatformView.AddGestureRecognizer(new UITapGestureRecognizer(g =>
             {
                 var location = g.LocationInView(g.View);
 
@@ -53,87 +42,37 @@ namespace SimpleToolkit.Core.Handlers
                 }
             }));
 
-            return platformView;
+            buttonPlatformView.BeganTouching += OnBeganTouching;
+            buttonPlatformView.EndedTouching += OnEndedTouching;
+            buttonPlatformView.MovedTouching += OnMovedTouching;
+            buttonPlatformView.CancelledTouching += OnEndedTouching;
+
+            return buttonPlatformView;
         }
 
-        // TODO: Find out why my gesture recognizer conflicts with scrolling in ScrollView
-        protected class UICustomGestureRecognizer : UITapGestureRecognizer
+        private void OnBeganTouching(object sender, ContentButtonEventArgs e)
         {
-            private Action<UICustomGestureRecognizer> action;
+            alreadyReleased = false;
 
-            public UICustomGestureRecognizer(Action<UICustomGestureRecognizer> value)
+            virtualView.OnPressed(e.InteractionPosition);
+        }
+
+        private void OnEndedTouching(object sender, ContentButtonEventArgs e)
+        {
+            if (!alreadyReleased)
             {
-                this.action = value;
+                virtualView.OnReleased(e.InteractionPosition);
             }
 
-            public override void TouchesBegan(NSSet touches, UIEvent evt)
+            alreadyReleased = true;
+        }
+
+        private void OnMovedTouching(object sender, ContentButtonEventArgs e)
+        {
+            if (!alreadyReleased && sender is ButtonContentView button && !button.Bounds.Contains(e.InteractionPosition.X, e.InteractionPosition.Y))
             {
-                base.TouchesBegan(touches, evt);
-
-                State = UIGestureRecognizerState.Began;
-
-                action?.Invoke(this);
-            }
-
-            public override void TouchesEnded(NSSet touches, UIEvent evt)
-            {
-                base.TouchesEnded(touches, evt);
-
-                State = UIGestureRecognizerState.Ended;
-
-                action?.Invoke(this);
-
-                State = UIGestureRecognizerState.Possible;
-            }
-
-            public override void TouchesMoved(NSSet touches, UIEvent evt)
-            {
-                base.TouchesMoved(touches, evt);
-
-                UITouch touch = touches.AnyObject as UITouch;
-
-                if (touch is not null && !View.Frame.Contains(touch.LocationInView(View)))
-                {
-                    State = UIGestureRecognizerState.Cancelled;
-                }
-
-                action?.Invoke(this);
-            }
-
-            public override void TouchesCancelled(NSSet touches, UIEvent evt)
-            {
-                base.TouchesCancelled(touches, evt);
-
-                State = UIGestureRecognizerState.Cancelled;
-
-                action?.Invoke(this);
-            }
-
-            public override void PressesBegan(NSSet<UIPress> presses, UIPressesEvent evt)
-            {
-                base.PressesBegan(presses, evt);
-
-                State = UIGestureRecognizerState.Began;
-
-                action?.Invoke(this);
-            }
-
-            public override void PressesEnded(NSSet<UIPress> presses, UIPressesEvent evt)
-            {
-                base.PressesEnded(presses, evt);
-
-                State = UIGestureRecognizerState.Ended;
-
-                action?.Invoke(this);
-            }
-
-            public override void PressesCancelled(NSSet<UIPress> presses, UIPressesEvent evt)
-            {
-                base.PressesCancelled(presses, evt);
-
-                State = UIGestureRecognizerState.Cancelled;
-
-                action?.Invoke(this);
+                virtualView.OnReleased(e.InteractionPosition);
+                alreadyReleased = true;
             }
         }
     }
