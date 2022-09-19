@@ -19,6 +19,11 @@ namespace SimpleToolkit.Core
         private static bool defaultStatusBarLightElements = false;
         private static bool defaultNavigationBarLightElements = true;
 
+        /// <summary>
+        /// Forces application content to be displayed behind system bars (status and navigation bars) on Android and iOS.
+        /// </summary>
+        /// <param name="builder">The builder for your .NET MAUI application and services.</param>
+        /// <returns>The builder.</returns>
         public static MauiAppBuilder DisplayContentBehindBars(this MauiAppBuilder builder)
         {
             WindowHandler.Mapper.AppendToMapping("DisplayContentBehindBars", (handler, window) =>
@@ -46,6 +51,13 @@ namespace SimpleToolkit.Core
             return builder;
         }
 
+        /// <summary>
+        /// Changes the status bar appearance of all windows.
+        /// </summary>
+        /// <param name="builder">The builder for your .NET MAUI application and services.</param>
+        /// <param name="color">New background color of the status bar.</param>
+        /// <param name="lightElements">Whether text and icons should be light or dark.</param>
+        /// <returns>The builder.</returns>
         public static MauiAppBuilder SetDefaultStatusBarAppearance(this MauiAppBuilder builder, Color color = null, bool lightElements = true)
         {
             defaultStatusBarColor = color;
@@ -59,6 +71,13 @@ namespace SimpleToolkit.Core
             return builder;
         }
 
+        /// <summary>
+        /// Changes the navigation bar appearance of all windows.
+        /// </summary>
+        /// <param name="builder">The builder for your .NET MAUI application and services.</param>
+        /// <param name="color">New background color of the navigation bar.</param>
+        /// <param name="lightElements">Whether text and icons should be light or dark.</param>
+        /// <returns>The builder.</returns>
         public static MauiAppBuilder SetDefaultNavigationBarAppearance(this MauiAppBuilder builder, Color color = null, bool lightElements = true)
         {
             defaultNavigationBarColor = color;
@@ -72,6 +91,12 @@ namespace SimpleToolkit.Core
             return builder;
         }
 
+        /// <summary>
+        /// Changes the status bar appearance of a window.
+        /// </summary>
+        /// <param name="window">The window.</param>
+        /// <param name="color">New background color of the status bar.</param>
+        /// <param name="lightElements">Whether text and icons should be light or dark.</param>
         public static void SetStatusBarAppearance(this IWindow window, Color color = null, bool? lightElements = null)
         {
             var activity = window.Handler.PlatformView as AppCompatActivity;
@@ -96,6 +121,12 @@ namespace SimpleToolkit.Core
             activity.Window.SetStatusBarColor((color ?? defaultStatusBarColor).ToPlatform());
         }
 
+        /// <summary>
+        /// Changes the navigation bar appearance of a window.
+        /// </summary>
+        /// <param name="window">The window.</param>
+        /// <param name="color">New background color of the navigation bar.</param>
+        /// <param name="lightElements">Whether text and icons should be light or dark.</param>
         public static void SetNavigationBarAppearance(this IWindow window, Color color = null, bool? lightElements = null)
         {
             var activity = window.Handler.PlatformView as AppCompatActivity;

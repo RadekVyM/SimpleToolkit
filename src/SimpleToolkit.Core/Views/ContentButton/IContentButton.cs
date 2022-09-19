@@ -8,7 +8,7 @@ namespace SimpleToolkit.Core
     public interface IContentButton : IContentView
     {
         /// <summary>
-        /// Gets or sets the command to invoke when the button is activated. This is a bindable property.
+        /// Gets or sets the command to invoke when the button is clicked. This is a bindable property.
         /// </summary>
         ICommand Command { get; set; }
         /// <summary>

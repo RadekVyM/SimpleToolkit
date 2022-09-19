@@ -1,10 +1,18 @@
 ﻿namespace SimpleToolkit.Core
 {
+    /// <summary>
+    /// Helpers for managing the safe area of an application window and helpers for changing the system bars appearance on Android.
+    /// </summary>
     public static partial class WindowExtensions
     {
         private static readonly Dictionary<Guid, List<Action<Thickness>>> windowSafeAreaListeners = new Dictionary<Guid, List<Action<Thickness>>>();
         private static readonly Dictionary<Guid, Thickness> safeAreas = new Dictionary<Guid, Thickness>();
 
+        /// <summary>
+        /// Subscribes to safe area changes of the window.
+        /// </summary>
+        /// <param name="window">The window whose safe area changes you want to subscribe.</param>
+        /// <param name="listener">The listener that obtains safe area insets of type <see cref="Thickness"/>.</param>
         public static void SubscribeToSafeAreaChanges(this IWindow window, Action<Thickness> listener)
         {
             if (window is not Element elementWindow)
@@ -15,6 +23,11 @@
             listener?.Invoke(GetSafeArea(elementWindow.Id));
         }
 
+        /// <summary>
+        /// Unsubscribes from safe area changes of the window.
+        /// </summary>
+        /// <param name="window">The window whose safe area changes you want to unsubscribe.</param>
+        /// <param name="listener">The listener that you want to remove from subscription.</param>
         public static void UnsubscribeFromSafeAreaChanges(this IWindow window, Action<Thickness> listener)
         {
             if (window is Element elementWindow)

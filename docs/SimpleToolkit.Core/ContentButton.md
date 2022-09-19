@@ -36,8 +36,10 @@ Output:
 
 ## Implementation details
 
-The `ContentButton` class is inherited from the .NET MAUI `ContentView` control. `ContentButton` has these events in addition to `ContentView`s events and properties:
+The `ContentButton` class is inherited from the .NET MAUI `ContentView` control. `ContentButton` has these events and properties in addition to `ContentView`s events and properties:
 
 - `Clicked` - an event that fires when the button is clicked
 - `Pressed` - an event that fires when the button is pressed
 - `Released` - an event that fires when the button is released
+- `Command` - a command that is invoked when the button is clicked
+- `CommandParameter` - a parameter to pass to the `Command` property

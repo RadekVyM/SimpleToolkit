@@ -1,6 +1,6 @@
 # System bars helpers
 
-Helpers for changing the appearance of system bars **on Android**:
+Helpers for changing the system bars appearance **on Android**:
 
 ```csharp
 #if ANDROID
@@ -11,7 +11,7 @@ this.Window.SetNavigationBarAppearance(color: Colors.White, lightElements: false
 #endif
 ```
 
-Appearance of the status bar can be changed using the `SetStatusBarAppearance()` extension method of a window. Appearance of the navigation bar can be changed using the `SetNavigationBarAppearance()` extension method of a window. Both methods take two parameters:
+The status bar appearance of a window can be changed using the `SetStatusBarAppearance()` extension method. The navigation bar appearance of a window can be changed using the `SetNavigationBarAppearance()` extension method. Both methods take two parameters:
 
 - `color` - new background color of the bar
 - `lightElements` - whether text and icons should be light or dark
@@ -22,7 +22,7 @@ Output:
     <img src="../images/pixel_system_bars.png" data-canonical-src="../images/pixel_system_bars.png" width="220" />
 </p>
 
-> This can also be done using the [.NET MAUI Community Toolkit](https://github.com/CommunityToolkit/Maui) features that offer more options.
+> This can also be done using [.NET MAUI Community Toolkit](https://github.com/CommunityToolkit/Maui) features that offer more options.
 
 ## Default appearance
 
