@@ -52,7 +52,7 @@ private void OnSafeAreaChanged(Thickness safeAreaPadding)
 }
 ```
 
-The `SubscribeToSafeAreaChanges()` method requires a method (listener) of type `Action<Thickess>` as a parameter. The passed method is called during the call of the `SubscribeToSafeAreaChanges()` method, and then every time the safe area of the window changes.
+The `SubscribeToSafeAreaChanges()` method requires a method (listener) of type `Action<Thickness>` as a parameter. The passed method is called during the call of the `SubscribeToSafeAreaChanges()` method, and then every time the safe area of the window changes.
 
 Subscription of the safe area changes can be canceled using the `UnsubscribeFromSafeAreaChanges()` extension method. This method takes as a parameter the method you want to unsubscribe:
 
