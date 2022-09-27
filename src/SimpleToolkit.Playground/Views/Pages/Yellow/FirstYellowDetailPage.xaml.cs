@@ -9,6 +9,6 @@ public partial class FirstYellowDetailPage : ContentPage
 
     private async void Button_Clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync(nameof(SecondYellowDetailPage));
+        await Shell.Current.GoToAsync(nameof(SecondYellowDetailPage), true);
     }
 }

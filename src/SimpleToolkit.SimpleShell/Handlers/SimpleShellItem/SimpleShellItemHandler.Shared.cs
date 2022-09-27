@@ -85,7 +85,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
                 shellSectionContainer.AddSubview(currentShellSectionHandler.PlatformView);
             }
 #elif WINDOWS
-            if (PlatformView != (Microsoft.UI.Xaml.Controls.Frame)shellSectionContainer.Child)
+            if (PlatformView != (Microsoft.UI.Xaml.Controls.Grid)shellSectionContainer.Child)
                 shellSectionContainer.Child = currentShellSectionHandler.PlatformView;
 #endif
         }

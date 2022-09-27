@@ -17,7 +17,8 @@
                     FontAttributes="Bold"
                     VerticalOptions="Center" 
                     HorizontalOptions="Center" />
-                <simpleCore:ContentButton>
+                <simpleCore:ContentButton
+                    Clicked="ContentButton_Clicked">
                     <Grid Background="Purple" Padding="20">
                         <Label
                             Text="Text"

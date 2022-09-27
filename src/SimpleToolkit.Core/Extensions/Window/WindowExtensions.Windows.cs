@@ -11,6 +11,7 @@ namespace SimpleToolkit.Core
         /// <returns>The builder.</returns>
         public static MauiAppBuilder DisplayContentBehindBars(this MauiAppBuilder builder)
         {
+            // TODO: See https://github.com/dotnet/maui/pull/10273
             return builder;
         }
     }

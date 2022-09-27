@@ -1,4 +1,7 @@
 ﻿using Microsoft.Maui.Platform;
+using SimpleToolkit.SimpleShell.Transitions;
+using System;
+using System.Linq.Expressions;
 #if ANDROID
 using NavFrame = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
 using PlatformPage = Android.Views.View;
@@ -7,7 +10,7 @@ using UIKit;
 using NavFrame = UIKit.UIView;
 using PlatformPage = UIKit.UIView;
 #elif WINDOWS
-using NavFrame = Microsoft.UI.Xaml.Controls.Frame;
+using NavFrame = Microsoft.UI.Xaml.Controls.Grid;
 using PlatformPage = Microsoft.UI.Xaml.FrameworkElement;
 #elif (NETSTANDARD || !PLATFORM) || (NET6_0_OR_GREATER && !IOS && !ANDROID && !TIZEN)
 using NavFrame = System.Object;
@@ -18,6 +21,8 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 {
     public class SimpleStackNavigationManager
     {
+        protected const string TransitionAnimationKey = nameof(SimpleShellTransition);
+
         protected IMauiContext mauiContext;
         protected NavFrame navigationFrame;
         protected IView currentPage;
@@ -62,39 +67,61 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                 return;
             }
 
+            var previousPage = currentPage;
             currentPage = newPageStack[newPageStack.Count - 1];
 
             _ = currentPage ?? throw new InvalidOperationException("Navigatoin Request Contains Null Elements");
-            // Prepared for potential animations
-            if (previousNavigationStack.Count < args.NavigationStack.Count)
+
+            if (previousNavigationStack.Count == args.NavigationStack.Count || previousNavigationStack?.FirstOrDefault() != args.NavigationStack?.FirstOrDefault())
             {
-                NavigateToPage();
+                NavigateToPage(SimpleShellTransitionType.Switching);
             }
-            else if (previousNavigationStack.Count == args.NavigationStack.Count)
+            else if (previousNavigationStack.Count < args.NavigationStack.Count)
             {
-                NavigateToPage();
+                NavigateToPage(SimpleShellTransitionType.Pushing);
             }
             else
             {
-                NavigateToPage();
+                NavigateToPage(SimpleShellTransitionType.Popping);
             }
 
-            FireNavigationFinished();
-
-            void NavigateToPage()
+            void NavigateToPage(SimpleShellTransitionType transitionType)
             {
-                var pageView = GetPageView(currentPage);
+                var oldPageView = previousPage is not null ? GetPageView(previousPage) : null;
+                var newPageView = GetPageView(currentPage);
                 NavigationStack = newPageStack;
 
-#if ANDROID
-                navigationFrame.RemoveAllViews();
-                navigationFrame.AddView(pageView);
-#elif __IOS__ || MACCATALYST
-                navigationFrame.ClearSubviews();
-                navigationFrame.AddSubview(pageView);
-#elif WINDOWS
-                navigationFrame.Content = pageView;
-#endif
+                var transition = currentPage is VisualElement visualCurrentPage ? SimpleShell.GetTransition(visualCurrentPage) : null;
+                transition ??= SimpleShell.GetTransition(Shell.Current);
+
+                if (transition is not null && currentPage is VisualElement visualCurrent && previousPage is VisualElement visualPrevious)
+                {
+                    var animation = new Animation(progress =>
+                    {
+                        transition.Callback?.Invoke(new SimpleShellTransitionArgs(visualPrevious, visualCurrent, progress, transitionType));
+                    });
+
+                    visualPrevious.AbortAnimation(TransitionAnimationKey);
+
+                    transition.Starting?.Invoke(new SimpleShellTransitionArgs(visualPrevious, visualCurrent, 0, transitionType));
+
+                    AddPlatformPage(newPageView, ShouldBeAbove(transition, transitionType));
+
+                    animation.Commit(visualCurrent, TransitionAnimationKey, length: transition.Duration, finished: (v, canceled) =>
+                    {
+                        RemovePlatformPage(oldPageView);
+                        transition.Finished?.Invoke(new SimpleShellTransitionArgs(visualPrevious, visualCurrent, v, transitionType));
+
+                        FireNavigationFinished();
+                        var count = GetChildrenCount();
+                    });
+                }
+                else
+                {
+                    RemovePlatformPage(oldPageView);
+                    AddPlatformPage(newPageView);
+                    FireNavigationFinished();
+                }
             }
         }
 
@@ -102,6 +129,56 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
         {
             var pageView = page.ToPlatform(mauiContext);
             return pageView;
+        }
+
+        protected virtual void AddPlatformPage(PlatformPage newPageView, bool onTop = true)
+        {
+#if ANDROID
+            navigationFrame.AddView(newPageView);
+            if (!onTop)
+                navigationFrame.BringChildToFront(navigationFrame.GetChildAt(0));
+#elif IOS || MACCATALYST
+            navigationFrame.AddSubview(newPageView);
+
+            if (!onTop)
+                navigationFrame.BringSubviewToFront(navigationFrame.Subviews.FirstOrDefault());
+#elif WINDOWS
+            if (onTop)
+                navigationFrame.Children.Add(newPageView);
+            else
+                navigationFrame.Children.Insert(0, newPageView);
+#endif
+        }
+
+        protected virtual void RemovePlatformPage(PlatformPage oldPageView)
+        {
+#if ANDROID
+            if (oldPageView is not null)
+                navigationFrame.RemoveView(oldPageView);
+#elif IOS || MACCATALYST
+            oldPageView?.RemoveFromSuperview();
+#elif WINDOWS
+            navigationFrame.Children.Remove(oldPageView);
+#endif
+        }
+
+        private bool ShouldBeAbove(SimpleShellTransition transition, SimpleShellTransitionType transitionType)
+        {
+            return (transitionType == SimpleShellTransitionType.Pushing && transition.DestinationPageAboveOnPushing)
+                || (transitionType == SimpleShellTransitionType.Popping && transition.DestinationPageAboveOnPopping)
+                || (transitionType == SimpleShellTransitionType.Switching && transition.DestinationPageAboveOnSwitching);
+        }
+
+        private int GetChildrenCount()
+        {
+#if ANDROID
+            return navigationFrame.ChildCount;
+#elif IOS || MACCATALYST
+            return navigationFrame.Subviews.Length;
+#elif WINDOWS
+            return navigationFrame.Children.Count;
+#endif
+            return 0;
         }
 
         private void FireNavigationFinished()

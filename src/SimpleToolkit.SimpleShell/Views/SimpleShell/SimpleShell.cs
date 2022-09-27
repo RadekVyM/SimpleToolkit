@@ -1,4 +1,5 @@
 ﻿using SimpleToolkit.SimpleShell.Extensions;
+using SimpleToolkit.SimpleShell.Transitions;
 
 namespace SimpleToolkit.SimpleShell
 {
@@ -30,6 +31,21 @@ namespace SimpleToolkit.SimpleShell
         public static readonly BindableProperty CurrentShellSectionProperty = BindableProperty.Create(nameof(CurrentShellSection), typeof(ShellSection), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
         public static readonly BindableProperty ShellSectionsProperty = BindableProperty.Create(nameof(ShellSections), typeof(IReadOnlyList<ShellSection>), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
         public static readonly BindableProperty ShellContentsProperty = BindableProperty.Create(nameof(ShellContents), typeof(IReadOnlyList<ShellContent>), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
+
+        public static readonly BindableProperty TransitionProperty =
+            BindableProperty.CreateAttached("Transition", typeof(SimpleShellTransition), typeof(Page), null);
+
+        public static SimpleShellTransition GetTransition(BindableObject item)
+        {
+            _ = item ?? throw new ArgumentNullException(nameof(item));
+            return (SimpleShellTransition)item.GetValue(TransitionProperty);
+        }
+
+        public static void SetTransition(BindableObject item, SimpleShellTransition value)
+        {
+            _ = item ?? throw new ArgumentNullException(nameof(item));
+            item.SetValue(TransitionProperty, value);
+        }
 
         public static new SimpleShell Current => Shell.Current as SimpleShell;
 

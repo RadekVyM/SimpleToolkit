@@ -5,7 +5,7 @@ using PageContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrame
 #elif __IOS__ || MACCATALYST
 using PageContainer = UIKit.UIView;
 #elif WINDOWS
-using PageContainer = Microsoft.UI.Xaml.Controls.Frame;
+using PageContainer = Microsoft.UI.Xaml.Controls.Grid;
 #elif (NETSTANDARD || !PLATFORM) || (NET6_0_OR_GREATER && !IOS && !ANDROID && !TIZEN)
 using PageContainer = System.Object;
 #endif
