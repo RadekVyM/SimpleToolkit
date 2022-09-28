@@ -1,8 +1,41 @@
-﻿namespace SimpleToolkit.SimpleShell.Extensions
+﻿using SimpleToolkit.SimpleShell.Transitions;
+
+namespace SimpleToolkit.SimpleShell.Extensions
 {
-    internal static class SimpleShellExtensions
+    public static class SimpleShellExtensions
     {
-        public static IEnumerable<ShellSection> GetShellSections(this BaseShellItem baseShellItem)
+        public static void SetTransition(this Page page, SimpleShellTransition transition)
+        {
+            SimpleShell.SetTransition(page, transition);
+        }
+
+        public static void SetTransition(
+            this Page page,
+            Action<SimpleShellTransitionArgs> callback,
+            uint duration = SimpleShellTransition.DefaultDuration,
+            Action<SimpleShellTransitionArgs> starting = null,
+            Action<SimpleShellTransitionArgs> finished = null,
+            bool destinationPageAboveOnSwitching = SimpleShellTransition.DefaultDestinationPageAboveOnSwitching,
+            bool destinationPageAboveOnPushing = SimpleShellTransition.DefaultDestinationPageAboveOnPushing,
+            bool destinationPageAboveOnPopping = SimpleShellTransition.DefaultDestinationPageAboveOnPopping)
+        {
+            page.SetTransition(new SimpleShellTransition(callback, duration, starting, finished, destinationPageAboveOnSwitching, destinationPageAboveOnPushing, destinationPageAboveOnPopping));
+        }
+
+        public static void SetTransition(
+            this Page page,
+            Action<SimpleShellTransitionArgs> callback,
+            Func<SimpleShellTransitionArgs, uint> duration = null,
+            Action<SimpleShellTransitionArgs> starting = null,
+            Action<SimpleShellTransitionArgs> finished = null,
+            Func<SimpleShellTransitionArgs, bool> destinationPageAboveOnSwitching = null,
+            Func<SimpleShellTransitionArgs, bool> destinationPageAboveOnPushing = null,
+            Func<SimpleShellTransitionArgs, bool> destinationPageAboveOnPopping = null)
+        {
+            page.SetTransition(new SimpleShellTransition(callback, duration, starting, finished, destinationPageAboveOnSwitching, destinationPageAboveOnPushing, destinationPageAboveOnPopping));
+        }
+
+        internal static IEnumerable<ShellSection> GetShellSections(this BaseShellItem baseShellItem)
         {
             var list = new HashSet<ShellSection>();
 
@@ -23,7 +56,7 @@
             return list;
         }
 
-        public static IEnumerable<ShellContent> GetShellContents(this BaseShellItem baseShellItem)
+        internal static IEnumerable<ShellContent> GetShellContents(this BaseShellItem baseShellItem)
         {
             var list = new HashSet<ShellContent>();
 

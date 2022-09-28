@@ -92,7 +92,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                 NavigationStack = newPageStack;
 
                 var transition = currentPage is VisualElement visualCurrentPage ? SimpleShell.GetTransition(visualCurrentPage) : null;
-                transition ??= SimpleShell.GetTransition(Shell.Current);
+                transition ??= SimpleShell.GetTransition(SimpleShell.Current);
 
                 if (transition is not null && currentPage is VisualElement visualCurrent && previousPage is VisualElement visualPrevious)
                 {
@@ -102,12 +102,13 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                     });
 
                     visualPrevious.AbortAnimation(TransitionAnimationKey);
-
                     transition.Starting?.Invoke(new SimpleShellTransitionArgs(visualPrevious, visualCurrent, 0, transitionType));
 
-                    AddPlatformPage(newPageView, ShouldBeAbove(transition, transitionType));
+                    AddPlatformPage(newPageView, ShouldBeAbove(transition, transitionType, visualPrevious, visualCurrent));
 
-                    animation.Commit(visualCurrent, TransitionAnimationKey, length: transition.Duration, finished: (v, canceled) =>
+                    var duration = transition.Duration?.Invoke(new SimpleShellTransitionArgs(visualPrevious, visualCurrent, 0, transitionType)) ?? SimpleShellTransition.DefaultDuration;
+                    
+                    animation.Commit(visualCurrent, TransitionAnimationKey, length: duration, finished: (v, canceled) =>
                     {
                         RemovePlatformPage(oldPageView);
                         transition.Finished?.Invoke(new SimpleShellTransitionArgs(visualPrevious, visualCurrent, v, transitionType));
@@ -162,11 +163,13 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 #endif
         }
 
-        private bool ShouldBeAbove(SimpleShellTransition transition, SimpleShellTransitionType transitionType)
+        private bool ShouldBeAbove(SimpleShellTransition transition, SimpleShellTransitionType transitionType, VisualElement oldPage, VisualElement newPage)
         {
-            return (transitionType == SimpleShellTransitionType.Pushing && transition.DestinationPageAboveOnPushing)
-                || (transitionType == SimpleShellTransitionType.Popping && transition.DestinationPageAboveOnPopping)
-                || (transitionType == SimpleShellTransitionType.Switching && transition.DestinationPageAboveOnSwitching);
+            var args = new SimpleShellTransitionArgs(oldPage, newPage, 0, transitionType);
+
+            return (transitionType == SimpleShellTransitionType.Pushing && (transition.DestinationPageAboveOnPushing?.Invoke(args) ?? SimpleShellTransition.DefaultDestinationPageAboveOnPushing))
+                || (transitionType == SimpleShellTransitionType.Popping && (transition.DestinationPageAboveOnPopping?.Invoke(args) ?? SimpleShellTransition.DefaultDestinationPageAboveOnPopping))
+                || (transitionType == SimpleShellTransitionType.Switching && (transition.DestinationPageAboveOnSwitching?.Invoke(args) ?? SimpleShellTransition.DefaultDestinationPageAboveOnSwitching));
         }
 
         private int GetChildrenCount()
