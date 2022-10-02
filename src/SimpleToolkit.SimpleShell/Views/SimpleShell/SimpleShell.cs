@@ -26,6 +26,7 @@ namespace SimpleToolkit.SimpleShell
         private bool defaultShellPropertyValuesSet;
 
         public static readonly BindableProperty ContentProperty = BindableProperty.Create(nameof(Content), typeof(IView), typeof(SimpleShell), propertyChanged: OnContentChanged);
+        public static readonly BindableProperty RootPageOverlayProperty = BindableProperty.Create(nameof(RootPageOverlay), typeof(IView), typeof(SimpleShell));
         public static readonly BindableProperty CurrentPageProperty = BindableProperty.Create(nameof(CurrentPage), typeof(Page), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
         public static readonly BindableProperty CurrentShellContentProperty = BindableProperty.Create(nameof(CurrentShellContent), typeof(ShellContent), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
         public static readonly BindableProperty CurrentShellSectionProperty = BindableProperty.Create(nameof(CurrentShellSection), typeof(ShellSection), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
@@ -53,6 +54,12 @@ namespace SimpleToolkit.SimpleShell
         {
             get => (IView)GetValue(ContentProperty);
             set => SetValue(ContentProperty, value);
+        }
+
+        public virtual IView RootPageOverlay
+        {
+            get => (IView)GetValue(RootPageOverlayProperty);
+            set => SetValue(RootPageOverlayProperty, value);
         }
 
         public new Page CurrentPage

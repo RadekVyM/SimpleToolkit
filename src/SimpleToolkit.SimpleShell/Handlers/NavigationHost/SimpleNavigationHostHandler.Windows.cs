@@ -17,8 +17,8 @@ namespace SimpleToolkit.SimpleShell.Handlers
         };
 
         public WBorder Container { get; protected set; }
-        
-        
+
+
         public SimpleNavigationHostHandler(IPropertyMapper mapper, CommandMapper commandMapper)
             : base(mapper ?? Mapper, commandMapper ?? CommandMapper)
         {

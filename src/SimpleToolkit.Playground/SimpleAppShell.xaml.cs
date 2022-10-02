@@ -152,6 +152,11 @@ namespace SimpleToolkit.SimpleShell.Playground
             Content = new SimpleNavigationHost();
         }
 
+        private void ButtonClicked(object sender, EventArgs e)
+        {
+            this.RootPageOverlay = null;
+        }
+
         private record DesignLanguageItem(string Title, Action Action)
         {
             public override string ToString() => Title;

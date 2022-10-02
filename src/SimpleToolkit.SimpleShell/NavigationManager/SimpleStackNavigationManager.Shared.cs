@@ -1,7 +1,5 @@
 ﻿using Microsoft.Maui.Platform;
 using SimpleToolkit.SimpleShell.Transitions;
-using System;
-using System.Linq.Expressions;
 #if ANDROID
 using NavFrame = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
 using PlatformPage = Android.Views.View;
@@ -19,13 +17,17 @@ using PlatformPage = System.Object;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager
 {
-    public class SimpleStackNavigationManager
+    public partial class SimpleStackNavigationManager
     {
         protected const string TransitionAnimationKey = nameof(SimpleShellTransition);
+
+        private bool isCurrentPageRoot = true;
+        private bool isPreviousPageRoot = false;
 
         protected IMauiContext mauiContext;
         protected NavFrame navigationFrame;
         protected IView currentPage;
+        protected IView rootPageOverlay;
 
         public IStackNavigation StackNavigation { get; protected set; }
         public IReadOnlyList<IView> NavigationStack { get; protected set; } = new List<IView>();
@@ -69,6 +71,9 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 
             var previousPage = currentPage;
             currentPage = newPageStack[newPageStack.Count - 1];
+
+            isPreviousPageRoot = isCurrentPageRoot;
+            isCurrentPageRoot = args.NavigationStack.Count < 2;
 
             _ = currentPage ?? throw new InvalidOperationException("Navigatoin Request Contains Null Elements");
 
@@ -114,7 +119,6 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                         transition.Finished?.Invoke(new SimpleShellTransitionArgs(visualPrevious, visualCurrent, v, transitionType));
 
                         FireNavigationFinished();
-                        var count = GetChildrenCount();
                     });
                 }
                 else
@@ -126,41 +130,22 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             }
         }
 
+        public virtual void UpdateRootPageOverlay(IView rootPageOverlay)
+        {
+            if (NavigationStack is null)
+            {
+                this.rootPageOverlay = rootPageOverlay;
+                return;
+            }
+
+            ReplaceRootPageOverlay(rootPageOverlay);
+            this.rootPageOverlay = rootPageOverlay;
+        }
+
         protected virtual PlatformPage GetPageView(IView page)
         {
             var pageView = page.ToPlatform(mauiContext);
             return pageView;
-        }
-
-        protected virtual void AddPlatformPage(PlatformPage newPageView, bool onTop = true)
-        {
-#if ANDROID
-            navigationFrame.AddView(newPageView);
-            if (!onTop)
-                navigationFrame.BringChildToFront(navigationFrame.GetChildAt(0));
-#elif IOS || MACCATALYST
-            navigationFrame.AddSubview(newPageView);
-
-            if (!onTop)
-                navigationFrame.BringSubviewToFront(navigationFrame.Subviews.FirstOrDefault());
-#elif WINDOWS
-            if (onTop)
-                navigationFrame.Children.Add(newPageView);
-            else
-                navigationFrame.Children.Insert(0, newPageView);
-#endif
-        }
-
-        protected virtual void RemovePlatformPage(PlatformPage oldPageView)
-        {
-#if ANDROID
-            if (oldPageView is not null)
-                navigationFrame.RemoveView(oldPageView);
-#elif IOS || MACCATALYST
-            oldPageView?.RemoveFromSuperview();
-#elif WINDOWS
-            navigationFrame.Children.Remove(oldPageView);
-#endif
         }
 
         private bool ShouldBeAbove(SimpleShellTransition transition, SimpleShellTransitionType transitionType, VisualElement oldPage, VisualElement newPage)
