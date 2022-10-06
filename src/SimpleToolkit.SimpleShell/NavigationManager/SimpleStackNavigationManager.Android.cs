@@ -9,7 +9,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
     {
         protected virtual void AddPlatformPage(PlatformPage newPageView, bool onTop = true)
         {
-            var overlay = this.rootPageOverlay?.ToHandler(mauiContext).PlatformView;
+            var overlay = GetPlatformView(this.rootPageOverlay);
 
             if (overlay?.Id == -1)
                 overlay.Id = PlatformPage.GenerateViewId();
@@ -37,7 +37,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 
         protected virtual void RemovePlatformPage(PlatformPage oldPageView)
         {
-            var overlay = this.rootPageOverlay?.ToHandler(mauiContext).PlatformView;
+            var overlay = GetPlatformView(this.rootPageOverlay);
 
             if (oldPageView is not null)
                 navigationFrame.RemoveView(oldPageView);
@@ -47,8 +47,8 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 
         protected virtual void ReplaceRootPageOverlay(IView rootPageOverlay)
         {
-            var oldOverlay = this.rootPageOverlay?.ToHandler(mauiContext).PlatformView;
-            var newOverlay = rootPageOverlay?.ToHandler(mauiContext).PlatformView;
+            var oldOverlay = GetPlatformView(this.rootPageOverlay);
+            var newOverlay = GetPlatformView(rootPageOverlay);
 
             if (oldOverlay?.Id == -1)
                 oldOverlay.Id = PlatformPage.GenerateViewId();
@@ -57,10 +57,16 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 
             if (oldOverlay is not null)
                 navigationFrame.RemoveView(oldOverlay);
-            if (newOverlay is not null && isCurrentPageRoot)
+            if (newOverlay is not null && isCurrentPageRoot && navigationFrame.FindViewById(newOverlay.Id) is null)
                 navigationFrame.AddView(newOverlay);
         }
 
+        private PlatformPage GetPlatformView(IView view)
+        {
+            var handler = view?.ToHandler(mauiContext);
+
+            return handler?.ContainerView ?? handler?.PlatformView;
+        }
     }
 }
 

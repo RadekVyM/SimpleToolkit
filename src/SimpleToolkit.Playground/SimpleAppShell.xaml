@@ -235,7 +235,9 @@
     </Tab>
 
     <shell:SimpleShell.RootPageOverlay>
-        <Grid>
+        <Grid
+            InputTransparent="True"
+            CascadeInputTransparent="False">
             <Button
                 Text="👋"
                 Clicked="ButtonClicked"
