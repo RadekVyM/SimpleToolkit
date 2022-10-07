@@ -60,13 +60,6 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             if (newOverlay is not null && isCurrentPageRoot && navigationFrame.FindViewById(newOverlay.Id) is null)
                 navigationFrame.AddView(newOverlay);
         }
-
-        private PlatformPage GetPlatformView(IView view)
-        {
-            var handler = view?.ToHandler(mauiContext);
-
-            return handler?.ContainerView ?? handler?.PlatformView;
-        }
     }
 }
 

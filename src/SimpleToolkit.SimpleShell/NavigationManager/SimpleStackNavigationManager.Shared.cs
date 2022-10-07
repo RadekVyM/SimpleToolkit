@@ -2,17 +2,17 @@
 using SimpleToolkit.SimpleShell.Transitions;
 #if ANDROID
 using NavFrame = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
-using PlatformPage = Android.Views.View;
+using PlatformView = Android.Views.View;
 #elif __IOS__ || MACCATALYST
 using UIKit;
 using NavFrame = UIKit.UIView;
-using PlatformPage = UIKit.UIView;
+using PlatformView = UIKit.UIView;
 #elif WINDOWS
 using NavFrame = Microsoft.UI.Xaml.Controls.Grid;
-using PlatformPage = Microsoft.UI.Xaml.FrameworkElement;
+using PlatformView = Microsoft.UI.Xaml.FrameworkElement;
 #elif (NETSTANDARD || !PLATFORM) || (NET6_0_OR_GREATER && !IOS && !ANDROID && !TIZEN)
 using NavFrame = System.Object;
-using PlatformPage = System.Object;
+using PlatformView = System.Object;
 #endif
 
 namespace SimpleToolkit.SimpleShell.NavigationManager
@@ -92,8 +92,8 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 
             void NavigateToPage(SimpleShellTransitionType transitionType)
             {
-                var oldPageView = previousPage is not null ? GetPageView(previousPage) : null;
-                var newPageView = GetPageView(currentPage);
+                var oldPageView = previousPage is not null ? GetPlatformView(previousPage) : null;
+                var newPageView = GetPlatformView(currentPage);
                 NavigationStack = newPageStack;
 
                 var transition = currentPage is VisualElement visualCurrentPage ? SimpleShell.GetTransition(visualCurrentPage) : null;
@@ -142,10 +142,11 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             this.rootPageOverlay = rootPageOverlay;
         }
 
-        protected virtual PlatformPage GetPageView(IView page)
+        protected virtual PlatformView GetPlatformView(IView view)
         {
-            var pageView = page.ToPlatform(mauiContext);
-            return pageView;
+            var handler = view?.ToHandler(mauiContext);
+
+            return handler?.ContainerView ?? handler?.PlatformView;
         }
 
         private bool ShouldBeAbove(SimpleShellTransition transition, SimpleShellTransitionType transitionType, VisualElement oldPage, VisualElement newPage)

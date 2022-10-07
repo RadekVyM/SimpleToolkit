@@ -43,8 +43,8 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 
         protected virtual void ReplaceRootPageOverlay(IView rootPageOverlay)
         {
-            var oldOverlay = this.rootPageOverlay?.ToHandler(mauiContext).PlatformView;
-            var newOverlay = rootPageOverlay?.ToHandler(mauiContext).PlatformView;
+            var oldOverlay = GetPlatformView(this.rootPageOverlay);
+            var newOverlay = GetPlatformView(rootPageOverlay);
 
             oldOverlay?.RemoveFromSuperview();
             if (newOverlay is not null && isCurrentPageRoot)
