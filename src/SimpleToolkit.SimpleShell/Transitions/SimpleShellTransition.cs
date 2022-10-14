@@ -8,15 +8,15 @@
     public enum SimpleShellTransitionType
     {
         /// <summary>
-        /// 
+        /// New root page is being set.
         /// </summary>
         Switching,
         /// <summary>
-        /// 
+        /// New page is being pushed to the navigation stack.
         /// </summary>
         Pushing,
         /// <summary>
-        /// 
+        /// Existing page is being popped from the navigation stack.
         /// </summary>
         Popping
     }
@@ -58,9 +58,9 @@
     public class SimpleShellTransition
     {
         internal const uint DefaultDuration = 250;
-        internal const bool DefaultDestinationPageAboveOnSwitching = true;
-        internal const bool DefaultDestinationPageAboveOnPushing = true;
-        internal const bool DefaultDestinationPageAboveOnPopping = true;
+        internal const bool DefaultDestinationPageInFrontOnSwitching = true;
+        internal const bool DefaultDestinationPageInFrontOnPushing = true;
+        internal const bool DefaultDestinationPageInFrontOnPopping = true;
 
         /// <summary>
         /// Callback that is called when progress of the transition changes.
@@ -79,17 +79,9 @@
         /// </summary>
         public Func<SimpleShellTransitionArgs, uint> Duration { get; }
         /// <summary>
-        /// Whether the destination page should be displayed above the origin page when switching root pages in the stack.
+        /// Whether the destination page should be displayed in front of the origin page when transitioning from one page to another.
         /// </summary>
-        public Func<SimpleShellTransitionArgs, bool> DestinationPageAboveOnSwitching { get; }
-        /// <summary>
-        /// Whether the destination page should be displayed above the origin page when pushing new page to the stack.
-        /// </summary>
-        public Func<SimpleShellTransitionArgs, bool> DestinationPageAboveOnPushing { get; }
-        /// <summary>
-        /// Whether the destination page should be displayed above the origin page when popping existing page from the stack.
-        /// </summary>
-        public Func<SimpleShellTransitionArgs, bool> DestinationPageAboveOnPopping { get; }
+        public Func<SimpleShellTransitionArgs, bool> DestinationPageInFront { get; }
 
         /// <summary>
         /// Constructor that does not allow to dynamically set some properties of the transition.
@@ -98,25 +90,29 @@
         /// <param name="duration">Duration of the transition.</param>
         /// <param name="starting">Callback that is called when the transition starts.</param>
         /// <param name="finished">Callback that is called when the transition finishes.</param>
-        /// <param name="destinationPageAboveOnSwitching">Whether the destination page should be displayed above the origin page when switching root pages in the stack.</param>
-        /// <param name="destinationPageAboveOnPushing">Whether the destination page should be displayed above the origin page when pushing new page to the stack.</param>
-        /// <param name="destinationPageAboveOnPopping">Whether the destination page should be displayed above the origin page when popping existing page from the stack.</param>
+        /// <param name="destinationPageInFrontOnSwitching">Whether the destination page should be displayed in front of the origin page when switching root pages in the stack.</param>
+        /// <param name="destinationPageInFrontOnPushing">Whether the destination page should be displayed in front of the origin page when pushing new page to the stack.</param>
+        /// <param name="destinationPageInFrontOnPopping">Whether the destination page should be displayed in front of the origin page when popping existing page from the stack.</param>
         public SimpleShellTransition(
             Action<SimpleShellTransitionArgs> callback,
             uint duration = DefaultDuration,
             Action<SimpleShellTransitionArgs> starting = null,
             Action<SimpleShellTransitionArgs> finished = null,
-            bool destinationPageAboveOnSwitching = DefaultDestinationPageAboveOnSwitching,
-            bool destinationPageAboveOnPushing = DefaultDestinationPageAboveOnPushing,
-            bool destinationPageAboveOnPopping = DefaultDestinationPageAboveOnPopping)
+            bool destinationPageInFrontOnSwitching = DefaultDestinationPageInFrontOnSwitching,
+            bool destinationPageInFrontOnPushing = DefaultDestinationPageInFrontOnPushing,
+            bool destinationPageInFrontOnPopping = DefaultDestinationPageInFrontOnPopping)
         {
             Callback = callback;
             Duration = (args) => duration;
             Finished = finished;
             Starting = starting;
-            DestinationPageAboveOnSwitching = (args) => destinationPageAboveOnSwitching;
-            DestinationPageAboveOnPushing = (args) => destinationPageAboveOnPushing;
-            DestinationPageAboveOnPopping = (args) => destinationPageAboveOnPopping;
+            DestinationPageInFront = (args) => args.TransitionType switch
+            {
+                SimpleShellTransitionType.Switching => destinationPageInFrontOnSwitching,
+                SimpleShellTransitionType.Pushing => destinationPageInFrontOnPushing,
+                SimpleShellTransitionType.Popping => destinationPageInFrontOnPopping,
+                _ => true
+            };
         }
 
         /// <summary>
@@ -126,25 +122,25 @@
         /// <param name="duration">Duration of the transition.</param>
         /// <param name="starting">Callback that is called when the transition starts.</param>
         /// <param name="finished">Callback that is called when the transition finishes.</param>
-        /// <param name="destinationPageAboveOnSwitching">Whether the destination page should be displayed above the origin page when switching root pages in the stack.</param>
-        /// <param name="destinationPageAboveOnPushing">Whether the destination page should be displayed above the origin page when pushing new page to the stack.</param>
-        /// <param name="destinationPageAboveOnPopping">Whether the destination page should be displayed above the origin page when popping existing page from the stack.</param>
+        /// <param name="destinationPageInFront">Whether the destination page should be displayed in front of the origin page when transitioning from one page to another.</param>
         public SimpleShellTransition(
             Action<SimpleShellTransitionArgs> callback,
             Func<SimpleShellTransitionArgs, uint> duration = null,
             Action<SimpleShellTransitionArgs> starting = null,
             Action<SimpleShellTransitionArgs> finished = null,
-            Func<SimpleShellTransitionArgs, bool> destinationPageAboveOnSwitching = null,
-            Func<SimpleShellTransitionArgs, bool> destinationPageAboveOnPushing = null,
-            Func<SimpleShellTransitionArgs, bool> destinationPageAboveOnPopping = null)
+            Func<SimpleShellTransitionArgs, bool> destinationPageInFront = null)
         {
             Callback = callback;
             Duration = duration ?? ((args) => DefaultDuration);
             Finished = finished;
             Starting = starting;
-            DestinationPageAboveOnSwitching = destinationPageAboveOnSwitching ?? ((args) => DefaultDestinationPageAboveOnSwitching);
-            DestinationPageAboveOnPushing = destinationPageAboveOnPushing ?? ((args) => DefaultDestinationPageAboveOnPushing);
-            DestinationPageAboveOnPopping = destinationPageAboveOnPopping ?? ((args) => DefaultDestinationPageAboveOnPopping);
+            DestinationPageInFront = destinationPageInFront ?? ((args) => args.TransitionType switch
+            {
+                SimpleShellTransitionType.Switching => DefaultDestinationPageInFrontOnSwitching,
+                SimpleShellTransitionType.Pushing => DefaultDestinationPageInFrontOnPushing,
+                SimpleShellTransitionType.Popping => DefaultDestinationPageInFrontOnPopping,
+                _ => true
+            });
         }
     }
 }

@@ -2,7 +2,7 @@
 using SimpleToolkit.SimpleShell.NavigationManager;
 #if ANDROID
 using PageContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
-#elif __IOS__ || MACCATALYST
+#elif IOS || MACCATALYST
 using PageContainer = UIKit.UIView;
 #elif WINDOWS
 using PageContainer = Microsoft.UI.Xaml.Controls.Grid;

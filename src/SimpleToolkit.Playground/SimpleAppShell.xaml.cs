@@ -56,19 +56,17 @@ namespace SimpleToolkit.SimpleShell.Playground
                         args.DestinationPage.Opacity = args.Progress;
                         break;
                     case SimpleShellTransitionType.Pushing:
-                        //args.OriginPage.Scale = 1 - args.Progress;
                         args.DestinationPage.Opacity = args.DestinationPage.Width < 0 ? 0 : 1;
-
-                        // if I use just TranslationX, it is not applied on iOS
+#if IOS
+                        // If I use just TranslationX, it is not applied on iOS
                         args.DestinationPage.Scale = 0.99 + (0.01 * args.Progress);
-
+#endif
                         args.DestinationPage.TranslationX = (1 - args.Progress) * args.DestinationPage.Width;
                         break;
                     case SimpleShellTransitionType.Popping:
-                        //args.DestinationPage.Scale = args.Progress;
-                        //args.OriginPage.Scale = 1 - args.Progress;
+#if IOS
                         args.OriginPage.Scale = 0.99 + (0.01 * (1 - args.Progress));
-
+#endif
                         args.OriginPage.TranslationX = args.Progress * args.OriginPage.Width;
                         break;
                 }
@@ -81,7 +79,7 @@ namespace SimpleToolkit.SimpleShell.Playground
                 args.OriginPage.Opacity = 1;
                 args.DestinationPage.Opacity = 1;
             },
-            destinationPageAboveOnPopping: false);
+            destinationPageInFrontOnPopping: false);
         }
 
         private void SimpleAppShellLoaded(object sender, EventArgs e)

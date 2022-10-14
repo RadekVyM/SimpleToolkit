@@ -8,7 +8,7 @@ namespace SimpleToolkit.SimpleShell
     // 2) Implement it myself in my SimpleShellSectionHandler - This can be a waste of time if 1) comes true
     // I am waiting for transition to handler architecture and then I will see
     // I have set default visibility of the toolbar to hidden for now
-    
+
     /// <summary>
     /// An implementation of <see cref="Shell"/> that lets you define your custom navigation experience. 
     /// </summary>
@@ -106,12 +106,14 @@ namespace SimpleToolkit.SimpleShell
             // System.InvalidOperationException: 'Handler is already being set elsewhere'
             // But it is really weird because it looks like nothing is called in the OnHandlerChanging() method. Page do not even override it
             // There is also the HandlerChanging event for those who need to do something on handler changing
+            // This situation overall causes problems - e.g. when I try to navigate to deeper to the stack after coming back to the app, the app crashes with 'pending navigation' exception
 
             //base.OnHandlerChanging(args);
 
+
             if (args.OldHandler is not null)
             {
-                Handler.UpdateValue(nameof(ISimpleShell.Content));
+                //Handler.UpdateValue(nameof(ISimpleShell.Content));
             }
         }
 

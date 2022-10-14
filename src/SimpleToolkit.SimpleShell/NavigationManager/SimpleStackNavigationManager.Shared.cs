@@ -112,12 +112,12 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                     AddPlatformPage(newPageView, ShouldBeAbove(transition, transitionType, visualPrevious, visualCurrent));
 
                     var duration = transition.Duration?.Invoke(new SimpleShellTransitionArgs(visualPrevious, visualCurrent, 0, transitionType)) ?? SimpleShellTransition.DefaultDuration;
-                    
+
                     animation.Commit(visualCurrent, TransitionAnimationKey, length: duration, finished: (v, canceled) =>
                     {
                         RemovePlatformPage(oldPageView);
                         transition.Finished?.Invoke(new SimpleShellTransitionArgs(visualPrevious, visualCurrent, v, transitionType));
-
+                        
                         FireNavigationFinished();
                     });
                 }
@@ -153,9 +153,13 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
         {
             var args = new SimpleShellTransitionArgs(oldPage, newPage, 0, transitionType);
 
-            return (transitionType == SimpleShellTransitionType.Pushing && (transition.DestinationPageAboveOnPushing?.Invoke(args) ?? SimpleShellTransition.DefaultDestinationPageAboveOnPushing))
-                || (transitionType == SimpleShellTransitionType.Popping && (transition.DestinationPageAboveOnPopping?.Invoke(args) ?? SimpleShellTransition.DefaultDestinationPageAboveOnPopping))
-                || (transitionType == SimpleShellTransitionType.Switching && (transition.DestinationPageAboveOnSwitching?.Invoke(args) ?? SimpleShellTransition.DefaultDestinationPageAboveOnSwitching));
+            return transition.DestinationPageInFront?.Invoke(args) ?? transitionType switch
+            {
+                SimpleShellTransitionType.Pushing => SimpleShellTransition.DefaultDestinationPageInFrontOnPushing,
+                SimpleShellTransitionType.Popping => SimpleShellTransition.DefaultDestinationPageInFrontOnPopping,
+                SimpleShellTransitionType.Switching => SimpleShellTransition.DefaultDestinationPageInFrontOnSwitching,
+                _ => true
+            };
         }
 
         private int GetChildrenCount()
