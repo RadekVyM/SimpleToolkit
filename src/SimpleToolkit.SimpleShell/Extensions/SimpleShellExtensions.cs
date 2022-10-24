@@ -1,4 +1,5 @@
 ﻿using SimpleToolkit.SimpleShell.Transitions;
+using static System.TimeZoneInfo;
 
 namespace SimpleToolkit.SimpleShell.Extensions
 {
@@ -56,6 +57,41 @@ namespace SimpleToolkit.SimpleShell.Extensions
             Func<SimpleShellTransitionArgs, bool> destinationPageInFront = null)
         {
             page.SetTransition(new SimpleShellTransition(callback, duration, starting, finished, destinationPageInFront));
+        }
+
+        /// <summary>
+        /// Sets new transition to the page.
+        /// </summary>
+        /// <param name="page">Destination page of a navigation with this transition.</param>
+        /// <param name="switchingCallback">Callback that is called when progress of the switching transition changes.</param>
+        /// <param name="pushingCallback">Callback that is called when progress of the pushing transition changes.</param>
+        /// <param name="poppingCallback">Callback that is called when progress of the popping transition changes.</param>
+        /// <param name="duration">Duration of the transition.</param>
+        /// <param name="starting">Callback that is called when the transition starts.</param>
+        /// <param name="finished">Callback that is called when the transition finishes.</param>
+        /// <param name="destinationPageInFront">Whether the destination page should be displayed in front of the origin page when transitioning from one page to another.</param>
+        public static void SetTransition(
+            this Page page,
+            Action<SimpleShellTransitionArgs> switchingCallback = null,
+            Action<SimpleShellTransitionArgs> pushingCallback = null,
+            Action<SimpleShellTransitionArgs> poppingCallback = null,
+            Func<SimpleShellTransitionArgs, uint> duration = null,
+            Action<SimpleShellTransitionArgs> starting = null,
+            Action<SimpleShellTransitionArgs> finished = null,
+            Func<SimpleShellTransitionArgs, bool> destinationPageInFront = null)
+        {
+            page.SetTransition(new SimpleShellTransition(args =>
+            {
+                var action = args.TransitionType switch
+                {
+                    SimpleShellTransitionType.Switching => switchingCallback,
+                    SimpleShellTransitionType.Pushing => pushingCallback,
+                    SimpleShellTransitionType.Popping => poppingCallback,
+                    _ => null
+                };
+
+                action?.Invoke(args);
+            }, duration, starting, finished, destinationPageInFront));
         }
 
         internal static IEnumerable<ShellSection> GetShellSections(this BaseShellItem baseShellItem)

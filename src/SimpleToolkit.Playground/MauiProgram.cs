@@ -4,7 +4,7 @@ namespace SimpleToolkit.SimpleShell.Playground
 {
     public static class MauiProgram
     {
-        public const bool UseSimpleShell = true;
+        internal const AppShellType UsedAppShell = AppShellType.Sample;
 
         public static MauiApp CreateMauiApp()
         {
@@ -27,7 +27,7 @@ namespace SimpleToolkit.SimpleShell.Playground
             builder.SetDefaultNavigationBarAppearance(color: Colors.White, lightElements: false);
 #endif
 
-            if (UseSimpleShell)
+            if (UsedAppShell is not AppShellType.Normal)
             {
                 builder.UseSimpleShell();
             }

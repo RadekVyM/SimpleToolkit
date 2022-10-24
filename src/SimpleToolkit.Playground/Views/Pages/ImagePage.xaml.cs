@@ -1,4 +1,4 @@
-using SimpleToolkit.SimpleShell.Transitions;
+using SimpleToolkit.SimpleShell.Extensions;
 
 namespace SimpleToolkit.SimpleShell.Playground.Views.Pages;
 
@@ -8,17 +8,16 @@ public partial class ImagePage : ContentPage
 	{
 		InitializeComponent();
 
-        SimpleShell.SetTransition(this, new SimpleShellTransition(args =>
-        {
-            args.OriginPage.TranslationY = args.Progress * (-args.OriginPage.Height);
-            args.DestinationPage.TranslationY = (1 - args.Progress) * (args.DestinationPage.Height);
-        },
-        500,
-        finished: args =>
-        {
-            args.OriginPage.TranslationY = 0;
-            args.DestinationPage.TranslationY = 0;
-        }));
+        this.SetTransition(
+            callback: args =>
+            {
+                args.DestinationPage.Scale = args.Progress;
+            },
+            500,
+            finished: args =>
+            {
+                args.DestinationPage.Scale = 1;
+            });
 	}
 
     //protected override void OnNavigatedTo(NavigatedToEventArgs args)

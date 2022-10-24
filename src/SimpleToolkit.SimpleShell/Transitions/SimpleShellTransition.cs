@@ -22,7 +22,7 @@
     }
 
     /// <summary>
-    /// Arguments of a page transition in in <see cref="SimpleShell"/>.
+    /// Arguments of a transition during navigation between two pages in <see cref="SimpleShell"/>.
     /// </summary>
     public class SimpleShellTransitionArgs
     {
@@ -35,7 +35,7 @@
         /// </summary>
         public VisualElement DestinationPage { get; protected set; }
         /// <summary>
-        /// Progress of the transition.
+        /// Progress of the transition. Number between 0 and 1.
         /// </summary>
         public double Progress { get; protected set; }
         /// <summary>

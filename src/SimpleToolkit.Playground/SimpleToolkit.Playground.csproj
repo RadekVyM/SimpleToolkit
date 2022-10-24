@@ -82,6 +82,9 @@
 	  <MauiXaml Update="NormalAppShell.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="SampleAppShell.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="SimpleAppShell.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
