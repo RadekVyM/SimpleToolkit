@@ -19,7 +19,7 @@
 		<PackageId>SimpleToolkit.SimpleShell</PackageId>
 		<Title>SimpleToolkit.SimpleShell</Title>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<PackageTags>MAUI, Controls, Shell, Navigation</PackageTags>
+		<PackageTags>MAUI, Controls, Shell, Navigation, Transitions</PackageTags>
 		<Authors>RadekVyM</Authors>
 		<PackageOutputPath>..\..\packages</PackageOutputPath>
 		<VersionPrefix>1.1.0</VersionPrefix>
