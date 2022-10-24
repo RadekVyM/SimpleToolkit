@@ -1,4 +1,5 @@
 ﻿using SimpleToolkit.SimpleShell.Extensions;
+using SimpleToolkit.SimpleShell.Transitions;
 
 namespace SimpleToolkit.SimpleShell
 {
@@ -7,7 +8,7 @@ namespace SimpleToolkit.SimpleShell
     // 2) Implement it myself in my SimpleShellSectionHandler - This can be a waste of time if 1) comes true
     // I am waiting for transition to handler architecture and then I will see
     // I have set default visibility of the toolbar to hidden for now
-    
+
     /// <summary>
     /// An implementation of <see cref="Shell"/> that lets you define your custom navigation experience. 
     /// </summary>
@@ -25,11 +26,27 @@ namespace SimpleToolkit.SimpleShell
         private bool defaultShellPropertyValuesSet;
 
         public static readonly BindableProperty ContentProperty = BindableProperty.Create(nameof(Content), typeof(IView), typeof(SimpleShell), propertyChanged: OnContentChanged);
+        public static readonly BindableProperty RootPageOverlayProperty = BindableProperty.Create(nameof(RootPageOverlay), typeof(IView), typeof(SimpleShell));
         public static readonly BindableProperty CurrentPageProperty = BindableProperty.Create(nameof(CurrentPage), typeof(Page), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
         public static readonly BindableProperty CurrentShellContentProperty = BindableProperty.Create(nameof(CurrentShellContent), typeof(ShellContent), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
         public static readonly BindableProperty CurrentShellSectionProperty = BindableProperty.Create(nameof(CurrentShellSection), typeof(ShellSection), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
         public static readonly BindableProperty ShellSectionsProperty = BindableProperty.Create(nameof(ShellSections), typeof(IReadOnlyList<ShellSection>), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
         public static readonly BindableProperty ShellContentsProperty = BindableProperty.Create(nameof(ShellContents), typeof(IReadOnlyList<ShellContent>), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
+
+        public static readonly BindableProperty TransitionProperty =
+            BindableProperty.CreateAttached("Transition", typeof(SimpleShellTransition), typeof(Page), null);
+
+        public static SimpleShellTransition GetTransition(BindableObject item)
+        {
+            _ = item ?? throw new ArgumentNullException(nameof(item));
+            return (SimpleShellTransition)item.GetValue(TransitionProperty);
+        }
+
+        public static void SetTransition(BindableObject item, SimpleShellTransition value)
+        {
+            _ = item ?? throw new ArgumentNullException(nameof(item));
+            item.SetValue(TransitionProperty, value);
+        }
 
         public static new SimpleShell Current => Shell.Current as SimpleShell;
 
@@ -37,6 +54,12 @@ namespace SimpleToolkit.SimpleShell
         {
             get => (IView)GetValue(ContentProperty);
             set => SetValue(ContentProperty, value);
+        }
+
+        public virtual IView RootPageOverlay
+        {
+            get => (IView)GetValue(RootPageOverlayProperty);
+            set => SetValue(RootPageOverlayProperty, value);
         }
 
         public new Page CurrentPage
@@ -83,12 +106,14 @@ namespace SimpleToolkit.SimpleShell
             // System.InvalidOperationException: 'Handler is already being set elsewhere'
             // But it is really weird because it looks like nothing is called in the OnHandlerChanging() method. Page do not even override it
             // There is also the HandlerChanging event for those who need to do something on handler changing
+            // This situation overall causes problems - e.g. when I try to navigate to deeper to the stack after coming back to the app, the app crashes with 'pending navigation' exception
 
             //base.OnHandlerChanging(args);
 
+
             if (args.OldHandler is not null)
             {
-                Handler.UpdateValue(nameof(ISimpleShell.Content));
+                //Handler.UpdateValue(nameof(ISimpleShell.Content));
             }
         }
 

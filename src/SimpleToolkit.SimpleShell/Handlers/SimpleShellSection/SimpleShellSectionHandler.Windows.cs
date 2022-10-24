@@ -1,16 +1,16 @@
 ﻿#if WINDOWS
 
 using Microsoft.Maui.Handlers;
-using WFrame = Microsoft.UI.Xaml.Controls.Frame;
+using WGrid = Microsoft.UI.Xaml.Controls.Grid;
 
 namespace SimpleToolkit.SimpleShell.Handlers
 {
-    public partial class SimpleShellSectionHandler : ElementHandler<ShellSection, WFrame>
+    public partial class SimpleShellSectionHandler : ElementHandler<ShellSection, WGrid>
     {
-        protected override WFrame CreatePlatformElement()
+        protected override WGrid CreatePlatformElement()
         {
             navigationManager = CreateNavigationManager();
-            return new WFrame();
+            return new WGrid();
         }
     }
 }

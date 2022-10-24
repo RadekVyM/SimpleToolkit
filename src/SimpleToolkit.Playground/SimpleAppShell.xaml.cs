@@ -1,6 +1,8 @@
 ﻿using SimpleToolkit.Core;
 using SimpleToolkit.SimpleShell.Controls;
 using SimpleToolkit.SimpleShell.Playground.Views.Pages;
+using SimpleToolkit.SimpleShell.Transitions;
+using SimpleToolkit.SimpleShell.Extensions;
 using System.Windows.Input;
 
 namespace SimpleToolkit.SimpleShell.Playground
@@ -44,6 +46,40 @@ namespace SimpleToolkit.SimpleShell.Playground
             Routing.RegisterRoute(nameof(FirstGreenDetailPage), typeof(FirstGreenDetailPage));
 
             Loaded += SimpleAppShellLoaded;
+
+            this.SetTransition(args =>
+            {
+                switch (args.TransitionType)
+                {
+                    case SimpleShellTransitionType.Switching:
+                        args.OriginPage.Opacity = 1 - args.Progress;
+                        args.DestinationPage.Opacity = args.Progress;
+                        break;
+                    case SimpleShellTransitionType.Pushing:
+                        args.DestinationPage.Opacity = args.DestinationPage.Width < 0 ? 0 : 1;
+#if IOS
+                        // If I use just TranslationX, it is not applied on iOS
+                        args.DestinationPage.Scale = 0.99 + (0.01 * args.Progress);
+#endif
+                        args.DestinationPage.TranslationX = (1 - args.Progress) * args.DestinationPage.Width;
+                        break;
+                    case SimpleShellTransitionType.Popping:
+#if IOS
+                        args.OriginPage.Scale = 0.99 + (0.01 * (1 - args.Progress));
+#endif
+                        args.OriginPage.TranslationX = args.Progress * args.OriginPage.Width;
+                        break;
+                }
+            },
+            250,
+            finished: args =>
+            {
+                args.DestinationPage.TranslationX = 0;
+                args.OriginPage.TranslationX = 0;
+                args.OriginPage.Opacity = 1;
+                args.DestinationPage.Opacity = 1;
+            },
+            destinationPageInFrontOnPopping: false);
         }
 
         private void SimpleAppShellLoaded(object sender, EventArgs e)
@@ -62,13 +98,13 @@ namespace SimpleToolkit.SimpleShell.Playground
             var shellItem = button.BindingContext as BaseShellItem;
 
             if (!CurrentState.Location.OriginalString.Contains(shellItem.Route))
-                await this.GoToAsync($"///{shellItem.Route}");
+                await this.GoToAsync($"///{shellItem.Route}", true);
         }
 
         private async void TabBarItemSelected(object sender, TabItemSelectedEventArgs e)
         {
             if (!CurrentState.Location.OriginalString.Contains(e.ShellItem.Route))
-                await this.GoToAsync($"///{e.ShellItem.Route}");
+                await this.GoToAsync($"///{e.ShellItem.Route}", true);
         }
 
         private async void BackButtonClicked(object sender, EventArgs e)
@@ -112,6 +148,11 @@ namespace SimpleToolkit.SimpleShell.Playground
         private void SwapButtonClicked(object sender, EventArgs e)
         {
             Content = new SimpleNavigationHost();
+        }
+
+        private void ButtonClicked(object sender, EventArgs e)
+        {
+            this.RootPageOverlay = null;
         }
 
         private record DesignLanguageItem(string Title, Action Action)

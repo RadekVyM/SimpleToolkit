@@ -20,7 +20,7 @@
                         VerticalOptions="Center"
                         HeightRequest="18" WidthRequest="18"/>
                     <Label
-                        Text="Star this repo" TextColor="White"
+                        Text="Show Image Page" TextColor="White"
                         FontAttributes="Bold"
                         VerticalOptions="Center"/>
                 </HorizontalStackLayout>

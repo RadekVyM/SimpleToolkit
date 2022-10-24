@@ -22,6 +22,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
         {
             [nameof(ISimpleShell.CurrentItem)] = MapCurrentItem,
             [nameof(ISimpleShell.Content)] = MapContent,
+            [nameof(ISimpleShell.RootPageOverlay)] = MapRootPageOverlay,
         };
 
         public static CommandMapper<ISimpleShell, SimpleShellHandler> CommandMapper = new(ViewHandler.ViewCommandMapper)
@@ -68,14 +69,16 @@ namespace SimpleToolkit.SimpleShell.Handlers
             var handler = CreateShellItemHandler();
             if (handler.VirtualView != newItem)
                 handler.SetVirtualView(newItem);
+
+            UpdateRootPageOverlay(VirtualView.RootPageOverlay);
         }
 
         protected virtual SimpleShellItemHandler CreateShellItemHandler()
         {
             var itemHandler = (SimpleShellItemHandler)VirtualView.CurrentItem.ToHandler(MauiContext);
 
-            if (itemHandler.PlatformView != GetNavigationHostContent())
-                (navigationHost?.Handler as SimpleNavigationHostHandler)?.SetContent(itemHandler.PlatformView);
+            if (itemHandler.PlatformView != GetNavigationHostContent() && navigationHost?.Handler is SimpleNavigationHostHandler navHostHandler)
+                navHostHandler.SetContent(itemHandler.PlatformView);
 
             if (itemHandler.VirtualView != VirtualView.CurrentItem)
                 itemHandler.SetVirtualView(VirtualView.CurrentItem);
@@ -83,10 +86,10 @@ namespace SimpleToolkit.SimpleShell.Handlers
             return itemHandler;
         }
 
-        protected virtual void UpdateContent(View content)
+        protected virtual void UpdateContent(IView content)
         {
-            if (navigationHost is not null)
-                (navigationHost?.Handler as SimpleNavigationHostHandler)?.SetContent(null);
+            if (navigationHost is not null && navigationHost?.Handler is SimpleNavigationHostHandler navHostHandler)
+                navHostHandler.SetContent(null);
 
             var platformContent = content.ToHandler(MauiContext).PlatformView;
             platformViewHasContent = platformContent is not null;
@@ -113,6 +116,14 @@ namespace SimpleToolkit.SimpleShell.Handlers
             navigationHost = VirtualView.Content.FindSimpleNavigationHost();
         }
 
+        protected virtual void UpdateRootPageOverlay(IView view)
+        {
+            if (VirtualView?.CurrentItem?.Handler is null || VirtualView.CurrentItem.Handler is not SimpleShellItemHandler shellItemHandler)
+                return;
+
+            shellItemHandler.SetRootPageOverlay(view);
+        }
+
         protected override void DisconnectHandler(PlatformShell platformView)
         {
             base.DisconnectHandler(platformView);
@@ -128,11 +139,13 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         public static void MapContent(SimpleShellHandler handler, ISimpleShell shell)
         {
-            if (shell.Content is not View viewContent)
-                return;
-
-            handler.UpdateContent(viewContent);
+            handler.UpdateContent(shell.Content);
             handler.UpdateValue(nameof(ISimpleShell.CurrentItem));
+        }
+
+        public static void MapRootPageOverlay(SimpleShellHandler handler, ISimpleShell shell)
+        {
+            handler.UpdateRootPageOverlay(shell.RootPageOverlay);
         }
     }
 }

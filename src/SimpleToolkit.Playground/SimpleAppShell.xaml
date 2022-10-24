@@ -233,6 +233,21 @@
             ContentTemplate="{DataTemplate pages:PurplePage}"
             Route="PurplePage" />
     </Tab>
+
+    <shell:SimpleShell.RootPageOverlay>
+        <Grid
+            InputTransparent="True"
+            CascadeInputTransparent="False">
+            <Button
+                Text="👋"
+                Clicked="ButtonClicked"
+                Background="Black"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                Margin="15"
+                CornerRadius="20"/>
+        </Grid>
+    </shell:SimpleShell.RootPageOverlay>
     
     <shell:SimpleShell.Content>
         <Grid

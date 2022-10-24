@@ -9,7 +9,7 @@
 
         private void StarButtonClicked(object sender, EventArgs e)
         {
-            Shell.Current.GoToAsync(nameof(FirstGreenDetailPage));
+            Shell.Current.GoToAsync(nameof(ImagePage));
         }
     }
 }

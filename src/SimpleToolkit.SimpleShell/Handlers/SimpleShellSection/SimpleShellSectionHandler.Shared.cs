@@ -2,10 +2,10 @@
 using SimpleToolkit.SimpleShell.NavigationManager;
 #if ANDROID
 using PageContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
-#elif __IOS__ || MACCATALYST
+#elif IOS || MACCATALYST
 using PageContainer = UIKit.UIView;
 #elif WINDOWS
-using PageContainer = Microsoft.UI.Xaml.Controls.Frame;
+using PageContainer = Microsoft.UI.Xaml.Controls.Grid;
 #elif (NETSTANDARD || !PLATFORM) || (NET6_0_OR_GREATER && !IOS && !ANDROID && !TIZEN)
 using PageContainer = System.Object;
 #endif
@@ -26,9 +26,12 @@ namespace SimpleToolkit.SimpleShell.Handlers
                 [nameof(IStackNavigation.RequestNavigation)] = RequestNavigation
             };
 
+        private ShellContent currentShellContent;
+        private bool navigationStackCanBeAdded = false;
+        private IView rootPageOverlay;
+
         protected SimpleStackNavigationManager navigationManager;
         protected ShellSection shellSection;
-
 
         public SimpleShellSectionHandler(IPropertyMapper mapper, CommandMapper commandMapper)
             : base(mapper ?? Mapper, commandMapper ?? CommandMapper)
@@ -72,6 +75,12 @@ namespace SimpleToolkit.SimpleShell.Handlers
             }
         }
 
+        public virtual void SetRootPageOverlay(IView rootPageOverlay)
+        {
+            this.rootPageOverlay = rootPageOverlay;
+            navigationManager?.UpdateRootPageOverlay(rootPageOverlay);
+        }
+
         public virtual void OnAppearanceChanged(ShellAppearance appearance)
         {
         }
@@ -79,6 +88,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
         protected override void ConnectHandler(PageContainer platformView)
         {
             navigationManager?.Connect(VirtualView, platformView);
+            navigationManager?.UpdateRootPageOverlay(rootPageOverlay);
             base.ConnectHandler(platformView);
         }
 
@@ -92,9 +102,6 @@ namespace SimpleToolkit.SimpleShell.Handlers
         {
             SyncNavigationStack(false);
         }
-
-        ShellContent currentShellContent;
-        bool navigationStackCanBeAdded = false;
 
         protected virtual void SyncNavigationStack(bool animated)
         {

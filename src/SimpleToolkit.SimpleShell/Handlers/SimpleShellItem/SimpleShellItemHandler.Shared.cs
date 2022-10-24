@@ -23,11 +23,11 @@ namespace SimpleToolkit.SimpleShell.Handlers
         public static CommandMapper<ShellItem, SimpleShellItemHandler> CommandMapper =
             new CommandMapper<ShellItem, SimpleShellItemHandler>(ElementCommandMapper);
 
+        protected IView rootPageOverlay;
         protected SectionContainer shellSectionContainer;
         protected ShellSection currentShellSection;
         protected SimpleShellSectionHandler currentShellSectionHandler;
 
-        
         public SimpleShellItemHandler(IPropertyMapper mapper, CommandMapper commandMapper)
             : base(mapper ?? Mapper, commandMapper ?? CommandMapper)
         {
@@ -41,6 +41,13 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         public virtual void OnAppearanceChanged(ShellAppearance appearance)
         {
+        }
+
+        public virtual void SetRootPageOverlay(IView rootPageOverlay)
+        {
+            this.rootPageOverlay = rootPageOverlay;
+
+            currentShellSectionHandler?.SetRootPageOverlay(rootPageOverlay);
         }
 
         protected void UpdateCurrentItem()
@@ -62,6 +69,8 @@ namespace SimpleToolkit.SimpleShell.Handlers
                 if (currentShellSectionHandler.VirtualView != VirtualView.CurrentItem)
                     currentShellSectionHandler.SetVirtualView(VirtualView.CurrentItem);
             }
+
+            currentShellSectionHandler?.SetRootPageOverlay(rootPageOverlay);
 
             //UpdateSearchHandler();
             //MapMenuItems();
@@ -85,7 +94,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
                 shellSectionContainer.AddSubview(currentShellSectionHandler.PlatformView);
             }
 #elif WINDOWS
-            if (PlatformView != (Microsoft.UI.Xaml.Controls.Frame)shellSectionContainer.Child)
+            if (PlatformView != (Microsoft.UI.Xaml.Controls.Grid)shellSectionContainer.Child)
                 shellSectionContainer.Child = currentShellSectionHandler.PlatformView;
 #endif
         }
@@ -101,6 +110,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
             shellSectionContainer = null;
             currentShellSection = null;
             currentShellSectionHandler = null;
+            rootPageOverlay = null;
         }
 
         public static void MapTabBarIsVisible(SimpleShellItemHandler handler, ShellItem item)
