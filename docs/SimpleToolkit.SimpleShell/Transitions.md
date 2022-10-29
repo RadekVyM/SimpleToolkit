@@ -99,9 +99,9 @@ public AppShell()
         finished: args =>
         {
             args.OriginPage.Opacity = 1;
-            args.OriginPage.TranslationX = 1;
+            args.OriginPage.TranslationX = 0;
             args.DestinationPage.Opacity = 1;
-            args.DestinationPage.TranslationX = 1;
+            args.DestinationPage.TranslationX = 0;
         },
         destinationPageInFront: args => args.TransitionType switch {
             SimpleShellTransitionType.Popping => false,
@@ -130,14 +130,12 @@ public ImagePage()
     this.SetTransition(
         callback: args =>
         {
-            args.OriginPage.TranslationY = args.Progress * (-args.OriginPage.Height);
-            args.DestinationPage.TranslationY = (1 - args.Progress) * (args.DestinationPage.Height);
+            args.DestinationPage.Scale = args.Progress;
         },
         500,
         finished: args =>
         {
-            args.OriginPage.TranslationY = 0;
-            args.DestinationPage.TranslationY = 0;
+            args.DestinationPage.Scale = 1;
         });
 }
 ```

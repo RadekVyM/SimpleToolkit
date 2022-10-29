@@ -7,9 +7,9 @@ namespace SimpleToolkit.SimpleShell.Playground;
 
 public partial class SampleAppShell : SimpleShell
 {
-	public SampleAppShell()
-	{
-		InitializeComponent();
+    public SampleAppShell()
+    {
+        InitializeComponent();
 
         Routing.RegisterRoute(nameof(ImagePage), typeof(ImagePage));
 
@@ -33,15 +33,17 @@ public partial class SampleAppShell : SimpleShell
             finished: args =>
             {
                 args.OriginPage.Opacity = 1;
-                args.OriginPage.TranslationX = 1;
+                args.OriginPage.TranslationX = 0;
                 args.DestinationPage.Opacity = 1;
-                args.DestinationPage.TranslationX = 1;
+                args.DestinationPage.TranslationX = 0;
             },
-            destinationPageInFront: args => args.TransitionType switch {
+            destinationPageInFront: args => args.TransitionType switch
+            {
                 SimpleShellTransitionType.Popping => false,
                 _ => true
             },
-            duration: args => args.TransitionType switch {
+            duration: args => args.TransitionType switch
+            {
                 SimpleShellTransitionType.Switching => 500,
                 _ => 350
             });
