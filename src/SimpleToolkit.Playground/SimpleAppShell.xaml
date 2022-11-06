@@ -252,7 +252,7 @@
     <shell:SimpleShell.Content>
         <Grid
             x:Name="rootContainer"
-            RowDefinitions="auto, auto, *, auto">
+            RowDefinitions="70, auto, *, auto">
             <Grid
                 x:Name="appBar"
                 Padding="12"

@@ -85,7 +85,8 @@ namespace SimpleToolkit.SimpleShell.Handlers
             if (PlatformView != shellSectionContainer.GetChildAt(0))
             {
                 shellSectionContainer.RemoveAllViews();
-                shellSectionContainer.AddView(currentShellSectionHandler.PlatformView);
+                if (currentShellSectionHandler.PlatformView is not null)
+                    shellSectionContainer.AddView(currentShellSectionHandler.PlatformView);
             }
 #elif IOS || MACCATALYST
             if (PlatformView != (UIKit.UIView)shellSectionContainer.Subviews.FirstOrDefault())

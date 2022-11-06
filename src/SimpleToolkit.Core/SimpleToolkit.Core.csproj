@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0;net6.0-android;net6.0-ios;net6.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net6.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net7.0;net7.0-android;net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
 		<UseMaui>true</UseMaui>
@@ -22,7 +22,7 @@
 		<PackageTags>MAUI, Controls, Button, Popover, Icon</PackageTags>
 		<Authors>RadekVyM</Authors>
 		<PackageOutputPath>..\..\packages</PackageOutputPath>
-		<VersionPrefix>1.0.0</VersionPrefix>
+		<VersionPrefix>1.0.1</VersionPrefix>
 		<VersionSuffix></VersionSuffix>
 		<Version>$(VersionPrefix)$(VersionSuffix)</Version>
 		<Description>Collection of simple .NET MAUI controls and helpers that is part of SimpleToolkit library.</Description>
@@ -30,7 +30,7 @@
 		<RepositoryUrl>https://github.com/RadekVyM/SimpleToolkit</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageIcon>logo_with_background.png</PackageIcon>
-		<Copyright>Copyright © RadekVyM and contributors</Copyright>
+		<Copyright>Copyright © Radek Vymětalík and contributors</Copyright>
 	</PropertyGroup>
 
 	<ItemGroup>

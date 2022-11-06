@@ -9,6 +9,9 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
     {
         protected virtual void AddPlatformPage(PlatformPage newPageView, bool onTop = true)
         {
+            if (newPageView is null)
+                return;
+
             var overlay = GetPlatformView(this.rootPageOverlay);
 
             if (overlay?.Id == -1)
