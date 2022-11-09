@@ -163,18 +163,6 @@
             Route="PopoverPage"/>
     </Tab>
 
-    <Tab
-        Title="Image"
-        Icon="avatar_empty.png"
-        controls:SimpleShellIcon.SelectedIcon="avatar_filled.png">
-        <ShellContent
-            Title="Image"
-            Icon="avatar_empty.png"
-            controls:SimpleShellIcon.SelectedIcon="avatar_filled.png"
-            ContentTemplate="{DataTemplate pages:ImagePage}"
-            Route="ImagePage"/>
-    </Tab>
-    
     <Tab Title="Flame tab" Route="FirstTab"
          Icon="flame_empty.png"
          controls:SimpleShellIcon.SelectedIcon="flame_filled.png">

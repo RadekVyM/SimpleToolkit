@@ -10,7 +10,24 @@
     <VerticalStackLayout
         HorizontalOptions="Center" VerticalOptions="Center">
         <simpleCore:ContentButton Clicked="StarButtonClicked">
-            <Border Background="Orange">
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroupList>
+                    <VisualStateGroup>
+                        <VisualState x:Name="Normal"/>
+                        <VisualState x:Name="Pressed">
+                            <VisualState.Setters>
+                                <Setter TargetName="border" Property="Background" Value="OrangeRed"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="PointerOver">
+                            <VisualState.Setters>
+                                <Setter TargetName="border" Property="Background" Value="DarkOrange"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </VisualStateManager.VisualStateGroups>
+            <Border x:Name="border" Background="Orange">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="6"/>
                 </Border.StrokeShape>

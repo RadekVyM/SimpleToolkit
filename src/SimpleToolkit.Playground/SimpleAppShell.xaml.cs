@@ -40,6 +40,7 @@ namespace SimpleToolkit.SimpleShell.Playground
 
             VisualStateManager.GoToState(this, "Material3");
 
+            Routing.RegisterRoute(nameof(ImagePage), typeof(ImagePage));
             Routing.RegisterRoute(nameof(FirstYellowDetailPage), typeof(FirstYellowDetailPage));
             Routing.RegisterRoute(nameof(SecondYellowDetailPage), typeof(SecondYellowDetailPage));
             Routing.RegisterRoute(nameof(ThirdYellowDetailPage), typeof(ThirdYellowDetailPage));
