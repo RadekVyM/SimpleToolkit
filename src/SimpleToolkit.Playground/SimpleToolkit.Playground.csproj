@@ -77,6 +77,12 @@
 	  <ProjectReference Include="..\SimpleToolkit.SimpleShell.Controls\SimpleToolkit.SimpleShell.Controls.csproj" />
 	  <ProjectReference Include="..\SimpleToolkit.SimpleShell\SimpleToolkit.SimpleShell.csproj" />
 	</ItemGroup>
+		
+	<ItemGroup>
+	  <Compile Update="PlaygroundAppShell.xaml.cs">
+	    <DependentUpon>PlaygroundAppShell.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
 
 	<ItemGroup>
 	  <MauiXaml Update="NormalAppShell.xaml">
@@ -85,7 +91,7 @@
 	  <MauiXaml Update="SampleAppShell.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="SimpleAppShell.xaml">
+	  <MauiXaml Update="PlaygroundAppShell.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

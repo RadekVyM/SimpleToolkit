@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <shell:SimpleShell
-    x:Class="SimpleToolkit.SimpleShell.Playground.SimpleAppShell"
+    x:Class="SimpleToolkit.SimpleShell.Playground.PlaygroundAppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:SimpleToolkit.SimpleShell.Playground"
@@ -85,6 +85,9 @@
                     <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.IconColor" Value="Black"/>
                     <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.TextColor" Value="Black"/>
                     <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.Background" Value="#ffffff"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.IconSelectionColor" Value="#0279fc"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.TextSelectionColor" Value="#0279fc"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.Background" Value="#ffffff"/>
                     <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.DesignLanguage" Value="Cupertino"/>
 
                     <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.IconColor" Value="Black"/>
@@ -100,6 +103,7 @@
                     <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.IconColor" Value="Black"/>
                     <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.TextColor" Value="Black"/>
                     <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.Background" Value="#f3f3f3"/>
+                    <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.SelectionBrush" Value="#3b4c73"/>
                     <Setter TargetName="designLanguagesListPopover" Property="controls:ListPopover.DesignLanguage" Value="Fluent"/>
 
                     <Setter TargetName="toolbarItemsPopover" Property="controls:ListPopover.IconColor" Value="Black"/>
@@ -226,14 +230,24 @@
         <Grid
             InputTransparent="True"
             CascadeInputTransparent="False">
-            <Button
-                Text="👋"
-                Clicked="ButtonClicked"
-                Background="Black"
-                HorizontalOptions="End"
-                VerticalOptions="End"
+            <VerticalStackLayout
                 Margin="15"
-                CornerRadius="20"/>
+                Spacing="10"
+                HorizontalOptions="End"
+                VerticalOptions="End">
+                <Button
+                    Grid.Column="2"
+                    Clicked="SwapButtonClicked"
+                    Background="Black"
+                    CornerRadius="20"
+                    Text="♻"/>
+
+                <Button
+                    Text="👋"
+                    Clicked="ButtonClicked"
+                    Background="Black"
+                    CornerRadius="20"/>
+            </VerticalStackLayout>
         </Grid>
     </shell:SimpleShell.RootPageOverlay>
     
@@ -279,11 +293,6 @@
                         </core:Icon.Source>
                     </core:Icon>
                 </core:ContentButton>
-
-                <Button
-                    Grid.Column="2"
-                    Clicked="SwapButtonClicked"
-                    Text="Swap"/>
 
                 <core:ContentButton
                     x:Name="designButton"

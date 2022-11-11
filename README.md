@@ -47,6 +47,8 @@ Here are some of my samples that were built using this library:
     <a href="https://github.com/RadekVyM/Navbar-Animation-2"><em>Navbar Animation #2</em></a>
 </p>
 
+List of all samples can be seen [here](./docs/Samples.md).
+
 ## SimpleToolkit.Core
 
 [![SimpleToolkit.Core](https://img.shields.io/nuget/v/SimpleToolkit.Core.svg?label=SimpleToolkit.Core)](https://www.nuget.org/packages/SimpleToolkit.Core/)
@@ -95,16 +97,31 @@ See [documentation](./docs/SimpleToolkit.SimpleShell) for more information.
 
 *SimpleToolkit.SimpleShell.Controls* is a collection of ready-to-use, navigation-related controls (not only) for `SimpleShell`.
 
-### Getting Started
+The package currently supports only two controls:
 
-In order to use *SimpleToolkit.SimpleShell.Controls*, you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
+- `ListPopover` - popover containing a list of selectable text items
+- `TabBar`
 
-```csharp
-builder.UseSimpleToolkit();
-```
+All controls can be styled using different design languages. These are currently supported:
+
+- Material 3
+- Cupertino
+- Fluent (WinUI 3)
+
+<p align="center">
+    <img width="350" src="./docs/images/listpopovers.png">
+</p>
+
+<p align="center">
+    <img width="350" src="./docs/images/tabbars.png">
+</p>
 
 <p align="center">
     <a href="https://giphy.com/gifs/wiesemann1893-transparent-logo-wiesemann-dWa2rUaiahx1FB3jor">
         <img width="250" src="https://media1.giphy.com/media/dWa2rUaiahx1FB3jor/giphy.gif?cid=790b7611041afeb62e8c51c2423440574e3473ff3a4cdd49&rid=giphy.gif&ct=g">
     </a>
 </p>
+
+> I am still not decided if I want to continue and how to develop the `SimpleToolkit.SimpleShell.Controls` package. **The package API is likely to change in the future.** For this reason, this package is still in preview and has poor documentation.
+
+See [documentation](./docs/SimpleToolkit.SimpleShell.Controls) for more information.

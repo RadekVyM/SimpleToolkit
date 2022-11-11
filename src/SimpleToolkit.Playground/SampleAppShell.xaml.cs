@@ -48,10 +48,10 @@ public partial class SampleAppShell : SimpleShell
                 _ => 350
             });
 
-        Loaded += SimpleAppShellLoaded;
+        Loaded += PlaygroundAppShellLoaded;
     }
 
-    private void SimpleAppShellLoaded(object sender, EventArgs e)
+    private void PlaygroundAppShellLoaded(object sender, EventArgs e)
     {
         this.Window.SubscribeToSafeAreaChanges(OnSafeAreaChanged);
     }
