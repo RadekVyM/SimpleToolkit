@@ -7,11 +7,11 @@ using System.Windows.Input;
 
 namespace SimpleToolkit.SimpleShell.Playground
 {
-    public partial class SimpleAppShell : SimpleShell
+    public partial class PlaygroundAppShell : SimpleShell
     {
         public ICommand BackCommand { get; set; }
 
-        public SimpleAppShell()
+        public PlaygroundAppShell()
         {
             BackCommand = new Command(async () => {
                 await this.GoToAsync("..");
@@ -39,13 +39,15 @@ namespace SimpleToolkit.SimpleShell.Playground
             };
 
             VisualStateManager.GoToState(this, "Material3");
+            designLanguagesListPopover.SelectedItem = designLanguagesListPopover.Items.FirstOrDefault();
 
+            Routing.RegisterRoute(nameof(ImagePage), typeof(ImagePage));
             Routing.RegisterRoute(nameof(FirstYellowDetailPage), typeof(FirstYellowDetailPage));
             Routing.RegisterRoute(nameof(SecondYellowDetailPage), typeof(SecondYellowDetailPage));
             Routing.RegisterRoute(nameof(ThirdYellowDetailPage), typeof(ThirdYellowDetailPage));
             Routing.RegisterRoute(nameof(FirstGreenDetailPage), typeof(FirstGreenDetailPage));
 
-            Loaded += SimpleAppShellLoaded;
+            Loaded += PlaygroundAppShellLoaded;
 
             this.SetTransition(args =>
             {
@@ -82,7 +84,7 @@ namespace SimpleToolkit.SimpleShell.Playground
             destinationPageInFrontOnPopping: false);
         }
 
-        private void SimpleAppShellLoaded(object sender, EventArgs e)
+        private void PlaygroundAppShellLoaded(object sender, EventArgs e)
         {
             this.Window.SubscribeToSafeAreaChanges(OnSafeAreaChanged);
         }
@@ -141,6 +143,7 @@ namespace SimpleToolkit.SimpleShell.Playground
         {
             if (e.Item is DesignLanguageItem designLanguageItem)
             {
+                designLanguagesListPopover.SelectedItem= designLanguageItem;
                 designLanguageItem.Action?.Invoke();
             }
         }

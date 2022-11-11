@@ -15,7 +15,7 @@
             {
                 AppShellType.Normal => new NormalAppShell(),
                 AppShellType.Sample => new SampleAppShell(),
-                _ => new SimpleAppShell()
+                _ => new PlaygroundAppShell()
             };
         }
     }

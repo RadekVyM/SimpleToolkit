@@ -155,8 +155,6 @@ See [documentation](Transitions.md) for more information.
 
 The `SimpleShell` class is inherited from the .NET MAUI `Shell` class, but all the handlers are implemented from the ground up. These handlers are inspired by the WinUI version of `Shell` handlers.
 
-`SimpleShell` currently does not provide any page transitions. Pages are simply swapped in a container during navigation.
-
 ## Why not use `SimpleShell` and use .NET MAUI `Shell` instead
 
 - .NET MAUI `Shell` offers a platform-specific appearance.

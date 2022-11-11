@@ -1,10 +1,11 @@
 ﻿#if ANDROID || IOS || MACCATALYST || WINDOWS
 
+using Microsoft.Maui;
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using SimpleToolkit.SimpleShell.Extensions;
 #if ANDROID
-using PlatformShell = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
+using PlatformShell = Android.Views.ViewGroup;
 #elif IOS || MACCATALYST
 using PlatformShell = UIKit.UIView;
 #elif WINDOWS
@@ -95,19 +96,19 @@ namespace SimpleToolkit.SimpleShell.Handlers
             platformViewHasContent = platformContent is not null;
 
 #if ANDROID
-            if (PlatformView.GetChildAt(0) != platformContent)
+            if (platformViewHasContent && PlatformView.GetChildAt(0) != platformContent)
             {
                 PlatformView.RemoveAllViews();
                 PlatformView.AddView(platformContent);
             }
 #elif IOS || MACCATALYST
-            if (PlatformView.Subviews.FirstOrDefault() != platformContent)
+            if (platformViewHasContent && PlatformView.Subviews.FirstOrDefault() != platformContent)
             {
                 PlatformView.ClearSubviews();
                 PlatformView.AddSubview(platformContent);
             }
 #elif WINDOWS
-            if (PlatformView.Child != platformContent)
+            if (platformViewHasContent && PlatformView.Child != platformContent)
             {
                 PlatformView.Child = platformContent;
             }

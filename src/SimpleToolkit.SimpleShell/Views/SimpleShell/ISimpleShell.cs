@@ -3,7 +3,7 @@
     /// <summary>
     /// A shell that lets you define your custom navigation experience. 
     /// </summary>
-    public interface ISimpleShell : IFlyoutView, IView, IElement, ITransform, IShellController, IPageController, IVisualElementController, IElementController, IPageContainer<Page>
+    public interface ISimpleShell : IView, IElement, ITransform, IShellController, IPageController, IVisualElementController, IElementController, IPageContainer<Page>
     {
         /// <summary>
         /// Gets or sets the content of this shell.

@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0-android;net6.0-ios;net6.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net6.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net7.0-android;net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
 		<OutputType>Exe</OutputType>
@@ -69,13 +69,19 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)'!='DEBUG'">
-		<PackageReference Include="SimpleToolkit.SimpleShell.Controls" Version="1.0.0" />
-		<PackageReference Include="SimpleToolkit.SimpleShell" Version="1.1.0-preview1" />
+		<PackageReference Include="SimpleToolkit.SimpleShell.Controls" Version="2.0.0-preview1" />
+		<PackageReference Include="SimpleToolkit.SimpleShell" Version="2.0.0" />
 	</ItemGroup>
 		
 	<ItemGroup Condition="'$(Configuration)'=='DEBUG'">
 	  <ProjectReference Include="..\SimpleToolkit.SimpleShell.Controls\SimpleToolkit.SimpleShell.Controls.csproj" />
 	  <ProjectReference Include="..\SimpleToolkit.SimpleShell\SimpleToolkit.SimpleShell.csproj" />
+	</ItemGroup>
+		
+	<ItemGroup>
+	  <Compile Update="PlaygroundAppShell.xaml.cs">
+	    <DependentUpon>PlaygroundAppShell.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -85,7 +91,7 @@
 	  <MauiXaml Update="SampleAppShell.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="SimpleAppShell.xaml">
+	  <MauiXaml Update="PlaygroundAppShell.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
