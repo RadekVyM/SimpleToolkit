@@ -7,6 +7,9 @@ namespace SimpleToolkit.Core
 {
     public static partial class WindowExtensions
     {
+        private const string DisplayContentBehindBarsKey = "DisplayContentBehindBars";
+        private const string InsetsKey = "Insets";
+
         /// <summary>
         /// Forces application content to be displayed behind system bars (status and navigation bars) on Android and iOS.
         /// </summary>
@@ -14,13 +17,19 @@ namespace SimpleToolkit.Core
         /// <returns>The builder.</returns>
         public static MauiAppBuilder DisplayContentBehindBars(this MauiAppBuilder builder)
         {
-            LayoutHandler.Mapper.PrependToMapping("DisplayContentBehindBars", (handler, layout) =>
+            LayoutHandler.Mapper.PrependToMapping(DisplayContentBehindBarsKey, (handler, layout) =>
             {
                 if (layout is Layout realLayout)
                     realLayout.IgnoreSafeArea = true;
             });
 
-            WindowHandler.Mapper.AppendToMapping("Insets", (handler, window) =>
+            PageHandler.Mapper.PrependToMapping(DisplayContentBehindBarsKey, (handler, page) =>
+            {
+                if (page is BindableObject bindablePage)
+                    Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific.Page.SetUseSafeArea(bindablePage, false);
+            });
+
+            WindowHandler.Mapper.AppendToMapping(InsetsKey, (handler, window) =>
             {
                 if (window is not Element elementWindow)
                     return;
