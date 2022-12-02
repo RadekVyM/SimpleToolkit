@@ -15,6 +15,7 @@ namespace SimpleToolkit.Core.Handlers
     public class PopoverViewController : UIViewController
     {
         private readonly IMauiContext mauiContext;
+        private Microsoft.Maui.Controls.Grid contentView = null;
 
         internal UIViewController ViewController { get; private set; }
         public IPopover VirtualView { get; private set; }
@@ -26,16 +27,20 @@ namespace SimpleToolkit.Core.Handlers
         }
 
 
-        public override void ViewDidAppear(bool animated)
+        public override void ViewWillAppear(bool animated)
         {
-            // Remove all the default styling of the popover container
+            base.ViewWillAppear(animated);
+
+            if (View.Superview is null)
+                return;
+
+            View.Superview.ClipsToBounds = false;
             View.Superview.Layer.CornerRadius = 0f;
             View.Superview.Layer.BackgroundColor = Colors.Transparent.ToCGColor();
             View.Superview.Layer.ShadowColor = null;
             View.Superview.Layer.ShadowOpacity = 0f;
             View.Layer.ShadowColor = null;
             View.Layer.ShadowOpacity = 0f;
-            base.ViewDidAppear(animated);
         }
 
         public override void ViewDidLayoutSubviews()
@@ -89,8 +94,6 @@ namespace SimpleToolkit.Core.Handlers
             if (PresentationController is UIPopoverPresentationController presentationController)
                 presentationController.Delegate = null;
         }
-
-        Microsoft.Maui.Controls.Grid contentView = null;
 
         [MemberNotNull(nameof(ViewController))]
         public void InitializeView(in IPopover virtualView, in IElement anchor)
@@ -217,6 +220,7 @@ namespace SimpleToolkit.Core.Handlers
             {
                 ArrowOffset = 0f;
                 ArrowDirection = 0;
+                BackgroundColor = UIColor.Clear;
 
                 Layer.ShadowColor = Colors.Transparent.ToCGColor();
                 Layer.ShadowOpacity = 0f;
