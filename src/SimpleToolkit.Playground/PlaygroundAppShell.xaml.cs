@@ -120,12 +120,20 @@ namespace SimpleToolkit.SimpleShell.Playground
         {
             if (!orangeAdded)
             {
-                this.Items.Add(new ShellContent()
+                var tab = new Tab
                 {
                     Title = "Orange",
-                    Route = nameof(OrangePage),
-                    ContentTemplate = new DataTemplate(typeof(OrangePage))
-                });
+                    Route = nameof(OrangePage)
+                };
+
+                tab.Items.Add(
+                    new ShellContent()
+                    {
+                        Title = "Orange",
+                        Route = nameof(OrangePage),
+                        ContentTemplate = new DataTemplate(typeof(OrangePage))
+                    });
+                this.Items.Add(tab);
 
                 addButton.IsVisible = false;
             }
