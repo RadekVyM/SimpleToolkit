@@ -9,7 +9,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
     {
         protected virtual void AddPlatformPage(PlatformPage newPageView, bool onTop = true)
         {
-            var overlay = this.rootPageOverlay?.ToHandler(mauiContext).PlatformView;
+            var overlay = GetPlatformView(this.rootPageOverlay);
 
             navigationFrame.AddSubview(newPageView);
 
@@ -34,7 +34,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
         
         protected virtual void RemovePlatformPage(PlatformPage oldPageView)
         {
-            var overlay = this.rootPageOverlay?.ToHandler(mauiContext).PlatformView;
+            var overlay = GetPlatformView(this.rootPageOverlay);
 
             oldPageView?.RemoveFromSuperview();
             if (!isCurrentPageRoot && isPreviousPageRoot && overlay is not null)

@@ -144,9 +144,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 
         protected virtual PlatformView GetPlatformView(IView view)
         {
-            var handler = view?.ToHandler(mauiContext);
-
-            return handler?.ContainerView ?? handler?.PlatformView;
+            return view?.ToPlatform(mauiContext);
         }
 
         private bool ShouldBeAbove(SimpleShellTransition transition, SimpleShellTransitionType transitionType, VisualElement oldPage, VisualElement newPage)

@@ -51,25 +51,30 @@ namespace SimpleToolkit.Core.Handlers.Platform
         public override void TouchesBegan(NSSet touches, UIEvent evt)
         {
             base.TouchesBegan(touches, evt);
-            BeganTouching?.Invoke(this, new ContentButtonEventArgs { InteractionPosition = GetPosition(touches) });
+            BeganTouching?.Invoke(this, GetContentButtonEventArgs(touches));
         }
 
         public override void TouchesEnded(NSSet touches, UIEvent evt)
         {
             base.TouchesEnded(touches, evt);
-            EndedTouching?.Invoke(this, new ContentButtonEventArgs { InteractionPosition = GetPosition(touches) });
+            EndedTouching?.Invoke(this, GetContentButtonEventArgs(touches));
         }
 
         public override void TouchesCancelled(NSSet touches, UIEvent evt)
         {
             base.TouchesCancelled(touches, evt);
-            CancelledTouching?.Invoke(this, new ContentButtonEventArgs { InteractionPosition = GetPosition(touches) });
+            CancelledTouching?.Invoke(this, GetContentButtonEventArgs(touches));
         }
 
         public override void TouchesMoved(NSSet touches, UIEvent evt)
         {
             base.TouchesMoved(touches, evt);
-            MovedTouching?.Invoke(this, new ContentButtonEventArgs { InteractionPosition = GetPosition(touches) });
+            MovedTouching?.Invoke(this, GetContentButtonEventArgs(touches));
+        }
+
+        private ContentButtonEventArgs GetContentButtonEventArgs(NSSet touches)
+        {
+            return new ContentButtonEventArgs { InteractionPosition = GetPosition(touches) };
         }
 
         private Point GetPosition(NSSet touches)

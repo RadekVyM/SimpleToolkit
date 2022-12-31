@@ -117,8 +117,12 @@ namespace SimpleToolkit.SimpleShell.Handlers
                     pageStack.Add(VirtualView.Navigation.NavigationStack[i]);
                 }
 
-            navigationStackCanBeAdded = currentShellContent is not null && VirtualView.Navigation.NavigationStack.Count > 1 && currentShellContent != VirtualView.CurrentItem; // This is just a workaround of the bug in Shell
-            currentShellContent = VirtualView.CurrentItem; // This is just a workaround of the bug in Shell
+            // This is just a workaround of the bug in Shell
+            navigationStackCanBeAdded =
+                currentShellContent is not null &&
+                VirtualView.Navigation.NavigationStack.Count > 1 &&
+                currentShellContent != VirtualView.CurrentItem;
+            currentShellContent = VirtualView.CurrentItem;
 
             // The point of this is to push the shell navigation over to using the INavigationStack
             // work flow. Ideally we rewrite all the push/pop/etc.. parts inside ShellSection.cs

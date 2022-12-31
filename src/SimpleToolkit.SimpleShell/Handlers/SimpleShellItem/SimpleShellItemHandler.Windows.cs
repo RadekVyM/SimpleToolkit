@@ -10,7 +10,6 @@ namespace SimpleToolkit.SimpleShell.Handlers
         protected override WBorder CreatePlatformElement()
         {
             shellSectionContainer = new WBorder();
-
             return shellSectionContainer;
         }
     }

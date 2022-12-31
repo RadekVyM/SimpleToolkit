@@ -9,7 +9,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
     {
         protected override WGrid CreatePlatformElement()
         {
-            navigationManager = CreateNavigationManager();
+            CreateNavigationManager();
             return new WGrid();
         }
     }

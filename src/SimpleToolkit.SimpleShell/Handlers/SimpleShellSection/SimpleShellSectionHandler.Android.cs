@@ -15,7 +15,6 @@ namespace SimpleToolkit.SimpleShell.Handlers
             {
                 Id = AView.GenerateViewId()
             };
-
             return container;
         }
     }

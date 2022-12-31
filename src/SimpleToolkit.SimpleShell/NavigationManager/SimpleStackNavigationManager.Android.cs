@@ -1,6 +1,5 @@
 ﻿#if ANDROID
 
-using Microsoft.Maui.Platform;
 using PlatformPage = Android.Views.View;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager

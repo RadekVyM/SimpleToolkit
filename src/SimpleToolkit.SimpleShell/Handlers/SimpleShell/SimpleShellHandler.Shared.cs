@@ -92,7 +92,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
             if (navigationHost is not null && navigationHost?.Handler is SimpleNavigationHostHandler navHostHandler)
                 navHostHandler.SetContent(null);
 
-            var platformContent = content.ToHandler(MauiContext).PlatformView;
+            var platformContent = content.ToPlatform(MauiContext);
             platformViewHasContent = platformContent is not null;
 
 #if ANDROID
