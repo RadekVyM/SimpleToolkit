@@ -1,8 +1,8 @@
-namespace SimpleToolkit.SimpleShell.Playground.Views.Pages;
+﻿namespace SimpleToolkit.SimpleShell.Playground.Views.Pages;
 
-public partial class ThirdYellowDetailPage : ContentPage
+public partial class FourthYellowDetailPage : ContentPage
 {
-	public ThirdYellowDetailPage()
+	public FourthYellowDetailPage()
 	{
 		InitializeComponent();
 	}

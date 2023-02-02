@@ -1,13 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SimpleToolkit.SimpleShell.Playground.Views.Pages.ThirdYellowDetailPage"
-             Title="ThirdYellowDetailPage"
-             Shell.PresentationMode="Modal">
+             x:Class="SimpleToolkit.SimpleShell.Playground.Views.Pages.FourthYellowDetailPage"
+             Title="FourthYellowDetailPage">
     <Grid BackgroundColor="Goldenrod">
         <Label
             FontSize="20"
-            Text="Third yellow detail page"
+            Text="Fourth yellow detail page"
             TextColor="White"
             TextTransform="Uppercase"
             FontAttributes="Bold"

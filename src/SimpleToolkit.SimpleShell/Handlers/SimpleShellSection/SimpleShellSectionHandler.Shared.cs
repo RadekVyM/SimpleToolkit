@@ -1,5 +1,6 @@
 ﻿using SimpleToolkit.SimpleShell.Extensions;
 using SimpleToolkit.SimpleShell.NavigationManager;
+using Microsoft.Maui.Controls.Internals;
 #if ANDROID
 using PageContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
 #elif IOS || MACCATALYST
@@ -98,26 +99,31 @@ namespace SimpleToolkit.SimpleShell.Handlers
             base.DisconnectHandler(platformView);
         }
 
-        void OnNavigationRequested(object sender, object e)
+        void OnNavigationRequested(object sender, NavigationRequestedEventArgs e)
         {
-            SyncNavigationStack(false);
+            SyncNavigationStack(e.Animated, e);
         }
 
-        protected virtual void SyncNavigationStack(bool animated)
+        protected virtual void SyncNavigationStack(bool animated, NavigationRequestedEventArgs e)
         {
             var pageStack = new List<IView>()
             {
                 (VirtualView.CurrentItem as IShellContentController).GetOrCreateContent()
             };
 
-            // When navigating from a subtab with a navigation stack to another subtab in the same tab, there is a NavigationStack of the previous subtab in VirtualView.Navigation
-            if (currentShellContent == VirtualView.CurrentItem && !navigationStackCanBeAdded) // This is just a workaround of the bug in Shell
+            // When navigating from a subtab with a navigation stack to another subtab in the same tab,
+            // there is a NavigationStack of the previous subtab in VirtualView.Navigation
+            if (currentShellContent == VirtualView.CurrentItem && // This is just a workaround of the bug mentioned above
+                !navigationStackCanBeAdded &&
+                e?.RequestType != NavigationRequestType.PopToRoot) // See https://github.com/dotnet/maui/pull/10653
+            {
                 for (var i = 1; i < VirtualView.Navigation.NavigationStack.Count; i++)
                 {
                     pageStack.Add(VirtualView.Navigation.NavigationStack[i]);
                 }
-
-            // This is just a workaround of the bug in Shell
+            }
+            
+            // This is just a workaround of the bug mentioned above
             navigationStackCanBeAdded =
                 currentShellContent is not null &&
                 VirtualView.Navigation.NavigationStack.Count > 1 &&
@@ -128,7 +134,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
             // work flow. Ideally we rewrite all the push/pop/etc.. parts inside ShellSection.cs
             // to just use INavigationStack but that will be easier once all platforms are using
             // ShellHandler
-            (VirtualView as IStackNavigation).RequestNavigation(new NavigationRequest(pageStack, animated));
+            (VirtualView as IStackNavigation).RequestNavigation(new ArgsNavigationRequest(pageStack, animated, e?.RequestType ?? NavigationRequestType.Unknown));
         }
 
         protected virtual SimpleStackNavigationManager CreateNavigationManager() =>
@@ -148,7 +154,17 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         public static void MapCurrentItem(SimpleShellSectionHandler handler, ShellSection item)
         {
-            handler.SyncNavigationStack(false);
+            handler.SyncNavigationStack(false, null);
+        }
+    }
+
+    public class ArgsNavigationRequest : NavigationRequest
+    {
+        public NavigationRequestType RequestType { get; }
+
+        public ArgsNavigationRequest(IReadOnlyList<IView> newNavigationStack, bool animated, NavigationRequestType requestType) : base(newNavigationStack, animated)
+        {
+            RequestType = requestType;
         }
     }
 }
