@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SimpleToolkit.SimpleShell.Playground.Views.Pages.GreenPage"
-             Title="GreenPage">
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="SimpleToolkit.SimpleShell.Playground.Views.Pages.GreenPage"
+    Title="GreenPage">
     <Grid BackgroundColor="ForestGreen">
         <Label
             FontSize="20"
@@ -13,6 +14,10 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
 
-        <Button Text="Go to first detail page" Clicked="Button_Clicked" Style="{StaticResource GreenPageNavigationButton}"/>
+        <VerticalStackLayout
+            VerticalOptions="End">
+            <Button Text="Go to first detail page" Clicked="FirstDetailClicked" Style="{StaticResource GreenPageNavigationButton}"/>
+            <Button Text="Go to second yellow detail page" Clicked="YellowDetailClicked" Style="{StaticResource GreenPageNavigationButton}"/>
+        </VerticalStackLayout>
     </Grid>
 </ContentPage>
