@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="SimpleToolkit.SimpleShell.Playground.Views.Pages.FourthYellowDetailPage"
+    Title="FourthYellowDetailPage">
+    <Grid BackgroundColor="Goldenrod">
+        <Label
+            FontSize="20"
+            Text="Fourth yellow detail page"
+            TextColor="White"
+            TextTransform="Uppercase"
+            FontAttributes="Bold"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+
+        <VerticalStackLayout
+            VerticalOptions="End">
+            <Button Text="Twice back" Clicked="TwiceClicked" Style="{StaticResource YellowPageNavigationButton}"/>
+            <Button Text="Go to green page" Clicked="GreenClicked" Style="{StaticResource YellowPageNavigationButton}"/>
+            <Button Text="Go to green detail page" Clicked="GreenDetailClicked" Style="{StaticResource YellowPageNavigationButton}"/>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

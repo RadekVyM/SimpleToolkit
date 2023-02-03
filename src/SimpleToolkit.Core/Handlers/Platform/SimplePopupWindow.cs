@@ -48,8 +48,9 @@ namespace SimpleToolkit.Core.Handlers
             }
 
             var measure = (VirtualView.Content as IView).Measure(double.PositiveInfinity, double.PositiveInfinity);
-            var width = (int)Math.Round(measure.Width * DeviceDisplay.Current.MainDisplayInfo.Density);
-            var height = (int)Math.Round(measure.Height * DeviceDisplay.Current.MainDisplayInfo.Density);
+            var density = DeviceDisplay.Current.MainDisplayInfo.Density;
+            var width = (int)Math.Round(measure.Width * density);
+            var height = (int)Math.Round(measure.Height * density);
 
             //var content = VirtualView.Content.ToPlatform(mauiContext);
             //content.Measure(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);

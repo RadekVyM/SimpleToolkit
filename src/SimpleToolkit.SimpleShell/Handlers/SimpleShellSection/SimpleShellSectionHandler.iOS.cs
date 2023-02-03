@@ -10,7 +10,6 @@ namespace SimpleToolkit.SimpleShell.Handlers
         protected override UIView CreatePlatformElement()
         {
             CreateNavigationManager();
-
             var container = new CustomContentView();
             return container;
         }

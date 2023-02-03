@@ -32,6 +32,7 @@ namespace SimpleToolkit.Core.Handlers
             VirtualView = element;
         }
 
+
         public void SetUpPlatformView(Action<Panel> panelCleanUp, Func<PopoverHandler, Panel> createControl)
         {
             ArgumentNullException.ThrowIfNull(panelCleanUp);

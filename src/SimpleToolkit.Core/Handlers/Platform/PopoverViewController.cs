@@ -15,7 +15,7 @@ namespace SimpleToolkit.Core.Handlers
     public class PopoverViewController : UIViewController
     {
         private readonly IMauiContext mauiContext;
-        private Microsoft.Maui.Controls.Grid contentView = null;
+        private Grid contentView = null;
 
         internal UIViewController ViewController { get; private set; }
         public IPopover VirtualView { get; private set; }
@@ -134,7 +134,7 @@ namespace SimpleToolkit.Core.Handlers
                 contentView.Children.Clear();
 
             // I do not understand how sizing on iOS works. This is the only hopefully working solution I came up with
-            contentView = new Microsoft.Maui.Controls.Grid
+            contentView = new Grid
             {
                 HorizontalOptions = LayoutOptions.Start,
                 VerticalOptions = LayoutOptions.Start,
@@ -154,7 +154,7 @@ namespace SimpleToolkit.Core.Handlers
         private void SetView(UIView view)
         {
             view.ClearSubviews();
-            var subview = contentView?.ToHandler(mauiContext)?.PlatformView;
+            var subview = contentView?.ToPlatform(mauiContext);
 
             if (subview is not null)
                 view.AddSubview(subview);

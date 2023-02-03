@@ -7,8 +7,13 @@ public partial class GreenPage : ContentPage
 		InitializeComponent();
     }
 
-    private async void Button_Clicked(object sender, EventArgs e)
+    private async void FirstDetailClicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(FirstGreenDetailPage));
+    }
+
+    private async void YellowDetailClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync($"//{nameof(YellowPage)}/{nameof(FirstYellowDetailPage)}/{nameof(SecondYellowDetailPage)}");
     }
 }

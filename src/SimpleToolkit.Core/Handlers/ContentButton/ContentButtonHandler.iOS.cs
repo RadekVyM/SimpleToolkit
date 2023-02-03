@@ -24,30 +24,35 @@ namespace SimpleToolkit.Core.Handlers
 
             buttonPlatformView.AccessibilityTraits = UIAccessibilityTrait.Button;
 
-            buttonPlatformView.AddGestureRecognizer(new UITapGestureRecognizer(g =>
-            {
-                var location = g.LocationInView(g.View);
-
-                switch (g.State)
-                {
-                    case UIGestureRecognizerState.Ended:
-                        virtualView.OnPressed(new Point(location.X, location.Y));
-                        virtualView.OnReleased(new Point(location.X, location.Y));
-                        virtualView.OnClicked();
-                        break;
-                    case UIGestureRecognizerState.Failed:
-                        virtualView.OnPressed(new Point(location.X, location.Y));
-                        virtualView.OnReleased(new Point(location.X, location.Y));
-                        break;
-                }
-            }));
-
-            buttonPlatformView.BeganTouching += OnBeganTouching;
-            buttonPlatformView.EndedTouching += OnEndedTouching;
-            buttonPlatformView.MovedTouching += OnMovedTouching;
-            buttonPlatformView.CancelledTouching += OnEndedTouching;
+            buttonPlatformView.AddGestureRecognizer(new UITapGestureRecognizer(OnViewTapped));
 
             return buttonPlatformView;
+        }
+
+        protected override void ConnectHandler(Microsoft.Maui.Platform.ContentView platformView)
+        {
+            base.ConnectHandler(platformView);
+
+            if (platformView is not ButtonContentView buttonContentView)
+                return;
+
+            buttonContentView.BeganTouching += OnBeganTouching;
+            buttonContentView.EndedTouching += OnEndedTouching;
+            buttonContentView.MovedTouching += OnMovedTouching;
+            buttonContentView.CancelledTouching += OnEndedTouching;
+        }
+
+        protected override void DisconnectHandler(Microsoft.Maui.Platform.ContentView platformView)
+        {
+            base.DisconnectHandler(platformView);
+
+            if (platformView is not ButtonContentView buttonContentView)
+                return;
+
+            buttonContentView.BeganTouching -= OnBeganTouching;
+            buttonContentView.EndedTouching -= OnEndedTouching;
+            buttonContentView.MovedTouching -= OnMovedTouching;
+            buttonContentView.CancelledTouching -= OnEndedTouching;
         }
 
         private void OnBeganTouching(object sender, ContentButtonEventArgs e)
@@ -73,6 +78,24 @@ namespace SimpleToolkit.Core.Handlers
             {
                 virtualView.OnReleased(e.InteractionPosition);
                 alreadyReleased = true;
+            }
+        }
+
+        private void OnViewTapped(UITapGestureRecognizer g)
+        {
+            var location = g.LocationInView(g.View);
+
+            switch (g.State)
+            {
+                case UIGestureRecognizerState.Ended:
+                    virtualView.OnPressed(new Point(location.X, location.Y));
+                    virtualView.OnReleased(new Point(location.X, location.Y));
+                    virtualView.OnClicked();
+                    break;
+                case UIGestureRecognizerState.Failed:
+                    virtualView.OnPressed(new Point(location.X, location.Y));
+                    virtualView.OnReleased(new Point(location.X, location.Y));
+                    break;
             }
         }
     }

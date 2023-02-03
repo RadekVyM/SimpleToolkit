@@ -9,6 +9,8 @@
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 
+		<PublishReadyToRun>false</PublishReadyToRun>
+		
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
@@ -22,7 +24,7 @@
 		<PackageTags>MAUI, Controls, Shell, Navigation, Transitions</PackageTags>
 		<Authors>RadekVyM</Authors>
 		<PackageOutputPath>..\..\packages</PackageOutputPath>
-		<VersionPrefix>2.0.0</VersionPrefix>
+		<VersionPrefix>2.0.1</VersionPrefix>
 		<VersionSuffix></VersionSuffix>
 		<Version>$(VersionPrefix)$(VersionSuffix)</Version>
 		<Description>Simplified implementation of .NET MAUI Shell that is part of SimpleToolkit library.</Description>
@@ -41,14 +43,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="..\..\images\logo_with_background.png">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
-	  <None Include="..\..\LICENSE">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
+		<None Include="..\..\images\logo_with_background.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 
 </Project>

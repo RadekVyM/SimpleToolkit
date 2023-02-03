@@ -95,19 +95,16 @@ namespace SimpleToolkit.Core.Handlers
 
         private void OnPointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            var position = e.GetCurrentPoint(PlatformView).Position;
-
             alreadyReleased = false;
 
-            VirtualView.OnPressed(new Point(position.X, position.Y));
+            VirtualView.OnPressed(GetPointerPosition(e));
         }
 
         private void OnPointerReleased(object sender, PointerRoutedEventArgs e)
         {
             if (!alreadyReleased)
             {
-                var position = e.GetCurrentPoint(PlatformView).Position;
-                VirtualView.OnReleased(new Point(position.X, position.Y));
+                VirtualView.OnReleased(GetPointerPosition(e));
             }
             VirtualView.OnClicked();
 
@@ -118,8 +115,7 @@ namespace SimpleToolkit.Core.Handlers
         {
             if (!alreadyReleased)
             {
-                var position = e.GetCurrentPoint(PlatformView).Position;
-                VirtualView.OnReleased(new Point(position.X, position.Y));
+                VirtualView.OnReleased(GetPointerPosition(e));
             }
 
             alreadyReleased = true;
@@ -133,13 +129,19 @@ namespace SimpleToolkit.Core.Handlers
 
                 alreadyReleased = false;
 
-                VirtualView.OnPressed(new Point(position.X, position.Y));
+                VirtualView.OnPressed(position);
                 if (!alreadyReleased)
-                    VirtualView.OnReleased(new Point(position.X, position.Y));
+                    VirtualView.OnReleased(position);
                 VirtualView.OnClicked();
 
                 alreadyReleased = true;
             }
+        }
+
+        private Point GetPointerPosition(PointerRoutedEventArgs e)
+        {
+            var position = e.GetCurrentPoint(PlatformView).Position;
+            return new Point(position.X, position.Y);
         }
 
         private static void UpdateContent(ContentButtonHandler handler)

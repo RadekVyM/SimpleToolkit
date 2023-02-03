@@ -1,5 +1,7 @@
 ﻿using Microsoft.Maui.Platform;
+using SimpleToolkit.SimpleShell.Handlers;
 using SimpleToolkit.SimpleShell.Transitions;
+using Microsoft.Maui.Controls.Internals;
 #if ANDROID
 using NavFrame = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
 using PlatformView = Android.Views.View;
@@ -61,8 +63,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             // User has modified navigation stack but not the currently visible page
             // So we just sync the elements in the stack
             if (!initialNavigation &&
-                newPageStack[newPageStack.Count - 1] ==
-                previousNavigationStack[previousNavigationStackCount - 1])
+                newPageStack[newPageStack.Count - 1] == previousNavigationStack[previousNavigationStackCount - 1])
             {
                 NavigationStack = newPageStack;
                 FireNavigationFinished();
@@ -73,15 +74,15 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             currentPage = newPageStack[newPageStack.Count - 1];
 
             isPreviousPageRoot = isCurrentPageRoot;
-            isCurrentPageRoot = args.NavigationStack.Count < 2;
+            isCurrentPageRoot = newPageStack.Count < 2;
 
             _ = currentPage ?? throw new InvalidOperationException("Navigatoin Request Contains Null Elements");
 
-            if (previousNavigationStack.Count == args.NavigationStack.Count || previousNavigationStack?.FirstOrDefault() != args.NavigationStack?.FirstOrDefault())
+            if (previousNavigationStack.Count == newPageStack.Count || previousNavigationStack?.FirstOrDefault() != newPageStack?.FirstOrDefault())
             {
                 NavigateToPage(SimpleShellTransitionType.Switching);
             }
-            else if (previousNavigationStack.Count < args.NavigationStack.Count)
+            else if (previousNavigationStack.Count < newPageStack.Count)
             {
                 NavigateToPage(SimpleShellTransitionType.Pushing);
             }
@@ -98,6 +99,14 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 
                 var transition = currentPage is VisualElement visualCurrentPage ? SimpleShell.GetTransition(visualCurrentPage) : null;
                 transition ??= SimpleShell.GetTransition(SimpleShell.Current);
+
+                if (args is ArgsNavigationRequest a && (a.RequestType == NavigationRequestType.Remove || a.RequestType == NavigationRequestType.Insert))
+                {
+                    RemovePlatformPage(oldPageView);
+                    AddPlatformPage(newPageView);
+                    FireNavigationFinished();
+                    return;
+                }
 
                 if (transition is not null && currentPage is VisualElement visualCurrent && previousPage is VisualElement visualPrevious)
                 {
@@ -144,9 +153,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 
         protected virtual PlatformView GetPlatformView(IView view)
         {
-            var handler = view?.ToHandler(mauiContext);
-
-            return handler?.ContainerView ?? handler?.PlatformView;
+            return view?.ToPlatform(mauiContext);
         }
 
         private bool ShouldBeAbove(SimpleShellTransition transition, SimpleShellTransitionType transitionType, VisualElement oldPage, VisualElement newPage)
