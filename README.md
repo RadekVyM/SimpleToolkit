@@ -25,23 +25,31 @@ I have split the content of this library into three NuGet packages because there
 Here are some of my samples that were built using this library:
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/RadekVyM/Gadgets-Store-App/maui/samples/gadget_store_home.png" data-canonical-src="https://github.com/RadekVyM/Gadgets-Store-App" width="500" />
+    <img src="https://raw.githubusercontent.com/RadekVyM/maui-wonderous-app/main/images/android_illustrations_20.gif" width="230" />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <img src="https://raw.githubusercontent.com/RadekVyM/maui-wonderous-app/main/images/iphone_wonders_transitions_20.gif" width="240" />
+</p>
+<p align="center">
+    <a href="https://github.com/RadekVyM/maui-wonderous-app"><em>Wonderous .NET MAUI</em></a>
+</p>
+<p align="center">
+    <img src="https://raw.githubusercontent.com/RadekVyM/Gadgets-Store-App/maui/samples/gadget_store_home.png" width="500" />
 </p>
 <p align="center">
     <a href="https://github.com/RadekVyM/Gadgets-Store-App"><em>Gadget Store App</em></a>
 </p>
 <p align="center">
-    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-1/main/Images/navbaranimation%20gif%20720.gif" data-canonical-src="https://github.com/RadekVyM/Navbar-Animation-1" width="230" />
+    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-1/main/Images/navbaranimation%20gif%20720.gif" width="230" />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-1/main/Images/iphone_navbaranimation_1.png" data-canonical-src="https://github.com/RadekVyM/Navbar-Animation-1" width="245" />
+    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-1/main/Images/iphone_navbaranimation_1.png" width="245" />
 </p>
 <p align="center">
     <a href="https://github.com/RadekVyM/Navbar-Animation-1"><em>Navbar Animation #1</em></a>
 </p>
 <p align="center">
-    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-2/main/images/android_navbaranimation_2.gif" data-canonical-src="https://github.com/RadekVyM/Navbar-Animation-2" width="230" />
+    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-2/main/images/android_navbaranimation_2.gif" width="230" />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-2/main/images/iphone_navbaranimation_2.png" data-canonical-src="https://github.com/RadekVyM/Navbar-Animation-2" width="245" />
+    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-2/main/images/iphone_navbaranimation_2.png" width="245" />
 </p>
 <p align="center">
     <a href="https://github.com/RadekVyM/Navbar-Animation-2"><em>Navbar Animation #2</em></a>
