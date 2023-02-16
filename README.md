@@ -25,14 +25,6 @@ I have split the content of this library into three NuGet packages because there
 Here are some of my samples that were built using this library:
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/RadekVyM/maui-wonderous-app/main/images/android_illustrations_20.gif" width="230" />
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="https://raw.githubusercontent.com/RadekVyM/maui-wonderous-app/main/images/iphone_wonders_transitions_20.gif" width="240" />
-</p>
-<p align="center">
-    <a href="https://github.com/RadekVyM/maui-wonderous-app"><em>Wonderous .NET MAUI</em></a>
-</p>
-<p align="center">
     <img src="https://raw.githubusercontent.com/RadekVyM/Gadgets-Store-App/maui/samples/gadget_store_home.png" width="500" />
 </p>
 <p align="center">
