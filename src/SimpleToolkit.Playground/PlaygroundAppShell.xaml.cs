@@ -51,7 +51,7 @@ namespace SimpleToolkit.SimpleShell.Playground
             Loaded += PlaygroundAppShellLoaded;
 
             this.SetTransition(
-                callback: args =>
+                callback: static args =>
                 {
                     switch (args.TransitionType)
                     {
@@ -68,15 +68,15 @@ namespace SimpleToolkit.SimpleShell.Playground
                             break;
                     }
                 },
-                duration: args => 250u,
-                finished: args =>
+                duration: static args => 250u,
+                finished: static args =>
                 {
                     args.DestinationPage.TranslationX = 0;
                     args.OriginPage.TranslationX = 0;
                     args.OriginPage.Opacity = 1;
                     args.DestinationPage.Opacity = 1;
                 },
-                destinationPageInFront: args => args.TransitionType switch
+                destinationPageInFront: static args => args.TransitionType switch
                 {
                     SimpleShellTransitionType.Popping => false,
                     _ => true

@@ -14,7 +14,7 @@ public partial class SampleAppShell : SimpleShell
         Routing.RegisterRoute(nameof(ImagePage), typeof(ImagePage));
 
         this.SetTransition(
-            callback: args =>
+            callback: static args =>
             {
                 switch (args.TransitionType)
                 {
@@ -30,22 +30,22 @@ public partial class SampleAppShell : SimpleShell
                         break;
                 }
             },
-            finished: args =>
+            finished: static args =>
             {
                 args.OriginPage.Opacity = 1;
                 args.OriginPage.TranslationX = 0;
                 args.DestinationPage.Opacity = 1;
                 args.DestinationPage.TranslationX = 0;
             },
-            destinationPageInFront: args => args.TransitionType switch
+            destinationPageInFront: static args => args.TransitionType switch
             {
                 SimpleShellTransitionType.Popping => false,
                 _ => true
             },
-            duration: args => args.TransitionType switch
+            duration: static args => args.TransitionType switch
             {
-                SimpleShellTransitionType.Switching => 500,
-                _ => 350
+                SimpleShellTransitionType.Switching => 500u,
+                _ => 350u
             });
 
         Loaded += PlaygroundAppShellLoaded;

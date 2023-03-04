@@ -10,12 +10,14 @@ public partial class ImagePage : ContentPage
 		InitializeComponent();
 
         this.SetTransition(new SimpleShellTransition(
-            callback: args => args.DestinationPage.Scale = args.Progress,
-            starting: args => args.DestinationPage.Scale = 0,
-            finished: args => args.DestinationPage.Scale = 1,
-            duration: args => 500u)
-            .CombinedWith(transition: SimpleShell.Current.GetTransition(), when: args => args.TransitionType != SimpleShellTransitionType.Pushing));
-	}
+            callback: static args => args.DestinationPage.Scale = args.Progress,
+            starting: static args => args.DestinationPage.Scale = 0,
+            finished: static args => args.DestinationPage.Scale = 1,
+            duration: static args => 500u)
+            .CombinedWith(
+                transition: SimpleShell.Current.GetTransition(),
+                when: static args => args.TransitionType != SimpleShellTransitionType.Pushing));
+    }
 
     //protected override void OnNavigatedTo(NavigatedToEventArgs args)
     //{
