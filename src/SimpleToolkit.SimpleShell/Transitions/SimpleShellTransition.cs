@@ -93,6 +93,8 @@
         /// <param name="destinationPageInFrontOnSwitching">Whether the destination page should be displayed in front of the origin page when switching root pages in the stack.</param>
         /// <param name="destinationPageInFrontOnPushing">Whether the destination page should be displayed in front of the origin page when pushing new page to the stack.</param>
         /// <param name="destinationPageInFrontOnPopping">Whether the destination page should be displayed in front of the origin page when popping existing page from the stack.</param>
+        [Obsolete("This constructor is deprecated. Please use other constructor.")]
+        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public SimpleShellTransition(
             Action<SimpleShellTransitionArgs> callback,
             uint duration = DefaultDuration,
@@ -116,7 +118,7 @@
         }
 
         /// <summary>
-        /// Constructor that allows to dynamically set some properties of the transition.
+        /// Constructor that allows to dynamically set properties of the transition.
         /// </summary>
         /// <param name="callback">Callback that is called when progress of the transition changes.</param>
         /// <param name="duration">Duration of the transition.</param>

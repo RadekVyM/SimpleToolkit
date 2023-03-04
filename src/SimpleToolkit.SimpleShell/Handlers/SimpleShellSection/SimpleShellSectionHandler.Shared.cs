@@ -110,7 +110,9 @@ namespace SimpleToolkit.SimpleShell.Handlers
                 (VirtualView.CurrentItem as IShellContentController).GetOrCreateContent()
             };
 
-            //LogStack(e, pageStack, VirtualView);
+#if DEBUG
+            LogStack(e, pageStack, VirtualView);
+#endif
 
             if (e?.RequestType != NavigationRequestType.PopToRoot) // See https://github.com/dotnet/maui/pull/10653
             {

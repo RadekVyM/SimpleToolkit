@@ -50,32 +50,37 @@ namespace SimpleToolkit.SimpleShell.Playground
 
             Loaded += PlaygroundAppShellLoaded;
 
-            this.SetTransition(args =>
-            {
-                switch (args.TransitionType)
+            this.SetTransition(
+                callback: args =>
                 {
-                    case SimpleShellTransitionType.Switching:
-                        args.OriginPage.Opacity = 1 - args.Progress;
-                        args.DestinationPage.Opacity = args.Progress;
-                        break;
-                    case SimpleShellTransitionType.Pushing:
-                        args.DestinationPage.Opacity = args.DestinationPage.Width < 0 ? 0 : 1;
-                        args.DestinationPage.TranslationX = (1 - args.Progress) * args.DestinationPage.Width;
-                        break;
-                    case SimpleShellTransitionType.Popping:
-                        args.OriginPage.TranslationX = args.Progress * args.OriginPage.Width;
-                        break;
-                }
-            },
-            250,
-            finished: args =>
-            {
-                args.DestinationPage.TranslationX = 0;
-                args.OriginPage.TranslationX = 0;
-                args.OriginPage.Opacity = 1;
-                args.DestinationPage.Opacity = 1;
-            },
-            destinationPageInFrontOnPopping: false);
+                    switch (args.TransitionType)
+                    {
+                        case SimpleShellTransitionType.Switching:
+                            args.OriginPage.Opacity = 1 - args.Progress;
+                            args.DestinationPage.Opacity = args.Progress;
+                            break;
+                        case SimpleShellTransitionType.Pushing:
+                            args.DestinationPage.Opacity = args.DestinationPage.Width < 0 ? 0 : 1;
+                            args.DestinationPage.TranslationX = (1 - args.Progress) * args.DestinationPage.Width;
+                            break;
+                        case SimpleShellTransitionType.Popping:
+                            args.OriginPage.TranslationX = args.Progress * args.OriginPage.Width;
+                            break;
+                    }
+                },
+                duration: args => 250u,
+                finished: args =>
+                {
+                    args.DestinationPage.TranslationX = 0;
+                    args.OriginPage.TranslationX = 0;
+                    args.OriginPage.Opacity = 1;
+                    args.DestinationPage.Opacity = 1;
+                },
+                destinationPageInFront: args => args.TransitionType switch
+                {
+                    SimpleShellTransitionType.Popping => false,
+                    _ => true
+                });
         }
 
         private void PlaygroundAppShellLoaded(object sender, EventArgs e)

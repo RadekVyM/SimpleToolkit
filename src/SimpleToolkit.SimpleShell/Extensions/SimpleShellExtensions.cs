@@ -1,12 +1,20 @@
 ﻿using SimpleToolkit.SimpleShell.Transitions;
-using static System.TimeZoneInfo;
 
 namespace SimpleToolkit.SimpleShell.Extensions
 {
     public static class SimpleShellExtensions
     {
         /// <summary>
-        /// Sets the transition to the page.
+        /// Gets the page transition.
+        /// </summary>
+        /// <param name="page">Page with required transition.</param>
+        public static SimpleShellTransition GetTransition(this Page page)
+        {
+            return SimpleShell.GetTransition(page);
+        }
+
+        /// <summary>
+        /// Sets the page transition.
         /// </summary>
         /// <param name="page">Destination page of a navigation with this transition.</param>
         /// <param name="transition">Transition of a navigation to the page.</param>
@@ -26,6 +34,8 @@ namespace SimpleToolkit.SimpleShell.Extensions
         /// <param name="destinationPageInFrontOnSwitching">Whether the destination page should be displayed in front of the origin page when switching root pages in the stack.</param>
         /// <param name="destinationPageInFrontOnPushing">Whether the destination page should be displayed in front of the origin page when pushing new page to the stack.</param>
         /// <param name="destinationPageInFrontOnPopping">Whether the destination page should be displayed in front of the origin page when popping existing page from the stack.</param>
+        [Obsolete("This extension method is deprecated. Please use other overload of this method.")]
+        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public static void SetTransition(
             this Page page,
             Action<SimpleShellTransitionArgs> callback,
@@ -93,6 +103,7 @@ namespace SimpleToolkit.SimpleShell.Extensions
                 action?.Invoke(args);
             }, duration, starting, finished, destinationPageInFront));
         }
+
 
         internal static IEnumerable<ShellSection> GetShellSections(this BaseShellItem baseShellItem)
         {
