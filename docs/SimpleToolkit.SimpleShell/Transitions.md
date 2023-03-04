@@ -12,7 +12,7 @@ Each transition is represented by a `SimpleShellTransition` object which contain
 - `Duration` - method returning duration of the transition
 - `DestinationPageInFront` - method returning whether the destination page should be displayed in front of the origin page when navigating from one page to another
 
-Each of these methods takes a object `SimpleShellTransitionArgs` as a parameter. Usefull information about currently running transition can be obtained from this object:
+Each of these methods takes a `SimpleShellTransitionArgs` object as a parameter. Usefull information about currently running transition can be obtained from this object:
 
 - `OriginPage` of type `VisualElement` - page from which the navigation is initiated
 - `DestinationPage` of type `VisualElement` - destination page of the navigation
@@ -38,16 +38,6 @@ Setting transition can be simplified using several extension methods. These are 
 public static void SetTransition(
     this Page page,
     SimpleShellTransition transition)
-
-public static void SetTransition(
-    this Page page,
-    Action<SimpleShellTransitionArgs> callback,
-    uint duration = 250,
-    Action<SimpleShellTransitionArgs> starting = null,
-    Action<SimpleShellTransitionArgs> finished = null,
-    bool destinationPageInFrontOnSwitching = true,
-    bool destinationPageInFrontOnPushing = true,
-    bool destinationPageInFrontOnPopping = true)
 
 public static void SetTransition(
     this Page page,
@@ -108,8 +98,8 @@ public AppShell()
             _ => true
         },
         duration: args => args.TransitionType switch {
-            SimpleShellTransitionType.Switching => 500,
-            _ => 350
+            SimpleShellTransitionType.Switching => 500u,
+            _ => 350u
         });
 }
 ```
@@ -128,15 +118,10 @@ public ImagePage()
     InitializeComponent();
 
     this.SetTransition(
-        callback: args =>
-        {
-            args.DestinationPage.Scale = args.Progress;
-        },
-        500,
-        finished: args =>
-        {
-            args.DestinationPage.Scale = 1;
-        });
+        callback: args => args.DestinationPage.Scale = args.Progress,
+        starting: args => args.DestinationPage.Scale = 0,
+        finished: args => args.DestinationPage.Scale = 1,
+        duration: args => 500u);
 }
 ```
 
@@ -145,3 +130,27 @@ Output:
 <p align="center">
     <img width="350" src="../images/windows_transitions_2.gif">
 </p>
+
+### Combining transitions
+
+Two transitions can be combined into one when you want to use different transitions under different conditions:
+
+```csharp
+public ImagePage()
+{
+    InitializeComponent();
+
+    this.SetTransition(new SimpleShellTransition(
+        callback: args => args.DestinationPage.Scale = args.Progress,
+        starting: args => args.DestinationPage.Scale = 0,
+        finished: args => args.DestinationPage.Scale = 1,
+        duration: args => 500u)
+        .CombinedWith(
+            transition: SimpleShell.Current.GetTransition(),
+            when: args => args.TransitionType != SimpleShellTransitionType.Pushing));
+}
+```
+
+`when` delegate determines when the second `transition` should be used.
+
+> In this example, scale transition is used only when the the page is being pushed to the navigation stack, otherwise the default transition defined in shell is used.
