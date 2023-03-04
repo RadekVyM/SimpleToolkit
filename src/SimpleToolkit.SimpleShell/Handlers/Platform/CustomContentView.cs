@@ -11,7 +11,11 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
             foreach (var subview in Subviews)
             {
-                subview.Frame = Bounds;
+                // Only resize a subview when it does not match the size of the parent
+                if (subview.Bounds.Width != Bounds.Width || subview.Bounds.Height != Bounds.Height)
+                {
+                    subview.Frame = new CoreGraphics.CGRect(subview.Frame.X, subview.Frame.Y, Bounds.Width, Bounds.Height);
+                }
             }
         }
     }

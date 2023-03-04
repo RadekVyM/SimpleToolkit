@@ -60,16 +60,9 @@ namespace SimpleToolkit.SimpleShell.Playground
                         break;
                     case SimpleShellTransitionType.Pushing:
                         args.DestinationPage.Opacity = args.DestinationPage.Width < 0 ? 0 : 1;
-#if IOS
-                        // If I use just TranslationX, it is not applied on iOS
-                        args.DestinationPage.Scale = 0.99 + (0.01 * args.Progress);
-#endif
                         args.DestinationPage.TranslationX = (1 - args.Progress) * args.DestinationPage.Width;
                         break;
                     case SimpleShellTransitionType.Popping:
-#if IOS
-                        args.OriginPage.Scale = 0.99 + (0.01 * (1 - args.Progress));
-#endif
                         args.OriginPage.TranslationX = args.Progress * args.OriginPage.Width;
                         break;
                 }
