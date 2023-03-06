@@ -25,12 +25,12 @@ I have split the content of this library into three NuGet packages because there
 Here are some of my samples that were built using this library:
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/RadekVyM/maui-wonderous-app/main/images/android_illustrations_20.gif" width="230" />
+    <img src="https://raw.githubusercontent.com/RadekVyM/MarvelousMAUI/main/images/android_illustrations_20.gif" width="230" />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="https://raw.githubusercontent.com/RadekVyM/maui-wonderous-app/main/images/iphone_wonders_transitions_20.gif" width="240" />
+    <img src="https://raw.githubusercontent.com/RadekVyM/MarvelousMAUI/main/images/iphone_wonders_transitions_20.gif" width="239" />
 </p>
 <p align="center">
-    <a href="https://github.com/RadekVyM/maui-wonderous-app"><em>Wonderous .NET MAUI</em></a>
+    <a href="https://github.com/RadekVyM/MarvelousMAUI"><em>Marvelous .NET MAUI</em></a>
 </p>
 <p align="center">
     <img src="https://raw.githubusercontent.com/RadekVyM/Gadgets-Store-App/maui/samples/gadget_store_home.png" width="500" />
@@ -88,6 +88,12 @@ See [documentation](./docs/SimpleToolkit.Core) for more information.
 The *SimpleToolkit.SimpleShell* package provides you with a simplified implementation of .NET MAUI `Shell` that lets you easily create a custom navigation experience in your .NET MAUI applications. The implementation is simply called `SimpleShell`.
 
 All `SimpleShell` is is just a simple container for your content with the ability to put the hosting area for pages wherever you want. Thanks to that, you are able to add custom tab bars, navigation bars, flyouts, etc. to your `Shell` application while using great `Shell` URI-based navigation.
+
+In order to use `SimpleShell`, you need to call the `UseSimpleShell()` extension method in your `MauiProgram.cs` file:
+
+```csharp
+builder.UseSimpleShell();
+```
 
 ### Why not use `SimpleShell` and use .NET MAUI `Shell` instead
 
