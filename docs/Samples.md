@@ -1,5 +1,10 @@
 # List of Samples Built Using SimpleToolkit
 
+## [Marvelous .NET MAUI](https://github.com/RadekVyM/MarvelousMAUI)
+**.NET MAUI clone** of the [Wonderous app](https://flutter.gskinner.com/wonderous/) - a visual showcase of **eight wonders of the world** made with [Flutter](https://github.com/flutter/flutter) by the team at [gskinner](https://gskinner.com/).
+
+https://user-images.githubusercontent.com/65116078/221362876-a51bf65e-8b8e-416c-8ef9-c56f57e792ea.mp4
+
 ## [Gadget Store App](https://github.com/RadekVyM/Gadgets-Store-App)
 
 **.NET MAUI** implementation of [Gadgets Store App](https://dribbble.com/shots/6983164-Gadgets-Store-App) design by [Sajon](https://dribbble.com/sajon007):
