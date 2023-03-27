@@ -13,15 +13,15 @@
         <!--<Tab Title="Flame tab" Route="FirstTab"
          Icon="flame_empty.png">-->
         <ShellContent
-            Title="Yellow"
-            Icon="flame_empty.png"
-            ContentTemplate="{DataTemplate pages:YellowPage}"
-            Route="YellowPage" />
-        <ShellContent
             Title="Green"
             Icon="bird_empty.png"
             ContentTemplate="{DataTemplate pages:GreenPage}"
             Route="GreenPage" />
+        <ShellContent
+            Title="Yellow"
+            Icon="flame_empty.png"
+            ContentTemplate="{DataTemplate pages:YellowPage}"
+            Route="YellowPage" />
         <!--</Tab>-->
 
         <!--<Tab Title="Case tab" Route="SecondTab"
