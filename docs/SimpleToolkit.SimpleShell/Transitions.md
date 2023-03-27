@@ -153,4 +153,4 @@ public ImagePage()
 
 `when` delegate determines when the second `transition` should be used.
 
-> In this example, scale transition is used only when the the page is being pushed to the navigation stack, otherwise the default transition defined in shell is used.
+> In this example, scale transition is used only when the page is being pushed to the navigation stack, otherwise the default transition defined in shell is used.
