@@ -101,7 +101,7 @@ namespace SimpleToolkit.Core
         {
             var activity = window.Handler.PlatformView as AppCompatActivity;
 
-            var windowInsetController = ViewCompat.GetWindowInsetsController(activity.Window.DecorView);
+            var windowInsetController = WindowCompat.GetInsetsController(activity.Window, activity.Window.DecorView);
             if (windowInsetController is not null)
             {
                 windowInsetController.AppearanceLightStatusBars = !(lightElements ?? defaultStatusBarLightElements);
@@ -170,7 +170,7 @@ namespace SimpleToolkit.Core
 
             action?.Invoke(windowId, new Thickness(barsInsets.Left / density, barsInsets.Top / density, barsInsets.Right / density, barsInsets.Bottom / density));
 
-            return insets;
+            return ViewCompat.OnApplyWindowInsets(v, insets.Inset(barsInsets));
         }
     }
 }
