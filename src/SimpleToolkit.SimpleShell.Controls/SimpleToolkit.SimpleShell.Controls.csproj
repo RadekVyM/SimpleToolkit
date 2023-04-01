@@ -46,7 +46,7 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)'!='DEBUG'">
-		<PackageReference Include="SimpleToolkit.Core" Version="2.0.*" PrivateAssets="All"/>
+		<PackageReference Include="SimpleToolkit.Core" Version="2.0.*" PrivateAssets="buildTransitive"/>
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)'=='DEBUG'">
