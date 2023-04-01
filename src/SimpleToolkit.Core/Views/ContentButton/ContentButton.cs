@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace SimpleToolkit.Core
 {
@@ -9,6 +10,8 @@ namespace SimpleToolkit.Core
     public class ContentButton : ContentView, IContentButton
     {
         private const string PressedState = "Pressed";
+
+        private bool isPressed = false;
 
         /// <summary>
         /// Event that fires when the button is clicked.
@@ -23,8 +26,10 @@ namespace SimpleToolkit.Core
         /// </summary>
         public event EventHandler<ContentButtonEventArgs> Released;
 
-        public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(ContentButton), defaultValue: null);
-        public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(ContentButton), defaultValue: null);
+        public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(ContentButton), defaultValue: null, propertyChanging: OnCommandChanging, propertyChanged: OnCommandChanged);
+
+        public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(ContentButton), defaultValue: null,
+            propertyChanged: (bindable, oldvalue, newvalue) => CommandCanExecuteChanged(bindable, EventArgs.Empty));
 
         public virtual ICommand Command
         {
@@ -38,8 +43,12 @@ namespace SimpleToolkit.Core
             set => SetValue(CommandParameterProperty, value);
         }
 
+
         public virtual void OnClicked()
         {
+            if (!IsEnabled)
+                return;
+
             Clicked?.Invoke(this, EventArgs.Empty);
 
             if (Command?.CanExecute(CommandParameter) == true)
@@ -50,7 +59,11 @@ namespace SimpleToolkit.Core
 
         public virtual void OnPressed(Point pressPosition)
         {
-            VisualStateManager.GoToState(this, PressedState);
+            if (!IsEnabled)
+                return;
+
+            UpdatePressed(true);
+
             Pressed?.Invoke(this, new ContentButtonEventArgs
             {
                 InteractionPosition = pressPosition
@@ -59,21 +72,85 @@ namespace SimpleToolkit.Core
 
         public virtual void OnReleased(Point releasePosition)
         {
-            GoToDefaultState();
+            if (!IsEnabled && !isPressed)
+                return;
+
+            UpdatePressed(false);
+
             Released?.Invoke(this, new ContentButtonEventArgs
             {
                 InteractionPosition = releasePosition
             });
         }
 
+        private void UpdatePressed(bool pressed)
+        {
+            isPressed = pressed;
+            UpdateState();
+        }
+
+        private void UpdateState()
+        {
+            if (isPressed)
+                VisualStateManager.GoToState(this, PressedState);
+            else
+                GoToDefaultState();
+        }
+
         private void GoToDefaultState()
         {
             if (!IsEnabled)
                 VisualStateManager.GoToState(this, VisualStateManager.CommonStates.Disabled);
-            else if (IsFocused)
-                VisualStateManager.GoToState(this, VisualStateManager.CommonStates.Focused);
             else
                 VisualStateManager.GoToState(this, VisualStateManager.CommonStates.Normal);
+
+            if (IsEnabled && IsFocused)
+            {
+                // Focus needs to be handled independently; otherwise, if no actual Focus state is supplied
+                // in the control's visual states, the state can end up stuck in PointerOver after the pointer
+                // exits and the control still has focus.
+                VisualStateManager.GoToState(this, VisualStateManager.CommonStates.Focused);
+            }
+        }
+
+        private void OnCommandCanExecuteChanged(object sender, EventArgs e)
+            => CommandCanExecuteChanged(this, e);
+
+        private static void CommandChanged(ContentButton button)
+        {
+            if (button.Command is not null)
+                CommandCanExecuteChanged(button, EventArgs.Empty);
+            else
+                button.SetValueCore(IsEnabledProperty, true);
+        }
+
+        private static void CommandCanExecuteChanged(object sender, EventArgs e)
+        {
+            var button = sender as ContentButton;
+
+            if (button.Command is not null)
+            {
+                button.SetValueCore(IsEnabledProperty, button.Command.CanExecute(button.CommandParameter));
+                button.UpdateState();
+            }
+        }
+
+        private static void OnCommandChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var button = bindable as ContentButton;
+
+            if (newValue is ICommand newCommand)
+                newCommand.CanExecuteChanged += button.OnCommandCanExecuteChanged;
+
+            CommandChanged(button);
+        }
+
+        private static void OnCommandChanging(BindableObject bindable, object oldValue, object newValue)
+        {
+            var button = bindable as ContentButton;
+
+            if (oldValue is ICommand oldCommand)
+                oldCommand.CanExecuteChanged -= button.OnCommandCanExecuteChanged;
         }
     }
 }

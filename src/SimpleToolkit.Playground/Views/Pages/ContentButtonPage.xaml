@@ -1,15 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage x:Class="SimpleToolkit.SimpleShell.Playground.Views.Pages.ContentButtonPage"
-             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:SimpleToolkit.SimpleShell.Playground.Views.Pages"
-             xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="SimpleToolkit.SimpleShell.Playground.Views.Pages.ContentButtonPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:SimpleToolkit.SimpleShell.Playground.Views.Pages"
+    xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
              
-             Title="Content Buttons">
+    Title="Content Buttons">
 
     <VerticalStackLayout
-        HorizontalOptions="Center" VerticalOptions="Center">
-        <simpleCore:ContentButton Clicked="StarButtonClicked">
+        HorizontalOptions="Center" VerticalOptions="Center"
+        Spacing="20">
+        <simpleCore:ContentButton
+            x:Name="contentButton"
+            Clicked="StarButtonClicked"
+            HorizontalOptions="Center">
             <VisualStateManager.VisualStateGroups>
                 <VisualStateGroupList>
                     <VisualStateGroup>
@@ -24,9 +29,15 @@
                                 <Setter TargetName="border" Property="Background" Value="DarkOrange"/>
                             </VisualState.Setters>
                         </VisualState>
+                        <VisualState x:Name="Disabled">
+                            <VisualState.Setters>
+                                <Setter TargetName="border" Property="Background" Value="LightGray"/>
+                            </VisualState.Setters>
+                        </VisualState>
                     </VisualStateGroup>
                 </VisualStateGroupList>
             </VisualStateManager.VisualStateGroups>
+
             <Border x:Name="border" Background="Orange">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="6"/>
@@ -43,5 +54,19 @@
                 </HorizontalStackLayout>
             </Border>
         </simpleCore:ContentButton>
+
+        <Button
+            x:Name="isEnabledButton"
+            Text="Enabled"
+            Clicked="ChangeButtonClicked"
+            Background="Orange"
+            HorizontalOptions="Center"/>
+
+        <Button
+            x:Name="commandParameterButton"
+            Text="Can execute"
+            Clicked="ChangeCommandParameterButtonClicked"
+            Background="Orange"
+            HorizontalOptions="Center"/>
     </VerticalStackLayout>
 </ContentPage>
