@@ -63,27 +63,8 @@ namespace SimpleToolkit.Core
             base.OnHandlerChanged();
 
 #if WINDOWS
-            if (Handler?.PlatformView is null)
-            {
-                return;
-            }
-
-            ((SimpleToolkit.Core.Handlers.SimpleFlyout)Handler.PlatformView).SetUpPlatformView(CleanUp, CreateWrapperContent);
-
-            static void CleanUp(Microsoft.UI.Xaml.Controls.Panel wrapper)
-            {
-                ((SimpleToolkit.Core.Handlers.WrapperPanel)wrapper).CleanUp();
-            }
-
-            static Microsoft.UI.Xaml.Controls.Panel CreateWrapperContent(Handlers.PopoverHandler handler)
-            {
-                if (handler.VirtualView.Content is null || handler.MauiContext is null)
-                {
-                    return null;
-                }
-
-                return new SimpleToolkit.Core.Handlers.WrapperPanel(handler.VirtualView.Content, handler.MauiContext);
-            }
+            if (Handler?.PlatformView is SimpleToolkit.Core.Handlers.SimpleFlyout platformFlyout)
+                platformFlyout.SetUpPlatformView();
 #endif
         }
 

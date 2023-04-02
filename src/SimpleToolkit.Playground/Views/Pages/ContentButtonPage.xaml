@@ -8,9 +8,38 @@
              
     Title="Content Buttons">
 
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="VerticalOptions" Value="Center"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+        </Style>
+    </ContentPage.Resources>
+
     <VerticalStackLayout
         HorizontalOptions="Center" VerticalOptions="Center"
         Spacing="20">
+        <simpleCore:ContentButton
+            Clicked="VariableButtonClicked"
+            HorizontalOptions="Center">
+            <Border Background="Orange">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="6"/>
+                </Border.StrokeShape>
+                
+                <VerticalStackLayout Padding="6">
+                    <Label
+                        Text="I am a button"/>
+                    <Label
+                        Text="with"/>
+                    <Label
+                        x:Name="variableContentLabel"
+                        Text="default content"/>
+                </VerticalStackLayout>
+            </Border>
+        </simpleCore:ContentButton>
+
         <simpleCore:ContentButton
             x:Name="contentButton"
             Clicked="StarButtonClicked"
@@ -48,9 +77,7 @@
                         VerticalOptions="Center"
                         HeightRequest="18" WidthRequest="18"/>
                     <Label
-                        Text="Show Image Page" TextColor="White"
-                        FontAttributes="Bold"
-                        VerticalOptions="Center"/>
+                        Text="Show Image Page"/>
                 </HorizontalStackLayout>
             </Border>
         </simpleCore:ContentButton>

@@ -42,9 +42,7 @@ namespace SimpleToolkit.Core.Handlers
         {
             var vc = handler.PlatformView.ViewController;
             if (vc is not null)
-            {
                 await vc.DismissViewControllerAsync(true);
-            }
             //handler.PlatformView.CleanUp();
         }
     }

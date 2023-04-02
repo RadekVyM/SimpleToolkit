@@ -13,10 +13,8 @@ namespace SimpleToolkit.Core.Handlers
     public class SimpleFlyout : Flyout
     {
         private readonly IMauiContext mauiContext;
-        private Action<Panel> panelCleanUp;
-        private Func<PopoverHandler, Panel> createControl;
 
-        internal Panel Control { get; set; }
+        internal WrapperPanel PanelContent => Content as WrapperPanel;
         internal XamlStyle FlyoutStyle { get; private set; } = new(typeof(FlyoutPresenter));
         public IPopover VirtualView { get; private set; }
         
@@ -29,18 +27,11 @@ namespace SimpleToolkit.Core.Handlers
 
         public void SetElement(IPopover element)
         {
-            VirtualView = element;
+            VirtualView = element ?? throw new ArgumentNullException(nameof(element));
         }
 
-
-        public void SetUpPlatformView(Action<Panel> panelCleanUp, Func<PopoverHandler, Panel> createControl)
+        public void SetUpPlatformView()
         {
-            ArgumentNullException.ThrowIfNull(panelCleanUp);
-            ArgumentNullException.ThrowIfNull(createControl);
-
-            this.panelCleanUp = panelCleanUp;
-            this.createControl = createControl;
-
             CreateControl();
             ConfigureControl();
         }
@@ -59,9 +50,7 @@ namespace SimpleToolkit.Core.Handlers
         public void Show(IElement anchor)
         {
             if (VirtualView is null)
-            {
                 return;
-            }
 
             if (anchor is not null)
             {
@@ -84,20 +73,15 @@ namespace SimpleToolkit.Core.Handlers
         {
             Hide();
 
-            if (Control is not null)
-                panelCleanUp?.Invoke(Control);
-
+            PanelContent?.CleanUp();
             VirtualView = null;
-            Control = null;
+            Content = null;
         }
 
         private void CreateControl()
         {
-            if (Control is null && VirtualView?.Content is not null && createControl is not null && VirtualView.Handler is PopoverHandler handler)
-            {
-                Control = createControl(handler);
-                Content = Control;
-            }
+            if (PanelContent is null && VirtualView?.Content is not null && VirtualView.Handler is PopoverHandler handler)
+                Content = new WrapperPanel(handler.VirtualView.Content, handler.MauiContext);
         }
 
         private void SetLayout()
@@ -110,8 +94,6 @@ namespace SimpleToolkit.Core.Handlers
 
         private void SetFlyoutStyle()
         {
-            _ = VirtualView?.Content ?? throw new NullReferenceException(nameof(IPopover.Content));
-
             FlyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.BackgroundProperty, Colors.Transparent.ToWindowsColor()));
             FlyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.IsDefaultShadowEnabledProperty, false));
             FlyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.PaddingProperty, 0));
@@ -124,7 +106,7 @@ namespace SimpleToolkit.Core.Handlers
 
         private void ApplyStyles()
         {
-            if (Control is null)
+            if (PanelContent is null)
                 return;
 
             FlyoutPresenterStyle = FlyoutStyle;

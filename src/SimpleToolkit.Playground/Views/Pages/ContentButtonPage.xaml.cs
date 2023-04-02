@@ -6,6 +6,9 @@ namespace SimpleToolkit.SimpleShell.Playground.Views.Pages
 {
     public partial class ContentButtonPage : ContentPage
     {
+        private const string WideText = "wide content that should change size of the button";
+        private const string ShortText = "short text";
+
         bool commandParameter => (bool)contentButton.CommandParameter;
 
 
@@ -36,6 +39,11 @@ namespace SimpleToolkit.SimpleShell.Playground.Views.Pages
         private void StarButtonClicked(object sender, EventArgs e)
         {
             Shell.Current.GoToAsync(nameof(ImagePage));
+        }
+
+        private void VariableButtonClicked(object sender, EventArgs e)
+        {
+            variableContentLabel.Text = variableContentLabel.Text == ShortText ? WideText : ShortText;
         }
 
         private void ChangeButtonClicked(object sender, EventArgs e)

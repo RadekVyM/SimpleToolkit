@@ -11,8 +11,8 @@ namespace SimpleToolkit.Core.Handlers
 {
     internal class WrapperPanel : Panel
     {
-        private readonly View view;
-        private readonly FrameworkElement frameworkElement;
+        private View view;
+        private FrameworkElement frameworkElement;
         private IPlatformViewHandler handler => view.Handler as IPlatformViewHandler;
         
         
@@ -43,6 +43,8 @@ namespace SimpleToolkit.Core.Handlers
         public void CleanUp()
         {
             view.MeasureInvalidated -= OnMeasureInvalidated;
+            view = null;
+            frameworkElement = null;
         }
 
         protected override global::Windows.Foundation.Size ArrangeOverride(global::Windows.Foundation.Size finalSize)
@@ -51,15 +53,11 @@ namespace SimpleToolkit.Core.Handlers
             frameworkElement?.Arrange(new WRect(0, 0, finalSize.Width, finalSize.Height));
 
             if (view.Width <= 0 || view.Height <= 0)
-            {
                 // Hide Panel when size _view is empty.
                 // It is necessary that this element does not overlap other elements when it should be hidden.
                 Opacity = 0;
-            }
             else
-            {
                 Opacity = 1;
-            }
 
             return finalSize;
         }
@@ -71,19 +69,13 @@ namespace SimpleToolkit.Core.Handlers
             var request = frameworkElement.DesiredSize;
 
             if (request.Height < 0)
-            {
                 request.Height = availableSize.Height;
-            }
 
             global::Windows.Foundation.Size result;
             if (view.HorizontalOptions.Alignment == Microsoft.Maui.Controls.LayoutAlignment.Fill && !double.IsInfinity(availableSize.Width) && availableSize.Width != 0)
-            {
                 result = new global::Windows.Foundation.Size(availableSize.Width, request.Height);
-            }
             else
-            {
                 result = request;
-            }
 
             return result;
         }
