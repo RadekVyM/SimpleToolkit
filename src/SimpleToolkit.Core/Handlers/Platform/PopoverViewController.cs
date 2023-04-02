@@ -15,10 +15,18 @@ namespace SimpleToolkit.Core.Handlers
     public class PopoverViewController : UIViewController
     {
         private readonly IMauiContext mauiContext;
-        private Grid contentView = null;
+
+        private Grid virtualContentWrapper = null;
+        private WeakReference<IPopover> virtualViewReference;
 
         internal UIViewController ViewController { get; private set; }
-        public IPopover VirtualView { get; private set; }
+
+        // See https://github.com/dotnet/maui/pull/14108
+        public IPopover VirtualView
+        {
+            get => virtualViewReference is not null && virtualViewReference.TryGetTarget(out var v) ? v : null;
+            set => virtualViewReference = value is null ? null : new(value);
+        }
 
 
         public PopoverViewController(IMauiContext mauiContext)
@@ -47,25 +55,16 @@ namespace SimpleToolkit.Core.Handlers
         {
             base.ViewDidLayoutSubviews();
 
-            if (VirtualView.Content is null)
+            if (VirtualView?.Content is null)
                 return;
 
-            var measure = (VirtualView.Content as IView).Measure(double.PositiveInfinity, double.PositiveInfinity);
+            var measure = (virtualContentWrapper as IView).Measure(double.PositiveInfinity, double.PositiveInfinity);
             PreferredContentSize = new CGSize(measure.Width, measure.Height);
 
             foreach (var subview in View.Subviews)
             {
                 subview.SizeToFit();
             }
-        }
-
-        public override void ViewWillDisappear(bool animated)
-        {
-            if (ViewController?.View is UIView view)
-            {
-                view.Alpha = 1f;
-            }
-            base.ViewWillDisappear(animated);
         }
 
         [MemberNotNull(nameof(VirtualView), nameof(ViewController))]
@@ -79,7 +78,6 @@ namespace SimpleToolkit.Core.Handlers
 
             var rootViewController = WindowStateManager.Default.GetCurrentUIViewController();
             ViewController ??= rootViewController;
-            SetDimmingBackgroundEffect();
         }
 
         public void CleanUp()
@@ -98,7 +96,7 @@ namespace SimpleToolkit.Core.Handlers
         [MemberNotNull(nameof(ViewController))]
         public void InitializeView(in IPopover virtualView, in IElement anchor)
         {
-            UpdateContainerGrid(virtualView);
+            UpdateVirtualContentWrapper(virtualView);
 
             SetPresentationController();
 
@@ -123,18 +121,17 @@ namespace SimpleToolkit.Core.Handlers
 
         public void UpdateContent()
         {
-            UpdateContainerGrid(VirtualView);
-
+            UpdateVirtualContentWrapper(VirtualView);
             SetView(View);
         }
 
-        private void UpdateContainerGrid(IPopover virtualView)
+        private void UpdateVirtualContentWrapper(IPopover virtualView)
         {
-            if (contentView?.Children.Any() == true)
-                contentView.Children.Clear();
+            if (virtualContentWrapper?.Children.Any() == true)
+                virtualContentWrapper.Children.Clear();
 
             // I do not understand how sizing on iOS works. This is the only hopefully working solution I came up with
-            contentView = new Grid
+            virtualContentWrapper = new Grid
             {
                 HorizontalOptions = LayoutOptions.Start,
                 VerticalOptions = LayoutOptions.Start,
@@ -142,19 +139,13 @@ namespace SimpleToolkit.Core.Handlers
                 ColumnDefinitions = new ColumnDefinitionCollection(new ColumnDefinition(GridLength.Auto)),
             };
 
-            contentView.Children.Add(virtualView.Content);
-        }
-
-        private void SetDimmingBackgroundEffect()
-        {
-            if (ViewController?.View is UIView view)
-                view.Alpha = 1f;
+            virtualContentWrapper.Children.Add(virtualView.Content);
         }
 
         private void SetView(UIView view)
         {
             view.ClearSubviews();
-            var subview = contentView?.ToPlatform(mauiContext);
+            var subview = virtualContentWrapper?.ToPlatform(mauiContext);
 
             if (subview is not null)
                 view.AddSubview(subview);
@@ -163,13 +154,12 @@ namespace SimpleToolkit.Core.Handlers
         private void SetPresentationController()
         {
             var popOverDelegate = new PopoverDelegate();
-
             var presentationController = ((UIPopoverPresentationController)PresentationController);
+
             presentationController.SourceView = ViewController?.View ?? throw new InvalidOperationException($"{nameof(ViewController.View)} cannot be null");
             presentationController.Delegate = popOverDelegate;
             presentationController.PermittedArrowDirections = 0; // Because of this the popover is above the anchor
             presentationController.BackgroundColor = Colors.Transparent.ToPlatform();
-
             presentationController.PopoverBackgroundViewType = typeof(PopoverBackgroundView);
         }
 

@@ -72,14 +72,11 @@ namespace SimpleToolkit.Core.Handlers
 
         private void ApplyTint(Color color)
         {
-            if (PlatformView.Image is not null)
+            if (PlatformView.Image is not null && color is not null)
             {
-                if (color is not null)
-                {
-                    if (PlatformView.Image.RenderingMode != UIImageRenderingMode.AlwaysTemplate)
-                        PlatformView.Image = PlatformView.Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
-                    PlatformView.TintColor = color.ToPlatform();
-                }
+                if (PlatformView.Image.RenderingMode != UIImageRenderingMode.AlwaysTemplate)
+                    PlatformView.Image = PlatformView.Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
+                PlatformView.TintColor = color.ToPlatform();
             }
         }
 

@@ -4,30 +4,27 @@ using CoreGraphics;
 using Foundation;
 using Microsoft.Maui.Platform;
 using UIKit;
+using PlatformContentView = Microsoft.Maui.Platform.ContentView;
 
 namespace SimpleToolkit.Core.Handlers.Platform
 {
-    public class ButtonContentView : Microsoft.Maui.Platform.ContentView
+    public class ButtonContentView : PlatformContentView
     {
-        public Func<double, double, Size> CrossPlatformMeasure { get; set; }
-        public Func<Rect, Size> CrossPlatformArrange { get; set; }
-
         public event EventHandler<ContentButtonEventArgs> BeganTouching;
         public event EventHandler<ContentButtonEventArgs> EndedTouching;
         public event EventHandler<ContentButtonEventArgs> CancelledTouching;
         public event EventHandler<ContentButtonEventArgs> MovedTouching;
 
+        // I need to oveverride these methods because of the CrossPlatformMeasure() and CrossPlatformArrange() methods
         public override CGSize SizeThatFits(CGSize size)
         {
-            if (CrossPlatformMeasure == null)
-            {
+            if (View is not IContentView contentView)
                 return base.SizeThatFits(size);
-            }
 
             var width = size.Width;
             var height = size.Height;
 
-            var crossPlatformSize = CrossPlatformMeasure(width, height);
+            var crossPlatformSize = contentView.CrossPlatformMeasure(width, height);
 
             return crossPlatformSize.ToCGSize();
         }
@@ -36,10 +33,13 @@ namespace SimpleToolkit.Core.Handlers.Platform
         {
             base.LayoutSubviews();
 
+            if (View is not IContentView contentView)
+                return;
+
             var bounds = AdjustForSafeArea(Bounds).ToRectangle();
 
-            CrossPlatformMeasure?.Invoke(bounds.Width, bounds.Height);
-            CrossPlatformArrange?.Invoke(bounds);
+            contentView.CrossPlatformMeasure(bounds.Width, bounds.Height);
+            contentView.CrossPlatformArrange(bounds);
         }
 
         public override void SetNeedsLayout()

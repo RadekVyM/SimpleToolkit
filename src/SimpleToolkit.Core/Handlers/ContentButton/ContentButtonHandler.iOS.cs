@@ -3,6 +3,7 @@
 using Microsoft.Maui.Handlers;
 using SimpleToolkit.Core.Handlers.Platform;
 using UIKit;
+using PlatformContentView = Microsoft.Maui.Platform.ContentView;
 
 namespace SimpleToolkit.Core.Handlers
 {
@@ -18,18 +19,14 @@ namespace SimpleToolkit.Core.Handlers
 
             var buttonPlatformView = new ButtonContentView
             {
-                CrossPlatformMeasure = VirtualView.CrossPlatformMeasure,
-                CrossPlatformArrange = VirtualView.CrossPlatformArrange
+                AccessibilityTraits = UIAccessibilityTrait.Button
             };
-
-            buttonPlatformView.AccessibilityTraits = UIAccessibilityTrait.Button;
-
             buttonPlatformView.AddGestureRecognizer(new UITapGestureRecognizer(OnViewTapped));
 
             return buttonPlatformView;
         }
 
-        protected override void ConnectHandler(Microsoft.Maui.Platform.ContentView platformView)
+        protected override void ConnectHandler(PlatformContentView platformView)
         {
             base.ConnectHandler(platformView);
 
@@ -42,7 +39,7 @@ namespace SimpleToolkit.Core.Handlers
             buttonContentView.CancelledTouching += OnEndedTouching;
         }
 
-        protected override void DisconnectHandler(Microsoft.Maui.Platform.ContentView platformView)
+        protected override void DisconnectHandler(PlatformContentView platformView)
         {
             base.DisconnectHandler(platformView);
 
