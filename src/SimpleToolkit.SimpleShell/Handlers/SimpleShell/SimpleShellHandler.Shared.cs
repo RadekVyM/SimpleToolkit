@@ -131,6 +131,12 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
             navigationHost = null;
             SelectedItem = null;
+
+#if IOS || MACCATALYST
+            navigationController.PopGestureRecognized -= NavigationControllerPopGestureRecognized;
+            navigationController.RemoveFromParentViewController();
+            navigationController = null;
+#endif
         }
 
         public static void MapCurrentItem(SimpleShellHandler handler, ISimpleShell shell)
