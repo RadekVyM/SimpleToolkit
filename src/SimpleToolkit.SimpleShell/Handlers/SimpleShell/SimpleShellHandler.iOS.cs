@@ -36,12 +36,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
             if (VirtualView is not SimpleShell shell)
                 return;
 
-            if (shell.Navigation.ModalStack.Any())
-                shell.Navigation.PopModalAsync();
-            else
-                shell.Navigation.PopAsync();
-
-            shell.CurrentPage.SendBackButtonPressed();
+            shell.SendBackButtonPressed();
         }
     }
 }
