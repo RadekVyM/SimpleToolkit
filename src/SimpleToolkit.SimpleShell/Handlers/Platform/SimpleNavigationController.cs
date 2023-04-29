@@ -13,6 +13,8 @@ namespace SimpleToolkit.SimpleShell.Handlers.Platform
 
         public event EventHandler PopGestureRecognized;
 
+        public bool ShouldRecognizePopGesture { get; set; } = true;
+
 
         protected virtual void OnPopGestureRecognized()
         {
@@ -61,7 +63,7 @@ namespace SimpleToolkit.SimpleShell.Handlers.Platform
         [Export("gestureRecognizerShouldBegin:")]
         public bool ShouldBegin(UIGestureRecognizer recognizer)
         {
-            return true;
+            return ShouldRecognizePopGesture;
         }
     }
 }

@@ -12,6 +12,12 @@ namespace SimpleToolkit.SimpleShell.Handlers
             shellSectionContainer = new WBorder();
             return shellSectionContainer;
         }
+
+        private void UpdateShellSectionContainerContent()
+        {
+            if (currentShellSectionHandler.PlatformView != (Microsoft.UI.Xaml.Controls.Grid)shellSectionContainer.Child)
+                shellSectionContainer.Child = currentShellSectionHandler.PlatformView;
+        }
     }
 }
 

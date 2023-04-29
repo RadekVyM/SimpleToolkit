@@ -1,6 +1,7 @@
 ﻿#if IOS || MACCATALYST
 
 using Microsoft.Maui.Handlers;
+using Microsoft.Maui.Platform;
 using UIKit;
 
 namespace SimpleToolkit.SimpleShell.Handlers
@@ -11,6 +12,15 @@ namespace SimpleToolkit.SimpleShell.Handlers
         {
             shellSectionContainer = new CustomContentView();
             return shellSectionContainer;
+        }
+
+        private void UpdateShellSectionContainerContent()
+        {
+            if (currentShellSectionHandler.PlatformView != (UIKit.UIView)shellSectionContainer.Subviews.FirstOrDefault())
+            {
+                shellSectionContainer.ClearSubviews();
+                shellSectionContainer.AddSubview(currentShellSectionHandler.PlatformView);
+            }
         }
     }
 }
