@@ -10,6 +10,10 @@ namespace SimpleToolkit.SimpleShell.Handlers
         {
             throw new NotImplementedException();
         }
+
+        private void UpdateShellSectionContainerContent()
+        {
+        }
     }
 }
 

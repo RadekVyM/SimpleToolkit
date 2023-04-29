@@ -17,6 +17,16 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
             return shellSectionContainer;
         }
+
+        private void UpdateShellSectionContainerContent()
+        {
+            if (currentShellSectionHandler.PlatformView != shellSectionContainer.GetChildAt(0))
+            {
+                shellSectionContainer.RemoveAllViews();
+                if (currentShellSectionHandler.PlatformView is not null)
+                    shellSectionContainer.AddView(currentShellSectionHandler.PlatformView);
+            }
+        }
     }
 }
 

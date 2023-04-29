@@ -24,7 +24,7 @@
 		<PackageTags>MAUI, Controls, Shell, Navigation, Transitions</PackageTags>
 		<Authors>RadekVyM</Authors>
 		<PackageOutputPath>..\..\packages</PackageOutputPath>
-		<VersionPrefix>2.1.0</VersionPrefix>
+		<VersionPrefix>2.1.1</VersionPrefix>
 		<VersionSuffix></VersionSuffix>
 		<Version>$(VersionPrefix)$(VersionSuffix)</Version>
 		<Description>Simplified implementation of .NET MAUI Shell that is part of SimpleToolkit library.</Description>
@@ -33,6 +33,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageIcon>logo_with_background.png</PackageIcon>
 		<Copyright>Copyright © Radek Vymětalík and contributors</Copyright>
+        <PackageReadmeFile>SimpleToolkit.SimpleShell.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -43,6 +44,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+        <None Include="..\..\docs\Nuget\SimpleToolkit.SimpleShell.md">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
 		<None Include="..\..\images\logo_with_background.png">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>

@@ -33,7 +33,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageIcon>logo_with_background.png</PackageIcon>
 		<Copyright>Copyright © Radek Vymětalík and contributors</Copyright>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageReadmeFile>SimpleToolkit.Core.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -44,7 +44,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\..\docs\SimpleToolkit.Core\README.md">
+		<None Include="..\..\docs\Nuget\SimpleToolkit.Core.md">
 		  <Pack>True</Pack>
 		  <PackagePath>\</PackagePath>
 		</None>

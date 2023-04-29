@@ -79,27 +79,6 @@ namespace SimpleToolkit.SimpleShell.Handlers
                 currentShellSection.PropertyChanged += OnCurrentShellSectionPropertyChanged;
         }
 
-        private void UpdateShellSectionContainerContent()
-        {
-#if ANDROID
-            if (PlatformView != shellSectionContainer.GetChildAt(0))
-            {
-                shellSectionContainer.RemoveAllViews();
-                if (currentShellSectionHandler.PlatformView is not null)
-                    shellSectionContainer.AddView(currentShellSectionHandler.PlatformView);
-            }
-#elif IOS || MACCATALYST
-            if (PlatformView != (UIKit.UIView)shellSectionContainer.Subviews.FirstOrDefault())
-            {
-                shellSectionContainer.ClearSubviews();
-                shellSectionContainer.AddSubview(currentShellSectionHandler.PlatformView);
-            }
-#elif WINDOWS
-            if (PlatformView != (Microsoft.UI.Xaml.Controls.Grid)shellSectionContainer.Child)
-                shellSectionContainer.Child = currentShellSectionHandler.PlatformView;
-#endif
-        }
-
         private void OnCurrentShellSectionPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
         }

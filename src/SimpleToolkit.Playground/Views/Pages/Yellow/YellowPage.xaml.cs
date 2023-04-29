@@ -19,6 +19,12 @@ public partial class YellowPage : ContentPage
 #endif
     }
 
+    protected override bool OnBackButtonPressed()
+    {
+        System.Diagnostics.Debug.WriteLine($"{nameof(YellowPage)}: Back button pressed");
+        return base.OnBackButtonPressed();
+    }
+
     private async void Button_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(FirstYellowDetailPage), true);

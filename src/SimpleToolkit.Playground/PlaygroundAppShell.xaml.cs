@@ -83,6 +83,12 @@ namespace SimpleToolkit.SimpleShell.Playground
                 });
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            System.Diagnostics.Debug.WriteLine($"{nameof(PlaygroundAppShell)}: Back button pressed");
+            return base.OnBackButtonPressed();
+        }
+
         private void PlaygroundAppShellLoaded(object sender, EventArgs e)
         {
             this.Window.SubscribeToSafeAreaChanges(OnSafeAreaChanged);
