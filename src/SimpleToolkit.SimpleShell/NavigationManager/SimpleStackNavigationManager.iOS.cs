@@ -9,7 +9,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
     {
         protected virtual void AddPlatformPage(PlatformPage newPageView, bool onTop = true)
         {
-            var overlay = GetPlatformView(this.rootPageOverlay);
+            var overlay = GetPlatformView(this.rootPageContainer);
 
             navigationFrame.AddSubview(newPageView);
 
@@ -34,17 +34,17 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
         
         protected virtual void RemovePlatformPage(PlatformPage oldPageView)
         {
-            var overlay = GetPlatformView(this.rootPageOverlay);
+            var overlay = GetPlatformView(this.rootPageContainer);
 
             oldPageView?.RemoveFromSuperview();
             if (!isCurrentPageRoot && isPreviousPageRoot && overlay is not null)
                 overlay?.RemoveFromSuperview();
         }
 
-        protected virtual void ReplaceRootPageOverlay(IView rootPageOverlay)
+        protected virtual void ReplaceRootPageContainer(IView rootPageContainer)
         {
-            var oldOverlay = GetPlatformView(this.rootPageOverlay);
-            var newOverlay = GetPlatformView(rootPageOverlay);
+            var oldOverlay = GetPlatformView(this.rootPageContainer);
+            var newOverlay = GetPlatformView(rootPageContainer);
 
             oldOverlay?.RemoveFromSuperview();
             if (newOverlay is not null && isCurrentPageRoot)

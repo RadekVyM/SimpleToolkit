@@ -23,7 +23,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
         public static CommandMapper<ShellItem, SimpleShellItemHandler> CommandMapper =
             new CommandMapper<ShellItem, SimpleShellItemHandler>(ElementCommandMapper);
 
-        protected IView rootPageOverlay;
+        protected IView rootPageContainer;
         protected SectionContainer shellSectionContainer;
         protected ShellSection currentShellSection;
         protected SimpleShellSectionHandler currentShellSectionHandler;
@@ -43,11 +43,10 @@ namespace SimpleToolkit.SimpleShell.Handlers
         {
         }
 
-        public virtual void SetRootPageOverlay(IView rootPageOverlay)
+        public virtual void SetRootPageContainer(IView view)
         {
-            this.rootPageOverlay = rootPageOverlay;
-
-            currentShellSectionHandler?.SetRootPageOverlay(rootPageOverlay);
+            rootPageContainer = view;
+            currentShellSectionHandler?.SetRootPageContainer(view);
         }
 
         protected void UpdateCurrentItem()
@@ -70,7 +69,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
                     currentShellSectionHandler.SetVirtualView(VirtualView.CurrentItem);
             }
 
-            currentShellSectionHandler?.SetRootPageOverlay(rootPageOverlay);
+            currentShellSectionHandler?.SetRootPageContainer(rootPageContainer);
 
             //UpdateSearchHandler();
             //MapMenuItems();
@@ -90,7 +89,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
             shellSectionContainer = null;
             currentShellSection = null;
             currentShellSectionHandler = null;
-            rootPageOverlay = null;
+            rootPageContainer = null;
         }
 
         public static void MapTabBarIsVisible(SimpleShellItemHandler handler, ShellItem item)

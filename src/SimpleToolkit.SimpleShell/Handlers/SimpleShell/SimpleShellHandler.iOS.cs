@@ -28,7 +28,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         protected virtual UIView GetNavigationHostContent()
         {
-            return (navigationHost?.Handler as SimpleNavigationHostHandler)?.Container?.Subviews.FirstOrDefault();
+            return (navigationHost?.Handler as SimpleNavigationHostHandler)?.PlatformView?.Subviews.FirstOrDefault();
         }
 
         private void NavigationControllerPopGestureRecognized(object sender, EventArgs e)

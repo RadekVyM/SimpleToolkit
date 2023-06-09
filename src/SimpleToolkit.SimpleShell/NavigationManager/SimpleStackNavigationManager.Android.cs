@@ -11,7 +11,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             if (newPageView is null)
                 return;
 
-            var overlay = GetPlatformView(this.rootPageOverlay);
+            var overlay = GetPlatformView(this.rootPageContainer);
 
             if (overlay?.Id == -1)
                 overlay.Id = PlatformPage.GenerateViewId();
@@ -39,7 +39,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 
         protected virtual void RemovePlatformPage(PlatformPage oldPageView)
         {
-            var overlay = GetPlatformView(this.rootPageOverlay);
+            var overlay = GetPlatformView(this.rootPageContainer);
 
             if (oldPageView is not null)
                 navigationFrame.RemoveView(oldPageView);
@@ -47,10 +47,10 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                 navigationFrame.RemoveView(overlay);
         }
 
-        protected virtual void ReplaceRootPageOverlay(IView rootPageOverlay)
+        protected virtual void ReplaceRootPageContainer(IView rootPageContainer)
         {
-            var oldOverlay = GetPlatformView(this.rootPageOverlay);
-            var newOverlay = GetPlatformView(rootPageOverlay);
+            var oldOverlay = GetPlatformView(this.rootPageContainer);
+            var newOverlay = GetPlatformView(rootPageContainer);
 
             if (oldOverlay?.Id == -1)
                 oldOverlay.Id = PlatformPage.GenerateViewId();

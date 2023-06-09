@@ -2,6 +2,7 @@
 using SimpleToolkit.SimpleShell.Handlers;
 using SimpleToolkit.SimpleShell.Transitions;
 using Microsoft.Maui.Controls.Internals;
+using SimpleToolkit.SimpleShell.Extensions;
 #if ANDROID
 using NavFrame = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
 using PlatformView = Android.Views.View;
@@ -29,7 +30,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
         protected IMauiContext mauiContext;
         protected NavFrame navigationFrame;
         protected IView currentPage;
-        protected IView rootPageOverlay;
+        protected IView rootPageContainer;
 
         public IStackNavigation StackNavigation { get; protected set; }
         public IReadOnlyList<IView> NavigationStack { get; protected set; } = new List<IView>();
@@ -139,21 +140,26 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             }
         }
 
-        public virtual void UpdateRootPageOverlay(IView rootPageOverlay)
+        public virtual void UpdateRootPageContainer(IView rootPageContainer)
         {
             if (NavigationStack is null)
             {
-                this.rootPageOverlay = rootPageOverlay;
+                this.rootPageContainer = rootPageContainer;
                 return;
             }
 
-            ReplaceRootPageOverlay(rootPageOverlay);
-            this.rootPageOverlay = rootPageOverlay;
+            ReplaceRootPageContainer(rootPageContainer);
+            this.rootPageContainer = rootPageContainer;
         }
 
         protected virtual PlatformView GetPlatformView(IView view)
         {
             return view?.ToPlatform(mauiContext);
+        }
+
+        protected virtual object GetRooPageContainerNavHost(IView rootPageContainer)
+        {
+            return rootPageContainer?.FindSimpleNavigationHost()?.Handler?.PlatformView;
         }
 
         private bool ShouldBeAbove(SimpleShellTransition transition, SimpleShellTransitionType transitionType, VisualElement oldPage, VisualElement newPage)

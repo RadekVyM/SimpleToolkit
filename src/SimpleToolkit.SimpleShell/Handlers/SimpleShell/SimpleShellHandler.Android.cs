@@ -24,7 +24,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         protected virtual AView GetNavigationHostContent()
         {
-            return (navigationHost?.Handler as SimpleNavigationHostHandler)?.Container?.GetChildAt(0);
+            return (navigationHost?.Handler as SimpleNavigationHostHandler)?.PlatformView?.GetChildAt(0);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         protected virtual WFrameworkElement GetNavigationHostContent()
         {
-            return (navigationHost?.Handler as SimpleNavigationHostHandler)?.Container?.Child as WFrameworkElement;
+            return (navigationHost?.Handler as SimpleNavigationHostHandler)?.PlatformView?.Children.FirstOrDefault() as WFrameworkElement;
         }
     }
 }

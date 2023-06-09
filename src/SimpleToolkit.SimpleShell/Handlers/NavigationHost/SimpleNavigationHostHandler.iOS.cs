@@ -16,8 +16,6 @@ namespace SimpleToolkit.SimpleShell.Handlers
         {
         };
 
-        public UIView Container { get; protected set; }
-
 
         public SimpleNavigationHostHandler(IPropertyMapper mapper, CommandMapper commandMapper)
             : base(mapper ?? Mapper, commandMapper ?? CommandMapper)
@@ -32,15 +30,14 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         protected override UIView CreatePlatformView()
         {
-            Container = new CustomContentView();
-            return Container;
+            return new CustomContentView();
         }
 
         public virtual void SetContent(UIView view)
         {
-            Container.ClearSubviews();
+            PlatformView.ClearSubviews();
             if (view is not null)
-                Container.AddSubview(view);
+                PlatformView.AddSubview(view);
         }
     }
 }

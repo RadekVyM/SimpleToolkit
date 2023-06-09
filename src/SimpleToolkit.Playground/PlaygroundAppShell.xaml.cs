@@ -168,7 +168,7 @@ namespace SimpleToolkit.SimpleShell.Playground
 
         private void ButtonClicked(object sender, EventArgs e)
         {
-            this.RootPageOverlay = null;
+            this.RootPageContainer = null;
         }
 
         private record DesignLanguageItem(string Title, Action Action)

@@ -14,7 +14,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
         {
         }
 
-        protected virtual void ReplaceRootPageOverlay(IView rootPageOverlay)
+        protected virtual void ReplaceRootPageContainer(IView rootPageContainer)
         {
         }
     }

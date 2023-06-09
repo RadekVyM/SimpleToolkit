@@ -226,10 +226,13 @@
             Route="PurplePage" />
     </Tab>
 
-    <shell:SimpleShell.RootPageOverlay>
+    <shell:SimpleShell.RootPageContainer>
         <Grid
             InputTransparent="True"
-            CascadeInputTransparent="False">
+            CascadeInputTransparent="False"
+            RowDefinitions="*, auto">
+            <shell:SimpleNavigationHost/>
+            
             <VerticalStackLayout
                 Margin="15"
                 Spacing="10"
@@ -248,13 +251,22 @@
                     Background="Black"
                     CornerRadius="20"/>
             </VerticalStackLayout>
+
+            <controls:TabBar 
+                x:Name="tabBar" Grid.Row="1" 
+                Items="{Binding Source={x:Reference thisShell}, Path=ShellContents}" 
+                SelectedItem="{Binding Source={x:Reference thisShell}, Path=CurrentShellContent}" 
+                ItemsAlignment="Center"
+                IsScrollable="False"
+                ItemSelected="TabBarItemSelected"
+                Style="{StaticResource MaterialTabbar}"/>
         </Grid>
-    </shell:SimpleShell.RootPageOverlay>
+    </shell:SimpleShell.RootPageContainer>
     
     <shell:SimpleShell.Content>
         <Grid
             x:Name="rootContainer"
-            RowDefinitions="70, auto, *, auto">
+            RowDefinitions="70, auto, *">
             <Grid
                 x:Name="appBar"
                 Padding="12"
@@ -340,16 +352,6 @@
                 </Border.StrokeShape>
                 <shell:SimpleNavigationHost/>
             </Border>
-
-            <controls:TabBar 
-                x:Name="tabBar" Grid.Row="3" 
-                Items="{Binding Source={x:Reference thisShell}, Path=ShellContents}" 
-                SelectedItem="{Binding Source={x:Reference thisShell}, Path=CurrentShellContent}" 
-                ItemsAlignment="Center"
-                IsScrollable="False"
-                ItemSelected="TabBarItemSelected"
-                Style="{StaticResource MaterialTabbar}"/>
-
         </Grid>
     </shell:SimpleShell.Content>
 

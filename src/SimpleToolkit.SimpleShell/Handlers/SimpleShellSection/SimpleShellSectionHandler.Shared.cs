@@ -28,7 +28,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
                 [nameof(IStackNavigation.RequestNavigation)] = RequestNavigation
             };
 
-        private IView rootPageOverlay;
+        private IView rootPageContainer;
 
         protected SimpleStackNavigationManager navigationManager;
         protected ShellSection shellSection;
@@ -75,10 +75,10 @@ namespace SimpleToolkit.SimpleShell.Handlers
             }
         }
 
-        public virtual void SetRootPageOverlay(IView rootPageOverlay)
+        public virtual void SetRootPageContainer(IView view)
         {
-            this.rootPageOverlay = rootPageOverlay;
-            navigationManager?.UpdateRootPageOverlay(rootPageOverlay);
+            rootPageContainer = view;
+            navigationManager?.UpdateRootPageContainer(view);
         }
 
         public virtual void OnAppearanceChanged(ShellAppearance appearance)
@@ -88,7 +88,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
         protected override void ConnectHandler(PageContainer platformView)
         {
             navigationManager?.Connect(VirtualView, platformView);
-            navigationManager?.UpdateRootPageOverlay(rootPageOverlay);
+            navigationManager?.UpdateRootPageContainer(rootPageContainer);
             base.ConnectHandler(platformView);
         }
 

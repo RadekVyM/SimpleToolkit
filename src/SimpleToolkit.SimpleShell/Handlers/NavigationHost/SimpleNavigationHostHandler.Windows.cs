@@ -1,12 +1,12 @@
 ﻿#if WINDOWS
 
 using Microsoft.Maui.Handlers;
-using WBorder = Microsoft.UI.Xaml.Controls.Border;
+using WGrid = Microsoft.UI.Xaml.Controls.Grid;
 using WFrameworkElement = Microsoft.UI.Xaml.FrameworkElement;
 
 namespace SimpleToolkit.SimpleShell.Handlers
 {
-    public partial class SimpleNavigationHostHandler : ViewHandler<ISimpleNavigationHost, WBorder>
+    public partial class SimpleNavigationHostHandler : ViewHandler<ISimpleNavigationHost, WGrid>
     {
         public static IPropertyMapper<ISimpleNavigationHost, SimpleNavigationHostHandler> Mapper = new PropertyMapper<ISimpleNavigationHost, SimpleNavigationHostHandler>(ViewHandler.ViewMapper)
         {
@@ -15,8 +15,6 @@ namespace SimpleToolkit.SimpleShell.Handlers
         public static CommandMapper<ISimpleNavigationHost, SimpleNavigationHostHandler> CommandMapper = new(ViewHandler.ViewCommandMapper)
         {
         };
-
-        public WBorder Container { get; protected set; }
 
 
         public SimpleNavigationHostHandler(IPropertyMapper mapper, CommandMapper commandMapper)
@@ -30,15 +28,16 @@ namespace SimpleToolkit.SimpleShell.Handlers
         }
 
 
-        protected override WBorder CreatePlatformView()
+        protected override WGrid CreatePlatformView()
         {
-            Container = new WBorder();
-            return Container;
+            return new WGrid();
         }
 
         public virtual void SetContent(WFrameworkElement element)
         {
-            Container.Child = element;
+            PlatformView.Children.Clear();
+            if (element is not null)
+                PlatformView.Children.Add(element);
         }
     }
 }

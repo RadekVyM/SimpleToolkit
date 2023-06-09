@@ -1,63 +1,107 @@
 ﻿#if WINDOWS
 
-using Microsoft.Maui.Platform;
-using PlatformPage = Microsoft.UI.Xaml.FrameworkElement;
+using PlatformView = Microsoft.UI.Xaml.FrameworkElement;
+using NavFrame = Microsoft.UI.Xaml.Controls.Grid;
+using Microsoft.UI.Xaml;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager
 {
     public partial class SimpleStackNavigationManager
     {
-        protected virtual void AddPlatformPage(PlatformPage newPageView, bool onTop = true)
+        protected virtual void AddPlatformPage(PlatformView newPageView, bool onTop = true)
         {
-            var overlay = GetPlatformView(this.rootPageOverlay);
+            var container = GetPlatformView(this.rootPageContainer);
 
-            if (onTop)
+            if (isCurrentPageRoot &&
+                container is not null &&
+                GetRooPageContainerNavHost(this.rootPageContainer) is NavFrame navHost)
             {
-                if (isCurrentPageRoot && overlay is not null)
+                if (!navigationFrame.Children.Contains(container))
                 {
-                    if (!navigationFrame.Children.Contains(overlay))
-                    {
-                        navigationFrame.Children.Add(newPageView);
-                        navigationFrame.Children.Add(overlay);
-                    }
+                    if (onTop)
+                        navigationFrame.Children.Add(container);
                     else
-                    {
-                        navigationFrame.Children.Insert(navigationFrame.Children.IndexOf(overlay), newPageView);
-                    }
+                        navigationFrame.Children.Insert(0, container);
                 }
+
+                if (onTop)
+                    navHost.Children.Add(newPageView);
                 else
-                {
-                    navigationFrame.Children.Add(newPageView);
-                }
+                    navHost.Children.Insert(0, newPageView);
             }
             else
             {
-                navigationFrame.Children.Insert(0, newPageView);
-
-                if (isCurrentPageRoot && overlay is not null && !navigationFrame.Children.Contains(overlay))
-                    navigationFrame.Children.Insert(1, overlay);
+                if (onTop)
+                    navigationFrame.Children.Add(newPageView);
+                else
+                    navigationFrame.Children.Insert(0, newPageView);
             }
         }
-        
-        protected virtual void RemovePlatformPage(PlatformPage oldPageView)
-        {
-            var overlay = GetPlatformView(this.rootPageOverlay);
 
-            if (oldPageView is not null)
+        protected virtual void RemovePlatformPage(PlatformView oldPageView)
+        {
+            var container = GetPlatformView(this.rootPageContainer);
+
+            if (oldPageView is not null && navigationFrame.Children.Contains(oldPageView))
                 navigationFrame.Children.Remove(oldPageView);
-            if (!isCurrentPageRoot && isPreviousPageRoot && overlay is not null)
-                navigationFrame.Children.Remove(overlay);
+            if (GetRooPageContainerNavHost(this.rootPageContainer) is NavFrame navHost &&
+                navHost.Children.Contains(oldPageView))
+                navHost.Children.Remove(oldPageView);
+            if (!isCurrentPageRoot && isPreviousPageRoot && container is not null)
+                RemoveRootPageContainer(container);
         }
 
-        protected virtual void ReplaceRootPageOverlay(IView rootPageOverlay)
+        protected virtual void ReplaceRootPageContainer(IView rootPageContainer)
         {
-            var oldOverlay = GetPlatformView(this.rootPageOverlay);
-            var newOverlay = GetPlatformView(rootPageOverlay);
+            var oldContainer = GetPlatformView(this.rootPageContainer);
+            var newContainer = GetPlatformView(rootPageContainer);
+            IList<UIElement> oldChildren = new List<UIElement>();
 
-            if (oldOverlay is not null)
-                navigationFrame.Children.Remove(oldOverlay);
-            if (newOverlay is not null && isCurrentPageRoot)
-                navigationFrame.Children.Add(newOverlay);
+            if (oldContainer is not null)
+                oldChildren = RemoveRootPageContainer(oldContainer);
+
+            // Old container is being replaced or added
+            if (newContainer is not null && isCurrentPageRoot)
+            {
+                // New container is being added
+                if (oldContainer is null && navigationFrame.Children.Any())
+                {
+                    foreach (var child in navigationFrame.Children)
+                        oldChildren.Add(child);
+                    navigationFrame.Children.Clear();
+                }
+
+                navigationFrame.Children.Add(newContainer);
+
+                if (GetRooPageContainerNavHost(rootPageContainer) is NavFrame newNavHost)
+                {
+                    foreach (var child in oldChildren)
+                        newNavHost.Children.Add(child);
+                }
+            }
+            
+            // Old container is being removed
+            if (oldContainer is not null && newContainer is null && isCurrentPageRoot)
+            {
+                foreach (var child in oldChildren)
+                    navigationFrame.Children.Add(child);
+            }
+        }
+
+        private IList<UIElement> RemoveRootPageContainer(PlatformView oldContainer)
+        {
+            var oldChildren = new List<UIElement>();
+            
+            if (GetRooPageContainerNavHost(this.rootPageContainer) is NavFrame oldNavHost)
+            {
+                oldChildren = oldNavHost.Children.ToList();
+                oldNavHost.Children.Clear();
+            }
+
+            if (navigationFrame.Children.Contains(oldContainer))
+                navigationFrame.Children.Remove(oldContainer);
+
+            return oldChildren;
         }
     }
 }
