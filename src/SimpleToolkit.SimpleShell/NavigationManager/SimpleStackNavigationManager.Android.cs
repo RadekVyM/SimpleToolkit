@@ -1,66 +1,124 @@
 ﻿#if ANDROID
 
-using PlatformPage = Android.Views.View;
+using Android.Views;
+using PlatformView = Android.Views.View;
+using NavFrame = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
+using SimpleToolkit.SimpleShell.Extensions;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager
 {
     public partial class SimpleStackNavigationManager
     {
-        protected virtual void AddPlatformPage(PlatformPage newPageView, bool onTop = true)
+        protected virtual void AddPlatformPage(PlatformView newPageView, bool onTop = true)
         {
             if (newPageView is null)
                 return;
 
-            var overlay = GetPlatformView(this.rootPageContainer);
+            var container = GetPlatformView(this.rootPageContainer);
 
-            if (overlay?.Id == -1)
-                overlay.Id = PlatformPage.GenerateViewId();
+            if (container?.Id == -1)
+                container.Id = PlatformView.GenerateViewId();
 
-            navigationFrame.AddView(newPageView);
-
-            if (isCurrentPageRoot && overlay is not null && navigationFrame.FindViewById(overlay.Id) is null)
-                navigationFrame.AddView(overlay);
-
-            if (onTop)
+            if (isCurrentPageRoot &&
+                container is not null &&
+                GetRooPageContainerNavHost(this.rootPageContainer) is NavFrame navHost)
             {
-                if (isCurrentPageRoot && overlay is not null)
-                    navigationFrame.BringChildToFront(overlay);
+                if (navigationFrame.FindViewById(container.Id) is null)
+                    navigationFrame.AddView(container);
+
+                navHost.AddView(newPageView);
+
+                if (onTop)
+                {
+                    navigationFrame.BringChildToFront(container);
+                    navHost.BringChildToFront(newPageView);
+                }
                 else
-                    navigationFrame.BringChildToFront(newPageView);
+                {
+                    navigationFrame.BringChildToFront(navigationFrame.GetChildAt(0));
+                    navHost.BringChildToFront(navHost.GetChildAt(0));
+                }
             }
             else
             {
-                if (isPreviousPageRoot && overlay is not null)
-                    navigationFrame.BringChildToFront(overlay);
+                navigationFrame.AddView(newPageView);
 
-                navigationFrame.BringChildToFront(navigationFrame.GetChildAt(0));
+                if (onTop)
+                    navigationFrame.BringChildToFront(newPageView);
+                else
+                    navigationFrame.BringChildToFront(navigationFrame.GetChildAt(0));
             }
         }
 
-        protected virtual void RemovePlatformPage(PlatformPage oldPageView)
+        protected virtual void RemovePlatformPage(PlatformView oldPageView)
         {
-            var overlay = GetPlatformView(this.rootPageContainer);
+            var container = GetPlatformView(this.rootPageContainer);
 
-            if (oldPageView is not null)
+            if (oldPageView is not null && navigationFrame.Contains(oldPageView))
                 navigationFrame.RemoveView(oldPageView);
-            if (!isCurrentPageRoot && isPreviousPageRoot && overlay is not null)
-                navigationFrame.RemoveView(overlay);
+            if (GetRooPageContainerNavHost(this.rootPageContainer) is NavFrame navHost &&
+                navHost.Contains(oldPageView))
+                navHost.RemoveView(oldPageView);
+            if (!isCurrentPageRoot && isPreviousPageRoot && container is not null)
+                RemoveRootPageContainer(container);
         }
 
         protected virtual void ReplaceRootPageContainer(IView rootPageContainer)
         {
-            var oldOverlay = GetPlatformView(this.rootPageContainer);
-            var newOverlay = GetPlatformView(rootPageContainer);
+            var oldContainer = GetPlatformView(this.rootPageContainer);
+            var newContainer = GetPlatformView(rootPageContainer);
+            IList<PlatformView> oldChildren = new List<PlatformView>();
 
-            if (oldOverlay?.Id == -1)
-                oldOverlay.Id = PlatformPage.GenerateViewId();
-            if (newOverlay?.Id == -1)
-                newOverlay.Id = PlatformPage.GenerateViewId();
+            if (oldContainer?.Id == -1)
+                oldContainer.Id = PlatformView.GenerateViewId();
+            if (newContainer?.Id == -1)
+                newContainer.Id = PlatformView.GenerateViewId();
 
-            if (oldOverlay is not null)
-                navigationFrame.RemoveView(oldOverlay);
-            if (newOverlay is not null && isCurrentPageRoot && navigationFrame.FindViewById(newOverlay.Id) is null)
-                navigationFrame.AddView(newOverlay);
+            if (oldContainer is not null)
+                oldChildren = RemoveRootPageContainer(oldContainer);
+
+            // Old container is being replaced or added
+            if (newContainer is not null && isCurrentPageRoot)
+            {
+                // New container is being added
+                if (oldContainer is null && navigationFrame.ChildCount != 0)
+                {
+                    foreach (var child in navigationFrame.GetChildViews())
+                        oldChildren.Add(child);
+                    navigationFrame.RemoveAllViews();
+                }
+
+                navigationFrame.AddView(newContainer);
+
+                if (GetRooPageContainerNavHost(rootPageContainer) is NavFrame newNavHost)
+                {
+                    foreach (var child in oldChildren)
+                        newNavHost.AddView(child);
+                }
+            }
+
+            // Old container is being removed
+            if (oldContainer is not null && newContainer is null && isCurrentPageRoot)
+            {
+                foreach (var child in oldChildren)
+                    navigationFrame.AddView(child);
+            }
+        }
+
+        private IList<PlatformView> RemoveRootPageContainer(PlatformView oldContainer)
+        {
+            var oldChildren = new List<PlatformView>();
+
+            if (GetRooPageContainerNavHost(this.rootPageContainer) is NavFrame oldNavHost)
+            {
+                oldChildren = oldNavHost.GetChildViews().ToList();
+                oldNavHost.RemoveAllViews();
+            }
+
+            if (navigationFrame.Contains(oldContainer))
+                navigationFrame.RemoveView(oldContainer);
+
+            return oldChildren;
         }
     }
 }

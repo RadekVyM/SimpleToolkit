@@ -66,8 +66,11 @@ namespace SimpleToolkit.Core.Handlers
 
         void OnSetImageSource(UIImage obj)
         {
+            if (obj is null)
+                return;
+
             PlatformView.Image = obj.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
-            PlatformView.TintColor = VirtualView.TintColor.ToPlatform();
+            PlatformView.TintColor = VirtualView.TintColor?.ToPlatform();
         }
 
         private void ApplyTint(Color color)

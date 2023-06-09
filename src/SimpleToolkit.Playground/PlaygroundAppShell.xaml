@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <shell:SimpleShell
     x:Class="SimpleToolkit.SimpleShell.Playground.PlaygroundAppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -228,8 +228,6 @@
 
     <shell:SimpleShell.RootPageContainer>
         <Grid
-            InputTransparent="True"
-            CascadeInputTransparent="False"
             RowDefinitions="*, auto">
             <shell:SimpleNavigationHost/>
             
