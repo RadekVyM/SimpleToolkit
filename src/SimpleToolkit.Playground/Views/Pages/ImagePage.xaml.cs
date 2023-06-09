@@ -13,7 +13,8 @@ public partial class ImagePage : ContentPage
             callback: static args => args.DestinationPage.Scale = args.Progress,
             starting: static args => args.DestinationPage.Scale = 0,
             finished: static args => args.DestinationPage.Scale = 1,
-            duration: static args => 500u)
+            duration: static args => 500u,
+            easing: static args => Easing.SpringOut)
             .CombinedWith(
                 transition: SimpleShell.Current.GetTransition(),
                 when: static args => args.TransitionType != SimpleShellTransitionType.Pushing));

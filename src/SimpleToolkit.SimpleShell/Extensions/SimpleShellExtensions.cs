@@ -64,9 +64,10 @@ namespace SimpleToolkit.SimpleShell.Extensions
             Func<SimpleShellTransitionArgs, uint> duration = null,
             Action<SimpleShellTransitionArgs> starting = null,
             Action<SimpleShellTransitionArgs> finished = null,
-            Func<SimpleShellTransitionArgs, bool> destinationPageInFront = null)
+            Func<SimpleShellTransitionArgs, bool> destinationPageInFront = null,
+            Func<SimpleShellTransitionArgs, Easing> easing = null)
         {
-            page.SetTransition(new SimpleShellTransition(callback, duration, starting, finished, destinationPageInFront));
+            page.SetTransition(new SimpleShellTransition(callback, duration, starting, finished, destinationPageInFront, easing));
         }
 
         /// <summary>
@@ -88,7 +89,8 @@ namespace SimpleToolkit.SimpleShell.Extensions
             Func<SimpleShellTransitionArgs, uint> duration = null,
             Action<SimpleShellTransitionArgs> starting = null,
             Action<SimpleShellTransitionArgs> finished = null,
-            Func<SimpleShellTransitionArgs, bool> destinationPageInFront = null)
+            Func<SimpleShellTransitionArgs, bool> destinationPageInFront = null,
+            Func<SimpleShellTransitionArgs, Easing> easing = null)
         {
             page.SetTransition(new SimpleShellTransition(args =>
             {
@@ -101,7 +103,7 @@ namespace SimpleToolkit.SimpleShell.Extensions
                 };
 
                 action?.Invoke(args);
-            }, duration, starting, finished, destinationPageInFront));
+            }, duration, starting, finished, destinationPageInFront, easing));
         }
 
 

@@ -42,13 +42,29 @@
         /// Type of the transition.
         /// </summary>
         public SimpleShellTransitionType TransitionType { get; protected set; }
+        /// <summary>
+        /// Whether the origin page is a root page.
+        /// </summary>
+        public bool IsOriginPageRoot { get; protected set; }
+        /// <summary>
+        /// Whether the destination page is a root page.
+        /// </summary>
+        public bool IsDestinationPageRoot { get; protected set; }
 
-        public SimpleShellTransitionArgs(VisualElement originPage, VisualElement destinationPage, double progress, SimpleShellTransitionType transitionType)
+        public SimpleShellTransitionArgs(
+            VisualElement originPage,
+            VisualElement destinationPage,
+            double progress,
+            SimpleShellTransitionType transitionType,
+            bool isOriginPageRoot,
+            bool isDestinationPageRoot)
         {
             OriginPage = originPage;
             DestinationPage = destinationPage;
             Progress = progress;
             TransitionType = transitionType;
+            IsOriginPageRoot = isOriginPageRoot;
+            IsDestinationPageRoot = isDestinationPageRoot;
         }
     }
 
@@ -60,7 +76,7 @@
         internal const uint DefaultDuration = 250;
         internal const bool DefaultDestinationPageInFrontOnSwitching = true;
         internal const bool DefaultDestinationPageInFrontOnPushing = true;
-        internal const bool DefaultDestinationPageInFrontOnPopping = true;
+        internal const bool DefaultDestinationPageInFrontOnPopping = false;
 
         /// <summary>
         /// Callback that is called when progress of the transition changes.
@@ -82,6 +98,10 @@
         /// Whether the destination page should be displayed in front of the origin page when transitioning from one page to another.
         /// </summary>
         public Func<SimpleShellTransitionArgs, bool> DestinationPageInFront { get; }
+        /// <summary>
+        /// Easing of the transition.
+        /// </summary>
+        public Func<SimpleShellTransitionArgs, Easing> Easing { get; }
 
         /// <summary>
         /// Constructor that does not allow to dynamically set some properties of the transition.
@@ -130,7 +150,8 @@
             Func<SimpleShellTransitionArgs, uint> duration = null,
             Action<SimpleShellTransitionArgs> starting = null,
             Action<SimpleShellTransitionArgs> finished = null,
-            Func<SimpleShellTransitionArgs, bool> destinationPageInFront = null)
+            Func<SimpleShellTransitionArgs, bool> destinationPageInFront = null,
+            Func<SimpleShellTransitionArgs, Easing> easing = null)
         {
             Callback = callback;
             Duration = duration ?? ((args) => DefaultDuration);
@@ -143,6 +164,7 @@
                 SimpleShellTransitionType.Popping => DefaultDestinationPageInFrontOnPopping,
                 _ => true
             });
+            Easing = easing ?? ((args) => Microsoft.Maui.Easing.Linear);
         }
     }
 }

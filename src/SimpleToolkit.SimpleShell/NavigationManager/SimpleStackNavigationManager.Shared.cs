@@ -3,6 +3,7 @@ using SimpleToolkit.SimpleShell.Handlers;
 using SimpleToolkit.SimpleShell.Transitions;
 using Microsoft.Maui.Controls.Internals;
 using SimpleToolkit.SimpleShell.Extensions;
+using System;
 #if ANDROID
 using NavFrame = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
 using PlatformView = Android.Views.View;
@@ -77,7 +78,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             isPreviousPageRoot = isCurrentPageRoot;
             isCurrentPageRoot = newPageStack.Count < 2;
 
-            _ = currentPage ?? throw new InvalidOperationException("Navigatoin Request Contains Null Elements");
+            _ = currentPage ?? throw new InvalidOperationException("Navigation Request Contains Null Elements");
 
             if (previousNavigationStack.Count == newPageStack.Count || previousNavigationStack?.FirstOrDefault() != newPageStack?.FirstOrDefault())
             {
@@ -113,23 +114,59 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                 {
                     var animation = new Animation(progress =>
                     {
-                        transition.Callback?.Invoke(new SimpleShellTransitionArgs(visualPrevious, visualCurrent, progress, transitionType));
+                        transition.Callback?.Invoke(new SimpleShellTransitionArgs(
+                            originPage: visualPrevious,
+                            destinationPage: visualCurrent,
+                            progress: progress,
+                            transitionType: transitionType,
+                            isOriginPageRoot: isPreviousPageRoot,
+                            isDestinationPageRoot: isCurrentPageRoot));
                     });
 
                     visualPrevious.AbortAnimation(TransitionAnimationKey);
-                    transition.Starting?.Invoke(new SimpleShellTransitionArgs(visualPrevious, visualCurrent, 0, transitionType));
+                    transition.Starting?.Invoke(new SimpleShellTransitionArgs(
+                            originPage: visualPrevious,
+                            destinationPage: visualCurrent,
+                            progress: 0,
+                            transitionType: transitionType,
+                            isOriginPageRoot: isPreviousPageRoot,
+                            isDestinationPageRoot: isCurrentPageRoot));
 
                     AddPlatformPage(newPageView, ShouldBeAbove(transition, transitionType, visualPrevious, visualCurrent));
 
-                    var duration = transition.Duration?.Invoke(new SimpleShellTransitionArgs(visualPrevious, visualCurrent, 0, transitionType)) ?? SimpleShellTransition.DefaultDuration;
+                    var duration = transition.Duration?.Invoke(new SimpleShellTransitionArgs(
+                        originPage: visualPrevious,
+                        destinationPage: visualCurrent,
+                        progress: 0,
+                        transitionType: transitionType,
+                        isOriginPageRoot: isPreviousPageRoot,
+                        isDestinationPageRoot: isCurrentPageRoot)) ?? SimpleShellTransition.DefaultDuration;
+                    var easing = transition.Easing?.Invoke(new SimpleShellTransitionArgs(
+                        originPage: visualPrevious,
+                        destinationPage: visualCurrent,
+                        progress: 0,
+                        transitionType: transitionType,
+                        isOriginPageRoot: isPreviousPageRoot,
+                        isDestinationPageRoot: isCurrentPageRoot)) ?? Easing.Linear;
 
-                    animation.Commit(visualCurrent, TransitionAnimationKey, length: duration, finished: (v, canceled) =>
-                    {
-                        RemovePlatformPage(oldPageView);
-                        transition.Finished?.Invoke(new SimpleShellTransitionArgs(visualPrevious, visualCurrent, v, transitionType));
+                    animation.Commit(
+                        visualCurrent,
+                        name: TransitionAnimationKey,
+                        length: duration,
+                        easing: easing,
+                        finished: (v, canceled) =>
+                        {
+                            RemovePlatformPage(oldPageView);
+                            transition.Finished?.Invoke(new SimpleShellTransitionArgs(
+                                originPage: visualPrevious,
+                                destinationPage: visualCurrent,
+                                progress: v,
+                                transitionType: transitionType,
+                                isOriginPageRoot: isPreviousPageRoot,
+                                isDestinationPageRoot: isCurrentPageRoot));
                         
-                        FireNavigationFinished();
-                    });
+                            FireNavigationFinished();
+                        });
                 }
                 else
                 {
@@ -164,7 +201,13 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 
         private bool ShouldBeAbove(SimpleShellTransition transition, SimpleShellTransitionType transitionType, VisualElement oldPage, VisualElement newPage)
         {
-            var args = new SimpleShellTransitionArgs(oldPage, newPage, 0, transitionType);
+            var args = new SimpleShellTransitionArgs(
+                originPage: oldPage,
+                destinationPage: newPage,
+                progress: 0,
+                transitionType: transitionType,
+                isOriginPageRoot: isPreviousPageRoot,
+                isDestinationPageRoot: isCurrentPageRoot);
 
             return transition.DestinationPageInFront?.Invoke(args) ?? transitionType switch
             {

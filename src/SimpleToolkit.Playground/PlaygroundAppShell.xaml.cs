@@ -78,8 +78,14 @@ namespace SimpleToolkit.SimpleShell.Playground
                 },
                 destinationPageInFront: static args => args.TransitionType switch
                 {
-                    SimpleShellTransitionType.Popping => false,
-                    _ => true
+                    SimpleShellTransitionType.Pushing => true,
+                    _ => false
+                },
+                easing: static args => args.TransitionType switch
+                {
+                    SimpleShellTransitionType.Pushing => Easing.SinIn,
+                    SimpleShellTransitionType.Popping => Easing.SinOut,
+                    _ => Easing.Linear
                 });
         }
 
