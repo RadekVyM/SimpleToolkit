@@ -28,6 +28,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
         protected ShellSection currentShellSection;
         protected SimpleShellSectionHandler currentShellSectionHandler;
 
+
         public SimpleShellItemHandler(IPropertyMapper mapper, CommandMapper commandMapper)
             : base(mapper ?? Mapper, commandMapper ?? CommandMapper)
         {

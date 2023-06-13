@@ -162,7 +162,7 @@ namespace SimpleToolkit.SimpleShell.Playground
         {
             if (e.Item is DesignLanguageItem designLanguageItem)
             {
-                designLanguagesListPopover.SelectedItem= designLanguageItem;
+                designLanguagesListPopover.SelectedItem = designLanguageItem;
                 designLanguageItem.Action?.Invoke();
             }
         }
