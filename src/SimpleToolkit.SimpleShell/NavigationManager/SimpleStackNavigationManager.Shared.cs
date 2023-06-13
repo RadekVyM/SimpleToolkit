@@ -114,40 +114,16 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                 {
                     var animation = new Animation(progress =>
                     {
-                        transition.Callback?.Invoke(new SimpleShellTransitionArgs(
-                            originPage: visualPrevious,
-                            destinationPage: visualCurrent,
-                            progress: progress,
-                            transitionType: transitionType,
-                            isOriginPageRoot: isPreviousPageRoot,
-                            isDestinationPageRoot: isCurrentPageRoot));
+                        transition.Callback?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, progress));
                     });
 
                     visualPrevious.AbortAnimation(TransitionAnimationKey);
-                    transition.Starting?.Invoke(new SimpleShellTransitionArgs(
-                            originPage: visualPrevious,
-                            destinationPage: visualCurrent,
-                            progress: 0,
-                            transitionType: transitionType,
-                            isOriginPageRoot: isPreviousPageRoot,
-                            isDestinationPageRoot: isCurrentPageRoot));
+                    transition.Starting?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, 0));
 
                     AddPlatformPage(newPageView, ShouldBeAbove(transition, transitionType, visualPrevious, visualCurrent));
 
-                    var duration = transition.Duration?.Invoke(new SimpleShellTransitionArgs(
-                        originPage: visualPrevious,
-                        destinationPage: visualCurrent,
-                        progress: 0,
-                        transitionType: transitionType,
-                        isOriginPageRoot: isPreviousPageRoot,
-                        isDestinationPageRoot: isCurrentPageRoot)) ?? SimpleShellTransition.DefaultDuration;
-                    var easing = transition.Easing?.Invoke(new SimpleShellTransitionArgs(
-                        originPage: visualPrevious,
-                        destinationPage: visualCurrent,
-                        progress: 0,
-                        transitionType: transitionType,
-                        isOriginPageRoot: isPreviousPageRoot,
-                        isDestinationPageRoot: isCurrentPageRoot)) ?? Easing.Linear;
+                    var duration = transition.Duration?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, 0)) ?? SimpleShellTransition.DefaultDuration;
+                    var easing = transition.Easing?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, 0)) ?? Easing.Linear;
 
                     animation.Commit(
                         visualCurrent,
@@ -157,14 +133,8 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                         finished: (v, canceled) =>
                         {
                             RemovePlatformPage(oldPageView);
-                            transition.Finished?.Invoke(new SimpleShellTransitionArgs(
-                                originPage: visualPrevious,
-                                destinationPage: visualCurrent,
-                                progress: v,
-                                transitionType: transitionType,
-                                isOriginPageRoot: isPreviousPageRoot,
-                                isDestinationPageRoot: isCurrentPageRoot));
-                        
+                            transition.Finished?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, v));
+
                             FireNavigationFinished();
                         });
                 }
@@ -173,6 +143,17 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                     RemovePlatformPage(oldPageView);
                     AddPlatformPage(newPageView);
                     FireNavigationFinished();
+                }
+
+                SimpleShellTransitionArgs CreateArgs(VisualElement visualCurrent, VisualElement visualPrevious, SimpleShellTransitionType transitionType, double progress)
+                {
+                    return new SimpleShellTransitionArgs(
+                        originPage: visualPrevious,
+                        destinationPage: visualCurrent,
+                        progress: progress,
+                        transitionType: transitionType,
+                        isOriginPageRoot: isPreviousPageRoot,
+                        isDestinationPageRoot: isCurrentPageRoot);
                 }
             }
         }

@@ -4,7 +4,7 @@ using System;
 using Microsoft.Maui.Platform;
 using AView = Android.Views.View;
 
-namespace SimpleToolkit.Core.Extensions
+namespace SimpleToolkit.Core
 {
     public static partial class ViewBoundsExtensions
 	{

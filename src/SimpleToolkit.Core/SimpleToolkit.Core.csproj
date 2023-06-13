@@ -44,8 +44,12 @@
 		<Folder Include="Platforms\iOS\" />
 		<Folder Include="Platforms\MacCatalyst\" />
 		<Folder Include="Platforms\Windows\" />
+		<Folder Include="Extensions\VisualElement\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Remove="Extensions\VisualElement\" />
+	</ItemGroup>
 	<ItemGroup>
 		<None Include="..\..\docs\Nuget\SimpleToolkit.Core.md">
 		  <Pack>True</Pack>

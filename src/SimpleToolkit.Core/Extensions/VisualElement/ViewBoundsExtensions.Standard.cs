@@ -2,7 +2,7 @@
 
 using System;
 
-namespace SimpleToolkit.Core.Extensions
+namespace SimpleToolkit.Core
 {
     public static partial class ViewBoundsExtensions
     {
