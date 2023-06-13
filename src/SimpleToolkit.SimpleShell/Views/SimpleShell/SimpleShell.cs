@@ -28,7 +28,7 @@ namespace SimpleToolkit.SimpleShell
         public static readonly BindableProperty ContentProperty =
             BindableProperty.Create(nameof(Content), typeof(IView), typeof(SimpleShell), defaultValue: new SimpleNavigationHost(), propertyChanged: OnContentChanged);
         public static readonly BindableProperty RootPageContainerProperty =
-            BindableProperty.Create(nameof(RootPageContainer), typeof(IView), typeof(SimpleShell));
+            BindableProperty.Create(nameof(RootPageContainer), typeof(IView), typeof(SimpleShell), propertyChanged: OnRootPageContainerChanged);
         public static readonly BindableProperty CurrentPageProperty =
             BindableProperty.Create(nameof(CurrentPage), typeof(Page), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
         public static readonly BindableProperty CurrentShellContentProperty =
@@ -102,6 +102,8 @@ namespace SimpleToolkit.SimpleShell
 
         public SimpleShell()
         {
+            UpdateLogicalChildren(null, Content as View, this);
+
             Navigated += SimpleShellNavigated;
             Loaded += SimpleShellLoaded;
         }
@@ -243,9 +245,40 @@ namespace SimpleToolkit.SimpleShell
 
         private static void OnContentChanged(BindableObject bindable, object oldValue, object newValue)
         {
+            var oldView = oldValue as View;
+            var newView = newValue as View;
+
             if (bindable is SimpleShell simpleShell)
             {
                 simpleShell.UpdateVisualStates();
+
+                UpdateLogicalChildren(oldView, newView, simpleShell);
+            }
+        }
+
+        private static void OnRootPageContainerChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var oldView = oldValue as View;
+            var newView = newValue as View;
+
+            if (bindable is SimpleShell simpleShell)
+            {
+                UpdateLogicalChildren(oldView, newView, simpleShell);
+            }
+        }
+
+        private static void UpdateLogicalChildren(View oldView, View newView, SimpleShell simpleShell)
+        {
+            if (oldView is not null)
+            {
+                oldView.Parent = null;
+                simpleShell.RemoveLogicalChild(oldView);
+            }
+
+            if (newView is not null)
+            {
+                newView.Parent = simpleShell;
+                simpleShell.AddLogicalChild(newView);
             }
         }
     }
