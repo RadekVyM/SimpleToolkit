@@ -1,5 +1,4 @@
 using SimpleToolkit.Core;
-using SimpleToolkit.Core.Extensions;
 
 namespace SimpleToolkit.SimpleShell.Playground.Views.Pages;
 
