@@ -79,6 +79,7 @@ namespace SimpleToolkit.Core.Handlers
             {
                 if (PlatformView.Image.RenderingMode != UIImageRenderingMode.AlwaysTemplate)
                     PlatformView.Image = PlatformView.Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
+                PlatformView.TintAdjustmentMode = UIViewTintAdjustmentMode.Normal;
                 PlatformView.TintColor = color.ToPlatform();
             }
         }
