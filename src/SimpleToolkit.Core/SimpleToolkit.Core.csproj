@@ -36,6 +36,9 @@
 		<PackageReadmeFile>SimpleToolkit.Core.md</PackageReadmeFile>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+	</PropertyGroup>
 	<ItemGroup>
 		<Folder Include="Platforms\Android\" />
 		<Folder Include="Platforms\iOS\" />
