@@ -14,7 +14,7 @@ builder.UseSimpleShell();
 
 ## SimpleShell
 
-`SimpleShell` is a simplified implementation of .NET MAUI `Shell`. All `SimpleShell` is is just a simple container for your content with the ability to put the hosting area for pages wherever you want. Thanks to that, you are able to add custom tab bars, navigation bars, flyouts, etc. to your `Shell` application while using great `Shell` URI-based navigation.
+`SimpleShell` is a simplified implementation of .NET MAUI `Shell`. All `SimpleShell` is is just a container for your content with the ability to put the hosting area for pages wherever you want, giving you the flexibility to add custom tab bars, navigation bars, flyouts, etc. to your `Shell` application while using great `Shell` URI-based navigation.
 
 ```xml
 <simpleShell:SimpleShell
