@@ -14,7 +14,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 
             if (isCurrentPageRoot &&
                 container is not null &&
-                GetRooPageContainerNavHost(this.rootPageContainer) is NavFrame navHost)
+                GetPageContainerNavHost(this.rootPageContainer) is NavFrame navHost)
             {
                 if (!navigationFrame.Children.Contains(container))
                 {
@@ -38,13 +38,13 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             }
         }
 
-        protected virtual void RemovePlatformPage(PlatformView oldPageView, bool isCurrentPageRoot, bool isPreviousPageRoot)
+        protected virtual void RemovePlatformPage(PlatformView oldPageView, IView oldShellSectionContainer, bool isCurrentPageRoot, bool isPreviousPageRoot)
         {
             var container = GetPlatformView(this.rootPageContainer);
 
             if (oldPageView is not null && navigationFrame.Children.Contains(oldPageView))
                 navigationFrame.Children.Remove(oldPageView);
-            if (GetRooPageContainerNavHost(this.rootPageContainer) is NavFrame navHost &&
+            if (GetPageContainerNavHost(this.rootPageContainer) is NavFrame navHost &&
                 navHost.Children.Contains(oldPageView))
                 navHost.Children.Remove(oldPageView);
             if (!isCurrentPageRoot && isPreviousPageRoot && container is not null)
@@ -73,7 +73,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 
                 navigationFrame.Children.Add(newContainer);
 
-                if (GetRooPageContainerNavHost(rootPageContainer) is NavFrame newNavHost)
+                if (GetPageContainerNavHost(rootPageContainer) is NavFrame newNavHost)
                 {
                     foreach (var child in oldChildren)
                         newNavHost.Children.Add(child);
@@ -92,7 +92,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
         {
             var oldChildren = new List<UIElement>();
             
-            if (GetRooPageContainerNavHost(this.rootPageContainer) is NavFrame oldNavHost)
+            if (GetPageContainerNavHost(this.rootPageContainer) is NavFrame oldNavHost)
             {
                 oldChildren = oldNavHost.Children.ToList();
                 oldNavHost.Children.Clear();

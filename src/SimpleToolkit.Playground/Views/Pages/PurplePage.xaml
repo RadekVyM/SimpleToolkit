@@ -6,12 +6,6 @@
     x:Class="SimpleToolkit.SimpleShell.Playground.Views.Pages.PurplePage"
     Title="PurplePage">
 
-    <ContentPage.Resources>
-        <DataTemplate x:Key="test">
-            <ContentView/>
-        </DataTemplate>
-    </ContentPage.Resources>
-
     <Grid
         BackgroundColor="MediumPurple">
         <CollectionView>

@@ -56,8 +56,16 @@ namespace SimpleToolkit.SimpleShell.Playground
                     switch (args.TransitionType)
                     {
                         case SimpleShellTransitionType.Switching:
-                            args.OriginPage.Opacity = 1 - args.Progress;
-                            args.DestinationPage.Opacity = args.Progress;
+                            if (args.OriginShellSectionContainer == args.DestinationShellSectionContainer)
+                            {
+                                args.OriginPage.Opacity = 1 - args.Progress;
+                                args.DestinationPage.Opacity = args.Progress;
+                            }
+                            else
+                            {
+                                (args.OriginShellSectionContainer ?? args.OriginPage).Opacity = 1 - args.Progress;
+                                (args.DestinationShellSectionContainer ?? args.DestinationPage).Opacity = args.Progress;
+                            }
                             break;
                         case SimpleShellTransitionType.Pushing:
                             args.DestinationPage.Opacity = args.DestinationPage.Width < 0 ? 0 : 1;
@@ -75,6 +83,10 @@ namespace SimpleToolkit.SimpleShell.Playground
                     args.OriginPage.TranslationX = 0;
                     args.OriginPage.Opacity = 1;
                     args.DestinationPage.Opacity = 1;
+                    if (args.OriginShellSectionContainer is not null)
+                        args.OriginShellSectionContainer.Opacity = 1;
+                    if (args.DestinationShellSectionContainer is not null)
+                        args.DestinationShellSectionContainer.Opacity = 1;
                 },
                 destinationPageInFront: static args => args.TransitionType switch
                 {

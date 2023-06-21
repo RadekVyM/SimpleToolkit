@@ -14,43 +14,99 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                 return;
 
             var container = GetPlatformView(this.rootPageContainer);
+            PlatformView sectionContainer = null;
+            NavFrame sectionNavHost = null;
+
+            if (
+                currentShellSectionContainer is not null &&
+                GetPageContainerNavHost(currentShellSectionContainer) is NavFrame snh)
+            {
+                sectionContainer = GetPlatformView(currentShellSectionContainer);
+                sectionNavHost = snh;
+            }
 
             if (isCurrentPageRoot &&
                 container is not null &&
-                GetRooPageContainerNavHost(this.rootPageContainer) is NavFrame navHost)
+                GetPageContainerNavHost(this.rootPageContainer) is NavFrame rootNavHost)
             {
                 if (!navigationFrame.Subviews.Contains(container))
                     navigationFrame.AddSubview(container);
 
-                navHost.AddSubview(newPageView);
+                if (sectionContainer is not null)
+                {
+                    if (!rootNavHost.Subviews.Contains(sectionContainer))
+                        rootNavHost.AddSubview(sectionContainer);
+
+                    sectionNavHost.AddSubview(newPageView);
+                }
+                else
+                {
+                    rootNavHost.AddSubview(newPageView);
+                }
 
                 if (onTop)
                 {
                     navigationFrame.BringSubviewToFront(container);
-                    navHost.BringSubviewToFront(newPageView);
+
+                    if (sectionContainer is not null)
+                    {
+                        rootNavHost.BringSubviewToFront(sectionContainer);
+                        sectionNavHost.BringSubviewToFront(newPageView);
+                    }
+                    else
+                    {
+                        rootNavHost.BringSubviewToFront(newPageView);
+                    }
                 }
                 else
                 {
                     navigationFrame.BringSubviewToFront(navigationFrame.Subviews.FirstOrDefault());
-                    navHost.BringSubviewToFront(navHost.Subviews.FirstOrDefault());
+                    rootNavHost.BringSubviewToFront(rootNavHost.Subviews.FirstOrDefault());
+
+                    if (sectionContainer is not null)
+                        sectionNavHost.BringSubviewToFront(sectionNavHost.Subviews.FirstOrDefault());
                 }
             }
             else
             {
-                navigationFrame.AddSubview(newPageView);
+                if (isCurrentPageRoot && sectionContainer is not null)
+                {
+                    if (!navigationFrame.Subviews.Contains(sectionContainer))
+                        navigationFrame.AddSubview(sectionContainer);
+
+                    sectionNavHost.AddSubview(newPageView);
+                }
+                else
+                {
+                    navigationFrame.AddSubview(newPageView);
+                }
 
                 if (onTop)
+                {
                     navigationFrame.BringSubviewToFront(newPageView);
+
+                    if (isCurrentPageRoot && sectionContainer is not null)
+                        sectionNavHost.BringSubviewToFront(newPageView);
+                }
                 else
+                {
                     navigationFrame.BringSubviewToFront(navigationFrame.Subviews.FirstOrDefault());
+
+                    if (isCurrentPageRoot && sectionContainer is not null)
+                        sectionNavHost.BringSubviewToFront(sectionNavHost.Subviews.FirstOrDefault());
+                }
             }
         }
 
-        protected virtual void RemovePlatformPage(PlatformView oldPageView, bool isCurrentPageRoot, bool isPreviousPageRoot)
+        protected virtual void RemovePlatformPage(PlatformView oldPageView, IView oldShellSectionContainer, bool isCurrentPageRoot, bool isPreviousPageRoot)
         {
             var container = GetPlatformView(this.rootPageContainer);
 
             oldPageView?.RemoveFromSuperview();
+
+            if (oldShellSectionContainer is not null && currentShellSectionContainer != oldShellSectionContainer)
+                RemoveShellSectionContainer(oldShellSectionContainer);
+
             if (!isCurrentPageRoot && isPreviousPageRoot && container is not null)
                 RemoveRootPageContainer(container);
         }
@@ -77,7 +133,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 
                 navigationFrame.AddSubview(newContainer);
 
-                if (GetRooPageContainerNavHost(rootPageContainer) is NavFrame newNavHost)
+                if (GetPageContainerNavHost(rootPageContainer) is NavFrame newNavHost)
                 {
                     foreach (var child in oldChildren)
                         newNavHost.AddSubview(child);
@@ -96,7 +152,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
         {
             var oldChildren = new List<PlatformView>();
 
-            if (GetRooPageContainerNavHost(this.rootPageContainer) is NavFrame oldNavHost)
+            if (GetPageContainerNavHost(this.rootPageContainer) is NavFrame oldNavHost)
             {
                 oldChildren = oldNavHost.Subviews.ToList();
                 oldNavHost.ClearSubviews();
@@ -105,6 +161,16 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             oldContainer.RemoveFromSuperview();
 
             return oldChildren;
+        }
+
+        private void RemoveShellSectionContainer(IView oldShellSectionContainer)
+        {
+            var oldContainer = GetPlatformView(oldShellSectionContainer);
+
+            if (GetPageContainerNavHost(oldShellSectionContainer) is NavFrame oldNavHost)
+                oldNavHost.ClearSubviews();
+
+            oldContainer.RemoveFromSuperview();
         }
     }
 }

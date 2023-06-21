@@ -2,6 +2,10 @@
 using SimpleToolkit.SimpleShell.NavigationManager;
 using Microsoft.Maui.Controls.Internals;
 using System.Linq;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls.PlatformConfiguration.TizenSpecific;
+using Microsoft.Maui.Platform;
 #if ANDROID
 using PageContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
 #elif IOS || MACCATALYST
@@ -136,7 +140,8 @@ namespace SimpleToolkit.SimpleShell.Handlers
         {
             if (arg3 is NavigationRequest nr)
             {
-                handler.navigationManager?.NavigateTo(nr);
+                var container = GetShellSectionContainer(handler.VirtualView);
+                handler.navigationManager?.NavigateTo(nr, container);
             }
             else
             {
@@ -147,6 +152,29 @@ namespace SimpleToolkit.SimpleShell.Handlers
         public static void MapCurrentItem(SimpleShellSectionHandler handler, ShellSection item)
         {
             handler.SyncNavigationStack(false, null);
+        }
+
+        private static IView GetShellSectionContainer(ShellSection section)
+        {
+            var container = SimpleShell.GetShellSectionContainer(section);
+
+            if (container is null)
+            {
+                var template = SimpleShell.GetShellSectionContainerTemplate(section);
+
+                if (template is not null)
+                {
+                    container = template.CreateContent() as IView ?? throw new InvalidOperationException("ShellSectionContainer has to implement the IView interface");
+                    container?.ToHandler(section.Handler.MauiContext);
+                }
+
+                if (container is BindableObject bindable)
+                    bindable.BindingContext = section; //section.BindingContext;
+
+                SimpleShell.SetShellSectionContainer(section, container);
+            }
+
+            return container;
         }
 
         private static void LogStack(NavigationRequestedEventArgs e, List<IView> pageStack, ShellSection virtualView)

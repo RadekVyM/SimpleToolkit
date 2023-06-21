@@ -10,7 +10,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
         {
         }
 
-        protected virtual void RemovePlatformPage(PlatformView oldPageView, bool isCurrentPageRoot, bool isPreviousPageRoot)
+        protected virtual void RemovePlatformPage(PlatformView oldPageView, IView oldShellSectionContainer, bool isCurrentPageRoot, bool isPreviousPageRoot)
         {
         }
 
