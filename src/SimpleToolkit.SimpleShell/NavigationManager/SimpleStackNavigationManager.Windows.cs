@@ -11,30 +11,49 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
         protected virtual void AddPlatformPage(PlatformView newPageView, bool onTop = true, bool isCurrentPageRoot = true)
         {
             var container = GetPlatformView(this.rootPageContainer);
+            PlatformView sectionContainer = null;
+            NavFrame sectionNavHost = null;
+
+            if (
+                currentShellSectionContainer is not null &&
+                GetPageContainerNavHost(currentShellSectionContainer) is NavFrame snh)
+            {
+                sectionContainer = GetPlatformView(currentShellSectionContainer);
+                sectionNavHost = snh;
+            }
 
             if (isCurrentPageRoot &&
                 container is not null &&
-                GetPageContainerNavHost(this.rootPageContainer) is NavFrame navHost)
+                GetPageContainerNavHost(this.rootPageContainer) is NavFrame rootNavHost)
             {
                 if (!navigationFrame.Children.Contains(container))
-                {
-                    if (onTop)
-                        navigationFrame.Children.Add(container);
-                    else
-                        navigationFrame.Children.Insert(0, container);
-                }
+                    AddViewToContainer(container, navigationFrame, onTop);
 
-                if (onTop)
-                    navHost.Children.Add(newPageView);
+                if (sectionContainer is not null)
+                {
+                    if (!rootNavHost.Children.Contains(sectionContainer))
+                        AddViewToContainer(sectionContainer, rootNavHost, onTop);
+
+                    AddViewToContainer(newPageView, sectionNavHost, onTop);
+                }
                 else
-                    navHost.Children.Insert(0, newPageView);
+                {
+                    AddViewToContainer(newPageView, rootNavHost, onTop);
+                }
             }
             else
             {
-                if (onTop)
-                    navigationFrame.Children.Add(newPageView);
+                if (isCurrentPageRoot && sectionContainer is not null)
+                {
+                    if (!navigationFrame.Children.Contains(sectionContainer))
+                        AddViewToContainer(sectionContainer, navigationFrame, onTop);
+
+                    AddViewToContainer(newPageView, sectionNavHost, onTop);
+                }
                 else
-                    navigationFrame.Children.Insert(0, newPageView);
+                {
+                    AddViewToContainer(newPageView, navigationFrame, onTop);
+                }
             }
         }
 
@@ -42,11 +61,12 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
         {
             var container = GetPlatformView(this.rootPageContainer);
 
-            if (oldPageView is not null && navigationFrame.Children.Contains(oldPageView))
-                navigationFrame.Children.Remove(oldPageView);
-            if (GetPageContainerNavHost(this.rootPageContainer) is NavFrame navHost &&
-                navHost.Children.Contains(oldPageView))
-                navHost.Children.Remove(oldPageView);
+            if (oldPageView?.Parent is NavFrame parent)
+                parent.Children.Remove(oldPageView);
+
+            if (oldShellSectionContainer is not null && currentShellSectionContainer != oldShellSectionContainer)
+                RemoveShellSectionContainer(oldShellSectionContainer);
+
             if (!isCurrentPageRoot && isPreviousPageRoot && container is not null)
                 RemoveRootPageContainer(container);
         }
@@ -102,6 +122,25 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                 navigationFrame.Children.Remove(oldContainer);
 
             return oldChildren;
+        }
+
+        private void RemoveShellSectionContainer(IView oldShellSectionContainer)
+        {
+            var oldContainer = GetPlatformView(oldShellSectionContainer);
+
+            if (GetPageContainerNavHost(oldShellSectionContainer) is NavFrame oldNavHost)
+                oldNavHost.Children.Clear();
+
+            if (oldContainer.Parent is NavFrame parent)
+                parent.Children.Remove(oldContainer);
+        }
+
+        private void AddViewToContainer(PlatformView view, NavFrame container, bool onTop)
+        {
+            if (onTop)
+                container.Children.Add(view);
+            else
+                container.Children.Insert(0, view);
         }
     }
 }
