@@ -7,6 +7,13 @@ public partial class PurplePage : ContentPage
 	public PurplePage()
 	{
 		InitializeComponent();
+
+		// TODO: This is just for testing. Remove it later!
+		this.Resources.TryGetValue("test", out object template);
+		var content = (template as DataTemplate).CreateContent() as VisualElement;
+	 	var isSet = content.IsSet(Element.BindingContextProperty);
+
+		var sc = SimpleShell.Current.CurrentShellContent;
 	}
 
     public void ContentButton_Clicked(object sender, EventArgs e)

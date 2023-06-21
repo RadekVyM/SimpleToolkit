@@ -8,7 +8,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 {
     public partial class SimpleStackNavigationManager
     {
-        protected virtual void AddPlatformPage(PlatformView newPageView, bool onTop = true)
+        protected virtual void AddPlatformPage(PlatformView newPageView, bool onTop = true, bool isCurrentPageRoot = true)
         {
             if (newPageView is null)
                 return;
@@ -46,7 +46,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             }
         }
 
-        protected virtual void RemovePlatformPage(PlatformView oldPageView)
+        protected virtual void RemovePlatformPage(PlatformView oldPageView, bool isCurrentPageRoot, bool isPreviousPageRoot)
         {
             var container = GetPlatformView(this.rootPageContainer);
 
@@ -55,7 +55,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                 RemoveRootPageContainer(container);
         }
 
-        protected virtual void ReplaceRootPageContainer(IView rootPageContainer)
+        protected virtual void ReplaceRootPageContainer(IView rootPageContainer, bool isCurrentPageRoot)
         {
             var oldContainer = GetPlatformView(this.rootPageContainer);
             var newContainer = GetPlatformView(rootPageContainer);
