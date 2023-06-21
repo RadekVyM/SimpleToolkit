@@ -140,8 +140,10 @@ namespace SimpleToolkit.SimpleShell.Handlers
         {
             if (arg3 is NavigationRequest nr)
             {
+                var shell = handler.VirtualView.FindParentOfType<SimpleShell>();
                 var container = GetShellSectionContainer(handler.VirtualView);
-                handler.navigationManager?.NavigateTo(nr, container);
+
+                handler.navigationManager?.NavigateTo(nr, shell, container);
             }
             else
             {
@@ -169,7 +171,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
                 }
 
                 if (container is BindableObject bindable)
-                    bindable.BindingContext = section; //section.BindingContext;
+                    bindable.BindingContext = section;
 
                 SimpleShell.SetShellSectionContainer(section, container);
             }

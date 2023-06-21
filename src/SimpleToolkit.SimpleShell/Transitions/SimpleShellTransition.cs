@@ -35,13 +35,17 @@
         /// </summary>
         public VisualElement DestinationPage { get; protected set; }
         /// <summary>
-        /// ShellSection container from which the navigation is initiated.
+        /// <see cref="ShellSection"/> container from which the navigation is initiated.
         /// </summary>
         public VisualElement OriginShellSectionContainer { get; protected set; }
         /// <summary>
-        /// Destination ShellSection container of the navigation.
+        /// Destination <see cref="ShellSection"/> container of the navigation.
         /// </summary>
         public VisualElement DestinationShellSectionContainer { get; protected set; }
+        /// <summary>
+        /// Current <see cref="SimpleShell"/> instance.
+        /// </summary>
+        public SimpleShell Shell { get; protected set; }
         /// <summary>
         /// Progress of the transition. Number between 0 and 1.
         /// </summary>
@@ -64,6 +68,7 @@
             VisualElement destinationPage,
             VisualElement originShellSectionContainer,
             VisualElement destinationShellSectionContainer,
+            SimpleShell shell,
             double progress,
             SimpleShellTransitionType transitionType,
             bool isOriginPageRoot,
@@ -73,6 +78,7 @@
             DestinationPage = destinationPage;
             OriginShellSectionContainer = originShellSectionContainer;
             DestinationShellSectionContainer = destinationShellSectionContainer;
+            Shell = shell;
             Progress = progress;
             TransitionType = transitionType;
             IsOriginPageRoot = isOriginPageRoot;

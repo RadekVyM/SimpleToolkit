@@ -54,7 +54,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             StackNavigation = null;
         }
 
-        public virtual void NavigateTo(NavigationRequest args, IView shellSectionContainer)
+        public virtual void NavigateTo(NavigationRequest args, SimpleShell shell, IView shellSectionContainer)
         {
             IReadOnlyList<IView> newPageStack = new List<IView>(args.NavigationStack);
             var previousNavigationStack = NavigationStack;
@@ -154,6 +154,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                         destinationPage: visualCurrent,
                         originShellSectionContainer: previousShellSectionContainer as VisualElement,
                         destinationShellSectionContainer: currentShellSectionContainer as VisualElement,
+                        shell: shell,
                         progress: progress,
                         transitionType: transitionType,
                         isOriginPageRoot: isPreviousPageRoot,
