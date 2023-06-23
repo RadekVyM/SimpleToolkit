@@ -56,6 +56,24 @@
                     Text="Shell Section Container"
                     TextColor="White"
                     Margin="10"/>
+                <Button
+                    Text="Swap"
+                    Clicked="SwapSectionButtonClicked"
+                    HorizontalOptions="End"
+                    Background="Black"/>
+                <shell:SimpleNavigationHost
+                    Grid.Row="1"/>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="AnotherSimpleShellSectionContainer">
+            <Grid
+                RowDefinitions="auto, *"
+                BackgroundColor="Black">
+                <Label
+                    Text="Another Shell Section Container"
+                    TextColor="White"
+                    Margin="10"/>
                 <shell:SimpleNavigationHost
                     Grid.Row="1"/>
             </Grid>
@@ -164,6 +182,7 @@
 
 
     <Tab
+        x:Name="iconsTab"
         Title="Icons"
         shell:SimpleShell.ShellSectionContainerTemplate="{StaticResource SimpleShellSectionContainer}">
         <Tab.Icon>

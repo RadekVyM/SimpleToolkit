@@ -1,5 +1,4 @@
 ﻿using SimpleToolkit.SimpleShell.Extensions;
-using SimpleToolkit.SimpleShell.Transitions;
 
 namespace SimpleToolkit.SimpleShell
 {
@@ -87,7 +86,7 @@ namespace SimpleToolkit.SimpleShell
 
         public SimpleShell()
         {
-            UpdateLogicalChildren(null, Content as View, this);
+            UpdateLogicalChildren(null, Content as Element);
 
             Navigated += SimpleShellNavigated;
             Loaded += SimpleShellLoaded;
@@ -230,40 +229,40 @@ namespace SimpleToolkit.SimpleShell
 
         private static void OnContentChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            var oldView = oldValue as View;
-            var newView = newValue as View;
+            var oldView = oldValue as Element;
+            var newView = newValue as Element;
 
             if (bindable is SimpleShell simpleShell)
             {
                 simpleShell.UpdateVisualStates();
 
-                UpdateLogicalChildren(oldView, newView, simpleShell);
+                simpleShell.UpdateLogicalChildren(oldView, newView);
             }
         }
 
         private static void OnRootPageContainerChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            var oldView = oldValue as View;
-            var newView = newValue as View;
+            var oldView = oldValue as Element;
+            var newView = newValue as Element;
 
             if (bindable is SimpleShell simpleShell)
             {
-                UpdateLogicalChildren(oldView, newView, simpleShell);
+                simpleShell.UpdateLogicalChildren(oldView, newView);
             }
         }
 
-        private static void UpdateLogicalChildren(View oldView, View newView, SimpleShell simpleShell)
+        private void UpdateLogicalChildren(Element oldView, Element newView)
         {
             if (oldView is not null)
             {
                 oldView.Parent = null;
-                simpleShell.RemoveLogicalChild(oldView);
+                RemoveLogicalChild(oldView);
             }
 
             if (newView is not null)
             {
-                newView.Parent = simpleShell;
-                simpleShell.AddLogicalChild(newView);
+                newView.Parent = this;
+                AddLogicalChild(newView);
             }
         }
     }

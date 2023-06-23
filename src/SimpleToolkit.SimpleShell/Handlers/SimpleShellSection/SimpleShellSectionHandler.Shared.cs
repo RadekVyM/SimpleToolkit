@@ -1,10 +1,6 @@
 ﻿using SimpleToolkit.SimpleShell.Extensions;
 using SimpleToolkit.SimpleShell.NavigationManager;
 using Microsoft.Maui.Controls.Internals;
-using System.Linq;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls.PlatformConfiguration.TizenSpecific;
 using Microsoft.Maui.Platform;
 #if ANDROID
 using PageContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
@@ -36,6 +32,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         protected SimpleStackNavigationManager navigationManager;
         protected ShellSection shellSection;
+
 
         public SimpleShellSectionHandler(IPropertyMapper mapper, CommandMapper commandMapper)
             : base(mapper ?? Mapper, commandMapper ?? CommandMapper)

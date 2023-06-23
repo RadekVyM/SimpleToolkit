@@ -189,6 +189,13 @@ namespace SimpleToolkit.SimpleShell.Playground
             this.RootPageContainer = null;
         }
 
+        private void SwapSectionButtonClicked(object sender, EventArgs e)
+        {
+            Resources.TryGetValue("AnotherSimpleShellSectionContainer", out object template);
+
+            SimpleShell.SetShellSectionContainerTemplate(iconsTab, template as DataTemplate);
+        }
+
         private record DesignLanguageItem(string Title, Action Action)
         {
             public override string ToString() => Title;

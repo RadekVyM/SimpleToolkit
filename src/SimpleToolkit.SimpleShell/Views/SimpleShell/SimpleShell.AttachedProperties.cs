@@ -1,4 +1,5 @@
-﻿using SimpleToolkit.SimpleShell.Transitions;
+﻿using SimpleToolkit.SimpleShell.Extensions;
+using SimpleToolkit.SimpleShell.Transitions;
 
 namespace SimpleToolkit.SimpleShell
 {
@@ -54,15 +55,24 @@ namespace SimpleToolkit.SimpleShell
         {
             var section = bindable as ShellSection;
 
-            if (section.IsSet(SimpleShell.ShellSectionContainerProperty))
+            if (section.IsSet(ShellSectionContainerProperty))
             {
-                SimpleShell.SetShellSectionContainer(section, null);
+                SetShellSectionContainer(section, null);
             }
         }
 
         private static void OnShellSectionContainerChanged(BindableObject bindable, object oldValue, object newValue)
         {
+            var section = bindable as ShellSection;
+            var oldView = oldValue as Element;
+            var newView = newValue as Element;
+
+            var simpleShell = section.FindParentOfType<SimpleShell>();
+
+            if (simpleShell is not null)
+            {
+                simpleShell.UpdateLogicalChildren(oldView, newView);
+            }
         }
     }
 }
-
