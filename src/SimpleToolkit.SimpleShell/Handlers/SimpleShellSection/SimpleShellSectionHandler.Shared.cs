@@ -164,14 +164,15 @@ namespace SimpleToolkit.SimpleShell.Handlers
                 if (template is not null)
                 {
                     container = template.CreateContent() as IView ?? throw new InvalidOperationException("ShellSectionContainer has to implement the IView interface");
-                    container?.ToHandler(section.Handler.MauiContext);
                 }
-
-                if (container is BindableObject bindable)
-                    bindable.BindingContext = section;
 
                 SimpleShell.SetShellSectionContainer(section, container);
             }
+
+            container?.ToHandler(section.Handler.MauiContext);
+
+            if (container is BindableObject bindable && !bindable.IsSet(BindableObject.BindingContextProperty))
+                bindable.BindingContext = section;
 
             return container;
         }

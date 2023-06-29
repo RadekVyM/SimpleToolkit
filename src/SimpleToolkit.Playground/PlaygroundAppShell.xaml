@@ -186,7 +186,7 @@
         Title="Icons"
         shell:SimpleShell.ShellSectionContainerTemplate="{StaticResource SimpleShellSectionContainer}">
         <Tab.Icon>
-            <FontImageSource Glyph="&#xf053;" FontFamily="FontAwesomeSolid" Size="44"/>
+            <FontImageSource Glyph="&#xf86d;" FontFamily="FontAwesomeSolid" Size="44"/>
         </Tab.Icon>
 
         <ShellContent
@@ -203,6 +203,19 @@
         Title="Buttons"
         Icon="flame_empty.png"
         controls:SimpleShellIcon.SelectedIcon="flame_filled.png">
+        <shell:SimpleShell.ShellSectionContainer>
+            <Grid
+                RowDefinitions="auto, *">
+                <Label
+                    Text="Hello"
+                    Padding="10"
+                    TextColor="White"
+                    Background="Black"/>
+                <shell:SimpleNavigationHost
+                    Grid.Row="1"/>
+            </Grid>
+        </shell:SimpleShell.ShellSectionContainer>
+        
         <ShellContent
             Title="Buttons"
             Icon="flame_empty.png"
