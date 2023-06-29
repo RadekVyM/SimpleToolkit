@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace SimpleToolkit.Core
+﻿namespace SimpleToolkit.Core
 {
-	public static partial class ViewBoundsExtensions
+    public static partial class ViewBoundsExtensions
 	{
 		public static Rect GetBounds(this VisualElement view, VisualElement relativeTo = null)
 		{

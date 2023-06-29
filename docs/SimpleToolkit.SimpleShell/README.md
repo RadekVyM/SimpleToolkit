@@ -90,7 +90,7 @@ SimpleShell provides you with some bindable properties which simplify the creati
 - `CurrentShellContent` - the currently selected `ShellContent`
 - `ShellSections` - read-only list of all `ShellSection`s in the shell
 - `ShellContents` - read-only list of all `ShellContent`s in the shell
-- `RootPageOverlay` - you can use this property to set a view that will be displayed over all root pages (`ShellContent`s). This is well suited for tab bars, floating buttons, or flyouts that should be visible only on a root page
+- `RootPageContainer` - sets a view that will wrap all your root pages (`ShellContent`s)
 
 The code behind of the XAML sample above:
 
@@ -136,6 +136,14 @@ Output:
         </tr>
     </table>
 </p>
+
+## `RootPageContainer`
+
+`RootPageContainer` sets a view that will wrap all your root pages (`ShellContent`s). This is well suited for adding elements such as tab bars, floating buttons, or flyouts that should be visible only on a root page.
+
+The `RootPageContainer` view has to contain a `SimpleNavigationHost` element somewhere in its view hieararchy. This element will host all root pages.
+
+TODO: `RootPageContainer` sample
 
 ## Visual states
 

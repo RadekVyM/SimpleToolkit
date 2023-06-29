@@ -106,14 +106,6 @@ private async void TabButtonClicked(object sender, EventArgs e)
 
 Navigation between pages works exactly the same as in .NET MAUI `Shell`, just use the common `Shell.Current.GoToAsync()`. Pages that are not part of the shell hierarchy can be registered using the `Routing.RegisterRoute()` method.
 
-### `RootPageContainer`
-
-`RootPageContainer` sets a view that will wrap all your root pages (`ShellContent`s). This is well suited for adding elements such as tab bars, floating buttons, or flyouts that should be visible only on a root page.
-
-The `RootPageContainer` view has to contain a `SimpleNavigationHost` element somewhere in its view hieararchy.
-
-TODO: `RootPageContainer` sample
-
 ## Why not use `SimpleShell` and use .NET MAUI `Shell` instead
 
 - .NET MAUI `Shell` offers a platform-specific appearance.
