@@ -5,7 +5,7 @@ using CoreGraphics;
 using Foundation;
 using UIKit;
 
-namespace SimpleToolkit.SimpleShell.Handlers.Platform
+namespace SimpleToolkit.SimpleShell.Platform
 {
     public class SimpleNavigationController : UINavigationController, IUIGestureRecognizerDelegate
     {

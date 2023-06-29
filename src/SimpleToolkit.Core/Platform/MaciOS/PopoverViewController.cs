@@ -10,7 +10,7 @@ using UIKit;
 
 // Partially based on the .NET MAUI Community Toolkit Popup control - https://github.com/CommunityToolkit/Maui
 
-namespace SimpleToolkit.Core.Handlers
+namespace SimpleToolkit.Core.Platform
 {
     public class PopoverViewController : UIViewController
     {

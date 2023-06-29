@@ -6,7 +6,7 @@ using Microsoft.Maui.Platform;
 using UIKit;
 using PlatformContentView = Microsoft.Maui.Platform.ContentView;
 
-namespace SimpleToolkit.Core.Handlers.Platform
+namespace SimpleToolkit.Core.Platform
 {
     public class ButtonContentView : PlatformContentView
     {

@@ -2,6 +2,7 @@
 
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
+using SimpleToolkit.SimpleShell.Platform;
 using UIKit;
 
 namespace SimpleToolkit.SimpleShell.Handlers
@@ -10,7 +11,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
     {
         protected override UIView CreatePlatformElement()
         {
-            shellSectionContainer = new CustomContentView();
+            shellSectionContainer = new SimpleContentView();
             return shellSectionContainer;
         }
 

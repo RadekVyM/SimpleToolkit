@@ -3,18 +3,19 @@
 using Microsoft.Maui.Platform;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
+using SimpleToolkit.Core.Handlers;
 using WindowsThickness = Microsoft.UI.Xaml.Thickness;
 using XamlStyle = Microsoft.UI.Xaml.Style;
 
 // Partially based on the .NET MAUI Community Toolkit Popup control - https://github.com/CommunityToolkit/Maui
 
-namespace SimpleToolkit.Core.Handlers
+namespace SimpleToolkit.Core.Platform
 {
     public class SimpleFlyout : Flyout
     {
         private readonly IMauiContext mauiContext;
 
-        internal WrapperPanel PanelContent => Content as WrapperPanel;
+        internal SimpleWrapperPanel PanelContent => Content as SimpleWrapperPanel;
         internal XamlStyle FlyoutStyle { get; private set; } = new(typeof(FlyoutPresenter));
         public IPopover VirtualView { get; private set; }
         
@@ -81,7 +82,7 @@ namespace SimpleToolkit.Core.Handlers
         private void CreateControl()
         {
             if (PanelContent is null && VirtualView?.Content is not null && VirtualView.Handler is PopoverHandler handler)
-                Content = new WrapperPanel(handler.VirtualView.Content, handler.MauiContext);
+                Content = new SimpleWrapperPanel(handler.VirtualView.Content, handler.MauiContext);
         }
 
         private void SetLayout()

@@ -1,7 +1,7 @@
 ﻿#if IOS || MACCATALYST
 
 using Microsoft.Maui.Handlers;
-using SimpleToolkit.SimpleShell.Handlers.Platform;
+using SimpleToolkit.SimpleShell.Platform;
 using UIKit;
 
 namespace SimpleToolkit.SimpleShell.Handlers
@@ -14,7 +14,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
         {
             var contentController = new UIViewController
             {
-                View = new CustomContentView(),
+                View = new SimpleContentView(),
             };
 
             navigationController = new SimpleNavigationController();

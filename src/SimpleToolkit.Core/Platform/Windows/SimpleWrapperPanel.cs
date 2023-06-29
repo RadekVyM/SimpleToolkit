@@ -7,16 +7,16 @@ using WRect = Windows.Foundation.Rect;
 
 // Based on https://github.com/CommunityToolkit/Maui/blob/main/src/CommunityToolkit.Maui.Core/Views/Popup/MauiPopup.android.cs
 
-namespace SimpleToolkit.Core.Handlers
+namespace SimpleToolkit.Core.Platform
 {
-    internal class WrapperPanel : Panel
+    internal class SimpleWrapperPanel : Panel
     {
         private View view;
         private FrameworkElement frameworkElement;
         private IPlatformViewHandler handler => view.Handler as IPlatformViewHandler;
         
         
-        public WrapperPanel(View view, IMauiContext mauiContext)
+        public SimpleWrapperPanel(View view, IMauiContext mauiContext)
         {
             ArgumentNullException.ThrowIfNull(view);
             ArgumentNullException.ThrowIfNull(mauiContext);

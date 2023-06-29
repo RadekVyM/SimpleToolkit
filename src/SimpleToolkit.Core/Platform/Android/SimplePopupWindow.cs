@@ -8,7 +8,7 @@ using Microsoft.Maui.Platform;
 using AView = Android.Views.View;
 using Math = System.Math;
 
-namespace SimpleToolkit.Core.Handlers
+namespace SimpleToolkit.Core.Platform
 {
     public class SimplePopupWindow : PopupWindow
     {

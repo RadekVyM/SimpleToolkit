@@ -35,16 +35,6 @@
 		<Copyright>Copyright © Radek Vymětalík and contributors</Copyright>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<Folder Include="Platforms\Android\" />
-		<Folder Include="Platforms\iOS\" />
-		<Folder Include="Platforms\MacCatalyst\" />
-		<Folder Include="Platforms\Windows\" />
-		<Folder Include="Views\AppBar\" />
-		<Folder Include="Converters\" />
-		<Folder Include="Views\TabView\" />
-	</ItemGroup>
-
 	<ItemGroup Condition="'$(Configuration)'!='DEBUG'">
 		<PackageReference Include="SimpleToolkit.Core" Version="2.0.*" PrivateAssets="buildTransitive"/>
 	</ItemGroup>

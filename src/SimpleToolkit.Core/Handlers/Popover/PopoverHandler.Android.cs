@@ -1,6 +1,7 @@
 ﻿#if ANDROID
 
 using Microsoft.Maui.Handlers;
+using SimpleToolkit.Core.Platform;
 
 namespace SimpleToolkit.Core.Handlers
 {

@@ -1,7 +1,7 @@
 ﻿#if IOS || MACCATALYST
 
 using Microsoft.Maui.Handlers;
-using SimpleToolkit.Core.Handlers.Platform;
+using SimpleToolkit.Core.Platform;
 using UIKit;
 using PlatformContentView = Microsoft.Maui.Platform.ContentView;
 

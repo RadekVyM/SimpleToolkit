@@ -63,7 +63,7 @@ namespace SimpleToolkit.Core
             base.OnHandlerChanged();
 
 #if WINDOWS
-            if (Handler?.PlatformView is SimpleToolkit.Core.Handlers.SimpleFlyout platformFlyout)
+            if (Handler?.PlatformView is SimpleToolkit.Core.Platform.SimpleFlyout platformFlyout)
                 platformFlyout.SetUpPlatformView();
 #endif
         }

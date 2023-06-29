@@ -2,6 +2,7 @@
 
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
+using SimpleToolkit.SimpleShell.Platform;
 using UIKit;
 
 namespace SimpleToolkit.SimpleShell.Handlers
@@ -30,7 +31,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         protected override UIView CreatePlatformView()
         {
-            return new CustomContentView();
+            return new SimpleContentView();
         }
 
         public virtual void SetContent(UIView view)

@@ -8,7 +8,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Path = Microsoft.UI.Xaml.Shapes.Path;
 
-namespace SimpleToolkit.Core.Handlers
+namespace SimpleToolkit.Core.Platform
 {
     public class SimpleContentPanel : Panel, IDisposable
     {
@@ -32,7 +32,7 @@ namespace SimpleToolkit.Core.Handlers
 
         public void UpdateBackground(Paint background)
         {
-            if (borderPath == null)
+            if (borderPath is null)
                 return;
 
             borderPath.UpdateBackground(background);
@@ -42,7 +42,7 @@ namespace SimpleToolkit.Core.Handlers
         {
             this.borderShape = borderShape;
 
-            if (borderPath == null)
+            if (borderPath is null)
                 return;
 
             borderPath.UpdateBorderShape(this.borderShape, ActualWidth, ActualHeight);
@@ -63,7 +63,7 @@ namespace SimpleToolkit.Core.Handlers
 
         protected override global::Windows.Foundation.Size MeasureOverride(global::Windows.Foundation.Size availableSize)
         {
-            if (CrossPlatformMeasure == null)
+            if (CrossPlatformMeasure is null)
             {
                 return base.MeasureOverride(availableSize);
             }
@@ -75,7 +75,7 @@ namespace SimpleToolkit.Core.Handlers
 
         protected override global::Windows.Foundation.Size ArrangeOverride(global::Windows.Foundation.Size finalSize)
         {
-            if (CrossPlatformArrange == null)
+            if (CrossPlatformArrange is null)
             {
                 return base.ArrangeOverride(finalSize);
             }
@@ -92,7 +92,7 @@ namespace SimpleToolkit.Core.Handlers
 
         private void ContentPanelSizeChanged(object sender, Microsoft.UI.Xaml.SizeChangedEventArgs e)
         {
-            if (borderPath == null || borderShape == null)
+            if (borderPath is null || borderShape is null)
                 return;
 
             var strokeThickness = borderPath?.StrokeThickness ?? 0;
@@ -104,7 +104,7 @@ namespace SimpleToolkit.Core.Handlers
             var shapePath = borderShape.PathForBounds(pathSize);
             var geometry = shapePath.AsPathGeometry();
 
-            if (borderPath != null)
+            if (borderPath is not null)
             {
                 borderPath.Data = geometry;
                 borderPath.RenderTransform = new TranslateTransform() { X = -(strokeThickness / 2), Y = -(strokeThickness / 2) };
