@@ -140,6 +140,8 @@ public AppShell()
 
 Output:
 
+https://github.com/RadekVyM/SimpleToolkit/assets/65116078/694efb22-2a1f-4ec2-b169-307499357ae4
+
 Transitions can be set on each page individually. Default transition will be overridden if it is already set:
 
 ```csharp
