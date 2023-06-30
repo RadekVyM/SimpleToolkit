@@ -11,11 +11,17 @@ Each transition is represented by a `SimpleShellTransition` object which contain
 - `Finished` - method that is called when the transition finishes
 - `Duration` - method returning duration of the transition
 - `DestinationPageInFront` - method returning whether the destination page should be displayed in front of the origin page when navigating from one page to another
+- `Easing` - method returning an easing of the transition animation
 
 Each of these methods takes a `SimpleShellTransitionArgs` object as a parameter. Usefull information about currently running transition can be obtained from this object:
 
 - `OriginPage` of type `VisualElement` - page from which the navigation is initiated
 - `DestinationPage` of type `VisualElement` - destination page of the navigation
+- `OriginShellSectionContainer` of type `VisualElement` - `ShellSectionContainer` from which the navigation is initiated. Can be `null` if no container is defined
+- `DestinationShellSectionContainer` of type `VisualElement` - destination `ShellSectionContainer` of the navigation. Can be `null` if no container is defined
+- `Shell` - current instance of `SimpleShell`
+- `IsOriginPageRoot` - whether the origin page is a root page
+- `IsDestinationPageRoot` - whether the destination page is a root page
 - `Progress` - progress of the transition. Number from 0 to 1
 - `TransitionType` - type of the transition that is represented by `SimpleShellTransitionType` enumeration:
     - `Switching` - new root page (`ShellContent`) is being set
@@ -45,7 +51,8 @@ public static void SetTransition(
     Func<SimpleShellTransitionArgs, uint> duration = null,
     Action<SimpleShellTransitionArgs> starting = null,
     Action<SimpleShellTransitionArgs> finished = null,
-    Func<SimpleShellTransitionArgs, bool> destinationPageInFront = null)
+    Func<SimpleShellTransitionArgs, bool> destinationPageInFront = null,
+    Func<SimpleShellTransitionArgs, Easing> easing = null)
 
 public static void SetTransition(
     this Page page,
@@ -55,65 +62,88 @@ public static void SetTransition(
     Func<SimpleShellTransitionArgs, uint> duration = null,
     Action<SimpleShellTransitionArgs> starting = null,
     Action<SimpleShellTransitionArgs> finished = null,
-    Func<SimpleShellTransitionArgs, bool> destinationPageInFront = null)
+    Func<SimpleShellTransitionArgs, bool> destinationPageInFront = null,
+    Func<SimpleShellTransitionArgs, Easing> easing = null)
 ```
 
 ## Example
 
-The default transition can be set, for example, in the constructor of your `AppShell`:
+The default transition for all pages can be set, for example, in the constructor of your `AppShell`:
 
 ```csharp
 public AppShell()
 {
     InitializeComponent();
 
-    Routing.RegisterRoute(nameof(ImagePage), typeof(ImagePage));
+    Routing.RegisterRoute(nameof(YellowDetailPage), typeof(YellowDetailPage));
 
     this.SetTransition(
-        callback: args =>
+        callback: static args =>
         {
             switch (args.TransitionType)
             {
                 case SimpleShellTransitionType.Switching:
-                    args.OriginPage.Opacity = 1 - args.Progress;
-                    args.DestinationPage.Opacity = args.Progress;
+                    if (args.OriginShellSectionContainer == args.DestinationShellSectionContainer)
+                    {
+                        // Navigatating within the same ShellSection
+                        args.OriginPage.Opacity = 1 - args.Progress;
+                        args.DestinationPage.Opacity = args.Progress;
+                    }
+                    else
+                    {
+                        // Navigatating between different ShellSections
+                        (args.OriginShellSectionContainer ?? args.OriginPage).Opacity = 1 - args.Progress;
+                        (args.DestinationShellSectionContainer ?? args.DestinationPage).Opacity = args.Progress;
+                    }
                     break;
                 case SimpleShellTransitionType.Pushing:
+                    // Hide the page until it is fully measured
+                    args.DestinationPage.Opacity = args.DestinationPage.Width < 0 ? 0.01 : 1;
+                    // Slide the page in from right
                     args.DestinationPage.TranslationX = (1 - args.Progress) * args.DestinationPage.Width;
                     break;
                 case SimpleShellTransitionType.Popping:
+                    // Slide the page out to right
                     args.OriginPage.TranslationX = args.Progress * args.OriginPage.Width;
                     break;
             }
         },
-        finished: args =>
+        finished: static args =>
         {
             args.OriginPage.Opacity = 1;
             args.OriginPage.TranslationX = 0;
             args.DestinationPage.Opacity = 1;
             args.DestinationPage.TranslationX = 0;
+            if (args.OriginShellSectionContainer is not null)
+                args.OriginShellSectionContainer.Opacity = 1;
+            if (args.DestinationShellSectionContainer is not null)
+                args.DestinationShellSectionContainer.Opacity = 1;
         },
-        destinationPageInFront: args => args.TransitionType switch {
+        destinationPageInFront: static args => args.TransitionType switch
+        {
             SimpleShellTransitionType.Popping => false,
             _ => true
         },
-        duration: args => args.TransitionType switch {
-            SimpleShellTransitionType.Switching => 500u,
-            _ => 350u
+        duration: static args => args.TransitionType switch
+        {
+            SimpleShellTransitionType.Switching => 300u,
+            _ => 200u
+        },
+        easing: static args => args.TransitionType switch
+        {
+            SimpleShellTransitionType.Pushing => Easing.SinIn,
+            SimpleShellTransitionType.Popping => Easing.SinOut,
+            _ => Easing.Linear
         });
 }
 ```
 
 Output:
 
-<p align="center">
-    <img width="350" src="../images/windows_transitions.gif">
-</p>
-
 Transitions can be set on each page individually. Default transition will be overridden if it is already set:
 
 ```csharp
-public ImagePage()
+public YellowDetailPage()
 {
     InitializeComponent();
 
@@ -125,18 +155,12 @@ public ImagePage()
 }
 ```
 
-Output:
-
-<p align="center">
-    <img width="350" src="../images/windows_transitions_2.gif">
-</p>
-
 ### Combining transitions
 
 Two transitions can be combined into one when you want to use different transitions under different conditions:
 
 ```csharp
-public ImagePage()
+public YellowDetailPage()
 {
     InitializeComponent();
 
@@ -153,4 +177,4 @@ public ImagePage()
 
 `when` delegate determines when the second `transition` should be used.
 
-> In this example, scale transition is used only when the page is being pushed to the navigation stack, otherwise the default transition defined in shell is used.
+> In this example, scale transition is used only when the page is being pushed to the navigation stack, otherwise the default transition defined in the shell is used.

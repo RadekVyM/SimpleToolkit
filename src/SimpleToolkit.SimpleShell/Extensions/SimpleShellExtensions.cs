@@ -31,33 +31,8 @@ namespace SimpleToolkit.SimpleShell.Extensions
         /// <param name="duration">Duration of the transition.</param>
         /// <param name="starting">Callback that is called when the transition starts.</param>
         /// <param name="finished">Callback that is called when the transition finishes.</param>
-        /// <param name="destinationPageInFrontOnSwitching">Whether the destination page should be displayed in front of the origin page when switching root pages in the stack.</param>
-        /// <param name="destinationPageInFrontOnPushing">Whether the destination page should be displayed in front of the origin page when pushing new page to the stack.</param>
-        /// <param name="destinationPageInFrontOnPopping">Whether the destination page should be displayed in front of the origin page when popping existing page from the stack.</param>
-        [Obsolete("This extension method is deprecated. Please use other overload of this method.")]
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        public static void SetTransition(
-            this Page page,
-            Action<SimpleShellTransitionArgs> callback,
-            uint duration = SimpleShellTransition.DefaultDuration,
-            Action<SimpleShellTransitionArgs> starting = null,
-            Action<SimpleShellTransitionArgs> finished = null,
-            bool destinationPageInFrontOnSwitching = SimpleShellTransition.DefaultDestinationPageInFrontOnSwitching,
-            bool destinationPageInFrontOnPushing = SimpleShellTransition.DefaultDestinationPageInFrontOnPushing,
-            bool destinationPageInFrontOnPopping = SimpleShellTransition.DefaultDestinationPageInFrontOnPopping)
-        {
-            page.SetTransition(new SimpleShellTransition(callback, duration, starting, finished, destinationPageInFrontOnSwitching, destinationPageInFrontOnPushing, destinationPageInFrontOnPopping));
-        }
-
-        /// <summary>
-        /// Sets new transition to the page.
-        /// </summary>
-        /// <param name="page">Destination page of a navigation with this transition.</param>
-        /// <param name="callback">Callback that is called when progress of the transition changes.</param>
-        /// <param name="duration">Duration of the transition.</param>
-        /// <param name="starting">Callback that is called when the transition starts.</param>
-        /// <param name="finished">Callback that is called when the transition finishes.</param>
         /// <param name="destinationPageInFront">Whether the destination page should be displayed in front of the origin page when transitioning from one page to another.</param>
+        /// <param name="easing">Easing of the transition animation.</param>
         public static void SetTransition(
             this Page page,
             Action<SimpleShellTransitionArgs> callback,
@@ -81,6 +56,7 @@ namespace SimpleToolkit.SimpleShell.Extensions
         /// <param name="starting">Callback that is called when the transition starts.</param>
         /// <param name="finished">Callback that is called when the transition finishes.</param>
         /// <param name="destinationPageInFront">Whether the destination page should be displayed in front of the origin page when transitioning from one page to another.</param>
+        /// <param name="easing">Easing of the transition animation.</param>
         public static void SetTransition(
             this Page page,
             Action<SimpleShellTransitionArgs> switchingCallback = null,

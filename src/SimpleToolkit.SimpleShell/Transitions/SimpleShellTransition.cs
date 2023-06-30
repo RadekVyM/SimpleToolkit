@@ -117,43 +117,9 @@
         /// </summary>
         public Func<SimpleShellTransitionArgs, bool> DestinationPageInFront { get; }
         /// <summary>
-        /// Easing of the transition.
+        /// Easing of the transition animation.
         /// </summary>
         public Func<SimpleShellTransitionArgs, Easing> Easing { get; }
-
-        /// <summary>
-        /// Constructor that does not allow to dynamically set some properties of the transition.
-        /// </summary>
-        /// <param name="callback">Callback that is called when progress of the transition changes.</param>
-        /// <param name="duration">Duration of the transition.</param>
-        /// <param name="starting">Callback that is called when the transition starts.</param>
-        /// <param name="finished">Callback that is called when the transition finishes.</param>
-        /// <param name="destinationPageInFrontOnSwitching">Whether the destination page should be displayed in front of the origin page when switching root pages in the stack.</param>
-        /// <param name="destinationPageInFrontOnPushing">Whether the destination page should be displayed in front of the origin page when pushing new page to the stack.</param>
-        /// <param name="destinationPageInFrontOnPopping">Whether the destination page should be displayed in front of the origin page when popping existing page from the stack.</param>
-        [Obsolete("This constructor is deprecated. Please use other constructor.")]
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        public SimpleShellTransition(
-            Action<SimpleShellTransitionArgs> callback,
-            uint duration = DefaultDuration,
-            Action<SimpleShellTransitionArgs> starting = null,
-            Action<SimpleShellTransitionArgs> finished = null,
-            bool destinationPageInFrontOnSwitching = DefaultDestinationPageInFrontOnSwitching,
-            bool destinationPageInFrontOnPushing = DefaultDestinationPageInFrontOnPushing,
-            bool destinationPageInFrontOnPopping = DefaultDestinationPageInFrontOnPopping)
-        {
-            Callback = callback;
-            Duration = (args) => duration;
-            Finished = finished;
-            Starting = starting;
-            DestinationPageInFront = (args) => args.TransitionType switch
-            {
-                SimpleShellTransitionType.Switching => destinationPageInFrontOnSwitching,
-                SimpleShellTransitionType.Pushing => destinationPageInFrontOnPushing,
-                SimpleShellTransitionType.Popping => destinationPageInFrontOnPopping,
-                _ => true
-            };
-        }
 
         /// <summary>
         /// Constructor that allows to dynamically set properties of the transition.
@@ -163,6 +129,7 @@
         /// <param name="starting">Callback that is called when the transition starts.</param>
         /// <param name="finished">Callback that is called when the transition finishes.</param>
         /// <param name="destinationPageInFront">Whether the destination page should be displayed in front of the origin page when transitioning from one page to another.</param>
+        /// <param name="easing">Easing of the transition animation.</param>
         public SimpleShellTransition(
             Action<SimpleShellTransitionArgs> callback,
             Func<SimpleShellTransitionArgs, uint> duration = null,

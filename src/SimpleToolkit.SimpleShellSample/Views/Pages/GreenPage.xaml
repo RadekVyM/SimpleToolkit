@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="SimpleToolkit.SimpleShellSample.Views.Pages.GreenPage"
+    Title="Green Page">
+
+    <Grid
+        BackgroundColor="ForestGreen">
+        <Label
+            FontSize="20"
+            Text="Green page"
+            TextColor="White"
+            TextTransform="Uppercase"
+            FontAttributes="Bold"
+            HorizontalOptions="Center" VerticalOptions="Center"/>
+    </Grid>
+</ContentPage>

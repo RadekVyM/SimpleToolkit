@@ -35,8 +35,11 @@
 		<Copyright>Copyright © Radek Vymětalík and contributors</Copyright>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+	</PropertyGroup>
 	<ItemGroup Condition="'$(Configuration)'!='DEBUG'">
-		<PackageReference Include="SimpleToolkit.Core" Version="2.0.*" PrivateAssets="buildTransitive"/>
+		<PackageReference Include="SimpleToolkit.Core" Version="2.0.*" PrivateAssets="buildTransitive" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)'=='DEBUG'">

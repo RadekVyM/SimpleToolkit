@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:core="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
@@ -23,51 +23,6 @@
             HorizontalOptions="Center" />
 
         <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="End">
-            <core:ContentButton Clicked="Button_Clicked_2" HorizontalOptions="Center">
-                <VisualStateManager.VisualStateGroups>
-                    <VisualStateGroupList>
-                        <VisualStateGroup x:Name="CommonStates">
-                            <VisualState x:Name="Normal">
-                            </VisualState>
-                            <VisualState x:Name="Focused">
-                                <VisualState.Setters>
-                                    <Setter TargetName="innerBorder" Property="View.Background" Value="Orange"/>
-                                </VisualState.Setters>
-                            </VisualState>
-                            <VisualState x:Name="Pressed">
-                                <VisualState.Setters>
-                                    <Setter TargetName="innerBorder" Property="View.Background" Value="Goldenrod"/>
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>
-                    </VisualStateGroupList>
-                </VisualStateManager.VisualStateGroups>
-
-                <core:Popover.AttachedPopover>
-                    <core:Popover>
-                        <Border Stroke="Transparent" StrokeThickness="0">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="4"/>
-                            </Border.StrokeShape>
-                            <VerticalStackLayout Background="Yellow" Padding="10">
-                                <Label Text="Hello really long text"/>
-                                <Label Text="Hello"/>
-                                <Label Text="Hello"/>
-                                <Label Text="Hello"/>
-                                <Label Text="Hello"/>
-                            </VerticalStackLayout>
-                        </Border>
-                    </core:Popover>
-                </core:Popover.AttachedPopover>
-
-                <Border x:Name="innerBorder" Stroke="Transparent" StrokeThickness="0" Background="DarkGoldenrod">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="8"/>
-                    </Border.StrokeShape>
-                    <Label Text="Popover test" Padding="12,8" TextColor="White" HorizontalOptions="Start"/>
-                </Border>
-            </core:ContentButton>
-            
             <Button Text="Go to first detail page" Clicked="Button_Clicked" Style="{StaticResource YellowPageNavigationButton}"/>
             <Button Text="Go to second detail page" Clicked="Button_Clicked_1" Style="{StaticResource YellowPageNavigationButton}"/>
         </VerticalStackLayout>
