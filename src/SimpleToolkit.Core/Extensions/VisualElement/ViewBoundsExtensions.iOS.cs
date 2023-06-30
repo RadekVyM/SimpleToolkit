@@ -9,7 +9,7 @@ namespace SimpleToolkit.Core
     {
         public static Rect GetBoundsOnScreen(this VisualElement view)
         {
-            if (view.Handler.PlatformView is not UIView platformView)
+            if (view?.Handler?.PlatformView is not UIView platformView)
                 return new Rect();
 
             var superview = platformView;

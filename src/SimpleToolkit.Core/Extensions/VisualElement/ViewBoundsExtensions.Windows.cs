@@ -9,7 +9,7 @@ namespace SimpleToolkit.Core
 	{
 	    public static Rect GetBoundsOnScreen(this VisualElement view)
         {
-            if (view.Handler.PlatformView is not FrameworkElement platformView)
+            if (view?.Handler?.PlatformView is not FrameworkElement platformView)
                 return new Rect();
 
             if (platformView == null)

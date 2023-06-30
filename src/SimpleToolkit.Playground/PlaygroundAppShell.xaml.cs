@@ -47,6 +47,7 @@ namespace SimpleToolkit.SimpleShell.Playground
             Routing.RegisterRoute(nameof(ThirdYellowDetailPage), typeof(ThirdYellowDetailPage));
             Routing.RegisterRoute(nameof(FourthYellowDetailPage), typeof(FourthYellowDetailPage));
             Routing.RegisterRoute(nameof(FirstGreenDetailPage), typeof(FirstGreenDetailPage));
+            Routing.RegisterRoute(nameof(ImageDetailPage), typeof(ImageDetailPage));
 
             Loaded += PlaygroundAppShellLoaded;
 

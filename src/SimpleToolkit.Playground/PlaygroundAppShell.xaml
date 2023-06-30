@@ -241,7 +241,6 @@
         Icon="flame_empty.png"
         controls:SimpleShellIcon.SelectedIcon="flame_filled.png"
         shell:SimpleShell.ShellSectionContainerTemplate="{StaticResource TabViewShellSectionContainer}">
-
         <ShellContent
             Title="Yellow"
             Icon="flame_empty.png"
@@ -254,6 +253,12 @@
             controls:SimpleShellIcon.SelectedIcon="bird_filled.png"
             ContentTemplate="{DataTemplate pages:GreenPage}"
             Route="GreenPage" />
+        <ShellContent
+            Title="Images"
+            Icon="case_empty.png"
+            controls:SimpleShellIcon.SelectedIcon="case_filled.png"
+            ContentTemplate="{DataTemplate pages:ImagesPage}"
+            Route="ImagesPage" />
     </Tab>
 
     <Tab

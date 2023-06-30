@@ -120,9 +120,9 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                     });
 
                     visualPrevious.AbortAnimation(TransitionAnimationKey);
-                    transition.Starting?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, 0));
-
                     AddPlatformPage(newPageView, ShouldBeAbove(transition, CreateArgs(visualCurrent, visualPrevious, transitionType, 0)), isCurrentPageRoot: isCurrentPageRoot);
+
+                    transition.Starting?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, 0));
 
                     var duration = transition.Duration?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, 0)) ?? SimpleShellTransition.DefaultDuration;
                     var easing = transition.Easing?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, 0)) ?? Easing.Linear;
