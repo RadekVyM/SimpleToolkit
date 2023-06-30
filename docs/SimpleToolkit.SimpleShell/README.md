@@ -365,6 +365,8 @@ Binding context of a view defined in the template is a respective `ShellSection`
 
 `SimpleShell` allows you to define custom transitions between pages during navigation:
 
+https://github.com/RadekVyM/SimpleToolkit/assets/65116078/694efb22-2a1f-4ec2-b169-307499357ae4
+
 See [documentation](Transitions.md) for more information.
 
 ## Visual states
