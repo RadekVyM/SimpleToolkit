@@ -24,5 +24,6 @@ These are all the helpers this package has to offer:
 
 - Safe area helpers - helpers for managing the safe area of an application window
 - System bars helpers - helpers for changing the appearance of system bars on Android
+- Bounds helper - `GetBounds()` extension method returning the bounds of a `VisualElement` relative to another `VisualElement` or the app screen if no element is passed as an argument
 
 > See [documentation](https://github.com/RadekVyM/SimpleToolkit/tree/main/docs/SimpleToolkit.Core) for more information.

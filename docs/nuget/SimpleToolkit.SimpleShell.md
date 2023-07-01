@@ -12,55 +12,59 @@ builder.UseSimpleShell();
 
 ## SimpleShell
 
-`SimpleShell` is a simplified implementation of .NET MAUI `Shell`. All `SimpleShell` is is just a simple container for your content with the ability to put the hosting area for pages wherever you want, giving you the flexibility to add custom tab bars, navigation bars, flyouts, etc. to your `Shell` application while using great `Shell` URI-based navigation.
+`SimpleShell` is a simplified implementation of .NET MAUI `Shell`. All `SimpleShell` is is just a container for your content with the ability to put the hosting area for pages wherever you want, giving you the flexibility to add custom tab bars, navigation bars, flyouts, etc. to your `Shell` application while using great `Shell` URI-based navigation.
+
+Let's say we have four root pages - `YellowPage`, `GreenPage`, `RedPage` and `BluePage` - and one detail page - `YellowDetailPage`. Shell with a simple app bar and tab bar can be defined like this:
 
 ```xml
 <simpleShell:SimpleShell
-    x:Class="SimpleSample.AppShell"
+    x:Class="SimpleToolkit.SimpleShellSample.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:simpleShell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
-    xmlns:pages="clr-namespace:SimpleSample.Views.Pages"
+    xmlns:pages="clr-namespace:SimpleToolkit.SimpleShellSample.Views.Pages"
     x:Name="thisShell">
 
-    <ShellContent
-        Title="Icons"
-        Icon="icon.png"
-        ContentTemplate="{DataTemplate pages:IconPage}"
-        Route="IconPage"/>
+    <!-- Pages can be grouped into tabs (ShellSections) -->
+    <Tab
+        Title="Yellow-Green"
+        Route="YellowGreenTab">
+        <ShellContent
+            Title="Yellow"
+            ContentTemplate="{DataTemplate pages:YellowPage}"
+            Route="YellowPage"/>
 
-    <ShellContent
-        Title="Buttons"
-        Icon="button.png"
-        ContentTemplate="{DataTemplate pages:ContentButtonPage}"
-        Route="ContentButtonPage"/>
+        <ShellContent
+            Title="Green"
+            ContentTemplate="{DataTemplate pages:GreenPage}"
+            Route="GreenPage"/>
+    </Tab>
 
-    <ShellContent
-        Title="Popovers"
-        Icon="popover.png"
-        ContentTemplate="{DataTemplate pages:PopoverPage}"
-        Route="PopoverPage"/>
+    <Tab
+        Title="Red"
+        Route="RedTab">
+        <ShellContent
+            Title="Red"
+            ContentTemplate="{DataTemplate pages:RedPage}"
+            Route="RedPage"/>
+    </Tab>
 
-    <simpleShell:SimpleShell.Content>
+    <Tab
+        Title="Blue"
+        Route="BlueTab">
+        <ShellContent
+            Title="Blue"
+            ContentTemplate="{DataTemplate pages:BluePage}"
+            Route="BluePage"/>
+    </Tab>
+
+    <simpleShell:SimpleShell.RootPageContainer>
         <Grid
-            RowDefinitions="50, *, 50">
-            <Button
-                x:Name="backButton"
-                Clicked="BackButtonClicked"
-                Text="Back"
-                Margin="20,5"
-                HorizontalOptions="Start"
-                Background="DarkOrange"/>
-            <Label
-                Margin="20,5"
-                HorizontalOptions="Center" VerticalOptions="Center"
-                Text="{Binding CurrentShellContent.Title, Source={x:Reference thisShell}}"
-                FontAttributes="Bold" FontSize="18"/>
-            <simpleShell:SimpleNavigationHost
-                Grid.Row="1"/>
+            RowDefinitions="*, 50">
+            <simpleShell:SimpleNavigationHost/>
             <HorizontalStackLayout
                 x:Name="tabBar"
-                Grid.Row="2"
+                Grid.Row="1"
                 Margin="20,5"
                 HorizontalOptions="Center" Spacing="10"
                 BindableLayout.ItemsSource="{Binding ShellContents, Source={x:Reference thisShell}}">
@@ -68,39 +72,74 @@ builder.UseSimpleShell();
                     <DataTemplate
                         x:DataType="BaseShellItem">
                         <Button
-                            Clicked="TabButtonClicked"
-                            Background="DarkOrange"
+                            Clicked="ShellItemButtonClicked"
+                            Background="Black"
                             Text="{Binding Title}"/>
                     </DataTemplate>
                 </BindableLayout.ItemTemplate>
             </HorizontalStackLayout>
         </Grid>
+    </simpleShell:SimpleShell.RootPageContainer>
+
+    <simpleShell:SimpleShell.Content>
+        <Grid
+            RowDefinitions="50, *">
+            <Button
+                x:Name="backButton"
+                Clicked="BackButtonClicked"
+                Text="Back"
+                Margin="20,5"
+                HorizontalOptions="Start"
+                Background="Black"/>
+            <Label
+                Margin="20,5"
+                HorizontalOptions="Center" VerticalOptions="Center"
+                Text="{Binding CurrentShellContent.Title, Source={x:Reference thisShell}}"
+                FontAttributes="Bold" FontSize="18"/>
+            <simpleShell:SimpleNavigationHost
+                Grid.Row="1"/>
+        </Grid>
     </simpleShell:SimpleShell.Content>
 </simpleShell:SimpleShell>
 ```
 
-As you can see, the logical navigation structure is defined with `ShellContent`, `Tab`, etc. as in normal .NET MAUI `Shell`. However, visual structure has to be defined manually using the `Content` property. The hosting area for pages is represented by the `SimpleNavigationHost` view that can occur in the visual hierarchy **just once**.
+As you can see, the logical navigation structure is defined with `ShellContent`, `Tab`, etc. as in normal .NET MAUI `Shell`. However, visual structure is defined manually using the `Content` or `RootPageContainer` property. The hosting area for pages is represented by the `SimpleNavigationHost` view that can occur in the visual hierarchy **just once**.
 
-SimpleShell provides you with some bindable properties which simplify the creation of custom navigation controls:
+SimpleShell provides you with some **bindable properties** that you can bind to when creating custom navigation controls:
 
 - `CurrentPage` - the currently selected `Page`
 - `CurrentShellSection` - the currently selected `ShellSection` (`Tab`)
 - `CurrentShellContent` - the currently selected `ShellContent`
 - `ShellSections` - read-only list of all `ShellSection`s in the shell
 - `ShellContents` - read-only list of all `ShellContent`s in the shell
-- `RootPageContainer` - sets a view that will wrap all your root pages (`ShellContent`s)
+- `RootPageContainer` - a view that will wrap all root pages (`ShellContent`s)
 
 The code behind of the XAML sample above:
 
 ```csharp
-private async void TabButtonClicked(object sender, EventArgs e)
+public partial class AppShell : SimpleToolkit.SimpleShell.SimpleShell
 {
-    var button = sender as Button;
-    var shellItem = button.BindingContext as BaseShellItem;
+	public AppShell()
+	{
+		InitializeComponent();
 
-    // Navigate to a new tab if it is not the current tab
-    if (!CurrentState.Location.OriginalString.Contains(shellItem.Route))
-        await this.GoToAsync($"///{shellItem.Route}");
+		Routing.RegisterRoute(nameof(YellowDetailPage), typeof(YellowDetailPage));
+    }
+
+    private async void ShellItemButtonClicked(object sender, EventArgs e)
+    {
+        var button = sender as Button;
+        var shellItem = button.BindingContext as BaseShellItem;
+
+        // Navigate to a new tab if it is not the current tab
+        if (!CurrentState.Location.OriginalString.Contains(shellItem.Route))
+            await GoToAsync($"///{shellItem.Route}", true);
+    }
+
+    private async void BackButtonClicked(object sender, EventArgs e)
+    {
+        await GoToAsync("..");
+    }
 }
 ```
 

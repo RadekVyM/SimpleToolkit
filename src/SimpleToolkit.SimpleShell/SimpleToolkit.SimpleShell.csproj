@@ -24,7 +24,7 @@
 		<PackageTags>MAUI, Controls, Shell, Navigation, Transitions</PackageTags>
 		<Authors>RadekVyM</Authors>
 		<PackageOutputPath>..\..\packages</PackageOutputPath>
-		<VersionPrefix>2.1.1</VersionPrefix>
+		<VersionPrefix>3.0.0</VersionPrefix>
 		<VersionSuffix></VersionSuffix>
 		<Version>$(VersionPrefix)$(VersionSuffix)</Version>
 		<Description>Simplified implementation of .NET MAUI Shell that is part of SimpleToolkit library.</Description>

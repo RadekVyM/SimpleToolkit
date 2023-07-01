@@ -112,7 +112,7 @@ SimpleShell provides you with some **bindable properties** that you can bind to 
 - `CurrentShellContent` - the currently selected `ShellContent`
 - `ShellSections` - read-only list of all `ShellSection`s in the shell
 - `ShellContents` - read-only list of all `ShellContent`s in the shell
-- `RootPageContainer` - a view that will wrap all your root pages (`ShellContent`s)
+- `RootPageContainer` - a view that will wrap all root pages (`ShellContent`s)
 
 The code behind of the XAML sample above:
 
@@ -162,10 +162,10 @@ Output:
         </tr>
         <tr>
             <td>
-                <img src="../images/android_simpleshell_content.gif" width="165"/>
+                <img src="../images/android_simpleshell_content.gif" width="175"/>
             </td>
             <td>
-                <img src="../images/ios_simpleshell_content.gif" width="165"/>
+                <img src="../images/ios_simpleshell_content.gif" width="175"/>
             </td>
             <td>
                 <img src="../images/windows_simpleshell_content.gif" width="280"/>
@@ -244,10 +244,10 @@ Tab bar is not visible on the detail page:
         </tr>
         <tr>
             <td>
-                <img src="../images/android_simpleshell_rootpagecontainer.gif" width="165"/>
+                <img src="../images/android_simpleshell_rootpagecontainer.gif" width="175"/>
             </td>
             <td>
-                <img src="../images/ios_simpleshell_rootpagecontainer.gif" width="165"/>
+                <img src="../images/ios_simpleshell_rootpagecontainer.gif" width="175"/>
             </td>
             <td>
                 <img src="../images/windows_simpleshell_rootpagecontainer.gif" width="280"/>
@@ -349,13 +349,13 @@ Binding context of a view defined in the template is a respective `ShellSection`
         </tr>
         <tr>
             <td>
-                <img src="../images/android_simpleshell_shellsectioncontainer.gif" width="165"/>
+                <img src="../images/android_simpleshell_shellsectioncontainer.gif" width="175"/>
             </td>
             <td>
-                <img src="../images/ios_simpleshell_shellsectioncontainer.gif" width="165"/>
+                <img src="../images/ios_simpleshell_shellsectioncontainer.gif" width="175"/>
             </td>
             <td>
-                <img src="../images/windows_simpleshell_rootpagecontainer.gif" width="280"/>
+                <img src="../images/windows_simpleshell_shellsectioncontainer.gif" width="280"/>
             </td>
         </tr>
     </table>
