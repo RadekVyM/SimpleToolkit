@@ -1,7 +1,5 @@
 ﻿namespace SimpleToolkit.SimpleShell.Transitions
 {
-    // TODO: If a ShellContent is not in a ShellSection, transition is not played
-
     /// <summary>
     /// Type of a page transition in <see cref="SimpleShell"/>.
     /// </summary>
@@ -35,6 +33,18 @@
         /// </summary>
         public VisualElement DestinationPage { get; protected set; }
         /// <summary>
+        /// <see cref="ShellSection"/> container from which the navigation is initiated.
+        /// </summary>
+        public VisualElement OriginShellSectionContainer { get; protected set; }
+        /// <summary>
+        /// Destination <see cref="ShellSection"/> container of the navigation.
+        /// </summary>
+        public VisualElement DestinationShellSectionContainer { get; protected set; }
+        /// <summary>
+        /// Current <see cref="SimpleShell"/> instance.
+        /// </summary>
+        public SimpleShell Shell { get; protected set; }
+        /// <summary>
         /// Progress of the transition. Number between 0 and 1.
         /// </summary>
         public double Progress { get; protected set; }
@@ -42,13 +52,35 @@
         /// Type of the transition.
         /// </summary>
         public SimpleShellTransitionType TransitionType { get; protected set; }
+        /// <summary>
+        /// Whether the origin page is a root page.
+        /// </summary>
+        public bool IsOriginPageRoot { get; protected set; }
+        /// <summary>
+        /// Whether the destination page is a root page.
+        /// </summary>
+        public bool IsDestinationPageRoot { get; protected set; }
 
-        public SimpleShellTransitionArgs(VisualElement originPage, VisualElement destinationPage, double progress, SimpleShellTransitionType transitionType)
+        public SimpleShellTransitionArgs(
+            VisualElement originPage,
+            VisualElement destinationPage,
+            VisualElement originShellSectionContainer,
+            VisualElement destinationShellSectionContainer,
+            SimpleShell shell,
+            double progress,
+            SimpleShellTransitionType transitionType,
+            bool isOriginPageRoot,
+            bool isDestinationPageRoot)
         {
             OriginPage = originPage;
             DestinationPage = destinationPage;
+            OriginShellSectionContainer = originShellSectionContainer;
+            DestinationShellSectionContainer = destinationShellSectionContainer;
+            Shell = shell;
             Progress = progress;
             TransitionType = transitionType;
+            IsOriginPageRoot = isOriginPageRoot;
+            IsDestinationPageRoot = isDestinationPageRoot;
         }
     }
 
@@ -60,7 +92,7 @@
         internal const uint DefaultDuration = 250;
         internal const bool DefaultDestinationPageInFrontOnSwitching = true;
         internal const bool DefaultDestinationPageInFrontOnPushing = true;
-        internal const bool DefaultDestinationPageInFrontOnPopping = true;
+        internal const bool DefaultDestinationPageInFrontOnPopping = false;
 
         /// <summary>
         /// Callback that is called when progress of the transition changes.
@@ -82,40 +114,10 @@
         /// Whether the destination page should be displayed in front of the origin page when transitioning from one page to another.
         /// </summary>
         public Func<SimpleShellTransitionArgs, bool> DestinationPageInFront { get; }
-
         /// <summary>
-        /// Constructor that does not allow to dynamically set some properties of the transition.
+        /// Easing of the transition animation.
         /// </summary>
-        /// <param name="callback">Callback that is called when progress of the transition changes.</param>
-        /// <param name="duration">Duration of the transition.</param>
-        /// <param name="starting">Callback that is called when the transition starts.</param>
-        /// <param name="finished">Callback that is called when the transition finishes.</param>
-        /// <param name="destinationPageInFrontOnSwitching">Whether the destination page should be displayed in front of the origin page when switching root pages in the stack.</param>
-        /// <param name="destinationPageInFrontOnPushing">Whether the destination page should be displayed in front of the origin page when pushing new page to the stack.</param>
-        /// <param name="destinationPageInFrontOnPopping">Whether the destination page should be displayed in front of the origin page when popping existing page from the stack.</param>
-        [Obsolete("This constructor is deprecated. Please use other constructor.")]
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        public SimpleShellTransition(
-            Action<SimpleShellTransitionArgs> callback,
-            uint duration = DefaultDuration,
-            Action<SimpleShellTransitionArgs> starting = null,
-            Action<SimpleShellTransitionArgs> finished = null,
-            bool destinationPageInFrontOnSwitching = DefaultDestinationPageInFrontOnSwitching,
-            bool destinationPageInFrontOnPushing = DefaultDestinationPageInFrontOnPushing,
-            bool destinationPageInFrontOnPopping = DefaultDestinationPageInFrontOnPopping)
-        {
-            Callback = callback;
-            Duration = (args) => duration;
-            Finished = finished;
-            Starting = starting;
-            DestinationPageInFront = (args) => args.TransitionType switch
-            {
-                SimpleShellTransitionType.Switching => destinationPageInFrontOnSwitching,
-                SimpleShellTransitionType.Pushing => destinationPageInFrontOnPushing,
-                SimpleShellTransitionType.Popping => destinationPageInFrontOnPopping,
-                _ => true
-            };
-        }
+        public Func<SimpleShellTransitionArgs, Easing> Easing { get; }
 
         /// <summary>
         /// Constructor that allows to dynamically set properties of the transition.
@@ -125,12 +127,14 @@
         /// <param name="starting">Callback that is called when the transition starts.</param>
         /// <param name="finished">Callback that is called when the transition finishes.</param>
         /// <param name="destinationPageInFront">Whether the destination page should be displayed in front of the origin page when transitioning from one page to another.</param>
+        /// <param name="easing">Easing of the transition animation.</param>
         public SimpleShellTransition(
             Action<SimpleShellTransitionArgs> callback,
             Func<SimpleShellTransitionArgs, uint> duration = null,
             Action<SimpleShellTransitionArgs> starting = null,
             Action<SimpleShellTransitionArgs> finished = null,
-            Func<SimpleShellTransitionArgs, bool> destinationPageInFront = null)
+            Func<SimpleShellTransitionArgs, bool> destinationPageInFront = null,
+            Func<SimpleShellTransitionArgs, Easing> easing = null)
         {
             Callback = callback;
             Duration = duration ?? ((args) => DefaultDuration);
@@ -143,6 +147,7 @@
                 SimpleShellTransitionType.Popping => DefaultDestinationPageInFrontOnPopping,
                 _ => true
             });
+            Easing = easing ?? ((args) => Microsoft.Maui.Easing.Linear);
         }
     }
 }

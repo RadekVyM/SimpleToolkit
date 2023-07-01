@@ -123,5 +123,4 @@ namespace SimpleToolkit.Core.Handlers
     }
 }
 
-
 #endif

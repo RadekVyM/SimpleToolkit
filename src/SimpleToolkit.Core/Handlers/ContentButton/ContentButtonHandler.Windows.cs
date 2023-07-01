@@ -5,6 +5,7 @@ using Microsoft.Maui.Platform;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml;
 using Windows.System;
+using SimpleToolkit.Core.Platform;
 
 namespace SimpleToolkit.Core.Handlers
 {

@@ -24,7 +24,7 @@
 		<PackageTags>MAUI, Controls, Shell, Navigation, Transitions</PackageTags>
 		<Authors>RadekVyM</Authors>
 		<PackageOutputPath>..\..\packages</PackageOutputPath>
-		<VersionPrefix>2.1.1</VersionPrefix>
+		<VersionPrefix>3.0.0</VersionPrefix>
 		<VersionSuffix></VersionSuffix>
 		<Version>$(VersionPrefix)$(VersionSuffix)</Version>
 		<Description>Simplified implementation of .NET MAUI Shell that is part of SimpleToolkit library.</Description>
@@ -36,12 +36,9 @@
         <PackageReadmeFile>SimpleToolkit.SimpleShell.md</PackageReadmeFile>
 	</PropertyGroup>
 
-	<ItemGroup>
-	  <Folder Include="Platforms\Android\" />
-	  <Folder Include="Platforms\iOS\" />
-	  <Folder Include="Platforms\MacCatalyst\" />
-	  <Folder Include="Platforms\Windows\" />
-	</ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+	</PropertyGroup>
 
 	<ItemGroup>
         <None Include="..\..\docs\Nuget\SimpleToolkit.SimpleShell.md">
@@ -56,6 +53,11 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Platform\Android\" />
+	  <Folder Include="Platform\Windows\" />
 	</ItemGroup>
 
 </Project>

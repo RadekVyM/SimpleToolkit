@@ -1,5 +1,4 @@
 ﻿using SimpleToolkit.SimpleShell.Extensions;
-using SimpleToolkit.SimpleShell.Transitions;
 
 namespace SimpleToolkit.SimpleShell
 {
@@ -12,7 +11,7 @@ namespace SimpleToolkit.SimpleShell
     /// <summary>
     /// An implementation of <see cref="Shell"/> that lets you define your custom navigation experience. 
     /// </summary>
-    public class SimpleShell : Shell, ISimpleShell
+    public partial class SimpleShell : Shell, ISimpleShell
     {
         const string PageStateNamePrefix = "SimplePageState";
         const string ShellContentStateNamePrefix = "SimpleShellContentState";
@@ -25,28 +24,20 @@ namespace SimpleToolkit.SimpleShell
 
         private bool defaultShellPropertyValuesSet;
 
-        public static readonly BindableProperty ContentProperty = BindableProperty.Create(nameof(Content), typeof(IView), typeof(SimpleShell), propertyChanged: OnContentChanged);
-        public static readonly BindableProperty RootPageOverlayProperty = BindableProperty.Create(nameof(RootPageOverlay), typeof(IView), typeof(SimpleShell));
-        public static readonly BindableProperty CurrentPageProperty = BindableProperty.Create(nameof(CurrentPage), typeof(Page), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
-        public static readonly BindableProperty CurrentShellContentProperty = BindableProperty.Create(nameof(CurrentShellContent), typeof(ShellContent), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
-        public static readonly BindableProperty CurrentShellSectionProperty = BindableProperty.Create(nameof(CurrentShellSection), typeof(ShellSection), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
-        public static readonly BindableProperty ShellSectionsProperty = BindableProperty.Create(nameof(ShellSections), typeof(IReadOnlyList<ShellSection>), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
-        public static readonly BindableProperty ShellContentsProperty = BindableProperty.Create(nameof(ShellContents), typeof(IReadOnlyList<ShellContent>), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
-
-        public static readonly BindableProperty TransitionProperty =
-            BindableProperty.CreateAttached("Transition", typeof(SimpleShellTransition), typeof(Page), null);
-
-        public static SimpleShellTransition GetTransition(BindableObject item)
-        {
-            _ = item ?? throw new ArgumentNullException(nameof(item));
-            return (SimpleShellTransition)item.GetValue(TransitionProperty);
-        }
-
-        public static void SetTransition(BindableObject item, SimpleShellTransition value)
-        {
-            _ = item ?? throw new ArgumentNullException(nameof(item));
-            item.SetValue(TransitionProperty, value);
-        }
+        public static readonly BindableProperty ContentProperty =
+            BindableProperty.Create(nameof(Content), typeof(IView), typeof(SimpleShell), defaultValue: new SimpleNavigationHost(), propertyChanged: OnContentChanged);
+        public static readonly BindableProperty RootPageContainerProperty =
+            BindableProperty.Create(nameof(RootPageContainer), typeof(IView), typeof(SimpleShell), propertyChanged: OnRootPageContainerChanged);
+        public static readonly BindableProperty CurrentPageProperty =
+            BindableProperty.Create(nameof(CurrentPage), typeof(Page), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
+        public static readonly BindableProperty CurrentShellContentProperty =
+            BindableProperty.Create(nameof(CurrentShellContent), typeof(ShellContent), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
+        public static readonly BindableProperty CurrentShellSectionProperty =
+            BindableProperty.Create(nameof(CurrentShellSection), typeof(ShellSection), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
+        public static readonly BindableProperty ShellSectionsProperty =
+            BindableProperty.Create(nameof(ShellSections), typeof(IReadOnlyList<ShellSection>), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
+        public static readonly BindableProperty ShellContentsProperty =
+            BindableProperty.Create(nameof(ShellContents), typeof(IReadOnlyList<ShellContent>), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
 
         public static new SimpleShell Current => Shell.Current as SimpleShell;
 
@@ -56,10 +47,10 @@ namespace SimpleToolkit.SimpleShell
             set => SetValue(ContentProperty, value);
         }
 
-        public virtual IView RootPageOverlay
+        public virtual IView RootPageContainer
         {
-            get => (IView)GetValue(RootPageOverlayProperty);
-            set => SetValue(RootPageOverlayProperty, value);
+            get => (IView)GetValue(RootPageContainerProperty);
+            set => SetValue(RootPageContainerProperty, value);
         }
 
         public new Page CurrentPage
@@ -95,6 +86,8 @@ namespace SimpleToolkit.SimpleShell
 
         public SimpleShell()
         {
+            UpdateLogicalChildren(null, Content as Element);
+
             Navigated += SimpleShellNavigated;
             Loaded += SimpleShellLoaded;
         }
@@ -236,9 +229,40 @@ namespace SimpleToolkit.SimpleShell
 
         private static void OnContentChanged(BindableObject bindable, object oldValue, object newValue)
         {
+            var oldView = oldValue as Element;
+            var newView = newValue as Element;
+
             if (bindable is SimpleShell simpleShell)
             {
                 simpleShell.UpdateVisualStates();
+
+                simpleShell.UpdateLogicalChildren(oldView, newView);
+            }
+        }
+
+        private static void OnRootPageContainerChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var oldView = oldValue as Element;
+            var newView = newValue as Element;
+
+            if (bindable is SimpleShell simpleShell)
+            {
+                simpleShell.UpdateLogicalChildren(oldView, newView);
+            }
+        }
+
+        private void UpdateLogicalChildren(Element oldView, Element newView)
+        {
+            if (oldView is not null)
+            {
+                oldView.Parent = null;
+                RemoveLogicalChild(oldView);
+            }
+
+            if (newView is not null)
+            {
+                newView.Parent = this;
+                AddLogicalChild(newView);
             }
         }
     }

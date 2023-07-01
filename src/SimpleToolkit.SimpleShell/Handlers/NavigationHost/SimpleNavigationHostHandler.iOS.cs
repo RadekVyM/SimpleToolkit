@@ -2,6 +2,7 @@
 
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
+using SimpleToolkit.SimpleShell.Platform;
 using UIKit;
 
 namespace SimpleToolkit.SimpleShell.Handlers
@@ -15,8 +16,6 @@ namespace SimpleToolkit.SimpleShell.Handlers
         public static CommandMapper<ISimpleNavigationHost, SimpleNavigationHostHandler> CommandMapper = new(ViewHandler.ViewCommandMapper)
         {
         };
-
-        public UIView Container { get; protected set; }
 
 
         public SimpleNavigationHostHandler(IPropertyMapper mapper, CommandMapper commandMapper)
@@ -32,15 +31,14 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         protected override UIView CreatePlatformView()
         {
-            Container = new CustomContentView();
-            return Container;
+            return new SimpleContentView();
         }
 
         public virtual void SetContent(UIView view)
         {
-            Container.ClearSubviews();
+            PlatformView.ClearSubviews();
             if (view is not null)
-                Container.AddSubview(view);
+                PlatformView.AddSubview(view);
         }
     }
 }

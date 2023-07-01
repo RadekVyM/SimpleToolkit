@@ -87,7 +87,7 @@ See [documentation](./docs/SimpleToolkit.Core) for more information.
 
 The *SimpleToolkit.SimpleShell* package provides you with a simplified implementation of .NET MAUI `Shell` that lets you easily create a custom navigation experience in your .NET MAUI applications. The implementation is simply called `SimpleShell`.
 
-All `SimpleShell` is is just a simple container for your content with the ability to put the hosting area for pages wherever you want. Thanks to that, you are able to add custom tab bars, navigation bars, flyouts, etc. to your `Shell` application while using great `Shell` URI-based navigation.
+All `SimpleShell` is is just a simple container for your content with the ability to put the hosting area for pages wherever you want, giving you the flexibility to add custom tab bars, navigation bars, flyouts, etc. to your `Shell` application while using great `Shell` URI-based navigation.
 
 In order to use `SimpleShell`, you need to call the `UseSimpleShell()` extension method in your `MauiProgram.cs` file:
 

@@ -1,20 +1,20 @@
 ﻿#if !(ANDROID || IOS || MACCATALYST || WINDOWS)
 
-using PlatformPage = System.Object;
+using PlatformView = System.Object;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager
 {
     public partial class SimpleStackNavigationManager
     {
-        protected virtual void AddPlatformPage(PlatformPage newPageView, bool onTop = true)
+        protected virtual void AddPlatformPage(PlatformView newPageView, bool onTop = true, bool isCurrentPageRoot = true)
         {
         }
 
-        protected virtual void RemovePlatformPage(PlatformPage oldPageView)
+        protected virtual void RemovePlatformPage(PlatformView oldPageView, IView oldShellSectionContainer, bool isCurrentPageRoot, bool isPreviousPageRoot)
         {
         }
 
-        protected virtual void ReplaceRootPageOverlay(IView rootPageOverlay)
+        protected virtual void ReplaceRootPageContainer(IView rootPageContainer, bool isCurrentPageRoot)
         {
         }
     }

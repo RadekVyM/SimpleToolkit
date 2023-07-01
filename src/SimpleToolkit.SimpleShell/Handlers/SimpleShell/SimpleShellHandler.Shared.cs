@@ -23,7 +23,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
         {
             [nameof(ISimpleShell.CurrentItem)] = MapCurrentItem,
             [nameof(ISimpleShell.Content)] = MapContent,
-            [nameof(ISimpleShell.RootPageOverlay)] = MapRootPageOverlay,
+            [nameof(ISimpleShell.RootPageContainer)] = MapRootPageContainer,
         };
 
         public static CommandMapper<ISimpleShell, SimpleShellHandler> CommandMapper = new(ViewHandler.ViewCommandMapper)
@@ -71,7 +71,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
             if (handler.VirtualView != newItem)
                 handler.SetVirtualView(newItem);
 
-            UpdateRootPageOverlay(VirtualView.RootPageOverlay);
+            UpdateRootPageContainer(VirtualView.RootPageContainer);
         }
 
         protected virtual SimpleShellItemHandler CreateShellItemHandler()
@@ -117,12 +117,12 @@ namespace SimpleToolkit.SimpleShell.Handlers
             navigationHost = VirtualView.Content.FindSimpleNavigationHost();
         }
 
-        protected virtual void UpdateRootPageOverlay(IView view)
+        protected virtual void UpdateRootPageContainer(IView view)
         {
             if (VirtualView?.CurrentItem?.Handler is null || VirtualView.CurrentItem.Handler is not SimpleShellItemHandler shellItemHandler)
                 return;
 
-            shellItemHandler.SetRootPageOverlay(view);
+            shellItemHandler.SetRootPageContainer(view);
         }
 
         protected override void DisconnectHandler(PlatformShell platformView)
@@ -150,9 +150,9 @@ namespace SimpleToolkit.SimpleShell.Handlers
             handler.UpdateValue(nameof(ISimpleShell.CurrentItem));
         }
 
-        public static void MapRootPageOverlay(SimpleShellHandler handler, ISimpleShell shell)
+        public static void MapRootPageContainer(SimpleShellHandler handler, ISimpleShell shell)
         {
-            handler.UpdateRootPageOverlay(shell.RootPageOverlay);
+            handler.UpdateRootPageContainer(shell.RootPageContainer);
         }
     }
 }

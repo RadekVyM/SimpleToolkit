@@ -23,7 +23,7 @@ namespace SimpleToolkit.SimpleShell.Playground
             builder.DisplayContentBehindBars();
 
 #if ANDROID
-            builder.SetDefaultStatusBarAppearance(color: Colors.Transparent, lightElements: true);
+            builder.SetDefaultStatusBarAppearance(color: Colors.Transparent, lightElements: false);
             builder.SetDefaultNavigationBarAppearance(color: Colors.Transparent, lightElements: false);
 #endif
 

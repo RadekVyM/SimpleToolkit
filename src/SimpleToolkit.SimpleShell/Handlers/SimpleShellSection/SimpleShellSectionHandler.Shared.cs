@@ -1,7 +1,7 @@
 ﻿using SimpleToolkit.SimpleShell.Extensions;
 using SimpleToolkit.SimpleShell.NavigationManager;
 using Microsoft.Maui.Controls.Internals;
-using System.Linq;
+using Microsoft.Maui.Platform;
 #if ANDROID
 using PageContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
 #elif IOS || MACCATALYST
@@ -28,10 +28,11 @@ namespace SimpleToolkit.SimpleShell.Handlers
                 [nameof(IStackNavigation.RequestNavigation)] = RequestNavigation
             };
 
-        private IView rootPageOverlay;
+        private IView rootPageContainer;
 
         protected SimpleStackNavigationManager navigationManager;
         protected ShellSection shellSection;
+
 
         public SimpleShellSectionHandler(IPropertyMapper mapper, CommandMapper commandMapper)
             : base(mapper ?? Mapper, commandMapper ?? CommandMapper)
@@ -75,10 +76,10 @@ namespace SimpleToolkit.SimpleShell.Handlers
             }
         }
 
-        public virtual void SetRootPageOverlay(IView rootPageOverlay)
+        public virtual void SetRootPageContainer(IView view)
         {
-            this.rootPageOverlay = rootPageOverlay;
-            navigationManager?.UpdateRootPageOverlay(rootPageOverlay);
+            rootPageContainer = view;
+            navigationManager?.UpdateRootPageContainer(view);
         }
 
         public virtual void OnAppearanceChanged(ShellAppearance appearance)
@@ -88,7 +89,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
         protected override void ConnectHandler(PageContainer platformView)
         {
             navigationManager?.Connect(VirtualView, platformView);
-            navigationManager?.UpdateRootPageOverlay(rootPageOverlay);
+            navigationManager?.UpdateRootPageContainer(rootPageContainer);
             base.ConnectHandler(platformView);
         }
 
@@ -136,7 +137,10 @@ namespace SimpleToolkit.SimpleShell.Handlers
         {
             if (arg3 is NavigationRequest nr)
             {
-                handler.navigationManager?.NavigateTo(nr);
+                var shell = handler.VirtualView.FindParentOfType<SimpleShell>();
+                var container = GetShellSectionContainer(handler.VirtualView);
+
+                handler.navigationManager?.NavigateTo(nr, shell, container);
             }
             else
             {
@@ -147,6 +151,30 @@ namespace SimpleToolkit.SimpleShell.Handlers
         public static void MapCurrentItem(SimpleShellSectionHandler handler, ShellSection item)
         {
             handler.SyncNavigationStack(false, null);
+        }
+
+        private static IView GetShellSectionContainer(ShellSection section)
+        {
+            var container = SimpleShell.GetShellSectionContainer(section);
+
+            if (container is null)
+            {
+                var template = SimpleShell.GetShellSectionContainerTemplate(section);
+
+                if (template is not null)
+                {
+                    container = template.CreateContent() as IView ?? throw new InvalidOperationException("ShellSectionContainer has to implement the IView interface");
+                }
+
+                SimpleShell.SetShellSectionContainer(section, container);
+            }
+
+            container?.ToHandler(section.Handler.MauiContext);
+
+            if (container is BindableObject bindable && !bindable.IsSet(BindableObject.BindingContextProperty))
+                bindable.BindingContext = section;
+
+            return container;
         }
 
         private static void LogStack(NavigationRequestedEventArgs e, List<IView> pageStack, ShellSection virtualView)

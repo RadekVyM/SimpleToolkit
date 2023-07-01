@@ -52,6 +52,13 @@ namespace SimpleToolkit.SimpleShell.Extensions
                         return transition?.DestinationPageInFront?.Invoke(args) ?? false;
                     else
                         return originalTransition?.DestinationPageInFront?.Invoke(args) ?? false;
+                },
+                easing: args =>
+                {
+                    if (when?.Invoke(args) ?? false)
+                        return transition?.Easing?.Invoke(args) ?? Easing.Linear;
+                    else
+                        return originalTransition?.Easing?.Invoke(args) ?? Easing.Linear;
                 });
 		}
 	}

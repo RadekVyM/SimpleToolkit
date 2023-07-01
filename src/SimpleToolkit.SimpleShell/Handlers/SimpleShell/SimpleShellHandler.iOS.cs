@@ -1,7 +1,7 @@
 ﻿#if IOS || MACCATALYST
 
 using Microsoft.Maui.Handlers;
-using SimpleToolkit.SimpleShell.Handlers.Platform;
+using SimpleToolkit.SimpleShell.Platform;
 using UIKit;
 
 namespace SimpleToolkit.SimpleShell.Handlers
@@ -14,7 +14,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
         {
             var contentController = new UIViewController
             {
-                View = new CustomContentView(),
+                View = new SimpleContentView(),
             };
 
             navigationController = new SimpleNavigationController();
@@ -28,7 +28,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         protected virtual UIView GetNavigationHostContent()
         {
-            return (navigationHost?.Handler as SimpleNavigationHostHandler)?.Container?.Subviews.FirstOrDefault();
+            return (navigationHost?.Handler as SimpleNavigationHostHandler)?.PlatformView?.Subviews.FirstOrDefault();
         }
 
         private void NavigationControllerPopGestureRecognized(object sender, EventArgs e)

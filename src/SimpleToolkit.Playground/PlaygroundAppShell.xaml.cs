@@ -47,6 +47,7 @@ namespace SimpleToolkit.SimpleShell.Playground
             Routing.RegisterRoute(nameof(ThirdYellowDetailPage), typeof(ThirdYellowDetailPage));
             Routing.RegisterRoute(nameof(FourthYellowDetailPage), typeof(FourthYellowDetailPage));
             Routing.RegisterRoute(nameof(FirstGreenDetailPage), typeof(FirstGreenDetailPage));
+            Routing.RegisterRoute(nameof(ImageDetailPage), typeof(ImageDetailPage));
 
             Loaded += PlaygroundAppShellLoaded;
 
@@ -56,8 +57,16 @@ namespace SimpleToolkit.SimpleShell.Playground
                     switch (args.TransitionType)
                     {
                         case SimpleShellTransitionType.Switching:
-                            args.OriginPage.Opacity = 1 - args.Progress;
-                            args.DestinationPage.Opacity = args.Progress;
+                            if (args.OriginShellSectionContainer == args.DestinationShellSectionContainer)
+                            {
+                                args.OriginPage.Opacity = 1 - args.Progress;
+                                args.DestinationPage.Opacity = args.Progress;
+                            }
+                            else
+                            {
+                                (args.OriginShellSectionContainer ?? args.OriginPage).Opacity = 1 - args.Progress;
+                                (args.DestinationShellSectionContainer ?? args.DestinationPage).Opacity = args.Progress;
+                            }
                             break;
                         case SimpleShellTransitionType.Pushing:
                             args.DestinationPage.Opacity = args.DestinationPage.Width < 0 ? 0 : 1;
@@ -75,11 +84,21 @@ namespace SimpleToolkit.SimpleShell.Playground
                     args.OriginPage.TranslationX = 0;
                     args.OriginPage.Opacity = 1;
                     args.DestinationPage.Opacity = 1;
+                    if (args.OriginShellSectionContainer is not null)
+                        args.OriginShellSectionContainer.Opacity = 1;
+                    if (args.DestinationShellSectionContainer is not null)
+                        args.DestinationShellSectionContainer.Opacity = 1;
                 },
                 destinationPageInFront: static args => args.TransitionType switch
                 {
-                    SimpleShellTransitionType.Popping => false,
-                    _ => true
+                    SimpleShellTransitionType.Pushing => true,
+                    _ => false
+                },
+                easing: static args => args.TransitionType switch
+                {
+                    SimpleShellTransitionType.Pushing => Easing.SinIn,
+                    SimpleShellTransitionType.Popping => Easing.SinOut,
+                    _ => Easing.Linear
                 });
         }
 
@@ -156,7 +175,7 @@ namespace SimpleToolkit.SimpleShell.Playground
         {
             if (e.Item is DesignLanguageItem designLanguageItem)
             {
-                designLanguagesListPopover.SelectedItem= designLanguageItem;
+                designLanguagesListPopover.SelectedItem = designLanguageItem;
                 designLanguageItem.Action?.Invoke();
             }
         }
@@ -168,7 +187,14 @@ namespace SimpleToolkit.SimpleShell.Playground
 
         private void ButtonClicked(object sender, EventArgs e)
         {
-            this.RootPageOverlay = null;
+            this.RootPageContainer = null;
+        }
+
+        private void SwapSectionButtonClicked(object sender, EventArgs e)
+        {
+            Resources.TryGetValue("AnotherSimpleShellSectionContainer", out object template);
+
+            SimpleShell.SetShellSectionContainerTemplate(iconsTab, template as DataTemplate);
         }
 
         private record DesignLanguageItem(string Title, Action Action)

@@ -2,7 +2,7 @@
 {
     internal enum AppShellType
     {
-        Normal, Sample, Playground
+        Normal, Playground
     }
 
     public partial class App : Application
@@ -14,7 +14,6 @@
             MainPage = MauiProgram.UsedAppShell switch
             {
                 AppShellType.Normal => new NormalAppShell(),
-                AppShellType.Sample => new SampleAppShell(),
                 _ => new PlaygroundAppShell()
             };
         }

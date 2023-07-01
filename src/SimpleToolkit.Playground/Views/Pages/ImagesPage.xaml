@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
+    x:Class="SimpleToolkit.SimpleShell.Playground.Views.Pages.ImagesPage"
+    Title="ImagesPage">
+
+    <Grid
+        HorizontalOptions="Center">
+        <Image
+            HorizontalOptions="Fill" VerticalOptions="Start"
+            HeightRequest="100"
+            Source="https://user-images.githubusercontent.com/736973/187334170-d05271e9-d016-4498-8065-662c6f1124fa.png">
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer
+                    Tapped="TapGestureRecognizer_Tapped"/>
+            </Image.GestureRecognizers>
+        </Image>
+    </Grid>
+</ContentPage>

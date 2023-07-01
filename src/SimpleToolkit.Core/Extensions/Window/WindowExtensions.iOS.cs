@@ -29,6 +29,11 @@ namespace SimpleToolkit.Core
                     Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific.Page.SetUseSafeArea(bindablePage, false);
             });
 
+            PageHandler.Mapper.AppendToMapping(Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific.Page.SafeAreaInsetsProperty.PropertyName, (handler, page) =>
+            {
+                OnSafeAreaMayChanged();
+            });
+
             WindowHandler.Mapper.AppendToMapping(InsetsKey, (handler, window) =>
             {
                 if (window is not Element elementWindow)
@@ -56,6 +61,11 @@ namespace SimpleToolkit.Core
         }
 
         private static void DeviceDisplayMainDisplayInfoChanged(object sender, DisplayInfoChangedEventArgs e)
+        {
+            OnSafeAreaMayChanged();
+        }
+
+        private static void OnSafeAreaMayChanged()
         {
             foreach (var key in safeAreas.Keys)
             {

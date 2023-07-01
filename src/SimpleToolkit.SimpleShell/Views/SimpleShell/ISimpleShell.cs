@@ -10,9 +10,9 @@
         /// </summary>
         IView Content { get; set; }
         /// <summary>
-        /// View that is displayed over all root pages.
+        /// View that wraps root pages.
         /// </summary>
-        IView RootPageOverlay { get; set; }
+        IView RootPageContainer { get; set; }
         /// <summary>
         /// The currently selected <see cref="Page"/>.
         /// </summary>

@@ -1,6 +1,7 @@
 ﻿#if IOS || MACCATALYST
 
 using Microsoft.Maui.Handlers;
+using SimpleToolkit.SimpleShell.Platform;
 using UIKit;
 
 namespace SimpleToolkit.SimpleShell.Handlers
@@ -10,7 +11,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
         protected override UIView CreatePlatformElement()
         {
             CreateNavigationManager();
-            var container = new CustomContentView();
+            var container = new SimpleContentView();
             return container;
         }
     }

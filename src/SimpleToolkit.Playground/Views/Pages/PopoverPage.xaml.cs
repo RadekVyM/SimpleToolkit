@@ -11,7 +11,7 @@ namespace SimpleToolkit.SimpleShell.Playground.Views.Pages
 
         private void ButtonClicked(object sender, EventArgs e)
         {
-            var button = sender as Button;
+            var button = sender as View;
             
             button.ShowAttachedPopover();
         }
