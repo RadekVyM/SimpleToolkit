@@ -103,7 +103,7 @@ Let's say we have four root pages - `YellowPage`, `GreenPage`, `RedPage` and `Bl
 
 ```
 
-As you can see, the logical navigation structure is defined with `ShellContent`, `Tab`, etc. as in normal .NET MAUI `Shell`. However, visual structure is defined manually using the `Content` property. The hosting area for pages is represented by the `SimpleNavigationHost` view that can occur in the visual hierarchy **just once**.
+As you can see, the logical navigation structure is defined with `ShellContent`, `Tab`, etc. as in normal .NET MAUI `Shell`. However, visual structure is defined manually using the `Content` property. The hosting area for pages is represented by the `SimpleNavigationHost` view that can occur in the `Content` element **just once**.
 
 SimpleShell provides you with some **bindable properties** that you can bind to when creating custom navigation controls:
 
