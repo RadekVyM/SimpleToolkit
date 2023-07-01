@@ -148,7 +148,7 @@ Navigation between pages works exactly the same as in .NET MAUI `Shell`, just us
 Output:
 
 <p align="center">
-    <table>
+    <table align="center">
         <tr>
             <th>
                 <p align="center">Android</p>
@@ -162,10 +162,10 @@ Output:
         </tr>
         <tr>
             <td>
-                <img src="../images/android_simpleshell_content.gif" width="175"/>
+                <img src="../images/android_simpleshell_content.gif" width="200"/>
             </td>
             <td>
-                <img src="../images/ios_simpleshell_content.gif" width="175"/>
+                <img src="../images/ios_simpleshell_content.gif" width="200"/>
             </td>
             <td>
                 <img src="../images/windows_simpleshell_content.gif" width="280"/>
@@ -230,7 +230,7 @@ The `RootPageContainer` view has to contain a `SimpleNavigationHost` element som
 Tab bar is not visible on the detail page:
 
 <p align="center">
-    <table>
+    <table align="center">
         <tr>
             <th>
                 <p align="center">Android</p>
@@ -244,10 +244,10 @@ Tab bar is not visible on the detail page:
         </tr>
         <tr>
             <td>
-                <img src="../images/android_simpleshell_rootpagecontainer.gif" width="175"/>
+                <img src="../images/android_simpleshell_rootpagecontainer.gif" width="200"/>
             </td>
             <td>
-                <img src="../images/ios_simpleshell_rootpagecontainer.gif" width="175"/>
+                <img src="../images/ios_simpleshell_rootpagecontainer.gif" width="200"/>
             </td>
             <td>
                 <img src="../images/windows_simpleshell_rootpagecontainer.gif" width="280"/>
@@ -335,7 +335,7 @@ The `ShellSection` with two root pages will contain a top tab bar:
 Binding context of a view defined in the template is a respective `ShellSection` (`Tab`) instance.
 
 <p align="center">
-    <table>
+    <table align="center">
         <tr>
             <th>
                 <p align="center">Android</p>
@@ -349,10 +349,10 @@ Binding context of a view defined in the template is a respective `ShellSection`
         </tr>
         <tr>
             <td>
-                <img src="../images/android_simpleshell_shellsectioncontainer.gif" width="175"/>
+                <img src="../images/android_simpleshell_shellsectioncontainer.gif" width="200"/>
             </td>
             <td>
-                <img src="../images/ios_simpleshell_shellsectioncontainer.gif" width="175"/>
+                <img src="../images/ios_simpleshell_shellsectioncontainer.gif" width="200"/>
             </td>
             <td>
                 <img src="../images/windows_simpleshell_shellsectioncontainer.gif" width="280"/>
