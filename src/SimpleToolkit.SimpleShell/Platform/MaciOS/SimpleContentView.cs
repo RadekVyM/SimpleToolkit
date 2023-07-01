@@ -2,7 +2,6 @@
 
 namespace SimpleToolkit.SimpleShell.Platform
 {
-    // TODO: Clipping to the Border shape does not work
     public class SimpleContentView : Microsoft.Maui.Platform.ContentView
     {
         public override void LayoutSubviews()

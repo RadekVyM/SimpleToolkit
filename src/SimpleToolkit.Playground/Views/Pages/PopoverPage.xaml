@@ -7,79 +7,81 @@
              
              Title="Popovers">
 
-    <VerticalStackLayout>
+    <VerticalStackLayout
+        VerticalOptions="Center" HorizontalOptions="Center"
+        Spacing="30">
         <Button
             VerticalOptions="Center" HorizontalOptions="Center"
             Clicked="ButtonClicked"
             Text="Show popover"
             Background="Orange">
-        <simpleCore:Popover.AttachedPopover>
-            <simpleCore:Popover>
-                <Border
-                    Background="DarkOrange">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="6"/>
-                    </Border.StrokeShape>
-
-                    <VerticalStackLayout Padding="12,10" Spacing="10">
-                        <simpleCore:Icon
-                            Source="star.png" TintColor="White"
-                            VerticalOptions="Center"
-                            HeightRequest="25" WidthRequest="25"/>
-                        <Label
-                            Text="Star this repo" TextColor="White"
-                            FontAttributes="Bold"
-                            VerticalOptions="Center"/>
-                    </VerticalStackLayout>
-                </Border>
-            </simpleCore:Popover>
-        </simpleCore:Popover.AttachedPopover>
-    </Button>
-
-    <simpleCore:ContentButton Clicked="ButtonClicked" HorizontalOptions="Center">
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroupList>
-                <VisualStateGroup x:Name="CommonStates">
-                    <VisualState x:Name="Normal">
-                    </VisualState>
-                    <VisualState x:Name="Focused">
-                        <VisualState.Setters>
-                            <Setter TargetName="innerBorder" Property="View.Background" Value="Orange"/>
-                        </VisualState.Setters>
-                    </VisualState>
-                    <VisualState x:Name="Pressed">
-                        <VisualState.Setters>
-                            <Setter TargetName="innerBorder" Property="View.Background" Value="Goldenrod"/>
-                        </VisualState.Setters>
-                    </VisualState>
-                </VisualStateGroup>
-            </VisualStateGroupList>
-        </VisualStateManager.VisualStateGroups>
-
-        <simpleCore:Popover.AttachedPopover>
-            <simpleCore:Popover>
-                <Border Stroke="Transparent" StrokeThickness="0">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="4"/>
-                    </Border.StrokeShape>
-                    <VerticalStackLayout Background="Yellow" Padding="10">
-                        <Label Text="Hello really long text"/>
-                        <Label Text="Hello"/>
-                        <Label Text="Hello"/>
-                        <Label Text="Hello"/>
-                        <Label Text="Hello"/>
-                    </VerticalStackLayout>
-                </Border>
-            </simpleCore:Popover>
-        </simpleCore:Popover.AttachedPopover>
-
-        <Border x:Name="innerBorder" Stroke="Transparent" StrokeThickness="0" Background="DarkGoldenrod">
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="8"/>
-            </Border.StrokeShape>
-            <Label Text="Popover test" Padding="12,8" TextColor="White" HorizontalOptions="Start"/>
-        </Border>
-    </simpleCore:ContentButton>
-    </VerticalStackLayout>
             
+            <simpleCore:Popover.AttachedPopover>
+                <simpleCore:Popover>
+                    <Border
+                        Background="DarkOrange">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="6"/>
+                        </Border.StrokeShape>
+
+                        <VerticalStackLayout Padding="12,10" Spacing="10">
+                            <simpleCore:Icon
+                                Source="star.png" TintColor="White"
+                                VerticalOptions="Center"
+                                HeightRequest="25" WidthRequest="25"/>
+                            <Label
+                                Text="Star this repo" TextColor="White"
+                                FontAttributes="Bold"
+                                VerticalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </simpleCore:Popover>
+            </simpleCore:Popover.AttachedPopover>
+        </Button>
+
+        <simpleCore:ContentButton Clicked="ButtonClicked" HorizontalOptions="Center">
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                        </VisualState>
+                        <VisualState x:Name="Focused">
+                            <VisualState.Setters>
+                                <Setter TargetName="innerBorder" Property="View.Background" Value="Orange"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Pressed">
+                            <VisualState.Setters>
+                                <Setter TargetName="innerBorder" Property="View.Background" Value="Goldenrod"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </VisualStateManager.VisualStateGroups>
+
+            <simpleCore:Popover.AttachedPopover>
+                <simpleCore:Popover>
+                    <Border Stroke="Transparent" StrokeThickness="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="4"/>
+                        </Border.StrokeShape>
+                        <VerticalStackLayout Background="LightYellow" Padding="10">
+                            <Label Text="Hello really long text"/>
+                            <Label Text="Hello"/>
+                            <Label Text="Hello"/>
+                            <Label Text="Hello"/>
+                            <Label Text="Hello"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </simpleCore:Popover>
+            </simpleCore:Popover.AttachedPopover>
+
+            <Border x:Name="innerBorder" Stroke="Transparent" StrokeThickness="0" Background="Orange">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8"/>
+                </Border.StrokeShape>
+                <Label Text="Popover test" Padding="12,8" TextColor="White" HorizontalOptions="Start"/>
+            </Border>
+        </simpleCore:ContentButton>
+    </VerticalStackLayout>
 </ContentPage>

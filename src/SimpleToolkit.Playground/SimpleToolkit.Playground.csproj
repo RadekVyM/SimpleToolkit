@@ -71,9 +71,9 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)'!='DEBUG'">
-        <PackageReference Include="SimpleToolkit.Core" Version="2.0.6" />
-        <PackageReference Include="SimpleToolkit.SimpleShell.Controls" Version="2.0.0-preview3" />
-        <PackageReference Include="SimpleToolkit.SimpleShell" Version="2.1.1" />
+        <PackageReference Include="SimpleToolkit.Core" Version="3.0.0" />
+        <PackageReference Include="SimpleToolkit.SimpleShell.Controls" Version="2.0.0-preview4" />
+        <PackageReference Include="SimpleToolkit.SimpleShell" Version="3.0.0" />
 	</ItemGroup>
 		
 	<ItemGroup Condition="'$(Configuration)'=='DEBUG'">

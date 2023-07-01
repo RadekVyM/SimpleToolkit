@@ -8,6 +8,11 @@
 
     <Grid
         x:Name="rootContainer">
+        <Rectangle
+            x:Name="background"
+            Fill="Black"
+            HorizontalOptions="Fill" VerticalOptions="Fill"/>
+
         <Grid
             VerticalOptions="Center">
             <Image

@@ -1,7 +1,5 @@
 ﻿namespace SimpleToolkit.SimpleShell.Transitions
 {
-    // TODO: If a ShellContent is not in a ShellSection, transition is not played
-
     /// <summary>
     /// Type of a page transition in <see cref="SimpleShell"/>.
     /// </summary>

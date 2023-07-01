@@ -4,6 +4,8 @@ using SimpleToolkit.SimpleShell.Transitions;
 
 namespace SimpleToolkit.SimpleShell.Playground.Views.Pages;
 
+// TODO: It does not work on Windows. I need to investigate why
+
 public partial class ImageDetailPage : ContentPage, IQueryAttributable
 {
     private Rect imageBounds;
@@ -32,7 +34,7 @@ public partial class ImageDetailPage : ContentPage, IQueryAttributable
 
                 System.Diagnostics.Debug.WriteLine(rect);
 
-                page.rootContainer.BackgroundColor = Color.FromRgba(0, 0, 0, args.Progress);
+                page.background.Opacity = Math.Max(args.Progress - 0.5, 0) * 2;
                 AbsoluteLayout.SetLayoutBounds(page.transitionImage, rect);
             },
             starting: static args =>
@@ -40,7 +42,7 @@ public partial class ImageDetailPage : ContentPage, IQueryAttributable
                 if (args.DestinationPage is not ImageDetailPage page)
                     return;
 
-                page.rootContainer.BackgroundColor = Color.FromRgba(0, 0, 0, 0);
+                page.background.Opacity = 0;
                 page.image.Opacity = 0.01;
                 page.transitionImage.Opacity = 1;
                 page.SetInitialTransitionImagePosition();
@@ -53,9 +55,10 @@ public partial class ImageDetailPage : ContentPage, IQueryAttributable
                 page.image.Opacity = 1;
                 page.transitionImage.Opacity = 0.01;
                 page.setOriginImageOpacity?.Invoke(1);
+                page.background.Opacity = 1;
             },
-            duration: static args => 300u,
-            easing: static args => Easing.SpringOut)
+            duration: static args => 600u,
+            easing: static args => Easing.CubicOut)
             .CombinedWith(
                 transition: SimpleShell.Current.GetTransition(),
                 when: static args => args.TransitionType != SimpleShellTransitionType.Pushing));
