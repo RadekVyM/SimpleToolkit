@@ -16,6 +16,11 @@ namespace SimpleToolkit.SimpleShell.Platform
         public bool ShouldRecognizePopGesture { get; set; } = true;
 
 
+        public SimpleNavigationController(UIViewController rootViewController) : base(rootViewController)
+        {
+        }
+
+
         protected virtual void OnPopGestureRecognized()
         {
             PopGestureRecognized?.Invoke(this, EventArgs.Empty);

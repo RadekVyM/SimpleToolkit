@@ -153,4 +153,7 @@
 		</MauiXaml>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="1.0.2" />
+	</ItemGroup>
 </Project>

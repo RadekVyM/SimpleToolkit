@@ -8,20 +8,20 @@ namespace SimpleToolkit.SimpleShell.Handlers
 {
     public partial class SimpleShellHandler : ViewHandler<ISimpleShell, UIView>
     {
-        private SimpleNavigationController navigationController;
+        public UIViewController ContentController { get; private set; }
 
         protected override UIView CreatePlatformView()
         {
-            var contentController = new UIViewController
+            ContentController = new UIViewController
             {
                 View = new SimpleContentView(),
             };
 
-            navigationController = new SimpleNavigationController();
-
-            navigationController.SetViewControllers(new[] { contentController }, false);
+            SimpleNavigationController navigationController = new SimpleNavigationController(ContentController);
 
             navigationController.PopGestureRecognized += NavigationControllerPopGestureRecognized;
+
+            ViewController = navigationController;
 
             return navigationController.View;
         }

@@ -2,20 +2,32 @@
 <ContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
     x:Class="SimpleToolkit.SimpleShell.Playground.Views.Pages.ImagesPage"
     Title="ImagesPage">
 
-    <Grid
-        HorizontalOptions="Center">
-        <Image
-            HorizontalOptions="Fill" VerticalOptions="Start"
-            HeightRequest="100"
-            Source="https://user-images.githubusercontent.com/736973/187334170-d05271e9-d016-4498-8065-662c6f1124fa.png">
-            <Image.GestureRecognizers>
-                <TapGestureRecognizer
-                    Tapped="TapGestureRecognizer_Tapped"/>
-            </Image.GestureRecognizers>
-        </Image>
-    </Grid>
+    <VerticalStackLayout>
+        <Grid
+            HorizontalOptions="Center">
+            <Image
+                HorizontalOptions="Fill" VerticalOptions="Start"
+                HeightRequest="100"
+                Source="https://user-images.githubusercontent.com/736973/187334170-d05271e9-d016-4498-8065-662c6f1124fa.png">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Tapped="TapGestureRecognizer_Tapped"/>
+                </Image.GestureRecognizers>
+            </Image>
+        </Grid>
+
+        <toolkit:MediaElement
+            Source="https://raw.githubusercontent.com/RadekVyM/MarvelousMAUI/main/images/Marvelous%20.NET%20MAUI.mp4"
+            ShouldShowPlaybackControls="True"
+            ShouldLoopPlayback="True"
+            ShouldAutoPlay="False"
+            Aspect="AspectFill"
+            VerticalOptions="Start"
+            HeightRequest="200"/>
+    </VerticalStackLayout>
 </ContentPage>
