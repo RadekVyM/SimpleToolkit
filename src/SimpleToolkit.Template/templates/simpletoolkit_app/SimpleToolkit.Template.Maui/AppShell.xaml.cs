@@ -18,6 +18,7 @@ public partial class AppShell : SimpleToolkit.SimpleShell.SimpleShell
 
         shell.Window.SubscribeToSafeAreaChanges(safeArea =>
         {
+            shell.tabBar.Padding = new Thickness(safeArea.Left, 0, safeArea.Right, safeArea.Bottom);
         });
     }
 
