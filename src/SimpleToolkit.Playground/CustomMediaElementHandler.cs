@@ -34,27 +34,9 @@ public class CustomMediaElementHandler : MediaElementHandler
         mediaManager ??= new(MauiContext,
                                 VirtualView);
 
-        // Retrieve the parenting page so we can provide that to the platform control
-        var parent = VirtualView.Parent;
-        while (parent is not null)
-        {
-            if (parent is Page)
-            {
-                break;
-            }
-
-            parent = parent.Parent;
-        }
-
-        var parentPage = (parent as Page)?.ToHandler(MauiContext);
-
         var (_, playerViewController) = mediaManager.CreatePlatformView();
 
-        // It looks like that parent view controller has to be a controller that is currently presented in a UINavigationController
-        //var view = new CustomMauiMediaElement(playerViewController, VirtualView);
-        var view = new CustomMauiMediaElement(playerViewController, VirtualView);
-
-        return view;
+        return new CustomMauiMediaElement(playerViewController, VirtualView);
     }
 
 
