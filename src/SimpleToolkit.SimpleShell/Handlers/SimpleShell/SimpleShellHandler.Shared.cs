@@ -136,7 +136,6 @@ namespace SimpleToolkit.SimpleShell.Handlers
             if (platformView.NextResponder is UIKit.UIViewController controller)
             {
                 controller.RemoveFromParentViewController();
-                ViewController = null;
             }
 #endif
         }

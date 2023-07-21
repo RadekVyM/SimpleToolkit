@@ -40,8 +40,6 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
             var shellController = shellHandler.ViewController;
 
-            //shellController.PresentViewController(navigationController, false, null);
-
             shellController?.AddChildViewController(navigationController);
             navigationController.DidMoveToParentViewController(shellController);
         }
