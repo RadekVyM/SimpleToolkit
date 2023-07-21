@@ -32,7 +32,8 @@ public class CustomMediaElementHandler : MediaElementHandler
         }
 
         mediaManager ??= new(MauiContext,
-                                VirtualView);
+                                VirtualView,
+                                Dispatcher.GetForCurrentThread() ?? throw new InvalidOperationException($"{nameof(IDispatcher)} cannot be null"));
 
         var (_, playerViewController) = mediaManager.CreatePlatformView();
 
