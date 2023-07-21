@@ -7,7 +7,7 @@ using UIKit;
 
 namespace SimpleToolkit.SimpleShell.Platform
 {
-    public class SimpleNavigationController : UINavigationController, IUIGestureRecognizerDelegate
+    public class SimpleShellSectionController : UINavigationController, IUIGestureRecognizerDelegate
     {
         private CGPoint startingPoint = default;
 
@@ -16,8 +16,9 @@ namespace SimpleToolkit.SimpleShell.Platform
         public bool ShouldRecognizePopGesture { get; set; } = true;
 
 
-        public SimpleNavigationController(UIViewController rootViewController) : base(rootViewController)
+        public SimpleShellSectionController(UIViewController rootViewController) : base(rootViewController)
         {
+            this.NavigationBarHidden = true;
         }
 
 

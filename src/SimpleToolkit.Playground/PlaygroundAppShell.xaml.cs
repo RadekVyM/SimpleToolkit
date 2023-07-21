@@ -115,7 +115,7 @@ namespace SimpleToolkit.SimpleShell.Playground
 
         private void OnSafeAreaChanged(Thickness safeAreaPadding)
         {
-            rootContainer.Padding = safeAreaPadding;
+            rootContainer.Padding = new Thickness(0, safeAreaPadding.Top, 0, safeAreaPadding.Bottom);
         }
 
         private async void ShellItemButtonClicked(object sender, EventArgs e)

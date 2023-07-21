@@ -6,6 +6,7 @@ using NavFrame = UIKit.UIView;
 using Microsoft.Maui.Handlers;
 using SimpleToolkit.SimpleShell.Handlers;
 using GameController;
+using SimpleToolkit.SimpleShell.Platform;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager
 {
@@ -13,7 +14,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
     {
         protected virtual void AddPlatformPage(IView newPage, SimpleShell shell, bool onTop = true, bool isCurrentPageRoot = true)
         {
-            if (shell.Handler is not SimpleShellHandler shellHandler)
+            if (navigationFrame.NextResponder is not SimpleShellSectionContentController contentController)
                 return;
 
             var newPageView = GetPlatformView(newPage);
@@ -21,10 +22,10 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             if (newPageView is null)
                 return;
 
-            shellHandler.ViewController.DismissViewController(false, null);
+            contentController.DismissViewController(false, null);
 
             if (newPage.Handler is PageHandler pageHandler)
-                shellHandler.ContentController?.AddChildViewController(pageHandler.ViewController);
+                contentController.AddChildViewController(pageHandler.ViewController);
 
             var container = GetPlatformView(this.rootPageContainer);
             PlatformView sectionContainer = null;
@@ -111,7 +112,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             }
 
             if (newPage.Handler is PageHandler didMovePageHandler)
-                didMovePageHandler.ViewController.DidMoveToParentViewController(shellHandler.ContentController);
+                didMovePageHandler.ViewController.DidMoveToParentViewController(contentController);
         }
 
         protected virtual void RemovePlatformPage(IView oldPage, IView oldShellSectionContainer, bool isCurrentPageRoot, bool isPreviousPageRoot)

@@ -101,7 +101,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                 NavigationStack = newPageStack;
 
                 var transition = currentPage is VisualElement visualCurrentPage ? SimpleShell.GetTransition(visualCurrentPage) : null;
-                transition ??= SimpleShell.GetTransition(SimpleShell.Current);
+                transition ??= SimpleShell.GetTransition(shell);
 
                 if (args is ArgsNavigationRequest a && (a.RequestType == NavigationRequestType.Remove || a.RequestType == NavigationRequestType.Insert))
                 {

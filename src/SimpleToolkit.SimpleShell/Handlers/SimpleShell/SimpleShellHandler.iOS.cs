@@ -8,35 +8,19 @@ namespace SimpleToolkit.SimpleShell.Handlers
 {
     public partial class SimpleShellHandler : ViewHandler<ISimpleShell, UIView>
     {
-        public UIViewController ContentController { get; private set; }
-
         protected override UIView CreatePlatformView()
         {
-            ContentController = new UIViewController
+            ViewController = new SimpleShellController
             {
                 View = new SimpleContentView(),
             };
 
-            SimpleNavigationController navigationController = new SimpleNavigationController(ContentController);
-
-            navigationController.PopGestureRecognized += NavigationControllerPopGestureRecognized;
-
-            ViewController = navigationController;
-
-            return navigationController.View;
+            return ViewController.View;
         }
 
         protected virtual UIView GetNavigationHostContent()
         {
             return (navigationHost?.Handler as SimpleNavigationHostHandler)?.PlatformView?.Subviews.FirstOrDefault();
-        }
-
-        private void NavigationControllerPopGestureRecognized(object sender, EventArgs e)
-        {
-            if (VirtualView is not SimpleShell shell)
-                return;
-
-            shell.SendBackButtonPressed();
         }
     }
 }

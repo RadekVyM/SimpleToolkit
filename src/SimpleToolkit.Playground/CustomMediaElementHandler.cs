@@ -47,10 +47,8 @@ namespace SimpleToolkit.SimpleShell.Playground
 
             var (_, playerViewController) = mediaManager.CreatePlatformView();
 
-            //var controller = (SimpleShell.Current.Handler as SimpleShellHandler).ContentController;
-            //var controller = WindowStateManager.Default.GetCurrentUIViewController();
-            //var controller = parentPage.ViewController;
-            var controller = GetRootController();
+            var controller = WindowStateManager.Default.GetCurrentUIViewController();
+            controller = (controller.ChildViewControllers.FirstOrDefault() as UINavigationController).VisibleViewController;
 
             var view = new MauiMediaElement(playerViewController, controller);
 
