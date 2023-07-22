@@ -12,7 +12,10 @@ namespace SimpleToolkit.SimpleShell.Handlers
         {
             ViewController = new SimpleShellController
             {
-                View = new SimpleContentView(),
+                View = new SimpleContentView
+                {
+                    View = VirtualView
+                }
             };
 
             return ViewController.View;

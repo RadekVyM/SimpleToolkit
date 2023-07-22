@@ -315,6 +315,7 @@
             <shell:SimpleNavigationHost/>
             
             <VerticalStackLayout
+                x:Name="floatingButtons"
                 Margin="15"
                 Spacing="10"
                 HorizontalOptions="End"

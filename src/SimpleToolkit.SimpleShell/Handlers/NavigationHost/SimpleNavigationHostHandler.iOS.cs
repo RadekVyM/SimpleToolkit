@@ -31,7 +31,10 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         protected override UIView CreatePlatformView()
         {
-            return new SimpleContentView();
+            return new SimpleContentView
+            {
+                View = VirtualView
+            };
         }
 
         public virtual void SetContent(UIView view)
