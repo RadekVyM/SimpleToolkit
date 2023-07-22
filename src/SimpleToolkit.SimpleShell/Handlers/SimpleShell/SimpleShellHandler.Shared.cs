@@ -133,9 +133,10 @@ namespace SimpleToolkit.SimpleShell.Handlers
             SelectedItem = null;
 
 #if IOS || MACCATALYST
-            navigationController.PopGestureRecognized -= NavigationControllerPopGestureRecognized;
-            navigationController.RemoveFromParentViewController();
-            navigationController = null;
+            if (platformView.NextResponder is UIKit.UIViewController controller)
+            {
+                controller.RemoveFromParentViewController();
+            }
 #endif
         }
 

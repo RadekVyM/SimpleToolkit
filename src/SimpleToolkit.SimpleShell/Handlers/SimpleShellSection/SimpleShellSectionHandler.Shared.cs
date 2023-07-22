@@ -5,6 +5,8 @@ using Microsoft.Maui.Platform;
 #if ANDROID
 using PageContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
 #elif IOS || MACCATALYST
+using UIKit;
+using SimpleToolkit.SimpleShell.Platform;
 using PageContainer = UIKit.UIView;
 #elif WINDOWS
 using PageContainer = Microsoft.UI.Xaml.Controls.Grid;
@@ -62,7 +64,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
                 if (view is IStackNavigation stackNavigation)
                 {
-                    navigationManager.Connect(stackNavigation, PlatformView);
+                    navigationManager.Connect(stackNavigation, GetPageContainer(PlatformView));
                 }
             }
 
@@ -88,7 +90,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         protected override void ConnectHandler(PageContainer platformView)
         {
-            navigationManager?.Connect(VirtualView, platformView);
+            navigationManager?.Connect(VirtualView, GetPageContainer(platformView));
             navigationManager?.UpdateRootPageContainer(rootPageContainer);
             base.ConnectHandler(platformView);
         }
@@ -96,6 +98,14 @@ namespace SimpleToolkit.SimpleShell.Handlers
         protected override void DisconnectHandler(PageContainer platformView)
         {
             navigationManager?.Disconnect(VirtualView, platformView);
+
+#if IOS || MACCATALYST
+            var controller = platformView.NextResponder as SimpleShellSectionController;
+            controller.PopGestureRecognized -= NavigationControllerPopGestureRecognized;
+            controller.RemoveFromParentViewController();
+            controller.DidMoveToParentViewController(null);
+#endif
+
             base.DisconnectHandler(platformView);
         }
 
@@ -175,6 +185,18 @@ namespace SimpleToolkit.SimpleShell.Handlers
                 bindable.BindingContext = section;
 
             return container;
+        }
+
+        private static PageContainer GetPageContainer(PageContainer platformView)
+        {
+#if IOS || MACCATALYST
+            var controller = platformView.NextResponder as SimpleShellSectionController;
+            var contentController = controller.ViewControllers.FirstOrDefault() as SimpleShellSectionContentController;
+
+            return contentController?.View ?? platformView;
+#else
+            return platformView;
+#endif
         }
 
         private static void LogStack(NavigationRequestedEventArgs e, List<IView> pageStack, ShellSection virtualView)

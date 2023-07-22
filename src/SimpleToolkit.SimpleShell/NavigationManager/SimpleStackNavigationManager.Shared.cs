@@ -98,16 +98,15 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             void NavigateToPage(SimpleShellTransitionType transitionType)
             {
                 var oldPageView = previousPage is not null ? GetPlatformView(previousPage) : null;
-                var newPageView = GetPlatformView(currentPage);
                 NavigationStack = newPageStack;
 
                 var transition = currentPage is VisualElement visualCurrentPage ? SimpleShell.GetTransition(visualCurrentPage) : null;
-                transition ??= SimpleShell.GetTransition(SimpleShell.Current);
+                transition ??= SimpleShell.GetTransition(shell);
 
                 if (args is ArgsNavigationRequest a && (a.RequestType == NavigationRequestType.Remove || a.RequestType == NavigationRequestType.Insert))
                 {
-                    RemovePlatformPage(oldPageView, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
-                    AddPlatformPage(newPageView, isCurrentPageRoot: isCurrentPageRoot);
+                    RemovePlatformPage(previousPage, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
+                    AddPlatformPage(currentPage, shell, isCurrentPageRoot: isCurrentPageRoot);
                     FireNavigationFinished();
                     return;
                 }
@@ -120,7 +119,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                     });
 
                     visualPrevious.AbortAnimation(TransitionAnimationKey);
-                    AddPlatformPage(newPageView, ShouldBeAbove(transition, CreateArgs(visualCurrent, visualPrevious, transitionType, 0)), isCurrentPageRoot: isCurrentPageRoot);
+                    AddPlatformPage(currentPage, shell, ShouldBeAbove(transition, CreateArgs(visualCurrent, visualPrevious, transitionType, 0)), isCurrentPageRoot: isCurrentPageRoot);
 
                     transition.Starting?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, 0));
 
@@ -134,7 +133,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                         easing: easing,
                         finished: (v, canceled) =>
                         {
-                            RemovePlatformPage(oldPageView, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
+                            RemovePlatformPage(previousPage, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
                             transition.Finished?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, v));
 
                             FireNavigationFinished();
@@ -142,8 +141,8 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                 }
                 else
                 {
-                    RemovePlatformPage(oldPageView, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
-                    AddPlatformPage(newPageView, isCurrentPageRoot: isCurrentPageRoot);
+                    RemovePlatformPage(previousPage, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
+                    AddPlatformPage(currentPage, shell, isCurrentPageRoot: isCurrentPageRoot);
                     FireNavigationFinished();
                 }
 

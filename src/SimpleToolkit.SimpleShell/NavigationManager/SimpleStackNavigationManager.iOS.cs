@@ -3,15 +3,29 @@
 using Microsoft.Maui.Platform;
 using PlatformView = UIKit.UIView;
 using NavFrame = UIKit.UIView;
+using Microsoft.Maui.Handlers;
+using SimpleToolkit.SimpleShell.Handlers;
+using GameController;
+using SimpleToolkit.SimpleShell.Platform;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager
 {
     public partial class SimpleStackNavigationManager
     {
-        protected virtual void AddPlatformPage(PlatformView newPageView, bool onTop = true, bool isCurrentPageRoot = true)
+        protected virtual void AddPlatformPage(IView newPage, SimpleShell shell, bool onTop = true, bool isCurrentPageRoot = true)
         {
+            if (navigationFrame.NextResponder is not SimpleShellSectionContentController contentController)
+                return;
+
+            var newPageView = GetPlatformView(newPage);
+
             if (newPageView is null)
                 return;
+
+            contentController.DismissViewController(false, null);
+
+            if (newPage.Handler is PageHandler pageHandler)
+                contentController.AddChildViewController(pageHandler.ViewController);
 
             var container = GetPlatformView(this.rootPageContainer);
             PlatformView sectionContainer = null;
@@ -96,10 +110,24 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                         sectionNavHost.BringSubviewToFront(sectionNavHost.Subviews.FirstOrDefault());
                 }
             }
+
+            if (newPage.Handler is PageHandler didMovePageHandler)
+                didMovePageHandler.ViewController.DidMoveToParentViewController(contentController);
         }
 
-        protected virtual void RemovePlatformPage(PlatformView oldPageView, IView oldShellSectionContainer, bool isCurrentPageRoot, bool isPreviousPageRoot)
+        protected virtual void RemovePlatformPage(IView oldPage, IView oldShellSectionContainer, bool isCurrentPageRoot, bool isPreviousPageRoot)
         {
+            var oldPageView = GetPlatformView(oldPage);
+
+            if (oldPageView is null)
+                return;
+
+            if (oldPage.Handler is PageHandler pageHandler)
+            {
+                pageHandler.ViewController?.WillMoveToParentViewController(null);
+                pageHandler.ViewController?.RemoveFromParentViewController();
+            }
+
             var container = GetPlatformView(this.rootPageContainer);
 
             oldPageView?.RemoveFromSuperview();

@@ -20,7 +20,7 @@ I have split the content of this library into three NuGet packages because there
 
 > ⚠ **Warning:** Long-term support is not guaranteed. Use at your own risk.
 
-## Samples
+## [Samples](./docs/Samples.md)
 
 Here are some of my samples that were built using this library:
 
@@ -47,15 +47,15 @@ Here are some of my samples that were built using this library:
     <a href="https://github.com/RadekVyM/Navbar-Animation-1"><em>Navbar Animation #1</em></a>
 </p>
 <p align="center">
-    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-2/main/images/android_navbaranimation_2.gif" width="230" />
+    <img src="https://raw.githubusercontent.com/RadekVyM/HamburgerMenuApp/main/images/android.gif" width="230" />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-2/main/images/iphone_navbaranimation_2.png" width="245" />
+    <img src="https://raw.githubusercontent.com/RadekVyM/HamburgerMenuApp/main/images/ios.gif" width="239" />
 </p>
 <p align="center">
-    <a href="https://github.com/RadekVyM/Navbar-Animation-2"><em>Navbar Animation #2</em></a>
+    <a href="https://github.com/RadekVyM/HamburgerMenuApp"><em>Hamburger Menu App</em></a>
 </p>
 
-List of all samples can be seen [here](./docs/Samples.md).
+> Check out a list of all samples [here](./docs/Samples.md).
 
 ## SimpleToolkit.Core
 

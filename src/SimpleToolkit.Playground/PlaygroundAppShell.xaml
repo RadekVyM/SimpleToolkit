@@ -8,7 +8,9 @@
     xmlns:shell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
     xmlns:controls="clr-namespace:SimpleToolkit.SimpleShell.Controls;assembly=SimpleToolkit.SimpleShell.Controls"
     xmlns:pages="clr-namespace:SimpleToolkit.SimpleShell.Playground.Views.Pages"
-    x:Name="thisShell">
+    x:Name="thisShell"
+
+    Background="White">
 
 
     <shell:SimpleShell.Resources>
@@ -313,6 +315,7 @@
             <shell:SimpleNavigationHost/>
             
             <VerticalStackLayout
+                x:Name="floatingButtons"
                 Margin="15"
                 Spacing="10"
                 HorizontalOptions="End"
