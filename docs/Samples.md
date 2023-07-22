@@ -5,6 +5,12 @@
 
 https://user-images.githubusercontent.com/65116078/221362876-a51bf65e-8b8e-416c-8ef9-c56f57e792ea.mp4
 
+## [Hamburger Menu App](https://github.com/RadekVyM/HamburgerMenuApp)
+
+**.NET MAUI** implementation of [Hamburger Menu with Landing Card Design](https://dribbble.com/shots/11101126-Hamburger-Menu-with-Landing-Card-Design) by [Sulai Man](https://dribbble.com/sully_man).
+
+https://github.com/RadekVyM/HamburgerMenuApp/assets/65116078/e4db39c0-8c6f-4ff7-8495-ded04b77e7e7
+
 ## [Gadget Store App](https://github.com/RadekVyM/Gadgets-Store-App)
 
 **.NET MAUI** implementation of [Gadgets Store App](https://dribbble.com/shots/6983164-Gadgets-Store-App) design by [Sajon](https://dribbble.com/sajon007):

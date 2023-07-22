@@ -23,7 +23,9 @@ Let's say we have four root pages - `YellowPage`, `GreenPage`, `RedPage` and `Bl
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:simpleShell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
     xmlns:pages="clr-namespace:SimpleToolkit.SimpleShellSample.Views.Pages"
-    x:Name="thisShell">
+    x:Name="thisShell"
+
+    Background="White">
 
     <!-- Pages can be grouped into tabs (ShellSections) -->
     <Tab
