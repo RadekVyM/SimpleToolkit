@@ -15,9 +15,7 @@ https://github.com/RadekVyM/HamburgerMenuApp/assets/65116078/e4db39c0-8c6f-4ff7-
 
 **.NET MAUI** implementation of [Gadgets Store App](https://dribbble.com/shots/6983164-Gadgets-Store-App) design by [Sajon](https://dribbble.com/sajon007):
 
-<p align="center">
-    <img src="https://raw.githubusercontent.com/RadekVyM/Gadgets-Store-App/maui/samples/gadget_store_home.png" data-canonical-src="https://github.com/RadekVyM/Gadgets-Store-App" width="500" />
-</p>
+https://github.com/RadekVyM/Gadgets-Store-App/assets/65116078/332aa779-861b-44b2-be1f-6a53dc730fae
 
 ## [Navbar Animation #1](https://github.com/RadekVyM/Navbar-Animation-1)
 
