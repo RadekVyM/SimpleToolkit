@@ -33,7 +33,9 @@ Here are some of my samples that were built using this library:
     <a href="https://github.com/RadekVyM/MarvelousMAUI"><em>Marvelous .NET MAUI</em></a>
 </p>
 <p align="center">
-    <img src="https://raw.githubusercontent.com/RadekVyM/Gadgets-Store-App/maui/samples/gadget_store_home.png" width="500" />
+    <img src="https://raw.githubusercontent.com/RadekVyM/Gadgets-Store-App/main/samples/android_gadgets_store_app.gif" width="230" />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <img src="https://raw.githubusercontent.com/RadekVyM/Gadgets-Store-App/main/samples/ios_gadgets_store_app.gif" width="239" />
 </p>
 <p align="center">
     <a href="https://github.com/RadekVyM/Gadgets-Store-App"><em>Gadget Store App</em></a>
