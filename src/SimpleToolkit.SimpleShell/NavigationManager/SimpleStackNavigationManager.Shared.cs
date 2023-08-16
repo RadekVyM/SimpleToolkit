@@ -1,9 +1,6 @@
-﻿using Microsoft.Maui.Platform;
-using SimpleToolkit.SimpleShell.Handlers;
+﻿using SimpleToolkit.SimpleShell.Handlers;
 using SimpleToolkit.SimpleShell.Transitions;
 using Microsoft.Maui.Controls.Internals;
-using SimpleToolkit.SimpleShell.Extensions;
-using System;
 #if ANDROID
 using NavFrame = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
 using PlatformView = Android.Views.View;
@@ -21,25 +18,14 @@ using PlatformView = System.Object;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager
 {
-    public partial class SimpleStackNavigationManager
+    public partial class SimpleStackNavigationManager : BaseSimpleStackNavigationManager
     {
         protected const string TransitionAnimationKey = nameof(SimpleShellTransition);
 
-        protected IMauiContext mauiContext;
-        protected NavFrame navigationFrame;
         protected IView currentPage;
-        protected IView rootPageContainer;
-        protected IView currentShellSectionContainer;
-        protected bool isCurrentPageRoot = true;
-
-        public IStackNavigation StackNavigation { get; protected set; }
-        public IReadOnlyList<IView> NavigationStack { get; protected set; } = new List<IView>();
 
 
-        public SimpleStackNavigationManager(IMauiContext mauiContext)
-        {
-            this.mauiContext = mauiContext;
-        }
+        public SimpleStackNavigationManager(IMauiContext mauiContext) : base(mauiContext) { }
 
 
         public virtual void Connect(IStackNavigation navigationView, NavFrame navigationFrame)
@@ -54,7 +40,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             StackNavigation = null;
         }
 
-        public virtual void NavigateTo(NavigationRequest args, SimpleShell shell, IView shellSectionContainer)
+        public override void NavigateTo(NavigationRequest args, SimpleShell shell, IView shellSectionContainer)
         {
             IReadOnlyList<IView> newPageStack = new List<IView>(args.NavigationStack);
             var previousNavigationStack = NavigationStack;
@@ -162,28 +148,6 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             }
         }
 
-        public virtual void UpdateRootPageContainer(IView rootPageContainer)
-        {
-            if (NavigationStack is null)
-            {
-                this.rootPageContainer = rootPageContainer;
-                return;
-            }
-
-            ReplaceRootPageContainer(rootPageContainer, isCurrentPageRoot);
-            this.rootPageContainer = rootPageContainer;
-        }
-
-        protected virtual PlatformView GetPlatformView(IView view)
-        {
-            return view?.ToPlatform(mauiContext);
-        }
-
-        protected virtual object GetPageContainerNavHost(IView pageContainer)
-        {
-            return pageContainer?.FindSimpleNavigationHost()?.Handler?.PlatformView;
-        }
-
         private bool ShouldBeAbove(SimpleShellTransition transition, SimpleShellTransitionArgs args)
         {
             return transition.DestinationPageInFront?.Invoke(args) ?? args.TransitionType switch
@@ -205,11 +169,6 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             return navigationFrame.Children.Count;
 #endif
             return 0;
-        }
-
-        private void FireNavigationFinished()
-        {
-            StackNavigation?.NavigationFinished(NavigationStack);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 
-public partial class SimpleShellSectionHandler
+public partial class NativeSimpleShellSectionHandler
 {
     protected override System.Object CreatePlatformElement()
     {

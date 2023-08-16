@@ -3,15 +3,14 @@
 using Microsoft.Maui.Handlers;
 using WGrid = Microsoft.UI.Xaml.Controls.Grid;
 
-namespace SimpleToolkit.SimpleShell.Handlers
+namespace SimpleToolkit.SimpleShell.Handlers;
+
+public partial class SimpleShellSectionHandler
 {
-    public partial class SimpleShellSectionHandler : ElementHandler<ShellSection, WGrid>
+    protected override WGrid CreatePlatformElement()
     {
-        protected override WGrid CreatePlatformElement()
-        {
-            CreateNavigationManager();
-            return new WGrid();
-        }
+        CreateNavigationManager();
+        return new WGrid();
     }
 }
 
