@@ -53,7 +53,7 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)'!='DEBUG'">
-        <PackageReference Include="SimpleToolkit.SimpleShell" Version="3.0.0" />
+        <PackageReference Include="SimpleToolkit.SimpleShell" Version="3.0.1" />
 	</ItemGroup>
 		
 	<ItemGroup Condition="'$(Configuration)'=='DEBUG'">
