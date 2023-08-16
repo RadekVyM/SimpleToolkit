@@ -9,7 +9,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager;
 
 public abstract partial class BaseSimpleStackNavigationManager
 {
-    protected void AddPlatformRootPage(bool onTop, PlatformView newPageView)
+    protected private void AddPlatformRootPage(bool onTop, PlatformView newPageView)
     {
         var container = GetPlatformView(this.rootPageContainer);
         PlatformView sectionContainer = null;
@@ -97,7 +97,6 @@ public abstract partial class BaseSimpleStackNavigationManager
             }
         }
     }
-
 
     protected virtual void ReplaceRootPageContainer(IView rootPageContainer, bool isCurrentPageRoot)
     {

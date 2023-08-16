@@ -60,4 +60,3 @@ public partial class NativeSimpleShellSectionHandler : BaseSimpleShellSectionHan
     protected override ISimpleStackNavigationManager CreateNavigationManager() =>
         base.navigationManager ??= new NativeSimpleStackNavigationManager(MauiContext ?? throw new InvalidOperationException("MauiContext cannot be null"));
 }
-

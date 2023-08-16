@@ -1,7 +1,5 @@
 ﻿#if !(ANDROID || IOS || MACCATALYST || WINDOWS)
 
-using PlatformView = System.Object;
-
 namespace SimpleToolkit.SimpleShell.NavigationManager;
 
 public partial class SimpleStackNavigationManager

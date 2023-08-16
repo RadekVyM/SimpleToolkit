@@ -6,13 +6,13 @@ using Microsoft.Maui.Controls.Internals;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 
-public abstract class BaseSimpleShellSectionHandler<PlatformT> : ElementHandler<ShellSection, PlatformT>, IAppearanceObserver where PlatformT : class
+public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : ElementHandler<ShellSection, PlatformT>, IAppearanceObserver where PlatformT : class
 {
     public static PropertyMapper<ShellSection, BaseSimpleShellSectionHandler<PlatformT>> Mapper =
-            new PropertyMapper<ShellSection, BaseSimpleShellSectionHandler<PlatformT>>(ElementMapper)
-            {
-                [nameof(ShellSection.CurrentItem)] = MapCurrentItem,
-            };
+        new PropertyMapper<ShellSection, BaseSimpleShellSectionHandler<PlatformT>>(ElementMapper)
+        {
+            [nameof(ShellSection.CurrentItem)] = MapCurrentItem,
+        };
 
     public static CommandMapper<ShellSection, BaseSimpleShellSectionHandler<PlatformT>> CommandMapper =
         new CommandMapper<ShellSection, BaseSimpleShellSectionHandler<PlatformT>>(ElementCommandMapper)
@@ -114,23 +114,6 @@ public abstract class BaseSimpleShellSectionHandler<PlatformT> : ElementHandler<
 
     protected virtual ISimpleStackNavigationManager CreateNavigationManager() =>
         throw new NotImplementedException("CreateNavigationManager() method must be implemented");
-
-#if IOS || MACCATALYST
-
-    protected void AddToParentController(UIKit.UIViewController viewController)
-    {
-        var shell = VirtualView.FindParentOfType<SimpleShell>();
-
-        if (shell.Handler is not SimpleShellHandler shellHandler)
-            return;
-
-        var shellController = shellHandler.ViewController;
-
-        shellController?.AddChildViewController(viewController);
-        viewController.DidMoveToParentViewController(shellController);
-    }
-
-#endif
 
     public static void RequestNavigation(BaseSimpleShellSectionHandler<PlatformT> handler, IStackNavigation view, object arg3)
     {

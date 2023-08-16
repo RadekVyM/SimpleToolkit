@@ -1,25 +1,24 @@
-﻿namespace SimpleToolkit.SimpleShell.NavigationManager;
+﻿using SimpleToolkit.SimpleShell.Transitions;
 
-public class NativeSimpleStackNavigationManager : ISimpleStackNavigationManager
+namespace SimpleToolkit.SimpleShell.NavigationManager;
+
+public class NativeSimpleStackNavigationManager : BaseSimpleStackNavigationManager, ISimpleStackNavigationManager
 {
-    protected IMauiContext mauiContext;
+    public NativeSimpleStackNavigationManager(IMauiContext mauiContext) : base(mauiContext) { }
 
-    public IStackNavigation StackNavigation => throw new NotImplementedException();
-    public IReadOnlyList<IView> NavigationStack => throw new NotImplementedException();
-
-
-    public NativeSimpleStackNavigationManager(IMauiContext mauiContext)
-    {
-        this.mauiContext = mauiContext;
-    }
-
-
-    public void NavigateTo(NavigationRequest args, SimpleShell shell, IView shellSectionContainer)
+    protected override void NavigateToPage(
+        SimpleShellTransitionType transitionType,
+        NavigationRequest args,
+        SimpleShell shell,
+        IReadOnlyList<IView> newPageStack,
+        IView previousShellSectionContainer,
+        IView previousPage,
+        bool isPreviousPageRoot)
     {
         throw new NotImplementedException();
     }
 
-    public void UpdateRootPageContainer(IView rootPageContainer)
+    protected override void OnBackStackChanged(IReadOnlyList<IView> newPageStack)
     {
         throw new NotImplementedException();
     }
