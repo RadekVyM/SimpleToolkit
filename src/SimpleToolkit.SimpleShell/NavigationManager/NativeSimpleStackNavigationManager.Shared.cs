@@ -52,16 +52,14 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
         IView previousPage,
         bool isPreviousPageRoot)
     {
+        // TODO: FireNavigationFinished() should be probably called after a transition animaiton is completed
+
         var oldRootPage = NavigationStack.FirstOrDefault();
         NavigationStack = newPageStack;
 
-        var current = currentPage;
-
         if (transitionType == SimpleShellTransitionType.Switching && isCurrentPageRoot)
         {
-#if IOS
             HandleNewStack(newPageStack);
-#endif
             NavigateToPageInContainer(transitionType, shell, previousShellSectionContainer, previousPage, isPreviousPageRoot);
             return;
         }
@@ -69,9 +67,7 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
         if (isCurrentPageRoot)
             SwitchPagesInContainer(shell, previousShellSectionContainer, oldRootPage, true);
 
-#if IOS
         HandleNewStack(newPageStack, !(transitionType == SimpleShellTransitionType.Switching && !isCurrentPageRoot));
         FireNavigationFinished();
-#endif
     }
 }

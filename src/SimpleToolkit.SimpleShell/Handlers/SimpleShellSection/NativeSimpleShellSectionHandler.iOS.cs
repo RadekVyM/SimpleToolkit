@@ -1,5 +1,6 @@
 ﻿#if IOS || MACCATALYST
 
+using SimpleToolkit.SimpleShell.Extensions;
 using SimpleToolkit.SimpleShell.Platform;
 using UIKit;
 
@@ -20,7 +21,8 @@ public partial class NativeSimpleShellSectionHandler
             View = new SimpleContentView(),
         };
 
-        var navigationController = new NativeSimpleShellSectionController(RootContentController);
+        var shell = VirtualView.FindParentOfType<SimpleShell>();
+        var navigationController = new NativeSimpleShellSectionController(RootContentController, shell);
 
         ViewController = navigationController;
         AddToParentController(navigationController);
