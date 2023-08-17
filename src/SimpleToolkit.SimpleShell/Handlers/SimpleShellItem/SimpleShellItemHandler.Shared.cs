@@ -1,12 +1,16 @@
 ﻿using Microsoft.Maui.Platform;
 #if ANDROID
 using SectionContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
+using BasePlatformView = Android.Views.View;
 #elif IOS || MACCATALYST
 using SectionContainer = UIKit.UIView;
+using BasePlatformView = UIKit.UIView;
 #elif WINDOWS
 using SectionContainer = Microsoft.UI.Xaml.Controls.Border;
+using BasePlatformView = Microsoft.UI.Xaml.FrameworkElement;
 #else
 using SectionContainer = System.Object;
+using BasePlatformView = System.Object;
 #endif
 
 namespace SimpleToolkit.SimpleShell.Handlers
@@ -26,7 +30,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
         protected IView rootPageContainer;
         protected SectionContainer shellSectionContainer;
         protected ShellSection currentShellSection;
-        protected SimpleShellSectionHandler currentShellSectionHandler;
+        protected BaseSimpleShellSectionHandler<BasePlatformView> currentShellSectionHandler;
 
 
         public SimpleShellItemHandler(IPropertyMapper mapper, CommandMapper commandMapper)
@@ -62,7 +66,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
             if (VirtualView.CurrentItem is not null)
             {
-                currentShellSectionHandler ??= (SimpleShellSectionHandler)VirtualView.CurrentItem.ToHandler(MauiContext);
+                currentShellSectionHandler ??= (BaseSimpleShellSectionHandler<BasePlatformView>)VirtualView.CurrentItem.ToHandler(MauiContext);
 
                 UpdateShellSectionContainerContent();
 

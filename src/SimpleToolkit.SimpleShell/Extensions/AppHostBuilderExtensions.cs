@@ -9,14 +9,17 @@ namespace SimpleToolkit.SimpleShell
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static MauiAppBuilder UseSimpleShell(this MauiAppBuilder builder)
+        public static MauiAppBuilder UseSimpleShell(this MauiAppBuilder builder, bool useNativeTransitions = false)
         {
             builder.ConfigureMauiHandlers(handlers =>
             {
                 handlers.AddHandler(typeof(SimpleNavigationHost), typeof(SimpleNavigationHostHandler));
                 handlers.AddHandler(typeof(SimpleShell), typeof(SimpleShellHandler));
                 handlers.AddHandler(typeof(ShellItem), typeof(SimpleShellItemHandler));
-                handlers.AddHandler(typeof(ShellSection), typeof(SimpleShellSectionHandler));
+                if (useNativeTransitions)
+                    handlers.AddHandler(typeof(ShellSection), typeof(NativeSimpleShellSectionHandler));
+                else
+                    handlers.AddHandler(typeof(ShellSection), typeof(SimpleShellSectionHandler));
             });
 
             return builder;

@@ -117,7 +117,7 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
 
     public static void RequestNavigation(BaseSimpleShellSectionHandler<PlatformT> handler, IStackNavigation view, object arg3)
     {
-        if (arg3 is NavigationRequest nr)
+        if (arg3 is ArgsNavigationRequest nr)
         {
             var shell = handler.VirtualView.FindParentOfType<SimpleShell>();
             var container = GetShellSectionContainer(handler.VirtualView);
@@ -126,7 +126,7 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
         }
         else
         {
-            throw new InvalidOperationException("Args must be NavigationRequest");
+            throw new InvalidOperationException("Args must be ArgsNavigationRequest");
         }
     }
 

@@ -7,19 +7,20 @@ namespace SimpleToolkit.SimpleShell.Handlers;
 
 public partial class NativeSimpleShellSectionHandler
 {
-    public UIViewController ContentController { get; private set; }
+    public UIViewController RootContentController { get; private set; }
     public UINavigationController ViewController { get; private set; }
+    protected UIView RootContentContainer => RootContentController.View;
 
     protected override UIView CreatePlatformElement()
     {
         CreateNavigationManager();
 
-        ContentController = new SimpleShellSectionContentController
+        RootContentController = new SimpleShellSectionContentController
         {
             View = new SimpleContentView(),
         };
 
-        var navigationController = new NativeSimpleShellSectionController(ContentController);
+        var navigationController = new NativeSimpleShellSectionController(RootContentController);
 
         ViewController = navigationController;
         AddToParentController(navigationController);

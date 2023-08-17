@@ -1,5 +1,6 @@
 ﻿using Microsoft.Maui.Platform;
 using SimpleToolkit.SimpleShell.Extensions;
+using SimpleToolkit.SimpleShell.Handlers;
 using SimpleToolkit.SimpleShell.Transitions;
 #if ANDROID
 using NavFrame = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
@@ -20,6 +21,8 @@ namespace SimpleToolkit.SimpleShell.NavigationManager;
 
 public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNavigationManager
 {
+    protected const string TransitionAnimationKey = nameof(SimpleShellTransition);
+
     protected IMauiContext mauiContext;
     protected NavFrame navigationFrame;
     protected IView currentPage;
@@ -37,7 +40,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
     }
 
 
-    public virtual void NavigateTo(NavigationRequest args, SimpleShell shell, IView shellSectionContainer)
+    public virtual void NavigateTo(ArgsNavigationRequest args, SimpleShell shell, IView shellSectionContainer)
     {
         IReadOnlyList<IView> newPageStack = new List<IView>(args.NavigationStack);
         var previousNavigationStack = NavigationStack;
@@ -74,9 +77,74 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
         NavigateToPage(transitionType, args, shell, newPageStack, previousShellSectionContainer, previousPage, isPreviousPageRoot);
     }
 
+    protected private void NavigateToPageInContainer(
+        SimpleShellTransitionType transitionType,
+        SimpleShell shell,
+        IView previousShellSectionContainer,
+        IView previousPage,
+        bool isPreviousPageRoot)
+    {
+        var transition = currentPage is VisualElement visualCurrentPage ? SimpleShell.GetTransition(visualCurrentPage) : null;
+        transition ??= SimpleShell.GetTransition(shell);
+
+        if (transition is not null && currentPage is VisualElement visualCurrent && previousPage is VisualElement visualPrevious)
+        {
+            var animation = new Animation(progress =>
+            {
+                transition.Callback?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, progress));
+            });
+
+            visualPrevious.AbortAnimation(TransitionAnimationKey);
+            AddPlatformPageToContainer(currentPage, shell, ShouldBeAbove(transition, CreateArgs(visualCurrent, visualPrevious, transitionType, 0)), isCurrentPageRoot: isCurrentPageRoot);
+
+            transition.Starting?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, 0));
+
+            var duration = transition.Duration?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, 0)) ?? SimpleShellTransition.DefaultDuration;
+            var easing = transition.Easing?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, 0)) ?? Easing.Linear;
+
+            animation.Commit(
+                visualCurrent,
+                name: TransitionAnimationKey,
+                length: duration,
+                easing: easing,
+                finished: (v, canceled) =>
+                {
+                    RemovePlatformPageFromContainer(previousPage, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
+                    transition.Finished?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, v));
+
+                    FireNavigationFinished();
+                });
+        }
+        else
+        {
+            SwitchPagesInContainer(shell, previousShellSectionContainer, previousPage, isPreviousPageRoot);
+            FireNavigationFinished();
+        }
+
+        SimpleShellTransitionArgs CreateArgs(VisualElement visualCurrent, VisualElement visualPrevious, SimpleShellTransitionType transitionType, double progress)
+        {
+            return new SimpleShellTransitionArgs(
+                originPage: visualPrevious,
+                destinationPage: visualCurrent,
+                originShellSectionContainer: previousShellSectionContainer as VisualElement,
+                destinationShellSectionContainer: currentShellSectionContainer as VisualElement,
+                shell: shell,
+                progress: progress,
+                transitionType: transitionType,
+                isOriginPageRoot: isPreviousPageRoot,
+                isDestinationPageRoot: isCurrentPageRoot);
+        }
+    }
+
+    protected private void SwitchPagesInContainer(SimpleShell shell, IView previousShellSectionContainer, IView previousPage, bool isPreviousPageRoot)
+    {
+        RemovePlatformPageFromContainer(previousPage, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
+        AddPlatformPageToContainer(currentPage, shell, isCurrentPageRoot: isCurrentPageRoot);
+    }
+
     protected abstract void NavigateToPage(
         SimpleShellTransitionType transitionType,
-        NavigationRequest args,
+        ArgsNavigationRequest args,
         SimpleShell shell,
         IReadOnlyList<IView> newPageStack,
         IView previousShellSectionContainer,

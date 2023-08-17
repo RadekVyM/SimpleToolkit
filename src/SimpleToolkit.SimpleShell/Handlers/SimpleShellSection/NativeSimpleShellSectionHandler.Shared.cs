@@ -29,17 +29,17 @@ public partial class NativeSimpleShellSectionHandler : BaseSimpleShellSectionHan
 
     protected override void ConnectNavigationManager(IStackNavigation stackNavigation)
     {
-        //navigationManager.Connect(stackNavigation, GetPageContainer(PlatformView));
+        navigationManager.Connect(stackNavigation, PlatformView, RootContentContainer);
     }
 
     protected override void DisconnectNavigationManager(IStackNavigation stackNavigation)
     {
-        //navigationManager.Disconnect(navigationManager.StackNavigation, PlatformView);
+        navigationManager.Disconnect(navigationManager.StackNavigation, PlatformView, RootContentContainer);
     }
 
     protected override void ConnectHandler(PageContainer platformView)
     {
-        //navigationManager?.Connect(VirtualView, GetPageContainer(platformView));
+        navigationManager?.Connect(VirtualView, PlatformView, RootContentContainer);
         navigationManager?.UpdateRootPageContainer(rootPageContainer);
         base.ConnectHandler(platformView);
     }
