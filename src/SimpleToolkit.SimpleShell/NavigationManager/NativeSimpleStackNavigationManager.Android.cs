@@ -42,19 +42,19 @@ public partial class NativeSimpleStackNavigationManager
             var shouldPop = ShouldPop(newPageStack, oldPageStack);
 
             transaction.SetCustomAnimations(
-                shouldPop ? Resource.Animation.simpleshell_enter_left : Resource.Animation.simpleshell_enter_right,
-                shouldPop ? Resource.Animation.simpleshell_exit_right : Resource.Animation.simpleshell_exit_left);
+                shouldPop ? Resource.Animation.simpleshell_none : Resource.Animation.simpleshell_enter_right,
+                shouldPop ? Resource.Animation.simpleshell_exit_right : Resource.Animation.simpleshell_none);
         }
         transaction.Replace(rootContainer.Id, fragment);
         transaction.Commit();
     }
 
-    private Fragment CreateFragment(AView view)
+    private static Fragment CreateFragment(AView view)
     {
         if (view.Parent is Android.Views.ViewGroup vg)
             vg.RemoveView(view);
 
-        return new SimpleFragment(view, mauiContext);
+        return new SimpleFragment(view);
     }
 
     private static bool ShouldPop(IReadOnlyList<IView> newPageStack, IReadOnlyList<IView> oldPageStack)

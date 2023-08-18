@@ -3,6 +3,7 @@
 using Android.OS;
 using Android.Views;
 using Android.Views.Animations;
+using AndroidX.Core.View;
 using AndroidX.Fragment.App;
 using Microsoft.Maui.Controls.Platform.Compatibility;
 using AndroidAnimation = Android.Views.Animations.Animation;
@@ -15,36 +16,38 @@ namespace SimpleToolkit.SimpleShell.Platform;
 
 public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener
 {
-    private readonly IMauiContext mauiContext;
     private CustomFrameLayout root;
     private AView view;
     private bool disposed;
     private bool isAnimating = false;
+    private float previousZIndex = 0f;
 
     public event EventHandler AnimationFinished;
 
 
-    public SimpleFragment(AView view, IMauiContext mauiContext)
+    public SimpleFragment(AView view)
     {
         this.view = view;
-        this.mauiContext = mauiContext;
     }
 
 
-    void AndroidAnimation.IAnimationListener.OnAnimationEnd(AndroidAnimation animation)
+    async void AndroidAnimation.IAnimationListener.OnAnimationEnd(AndroidAnimation animation)
     {
         View?.SetLayerType(LayerType.None, null);
         AnimationFinished?.Invoke(this, EventArgs.Empty);
         isAnimating = false;
+
+        await Task.Delay(50);
+
+        if (View is not null)
+            ViewCompat.SetTranslationZ(View, previousZIndex);
     }
 
     public override void OnResume()
     {
         base.OnResume();
         if (!isAnimating)
-        {
             AnimationFinished?.Invoke(this, EventArgs.Empty);
-        }
     }
 
     public override AndroidAnimation OnCreateAnimation(int transit, bool enter, int nextAnim)
@@ -75,6 +78,12 @@ public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener
 
         if (result is AnimationSet set)
             set.Animations[0].SetAnimationListener(this);
+
+        if (nextAnim != Resource.Animation.simpleshell_none)
+        {
+            previousZIndex = ViewCompat.GetTranslationZ(View);
+            ViewCompat.SetTranslationZ(View, 10f);
+        }
 
         return result;
     }
