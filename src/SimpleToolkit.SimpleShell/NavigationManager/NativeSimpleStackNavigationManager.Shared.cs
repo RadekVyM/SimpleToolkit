@@ -55,7 +55,6 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
         // TODO: FireNavigationFinished() should be probably called after a transition animaiton is completed
 
         var oldRootPage = NavigationStack.FirstOrDefault();
-        NavigationStack = newPageStack;
 
         if (transitionType == SimpleShellTransitionType.Switching && isCurrentPageRoot)
         {

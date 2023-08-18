@@ -16,6 +16,9 @@ public abstract partial class BaseSimpleStackNavigationManager
         if (newPageView is null)
             return;
 
+        if (newPageView.Parent is ViewGroup vg)
+            vg.RemoveView(newPageView);
+
         if (isCurrentPageRoot)
         {
             AddPlatformRootPage(onTop, newPageView);

@@ -1,7 +1,5 @@
 ﻿#if !(ANDROID || IOS || MACCATALYST || WINDOWS)
 
-using SimpleToolkit.SimpleShell.Transitions;
-
 namespace SimpleToolkit.SimpleShell.NavigationManager;
 
 public partial class NativeSimpleStackNavigationManager
@@ -13,6 +11,7 @@ public partial class NativeSimpleStackNavigationManager
 
     protected void HandleNewStack(IReadOnlyList<IView> newPageStack, bool animated = true)
     {
+        NavigationStack = newPageStack;
         throw new NotImplementedException();
     }
 }

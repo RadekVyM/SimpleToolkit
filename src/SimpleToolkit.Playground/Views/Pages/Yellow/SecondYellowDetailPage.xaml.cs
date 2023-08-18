@@ -21,4 +21,34 @@ public partial class SecondYellowDetailPage : ContentPage
     {
         await Shell.Current.GoToAsync(nameof(FourthYellowDetailPage), false);
     }
+
+    protected override void OnAppearing()
+    {
+        System.Diagnostics.Debug.WriteLine("OnAppearing");
+        base.OnAppearing();
+    }
+
+    protected override void OnDisappearing()
+    {
+        System.Diagnostics.Debug.WriteLine("OnDisappearing");
+        base.OnDisappearing();
+    }
+
+    protected override void OnNavigatingFrom(NavigatingFromEventArgs args)
+    {
+        System.Diagnostics.Debug.WriteLine("OnNavigatingFrom");
+        base.OnNavigatingFrom(args);
+    }
+
+    protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
+    {
+        System.Diagnostics.Debug.WriteLine("OnNavigatedFrom");
+        base.OnNavigatedFrom(args);
+    }
+
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        System.Diagnostics.Debug.WriteLine("OnNavigatedTo");
+        base.OnNavigatedTo(args);
+    }
 }

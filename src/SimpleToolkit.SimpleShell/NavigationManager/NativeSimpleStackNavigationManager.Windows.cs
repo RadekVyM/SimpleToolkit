@@ -16,7 +16,7 @@ public partial class NativeSimpleStackNavigationManager
 
     protected void HandleNewStack(IReadOnlyList<IView> newPageStack, bool animated = true)
     {
-        
+        NavigationStack = newPageStack;
     }
 }
 

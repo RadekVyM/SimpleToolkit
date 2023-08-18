@@ -1,7 +1,7 @@
 ﻿using Microsoft.Maui.Platform;
 #if ANDROID
 using SectionContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
-using BasePlatformView = Android.Views.View;
+using BasePlatformView = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
 #elif IOS || MACCATALYST
 using SectionContainer = UIKit.UIView;
 using BasePlatformView = UIKit.UIView;

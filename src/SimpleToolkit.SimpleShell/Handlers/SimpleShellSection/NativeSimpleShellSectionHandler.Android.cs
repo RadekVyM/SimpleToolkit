@@ -1,16 +1,22 @@
 ﻿#if ANDROID
 
 using Microsoft.Maui.Controls.Platform.Compatibility;
+using AView = Android.Views.View;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 
 public partial class NativeSimpleShellSectionHandler
 {
-    protected CustomFrameLayout RootContentContainer => null;
+    protected CustomFrameLayout RootContentContainer { get; private set; }
 
     protected override CustomFrameLayout CreatePlatformElement()
     {
-        throw new NotImplementedException();
+        CreateNavigationManager();
+
+        var root = new CustomFrameLayout(MauiContext.Context) { Id = AView.GenerateViewId() };
+        RootContentContainer = new CustomFrameLayout(MauiContext.Context);
+
+        return root;
     }
 }
 

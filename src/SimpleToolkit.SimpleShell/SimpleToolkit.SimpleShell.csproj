@@ -41,6 +41,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Platforms\" />
+	  <None Remove="Platforms\Android\" />
+	  <None Remove="Platforms\Android\Resources\" />
+	  <None Remove="Platforms\Android\Resources\anim\" />
+	</ItemGroup>
+	<ItemGroup>
         <None Include="..\..\docs\Nuget\SimpleToolkit.SimpleShell.md">
             <Pack>True</Pack>
             <PackagePath>\</PackagePath>
@@ -58,6 +64,10 @@
 	<ItemGroup>
 	  <Folder Include="Platform\Android\" />
 	  <Folder Include="Platform\Windows\" />
+	  <Folder Include="Platforms\" />
+	  <Folder Include="Platforms\Android\" />
+	  <Folder Include="Platforms\Android\Resources\" />
+	  <Folder Include="Platforms\Android\Resources\anim\" />
 	</ItemGroup>
 
 </Project>

@@ -22,6 +22,8 @@ public abstract partial class BaseSimpleStackNavigationManager
         if (newPageView is null)
             return;
 
+        newPageView.RemoveFromSuperview();
+
         contentController.DismissViewController(false, null);
 
         if (newPage.Handler is PageHandler pageHandler)

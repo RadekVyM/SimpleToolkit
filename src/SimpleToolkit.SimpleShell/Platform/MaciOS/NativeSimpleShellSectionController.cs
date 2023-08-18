@@ -181,7 +181,7 @@ public class NativeSimpleShellSectionController : UINavigationController
 
         void OnInteractionChanged(IUIViewControllerTransitionCoordinatorContext context)
         {
-            System.Diagnostics.Debug.WriteLine($"{context.CompletionVelocity}");
+            //System.Diagnostics.Debug.WriteLine($"{context.CompletionVelocity}");
 
             if (!context.IsCancelled)
             {
