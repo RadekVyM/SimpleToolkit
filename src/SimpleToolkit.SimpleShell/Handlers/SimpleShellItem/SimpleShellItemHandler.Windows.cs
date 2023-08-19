@@ -15,7 +15,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         private void UpdateShellSectionContainerContent()
         {
-            if (currentShellSectionHandler.PlatformView != (Microsoft.UI.Xaml.Controls.Grid)shellSectionContainer.Child)
+            if (currentShellSectionHandler.PlatformView != shellSectionContainer.Child)
                 shellSectionContainer.Child = currentShellSectionHandler.PlatformView;
         }
     }

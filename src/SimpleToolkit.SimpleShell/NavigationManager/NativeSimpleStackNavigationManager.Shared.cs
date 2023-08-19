@@ -34,10 +34,18 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
         this.navigationFrame = navigationFrame;
         this.rootContainer = rootContainer;
         StackNavigation = navigationView;
+
+#if WINDOWS
+        rootContainer.Navigated += OnNavigated;
+#endif
     }
 
     public virtual void Disconnect(IStackNavigation navigationView, RootContainer rootContainer, NavFrame navigationFrame)
     {
+#if WINDOWS
+        rootContainer.Navigated -= OnNavigated;
+#endif
+
         this.navigationFrame = null;
         this.rootContainer = null;
         StackNavigation = null;
@@ -67,6 +75,12 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
             SwitchPagesInContainer(shell, previousShellSectionContainer, oldRootPage, true);
 
         HandleNewStack(newPageStack, !(transitionType == SimpleShellTransitionType.Switching && !isCurrentPageRoot));
+        FireNavigationFinished();
+    }
+
+    protected override void OnBackStackChanged(IReadOnlyList<IView> newPageStack)
+    {
+        HandleNewStack(newPageStack, false);
         FireNavigationFinished();
     }
 }

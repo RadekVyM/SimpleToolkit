@@ -3,10 +3,19 @@ using Microsoft.Maui.Platform;
 using SimpleToolkit.SimpleShell.Extensions;
 using SimpleToolkit.SimpleShell.NavigationManager;
 using Microsoft.Maui.Controls.Internals;
+#if ANDROID
+using PlatformView = Android.Views.View;
+#elif IOS || MACCATALYST
+using PlatformView = UIKit.UIView;
+#elif WINDOWS
+using PlatformView = Microsoft.UI.Xaml.FrameworkElement;
+#else
+using PlatformView = System.Object;
+#endif
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 
-public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : ElementHandler<ShellSection, PlatformT>, IAppearanceObserver where PlatformT : class
+public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : ElementHandler<ShellSection, PlatformT>, IBaseSimpleShellSectionHandler, IAppearanceObserver where PlatformT : class
 {
     public static PropertyMapper<ShellSection, BaseSimpleShellSectionHandler<PlatformT>> Mapper =
         new PropertyMapper<ShellSection, BaseSimpleShellSectionHandler<PlatformT>>(ElementMapper)
@@ -23,6 +32,8 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
     protected IView rootPageContainer;
     protected ISimpleStackNavigationManager navigationManager;
     protected ShellSection shellSection;
+
+    PlatformView IBaseSimpleShellSectionHandler.PlatformView => this.PlatformView as PlatformView;
 
 
     public BaseSimpleShellSectionHandler(IPropertyMapper mapper, CommandMapper commandMapper)

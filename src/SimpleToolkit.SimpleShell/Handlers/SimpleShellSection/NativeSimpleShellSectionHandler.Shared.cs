@@ -5,7 +5,7 @@ using PageContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrame
 using SimpleToolkit.SimpleShell.Platform;
 using PageContainer = UIKit.UIView;
 #elif WINDOWS
-using PageContainer = Microsoft.UI.Xaml.Controls.Grid;
+using PageContainer = Microsoft.UI.Xaml.Controls.Frame;
 #elif (NETSTANDARD || !PLATFORM) || (NET6_0_OR_GREATER && !IOS && !ANDROID && !TIZEN)
 using PageContainer = System.Object;
 #endif
@@ -46,7 +46,7 @@ public partial class NativeSimpleShellSectionHandler : BaseSimpleShellSectionHan
 
     protected override void DisconnectHandler(PageContainer platformView)
     {
-        //navigationManager?.Disconnect(VirtualView, platformView);
+        navigationManager?.Disconnect(VirtualView, platformView, RootContentContainer);
 
 #if IOS || MACCATALYST
         var controller = platformView.NextResponder as UIKit.UIViewController;

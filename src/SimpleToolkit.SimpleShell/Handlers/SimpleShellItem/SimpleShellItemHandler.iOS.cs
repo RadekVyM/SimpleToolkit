@@ -17,7 +17,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         private void UpdateShellSectionContainerContent()
         {
-            if (currentShellSectionHandler.PlatformView != (UIKit.UIView)shellSectionContainer.Subviews.FirstOrDefault())
+            if (currentShellSectionHandler.PlatformView != shellSectionContainer.Subviews.FirstOrDefault())
             {
                 shellSectionContainer.ClearSubviews();
                 shellSectionContainer.AddSubview(currentShellSectionHandler.PlatformView);

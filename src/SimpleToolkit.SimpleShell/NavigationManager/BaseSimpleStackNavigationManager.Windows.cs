@@ -38,7 +38,7 @@ public abstract partial class BaseSimpleStackNavigationManager
 
         if (!isCurrentPageRoot && isPreviousPageRoot && container is not null)
             RemoveRootPageContainer(container);
-    }±
+    }
 
     protected private void AddPlatformRootPage(bool onTop, PlatformView newPageView)
     {
@@ -154,6 +154,9 @@ public abstract partial class BaseSimpleStackNavigationManager
 
     protected private static void AddViewToContainer(PlatformView view, NavFrame container, bool onTop)
     {
+        if (container.Children.Contains(view))
+            container.Children.Remove(view);
+
         if (onTop)
             container.Children.Add(view);
         else
