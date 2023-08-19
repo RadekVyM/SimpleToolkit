@@ -27,7 +27,10 @@ public abstract partial class BaseSimpleStackNavigationManager
         contentController.DismissViewController(false, null);
 
         if (newPage.Handler is PageHandler pageHandler)
+        {
+            pageHandler.ViewController.RemoveFromParentViewController();
             contentController.AddChildViewController(pageHandler.ViewController);
+        }
 
         if (isCurrentPageRoot)
         {

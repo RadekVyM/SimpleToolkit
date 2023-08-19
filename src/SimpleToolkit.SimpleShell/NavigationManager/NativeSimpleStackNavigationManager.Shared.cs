@@ -67,12 +67,20 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
         if (transitionType == SimpleShellTransitionType.Switching && isCurrentPageRoot)
         {
             HandleNewStack(newPageStack);
+#if IOS || MACCATALYST
+            NavigateNativelyToPageInContainer(shell, previousShellSectionContainer, previousPage, isPreviousPageRoot);
+#else
             NavigateToPageInContainer(transitionType, shell, previousShellSectionContainer, previousPage, isPreviousPageRoot);
+#endif
             return;
         }
 
         if (isCurrentPageRoot)
+#if IOS || MACCATALYST
             SwitchPagesInContainer(shell, previousShellSectionContainer, oldRootPage, true);
+#else
+            SwitchPagesInContainer(shell, previousShellSectionContainer, oldRootPage, true);
+#endif
 
         HandleNewStack(newPageStack, !(transitionType == SimpleShellTransitionType.Switching && !isCurrentPageRoot));
         FireNavigationFinished();
