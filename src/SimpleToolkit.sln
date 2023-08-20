@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleToolkit.Playground", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleToolkit.Core", "SimpleToolkit.Core\SimpleToolkit.Core.csproj", "{F38F8824-2D2A-4601-81D5-F1AAD7870928}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleToolkit.SimpleShellSample", "SimpleToolkit.SimpleShellSample\SimpleToolkit.SimpleShellSample.csproj", "{648738C7-922B-46B4-A40D-2BB25292DF83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleToolkit.SimpleShellSample", "SimpleToolkit.SimpleShellSample\SimpleToolkit.SimpleShellSample.csproj", "{648738C7-922B-46B4-A40D-2BB25292DF83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +39,7 @@ Global
 		{F38F8824-2D2A-4601-81D5-F1AAD7870928}.Release|Any CPU.Build.0 = Release|Any CPU
 		{648738C7-922B-46B4-A40D-2BB25292DF83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{648738C7-922B-46B4-A40D-2BB25292DF83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{648738C7-922B-46B4-A40D-2BB25292DF83}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{648738C7-922B-46B4-A40D-2BB25292DF83}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{648738C7-922B-46B4-A40D-2BB25292DF83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
