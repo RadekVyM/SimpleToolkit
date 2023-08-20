@@ -10,14 +10,12 @@ namespace SimpleToolkit.SimpleShell.NavigationManager;
 
 public partial class NativeSimpleStackNavigationManager
 {
-    protected void NavigateNativelyToPageInContainer(
+    protected async void NavigateNativelyToPageInContainer(
         SimpleShell shell,
         IView previousShellSectionContainer,
         IView previousPage,
         bool isPreviousPageRoot)
     {
-        AddPlatformPageToContainer(currentPage, shell, false, isCurrentPageRoot: isCurrentPageRoot);
-
         var newPageView = GetPlatformView(currentPage);
         var oldPageView = GetPlatformView(previousPage);
         var newSectionContainer = GetPlatformView(currentShellSectionContainer);
@@ -29,6 +27,13 @@ public partial class NativeSimpleStackNavigationManager
         var from = newSectionContainer == oldSectionContainer ?
             oldPageView :
             oldSectionContainer ?? oldPageView;
+
+        to.Transitions = new TransitionCollection { new EntranceThemeTransition() };
+
+        // Here we go again 😶
+        await Task.Delay(10);
+        
+        AddPlatformPageToContainer(currentPage, shell, true, isCurrentPageRoot: isCurrentPageRoot);
 
         if (from is not null)
         {

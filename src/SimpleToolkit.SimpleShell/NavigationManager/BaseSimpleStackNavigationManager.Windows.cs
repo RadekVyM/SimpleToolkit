@@ -62,10 +62,10 @@ public abstract partial class BaseSimpleStackNavigationManager
 
             if (sectionContainer is not null)
             {
+                AddViewToContainer(newPageView, sectionNavHost, onTop);
+                
                 if (!rootNavHost.Children.Contains(sectionContainer))
                     AddViewToContainer(sectionContainer, rootNavHost, onTop);
-
-                AddViewToContainer(newPageView, sectionNavHost, onTop);
             }
             else
             {
@@ -76,10 +76,10 @@ public abstract partial class BaseSimpleStackNavigationManager
         {
             if (sectionContainer is not null)
             {
+                AddViewToContainer(newPageView, sectionNavHost, onTop);
+                
                 if (!navigationFrame.Children.Contains(sectionContainer))
                     AddViewToContainer(sectionContainer, navigationFrame, onTop);
-
-                AddViewToContainer(newPageView, sectionNavHost, onTop);
             }
             else
             {
