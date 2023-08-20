@@ -9,8 +9,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager;
 
 public partial class NativeSimpleStackNavigationManager
 {
-    // TODO: This is just an experiment for now
-    protected private void NavigateNativelyToPageInContainer(
+    protected void NavigateNativelyToPageInContainer(
         SimpleShell shell,
         IView previousShellSectionContainer,
         IView previousPage,

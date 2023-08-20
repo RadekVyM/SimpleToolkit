@@ -10,6 +10,37 @@ namespace SimpleToolkit.SimpleShell.NavigationManager;
 
 public partial class NativeSimpleStackNavigationManager
 {
+    protected void NavigateNativelyToPageInContainer(
+        SimpleShell shell,
+        IView previousShellSectionContainer,
+        IView previousPage,
+        bool isPreviousPageRoot)
+    {
+        AddPlatformPageToContainer(currentPage, shell, false, isCurrentPageRoot: isCurrentPageRoot);
+
+        var newPageView = GetPlatformView(currentPage);
+        var oldPageView = GetPlatformView(previousPage);
+        var newSectionContainer = GetPlatformView(currentShellSectionContainer);
+        var oldSectionContainer = GetPlatformView(previousShellSectionContainer);
+
+        var to = newSectionContainer == oldSectionContainer ?
+            newPageView :
+            newSectionContainer ?? newPageView;
+        var from = newSectionContainer == oldSectionContainer ?
+            oldPageView :
+            oldSectionContainer ?? oldPageView;
+
+        if (from is not null)
+        {
+            RemovePlatformPageFromContainer(previousPage, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
+            FireNavigationFinished();
+        }
+        else
+        {
+            FireNavigationFinished();
+        }
+    }
+
     protected void HandleNewStack(IReadOnlyList<IView> newPageStack, bool animated = true)
     {
         var isRootNavigation = newPageStack.Count == 1 && NavigationStack.Count == 1;
