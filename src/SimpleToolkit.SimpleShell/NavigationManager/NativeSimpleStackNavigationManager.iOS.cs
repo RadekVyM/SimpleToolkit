@@ -58,7 +58,7 @@ public partial class NativeSimpleStackNavigationManager
             .ToArray();
 
         await controller.HandleNewStack(newControllers, animated);
-        DisconnectHandlers(oldPageStack.Except(newPageStack));
+        DisconnectHandlers(oldPageStack.Skip(1).Except(newPageStack));
     }
 
     protected static void DisconnectHandlers(IEnumerable<IView> pageStack)
