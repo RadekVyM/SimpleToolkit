@@ -8,8 +8,6 @@ using SimpleToolkit.SimpleShell.Platform;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager;
 
-// TODO: I should maybe call DisconnectHandler() on page.Handler of pages that are not being reused
-
 public abstract partial class BaseSimpleStackNavigationManager
 {
     protected virtual void AddPlatformPageToContainer(IView newPage, SimpleShell shell, bool onTop = true, bool isCurrentPageRoot = true)

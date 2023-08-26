@@ -38,8 +38,9 @@ public partial class NativeSimpleStackNavigationManager
         return Task.CompletedTask;
     }
 
-    protected void HandleNewStack(IReadOnlyList<IView> newPageStack, bool animated = true)
+    protected async void HandleNewStack(IReadOnlyList<IView> newPageStack, bool animated = true)
     {
+        var oldPageStack = NavigationStack;
         NavigationStack = newPageStack;
         var controller = rootContainer.NextResponder as NativeSimpleShellSectionController;
         var root = navigationFrame.NextResponder as UIViewController;
@@ -56,7 +57,17 @@ public partial class NativeSimpleStackNavigationManager
             .Prepend(root)
             .ToArray();
 
-        controller.HandleNewStack(newControllers, animated);
+        await controller.HandleNewStack(newControllers, animated);
+        DisconnectHandlers(oldPageStack.Except(newPageStack));
+    }
+
+    protected static void DisconnectHandlers(IEnumerable<IView> pageStack)
+    {
+        foreach (var page in pageStack)
+        {
+            var handler = page.Handler;
+            handler?.DisconnectHandler();
+        }
     }
 }
 

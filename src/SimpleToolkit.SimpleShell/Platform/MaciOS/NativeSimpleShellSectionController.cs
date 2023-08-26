@@ -8,12 +8,12 @@ namespace SimpleToolkit.SimpleShell.Platform;
 
 // Based on https://github.com/dotnet/maui/blob/main/src/Controls/src/Core/Compatibility/Handlers/Shell/iOS/ShellSectionRenderer.cs
 
-// TODO: I should maybe call DisconnectHandler() on page.Handler of pages that are not being reused
-
 public class NativeSimpleShellSectionController : UINavigationController
 {
     private SimpleShell shell;
     private TaskCompletionSource<bool> popCompletionTask;
+    private Dictionary<UIViewController, TaskCompletionSource<bool>> completionTasks =
+        new Dictionary<UIViewController, TaskCompletionSource<bool>>();
     private bool disposed;
 
 
@@ -28,7 +28,7 @@ public class NativeSimpleShellSectionController : UINavigationController
     }
 
 
-    public void HandleNewStack(UIViewController[] stack, bool animated)
+    public async Task HandleNewStack(UIViewController[] stack, bool animated)
     {
         var lastInStack = stack[stack.Length - 1];
 
@@ -48,15 +48,24 @@ public class NativeSimpleShellSectionController : UINavigationController
                 break;
         }
 
+        UIViewController waitingFor;
+
         if (lastSame == lastInStack)
         {
+            waitingFor = lastSame;
             PopToViewController(lastSame, animated);
         }
         else
         {
+            waitingFor = lastInStack;
             PushViewController(lastInStack, animated);
             ReplaceViewControllers(1, stack.Skip(1).ToArray());
         }
+
+        var taskSource = completionTasks[waitingFor] = new TaskCompletionSource<bool>();
+        var task = taskSource.Task;
+
+        await task;
     }
 
     public override void ViewDidLoad()
@@ -71,6 +80,16 @@ public class NativeSimpleShellSectionController : UINavigationController
 
     public override void ViewDidDisappear(bool animated)
     {
+        var sourcesToComplete = new List<TaskCompletionSource<bool>>();
+
+        foreach (var item in completionTasks.Values)
+            sourcesToComplete.Add(item);
+
+        completionTasks.Clear();
+
+        foreach (var source in sourcesToComplete)
+            source.TrySetResult(false);
+
         popCompletionTask?.TrySetResult(false);
         popCompletionTask = null;
 
@@ -102,8 +121,6 @@ public class NativeSimpleShellSectionController : UINavigationController
         // TODO: Is this the right solution?
         if (await popTask)
             await shell?.GoToAsync("..");
-
-        //DisposePage(poppedPage);
     }
 
     private bool ShouldPop()
@@ -135,11 +152,7 @@ public class NativeSimpleShellSectionController : UINavigationController
             if (navigationController.ViewControllers.Length == 1)
                 return false;
 
-            var should = shouldPop();
-
-            System.Diagnostics.Debug.WriteLine($"Should: {should}");
-
-            return should;
+            return shouldPop?.Invoke() ?? true;
         }
     }
 
@@ -164,9 +177,18 @@ public class NativeSimpleShellSectionController : UINavigationController
 
         public override void DidShowViewController(UINavigationController navigationController, [Transient] UIViewController viewController, bool animated)
         {
+            var tasks = self.completionTasks;
             var popTask = self.popCompletionTask;
 
-            popTask?.TrySetResult(true);
+            if (tasks.TryGetValue(viewController, out var source))
+            {
+                source.TrySetResult(true);
+                tasks.Remove(viewController);
+            }
+            else
+            {
+                popTask?.TrySetResult(true);
+            }
         }
 
         public override void WillShowViewController(UINavigationController navigationController, [Transient] UIViewController viewController, bool animated)
