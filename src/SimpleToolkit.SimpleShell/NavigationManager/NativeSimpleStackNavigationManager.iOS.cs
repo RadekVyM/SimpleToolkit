@@ -31,8 +31,14 @@ public partial class NativeSimpleStackNavigationManager
 
         if (from is not null)
         {
-            UIView.Transition(from, to, 0.2, UIViewAnimationOptions.TransitionCrossDissolve, () =>
-                RemovePlatformPageFromContainer(previousPage, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot));
+            UIView.TransitionNotify(from, to, 0.2, UIViewAnimationOptions.TransitionCrossDissolve, (finished) =>
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    if (previousPage != currentPage)
+                        RemovePlatformPageFromContainer(previousPage, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
+                });
+            });
         }
 
         return Task.CompletedTask;
