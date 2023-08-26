@@ -51,7 +51,7 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
         StackNavigation = null;
     }
 
-    protected override void NavigateToPage(
+    protected override async void NavigateToPage(
         SimpleShellTransitionType transitionType,
         ArgsNavigationRequest args,
         SimpleShell shell,
@@ -60,14 +60,13 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
         IView previousPage,
         bool isPreviousPageRoot)
     {
-        // TODO: FireNavigationFinished() should be probably called after a transition animaiton is completed
-
         var oldRootPage = NavigationStack.FirstOrDefault();
 
         if (transitionType == SimpleShellTransitionType.Switching && isCurrentPageRoot)
         {
             HandleNewStack(newPageStack);
-            NavigateNativelyToPageInContainer(shell, previousShellSectionContainer, previousPage, isPreviousPageRoot);
+            await NavigateNativelyToPageInContainer(shell, previousShellSectionContainer, previousPage, isPreviousPageRoot);
+            FireNavigationFinished();
             return;
         }
 

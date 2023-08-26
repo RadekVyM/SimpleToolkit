@@ -5,7 +5,10 @@ public partial class SecondYellowDetailPage : ContentPage
 	public SecondYellowDetailPage()
 	{
 		InitializeComponent();
-	}
+
+        Loaded += PageLoaded;
+        Unloaded += PageUnloaded;
+    }
 
     private async void RootButton_Clicked(object sender, EventArgs e)
     {
@@ -20,6 +23,16 @@ public partial class SecondYellowDetailPage : ContentPage
     private async void FourthButton_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(FourthYellowDetailPage), false);
+    }
+
+    private void PageLoaded(object sender, EventArgs e)
+    {
+        System.Diagnostics.Debug.WriteLine("Loaded");
+    }
+
+    private void PageUnloaded(object sender, EventArgs e)
+    {
+        System.Diagnostics.Debug.WriteLine("Unloaded");
     }
 
     protected override void OnAppearing()

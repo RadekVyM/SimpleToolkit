@@ -4,7 +4,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager;
 
 public partial class NativeSimpleStackNavigationManager
 {
-    protected void NavigateNativelyToPageInContainer(
+    protected async Task NavigateNativelyToPageInContainer(
         SimpleShell shell,
         IView previousShellSectionContainer,
         IView previousPage,

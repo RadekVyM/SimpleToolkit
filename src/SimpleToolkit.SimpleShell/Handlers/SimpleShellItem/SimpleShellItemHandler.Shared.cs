@@ -9,6 +9,8 @@ using SectionContainer = Microsoft.UI.Xaml.Controls.Border;
 using SectionContainer = System.Object;
 #endif
 
+// Partially based on https://github.com/dotnet/maui/blob/main/src/Controls/src/Core/Handlers/Shell/ShellItemHandler.Windows.cs
+
 namespace SimpleToolkit.SimpleShell.Handlers
 {
     public partial class SimpleShellItemHandler : IAppearanceObserver

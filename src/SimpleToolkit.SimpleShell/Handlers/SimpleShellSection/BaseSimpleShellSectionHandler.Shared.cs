@@ -15,6 +15,8 @@ using PlatformView = System.Object;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 
+// Based on https://github.com/dotnet/maui/blob/main/src/Controls/src/Core/Handlers/Shell/ShellSectionHandler.Windows.cs
+
 public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : ElementHandler<ShellSection, PlatformT>, IBaseSimpleShellSectionHandler, IAppearanceObserver where PlatformT : class
 {
     public static PropertyMapper<ShellSection, BaseSimpleShellSectionHandler<PlatformT>> Mapper =
@@ -63,9 +65,7 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
             DisconnectNavigationManager(navigationManager.StackNavigation);
 
             if (view is IStackNavigation stackNavigation)
-            {
                 ConnectNavigationManager(stackNavigation);
-            }
         }
 
         base.SetVirtualView(view);
@@ -100,9 +100,9 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
     protected virtual void SyncNavigationStack(bool animated, NavigationRequestedEventArgs e)
     {
         var pageStack = new List<IView>()
-            {
-                (VirtualView.CurrentItem as IShellContentController).GetOrCreateContent()
-            };
+        {
+            (VirtualView.CurrentItem as IShellContentController).GetOrCreateContent()
+        };
 
 #if DEBUG
         LogStack(e, pageStack, VirtualView);
@@ -155,9 +155,7 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
             var template = SimpleShell.GetShellSectionContainerTemplate(section);
 
             if (template is not null)
-            {
                 container = template.CreateContent() as IView ?? throw new InvalidOperationException("ShellSectionContainer has to implement the IView interface");
-            }
 
             SimpleShell.SetShellSectionContainer(section, container);
         }

@@ -9,7 +9,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager;
 
 public partial class NativeSimpleStackNavigationManager
 {
-    protected void NavigateNativelyToPageInContainer(
+    protected Task NavigateNativelyToPageInContainer(
         SimpleShell shell,
         IView previousShellSectionContainer,
         IView previousPage,
@@ -30,13 +30,12 @@ public partial class NativeSimpleStackNavigationManager
             oldSectionContainer ?? oldPageView;
 
         if (from is not null)
+        {
             UIView.Transition(from, to, 0.2, UIViewAnimationOptions.TransitionCrossDissolve, () =>
-            {
-                RemovePlatformPageFromContainer(previousPage, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
-                FireNavigationFinished();
-            });
-        else
-            FireNavigationFinished();
+                RemovePlatformPageFromContainer(previousPage, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot));
+        }
+
+        return Task.CompletedTask;
     }
 
     protected void HandleNewStack(IReadOnlyList<IView> newPageStack, bool animated = true)

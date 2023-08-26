@@ -10,7 +10,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager;
 
 public partial class NativeSimpleStackNavigationManager
 {
-    protected async void NavigateNativelyToPageInContainer(
+    protected async Task NavigateNativelyToPageInContainer(
         SimpleShell shell,
         IView previousShellSectionContainer,
         IView previousPage,
@@ -31,19 +31,13 @@ public partial class NativeSimpleStackNavigationManager
         to.Transitions = new TransitionCollection { new EntranceThemeTransition() };
 
         // Here we go again 😶
+        // The delay is needed to play the animation, but ideally it should not be
         await Task.Delay(10);
         
         AddPlatformPageToContainer(currentPage, shell, true, isCurrentPageRoot: isCurrentPageRoot);
 
         if (from is not null)
-        {
             RemovePlatformPageFromContainer(previousPage, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
-            FireNavigationFinished();
-        }
-        else
-        {
-            FireNavigationFinished();
-        }
     }
 
     protected void HandleNewStack(IReadOnlyList<IView> newPageStack, bool animated = true)
@@ -74,6 +68,7 @@ public partial class NativeSimpleStackNavigationManager
     protected virtual Type GetDestinationPageType() =>
         typeof(Microsoft.UI.Xaml.Controls.Page);
 
+    // Based on https://github.com/dotnet/maui/blob/main/src/Core/src/Platform/Windows/StackNavigationManager.cs
     private void OnNavigated(object sender, Microsoft.UI.Xaml.Navigation.NavigationEventArgs e)
     {
         if (e.Content is not FrameworkElement fe)

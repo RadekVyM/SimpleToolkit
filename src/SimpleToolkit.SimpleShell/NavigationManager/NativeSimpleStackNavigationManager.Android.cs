@@ -10,7 +10,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager;
 
 public partial class NativeSimpleStackNavigationManager
 {
-    protected async void NavigateNativelyToPageInContainer(
+    protected async Task NavigateNativelyToPageInContainer(
         SimpleShell shell,
         IView previousShellSectionContainer,
         IView previousPage,
@@ -38,22 +38,12 @@ public partial class NativeSimpleStackNavigationManager
         if (from is not null)
         {
             var enterAnimation = AnimationUtils.LoadAnimation(mauiContext.Context, Resource.Animation.simpleshell_fade_in);
-            enterAnimation.AnimationEnd += OnEnterAnimationEnded;
-
-            // IDK why the delay is needed to play the animation
+            
+            // The delay is needed to play the animation, but ideally it should not be
             await Task.Delay(10).ConfigureAwait(true);
+
             to.StartAnimation(enterAnimation);
             RemovePlatformPageFromContainer(previousPage, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
-        }
-        else
-        {
-            FireNavigationFinished();
-        }
-
-        void OnEnterAnimationEnded(object sender, Android.Views.Animations.Animation.AnimationEndEventArgs e)
-        {
-            e.Animation.AnimationEnd -= OnEnterAnimationEnded;
-            FireNavigationFinished();
         }
     }
 
