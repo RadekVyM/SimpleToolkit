@@ -43,7 +43,8 @@ public partial class NativeSimpleStackNavigationManager
             await Task.Delay(10).ConfigureAwait(true);
 
             to.StartAnimation(enterAnimation);
-            RemovePlatformPageFromContainer(previousPage, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
+            if (previousPage != currentPage)
+                RemovePlatformPageFromContainer(previousPage, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
         }
     }
 

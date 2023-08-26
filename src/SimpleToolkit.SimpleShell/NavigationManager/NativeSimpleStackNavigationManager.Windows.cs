@@ -36,7 +36,7 @@ public partial class NativeSimpleStackNavigationManager
         
         AddPlatformPageToContainer(currentPage, shell, true, isCurrentPageRoot: isCurrentPageRoot);
 
-        if (from is not null)
+        if (from is not null && previousPage != currentPage)
             RemovePlatformPageFromContainer(previousPage, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
     }
 
