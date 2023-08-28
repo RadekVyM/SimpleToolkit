@@ -31,7 +31,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
-	  <CreatePackage>false</CreatePackage>
+		<CreatePackage>false</CreatePackage>
 	</PropertyGroup>
 	<ItemGroup>
 		<!-- App Icon -->
@@ -52,51 +52,51 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\Fonts\Font-Awesome-Solid.otf" />
-	  <None Remove="Resources\Images\arrow_left.svg" />
-	  <None Remove="Resources\Images\avatar_empty.png" />
-	  <None Remove="Resources\Images\avatar_filled.png" />
-	  <None Remove="Resources\Images\bird_empty.png" />
-	  <None Remove="Resources\Images\bird_filled.png" />
-	  <None Remove="Resources\Images\case_empty.png" />
-	  <None Remove="Resources\Images\case_filled.png" />
-	  <None Remove="Resources\Images\flame_empty.png" />
-	  <None Remove="Resources\Images\flame_filled.png" />
-	  <None Remove="Resources\Images\pizza_empty.png" />
-	  <None Remove="Resources\Images\pizza_filled.png" />
-	  <None Remove="Resources\Images\sandy_beach.jpg" />
-	  <None Remove="Resources\Images\settings.png" />
-	  <None Remove="Resources\Images\speaker.png" />
-	  <None Remove="Resources\Images\star.png" />
+		<None Remove="Resources\Fonts\Font-Awesome-Solid.otf" />
+		<None Remove="Resources\Images\arrow_left.svg" />
+		<None Remove="Resources\Images\avatar_empty.png" />
+		<None Remove="Resources\Images\avatar_filled.png" />
+		<None Remove="Resources\Images\bird_empty.png" />
+		<None Remove="Resources\Images\bird_filled.png" />
+		<None Remove="Resources\Images\case_empty.png" />
+		<None Remove="Resources\Images\case_filled.png" />
+		<None Remove="Resources\Images\flame_empty.png" />
+		<None Remove="Resources\Images\flame_filled.png" />
+		<None Remove="Resources\Images\pizza_empty.png" />
+		<None Remove="Resources\Images\pizza_filled.png" />
+		<None Remove="Resources\Images\sandy_beach.jpg" />
+		<None Remove="Resources\Images\settings.png" />
+		<None Remove="Resources\Images\speaker.png" />
+		<None Remove="Resources\Images\star.png" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)'!='DEBUG'">
-        <PackageReference Include="SimpleToolkit.Core" Version="3.0.0" />
-        <PackageReference Include="SimpleToolkit.SimpleShell.Controls" Version="2.0.0-preview4" />
-        <PackageReference Include="SimpleToolkit.SimpleShell" Version="3.0.0" />
+		<PackageReference Include="SimpleToolkit.Core" Version="3.0.0" />
+		<PackageReference Include="SimpleToolkit.SimpleShell.Controls" Version="2.0.0-preview4" />
+		<PackageReference Include="SimpleToolkit.SimpleShell" Version="3.0.0" />
 	</ItemGroup>
-		
+
 	<ItemGroup Condition="'$(Configuration)'=='DEBUG'">
-	  <ProjectReference Include="..\SimpleToolkit.SimpleShell.Controls\SimpleToolkit.SimpleShell.Controls.csproj" />
-	  <ProjectReference Include="..\SimpleToolkit.SimpleShell\SimpleToolkit.SimpleShell.csproj" />
-	</ItemGroup>
-		
-	<ItemGroup>
-	  <Compile Update="PlaygroundAppShell.xaml.cs">
-	    <DependentUpon>PlaygroundAppShell.xaml</DependentUpon>
-	  </Compile>
+		<ProjectReference Include="..\SimpleToolkit.SimpleShell.Controls\SimpleToolkit.SimpleShell.Controls.csproj" />
+		<ProjectReference Include="..\SimpleToolkit.SimpleShell\SimpleToolkit.SimpleShell.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="NormalAppShell.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="PlaygroundAppShell.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Pages\Yellow\FourthYellowDetailPage.xaml">
-	    <SubType></SubType>
-	  </MauiXaml>
+		<Compile Update="PlaygroundAppShell.xaml.cs">
+			<DependentUpon>PlaygroundAppShell.xaml</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<MauiXaml Update="NormalAppShell.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="PlaygroundAppShell.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Pages\Yellow\FourthYellowDetailPage.xaml">
+			<SubType></SubType>
+		</MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -107,7 +107,7 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Pages\ContentButtonPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Pages\GrayPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -116,16 +116,16 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Pages\IconPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Pages\ImagePage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Pages\OrangePage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Pages\PopoverPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Pages\PurplePage.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -154,6 +154,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="2.0.0" />
+		<PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="2.0.0" />
 	</ItemGroup>
 </Project>

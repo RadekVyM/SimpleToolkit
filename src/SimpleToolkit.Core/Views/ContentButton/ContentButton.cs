@@ -121,7 +121,7 @@ namespace SimpleToolkit.Core
             if (button.Command is not null)
                 CommandCanExecuteChanged(button, EventArgs.Empty);
             else
-                button.SetValueCore(IsEnabledProperty, true);
+                button.SetValue(IsEnabledProperty, true);
         }
 
         private static void CommandCanExecuteChanged(object sender, EventArgs e)
@@ -130,7 +130,7 @@ namespace SimpleToolkit.Core
 
             if (button.Command is not null)
             {
-                button.SetValueCore(IsEnabledProperty, button.Command.CanExecute(button.CommandParameter));
+                button.SetValue(IsEnabledProperty, button.Command.CanExecute(button.CommandParameter));
                 button.UpdateState();
             }
         }
