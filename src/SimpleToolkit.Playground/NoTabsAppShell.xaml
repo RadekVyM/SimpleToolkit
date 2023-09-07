@@ -7,7 +7,9 @@
     xmlns:pages="clr-namespace:SimpleToolkit.SimpleShell.Playground.Views.Pages"
     Title="NoTabsAppShell"
 
-    x:Name="thisShell">
+    x:Name="thisShell"
+
+    Background="White">
 
     <ShellContent
         Title="Yellow"

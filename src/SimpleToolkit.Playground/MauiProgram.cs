@@ -8,7 +8,7 @@ namespace SimpleToolkit.SimpleShell.Playground
 {
     public static class MauiProgram
     {
-        internal const AppShellType UsedAppShell = AppShellType.NoTabs;
+        internal const AppShellType UsedAppShell = AppShellType.Playground;
 
         public static MauiApp CreateMauiApp()
         {
@@ -32,8 +32,8 @@ namespace SimpleToolkit.SimpleShell.Playground
             });
 
 #endif
-
-            builder.DisplayContentBehindBars();
+            if (UsedAppShell != AppShellType.NoTabs)
+                builder.DisplayContentBehindBars();
 
 #if ANDROID
             builder.SetDefaultStatusBarAppearance(color: Colors.Transparent, lightElements: false);

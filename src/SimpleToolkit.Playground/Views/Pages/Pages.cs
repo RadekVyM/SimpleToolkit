@@ -7,17 +7,17 @@ public class BluePage : BasePage
 
 public class GrayPage : BasePage
 {
-    public GrayPage() : base("Gray page", Colors.Gray) { }
+    public GrayPage() : base("Gray Page", Colors.Gray) { }
 }
 
 public class OrangePage : BasePage
 {
-    public OrangePage() : base("Orange page", Colors.DarkOrange) { }
+    public OrangePage() : base("Orange Page", Colors.DarkOrange) { }
 }
 
 public class RedPage : BasePage
 {
-    public RedPage() : base("Red page", Colors.DarkRed) { }
+    public RedPage() : base("Red Page", Colors.DarkRed) { }
 }
 
 public class YellowPage : BasePage
