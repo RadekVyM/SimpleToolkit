@@ -56,31 +56,31 @@ namespace SimpleToolkit.SimpleShell
         public new Page CurrentPage
         {
             get => (Page)GetValue(CurrentPageProperty);
-            protected set => SetValue(CurrentPageProperty, value);
+            private protected set => SetValue(CurrentPageProperty, value);
         }
 
         public ShellContent CurrentShellContent
         {
             get => (ShellContent)GetValue(CurrentShellContentProperty);
-            protected set => SetValue(CurrentShellContentProperty, value);
+            private protected set => SetValue(CurrentShellContentProperty, value);
         }
 
         public ShellSection CurrentShellSection
         {
             get => (ShellSection)GetValue(CurrentShellSectionProperty);
-            protected set => SetValue(CurrentShellSectionProperty, value);
+            private protected set => SetValue(CurrentShellSectionProperty, value);
         }
 
         public IReadOnlyList<ShellSection> ShellSections
         {
             get => (IReadOnlyList<ShellSection>)GetValue(ShellSectionsProperty);
-            protected set => SetValue(ShellSectionsProperty, value);
+            private protected set => SetValue(ShellSectionsProperty, value);
         }
 
         public IReadOnlyList<ShellContent> ShellContents
         {
             get => (IReadOnlyList<ShellContent>)GetValue(ShellContentsProperty);
-            protected set => SetValue(ShellContentsProperty, value);
+            private protected set => SetValue(ShellContentsProperty, value);
         }
 
 
