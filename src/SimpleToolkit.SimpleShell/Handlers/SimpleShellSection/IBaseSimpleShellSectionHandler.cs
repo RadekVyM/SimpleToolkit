@@ -16,5 +16,4 @@ public interface IBaseSimpleShellSectionHandler
     ShellSection VirtualView { get; }
     void SetVirtualView(IElement view);
     PlatformView PlatformView { get; }
-
 }

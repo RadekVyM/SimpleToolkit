@@ -64,6 +64,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
             if (VirtualView.CurrentItem is not null)
             {
+                // One handler is reused for all ShellSections
                 currentShellSectionHandler ??= (IBaseSimpleShellSectionHandler)VirtualView.CurrentItem.ToHandler(MauiContext);
 
                 UpdateShellSectionContainerContent();
@@ -81,7 +82,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
                 currentShellSection.PropertyChanged += OnCurrentShellSectionPropertyChanged;
         }
 
-        private void OnCurrentShellSectionPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private static void OnCurrentShellSectionPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
         }
 

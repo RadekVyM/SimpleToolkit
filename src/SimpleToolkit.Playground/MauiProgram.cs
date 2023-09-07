@@ -1,12 +1,14 @@
 ﻿using SimpleToolkit.Core;
 using CommunityToolkit.Maui;
+#if IOS || MACCATALYST
 using CommunityToolkit.Maui.Views;
+#endif
 
 namespace SimpleToolkit.SimpleShell.Playground
 {
     public static class MauiProgram
     {
-        internal const AppShellType UsedAppShell = AppShellType.Playground;
+        internal const AppShellType UsedAppShell = AppShellType.NoTabs;
 
         public static MauiApp CreateMauiApp()
         {
@@ -39,7 +41,7 @@ namespace SimpleToolkit.SimpleShell.Playground
 #endif
             if (UsedAppShell is not AppShellType.Normal)
             {
-                builder.UseSimpleShell(true);
+                builder.UseSimpleShell(false);
             }
 
             return builder.Build();

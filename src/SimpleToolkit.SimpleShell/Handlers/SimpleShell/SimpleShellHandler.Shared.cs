@@ -32,6 +32,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         protected bool platformViewHasContent = false;
         protected ISimpleNavigationHost navigationHost;
+        protected SimpleShellItemHandler currentShellItemHandler;
 
         public ShellItem SelectedItem { get; protected set; }
 
@@ -76,7 +77,8 @@ namespace SimpleToolkit.SimpleShell.Handlers
 
         protected virtual SimpleShellItemHandler CreateShellItemHandler()
         {
-            var itemHandler = (SimpleShellItemHandler)VirtualView.CurrentItem.ToHandler(MauiContext);
+            // One handler is reused for all ShellItems
+            var itemHandler = currentShellItemHandler ??= (SimpleShellItemHandler)VirtualView.CurrentItem.ToHandler(MauiContext);
 
             if (itemHandler.PlatformView != GetNavigationHostContent() && navigationHost?.Handler is SimpleNavigationHostHandler navHostHandler)
                 navHostHandler.SetContent(itemHandler.PlatformView);
@@ -130,6 +132,7 @@ namespace SimpleToolkit.SimpleShell.Handlers
             base.DisconnectHandler(platformView);
 
             navigationHost = null;
+            currentShellItemHandler = null;
             SelectedItem = null;
 
 #if IOS || MACCATALYST
