@@ -56,6 +56,7 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
         ArgsNavigationRequest args,
         SimpleShell shell,
         IReadOnlyList<IView> newPageStack,
+        IView previousShellItemContainer,
         IView previousShellSectionContainer,
         IView previousPage,
         bool isPreviousPageRoot)
@@ -65,13 +66,13 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
         if (transitionType == SimpleShellTransitionType.Switching && isCurrentPageRoot)
         {
             HandleNewStack(newPageStack);
-            await NavigateNativelyToPageInContainer(shell, previousShellSectionContainer, previousPage, isPreviousPageRoot);
+            await NavigateNativelyToPageInContainer(shell, previousShellItemContainer, previousShellSectionContainer, oldRootPage, true);
             FireNavigationFinished();
             return;
         }
 
         if (isCurrentPageRoot)
-            SwitchPagesInContainer(shell, previousShellSectionContainer, oldRootPage, true);
+            SwitchPagesInContainer(shell, previousShellItemContainer, previousShellSectionContainer, oldRootPage, true);
 
         HandleNewStack(newPageStack, !(transitionType == SimpleShellTransitionType.Switching && !isCurrentPageRoot));
         FireNavigationFinished();

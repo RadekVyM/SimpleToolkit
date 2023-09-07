@@ -8,11 +8,11 @@ namespace SimpleToolkit.SimpleShell
         public static readonly BindableProperty TransitionProperty =
             BindableProperty.CreateAttached("Transition", typeof(SimpleShellTransition), typeof(Page), null);
 
-        public static readonly BindableProperty ShellSectionContainerTemplateProperty =
-            BindableProperty.CreateAttached("ShellSectionContainerTemplate", typeof(DataTemplate), typeof(ShellSection), null, propertyChanged: OnShellSectionContainerTemplateChanged);
+        public static readonly BindableProperty ShellGroupContainerTemplateProperty =
+            BindableProperty.CreateAttached("ShellGroupContainerTemplate", typeof(DataTemplate), typeof(ShellGroupItem), null, propertyChanged: OnShellGroupContainerTemplateChanged);
 
-        public static readonly BindableProperty ShellSectionContainerProperty =
-            BindableProperty.CreateAttached("ShellSectionContainer", typeof(IView), typeof(ShellSection), null, propertyChanged: OnShellSectionContainerChanged);
+        public static readonly BindableProperty ShellGroupContainerProperty =
+            BindableProperty.CreateAttached("ShellGroupContainer", typeof(IView), typeof(ShellGroupItem), null, propertyChanged: OnShellGroupContainerChanged);
 
         public static SimpleShellTransition GetTransition(BindableObject item)
         {
@@ -26,48 +26,48 @@ namespace SimpleToolkit.SimpleShell
             item.SetValue(TransitionProperty, value);
         }
 
-        public static DataTemplate GetShellSectionContainerTemplate(BindableObject item)
+        public static DataTemplate GetShellGroupContainerTemplate(BindableObject item)
         {
             _ = item ?? throw new ArgumentNullException(nameof(item));
-            return (DataTemplate)item.GetValue(ShellSectionContainerTemplateProperty);
+            return (DataTemplate)item.GetValue(ShellGroupContainerTemplateProperty);
         }
 
-        public static void SetShellSectionContainerTemplate(BindableObject item, DataTemplate value)
+        public static void SetShellGroupContainerTemplate(BindableObject item, DataTemplate value)
         {
             _ = item ?? throw new ArgumentNullException(nameof(item));
-            item.SetValue(ShellSectionContainerTemplateProperty, value);
+            item.SetValue(ShellGroupContainerTemplateProperty, value);
         }
 
-        public static IView GetShellSectionContainer(BindableObject item)
+        public static IView GetShellGroupContainer(BindableObject item)
         {
             _ = item ?? throw new ArgumentNullException(nameof(item));
-            return (IView)item.GetValue(ShellSectionContainerProperty);
+            return (IView)item.GetValue(ShellGroupContainerProperty);
         }
 
-        public static void SetShellSectionContainer(BindableObject item, IView value)
+        public static void SetShellGroupContainer(BindableObject item, IView value)
         {
             _ = item ?? throw new ArgumentNullException(nameof(item));
-            item.SetValue(ShellSectionContainerProperty, value);
+            item.SetValue(ShellGroupContainerProperty, value);
         }
 
 
-        private static void OnShellSectionContainerTemplateChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void OnShellGroupContainerTemplateChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            var section = bindable as ShellSection;
+            var group = bindable as ShellGroupItem;
 
-            if (section.IsSet(ShellSectionContainerProperty))
+            if (group.IsSet(ShellGroupContainerProperty))
             {
-                SetShellSectionContainer(section, null);
+                SetShellGroupContainer(group, null);
             }
         }
 
-        private static void OnShellSectionContainerChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void OnShellGroupContainerChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            var section = bindable as ShellSection;
+            var group = bindable as ShellGroupItem;
             var oldView = oldValue as Element;
             var newView = newValue as Element;
 
-            var simpleShell = section.FindParentOfType<SimpleShell>();
+            var simpleShell = group.FindParentOfType<SimpleShell>();
 
             if (simpleShell is not null)
             {

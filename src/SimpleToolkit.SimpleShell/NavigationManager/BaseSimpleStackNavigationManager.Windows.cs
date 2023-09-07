@@ -21,7 +21,7 @@ public abstract partial class BaseSimpleStackNavigationManager
             AddToContainer(newPageView, navigationFrame, onTop);
     }
 
-    protected virtual void RemovePlatformPageFromContainer(IView oldPage, IView oldShellSectionContainer, bool isCurrentPageRoot, bool isPreviousPageRoot)
+    protected virtual void RemovePlatformPageFromContainer(IView oldPage, IView oldShellItemContainer, IView oldShellSectionContainer, bool isCurrentPageRoot, bool isPreviousPageRoot)
     {
         var oldPageView = GetPlatformView(oldPage);
 

@@ -6,6 +6,7 @@ public partial class NativeSimpleStackNavigationManager
 {
     protected async Task NavigateNativelyToPageInContainer(
         SimpleShell shell,
+        IView previousShellItemContainer,
         IView previousShellSectionContainer,
         IView previousPage,
         bool isPreviousPageRoot)

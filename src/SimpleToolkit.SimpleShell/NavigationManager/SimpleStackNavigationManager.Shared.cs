@@ -40,6 +40,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
             ArgsNavigationRequest args,
             SimpleShell shell,
             IReadOnlyList<IView> newPageStack,
+            IView previousShellItemContainer,
             IView previousShellSectionContainer,
             IView previousPage,
             bool isPreviousPageRoot)
@@ -48,12 +49,12 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 
             if (args.RequestType == NavigationRequestType.Remove || args.RequestType == NavigationRequestType.Insert)
             {
-                SwitchPagesInContainer(shell, previousShellSectionContainer, previousPage, isPreviousPageRoot);
+                SwitchPagesInContainer(shell, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot);
                 FireNavigationFinished();
                 return;
             }
 
-            NavigateToPageInContainer(transitionType, shell, previousShellSectionContainer, previousPage, isPreviousPageRoot);
+            NavigateToPageInContainer(transitionType, shell, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot);
         }
         
         protected override void OnBackStackChanged(IReadOnlyList<IView> newPageStack)

@@ -131,9 +131,10 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
         if (arg3 is ArgsNavigationRequest nr)
         {
             var shell = handler.VirtualView.FindParentOfType<SimpleShell>();
-            var container = GetShellSectionContainer(handler.VirtualView);
+            var shellSectionContainer = GetShellGroupContainer(handler.VirtualView);
+            var shellItemContainer = GetShellItemContainer(handler.VirtualView);
 
-            handler.navigationManager?.NavigateTo(nr, shell, container);
+            handler.navigationManager?.NavigateTo(nr, shell, shellSectionContainer, shellItemContainer);
         }
         else
         {
@@ -146,24 +147,32 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
         handler.SyncNavigationStack(false, null);
     }
 
-    private static IView GetShellSectionContainer(ShellSection section)
+    private static IView GetShellItemContainer(ShellSection shellSection)
     {
-        var container = SimpleShell.GetShellSectionContainer(section);
+        if (shellSection.Parent is ShellItem shellItem)
+            return GetShellGroupContainer(shellItem);
+
+        return null;
+    }
+
+    private static IView GetShellGroupContainer(ShellGroupItem group)
+    {
+        var container = SimpleShell.GetShellGroupContainer(group);
 
         if (container is null)
         {
-            var template = SimpleShell.GetShellSectionContainerTemplate(section);
+            var template = SimpleShell.GetShellGroupContainerTemplate(group);
 
             if (template is not null)
                 container = template.CreateContent() as IView ?? throw new InvalidOperationException("ShellSectionContainer has to implement the IView interface");
 
-            SimpleShell.SetShellSectionContainer(section, container);
+            SimpleShell.SetShellGroupContainer(group, container);
         }
 
-        container?.ToHandler(section.Handler.MauiContext);
+        container?.ToHandler(group.Handler.MauiContext);
 
         if (container is BindableObject bindable && !bindable.IsSet(BindableObject.BindingContextProperty))
-            bindable.BindingContext = section;
+            bindable.BindingContext = group;
         return container;
     }
 

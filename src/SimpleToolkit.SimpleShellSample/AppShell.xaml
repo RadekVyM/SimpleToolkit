@@ -12,7 +12,7 @@
     <Tab
         Title="Yellow-Green"
         Route="YellowGreenTab">
-        <simpleShell:SimpleShell.ShellSectionContainerTemplate>
+        <simpleShell:SimpleShell.ShellGroupContainerTemplate>
             <DataTemplate
                 x:DataType="ShellSection">
                 <Grid
@@ -35,7 +35,7 @@
                         Grid.Row="1"/>
                 </Grid>
             </DataTemplate>
-        </simpleShell:SimpleShell.ShellSectionContainerTemplate>
+        </simpleShell:SimpleShell.ShellGroupContainerTemplate>
 
         <ShellContent
             Title="Yellow"

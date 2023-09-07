@@ -2,7 +2,7 @@
 {
     internal enum AppShellType
     {
-        Normal, Playground, NoTabs
+        Normal, Playground, NoTabs, ShellItems
     }
 
     public partial class App : Application
@@ -15,6 +15,7 @@
             {
                 AppShellType.Normal => new NormalAppShell(),
                 AppShellType.NoTabs => new NoTabsAppShell(),
+                AppShellType.ShellItems => new ShellItemsAppShell(),
                 _ => new PlaygroundAppShell()
             };
         }

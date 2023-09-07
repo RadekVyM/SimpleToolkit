@@ -28,6 +28,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
     protected IView currentPage;
     protected IView rootPageContainer;
     protected IView currentShellSectionContainer;
+    protected IView currentShellItemContainer;
     protected bool isCurrentPageRoot = true;
 
     public IStackNavigation StackNavigation { get; protected set; }
@@ -40,7 +41,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
     }
 
 
-    public virtual void NavigateTo(ArgsNavigationRequest args, SimpleShell shell, IView shellSectionContainer)
+    public virtual void NavigateTo(ArgsNavigationRequest args, SimpleShell shell, IView shellSectionContainer, IView shellItemContainer)
     {
         IReadOnlyList<IView> newPageStack = new List<IView>(args.NavigationStack);
         var previousNavigationStack = NavigationStack;
@@ -62,6 +63,9 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
         var previousShellSectionContainer = currentShellSectionContainer;
         currentShellSectionContainer = shellSectionContainer;
 
+        var previousShellItemContainer = currentShellItemContainer;
+        currentShellItemContainer = shellItemContainer;
+
         var isPreviousPageRoot = isCurrentPageRoot;
         isCurrentPageRoot = newPageStack.Count < 2;
 
@@ -74,12 +78,13 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
         else if (previousNavigationStack.Count < newPageStack.Count)
             transitionType = SimpleShellTransitionType.Pushing;
 
-        NavigateToPage(transitionType, args, shell, newPageStack, previousShellSectionContainer, previousPage, isPreviousPageRoot);
+        NavigateToPage(transitionType, args, shell, newPageStack, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot);
     }
 
     protected private void NavigateToPageInContainer(
         SimpleShellTransitionType transitionType,
         SimpleShell shell,
+        IView previousShellItemContainer,
         IView previousShellSectionContainer,
         IView previousPage,
         bool isPreviousPageRoot)
@@ -109,7 +114,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
                 easing: easing,
                 finished: (v, canceled) =>
                 {
-                    RemovePlatformPageFromContainer(previousPage, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
+                    RemovePlatformPageFromContainer(previousPage, previousShellItemContainer, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
                     transition.Finished?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, v));
 
                     FireNavigationFinished();
@@ -117,7 +122,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
         }
         else
         {
-            SwitchPagesInContainer(shell, previousShellSectionContainer, previousPage, isPreviousPageRoot);
+            SwitchPagesInContainer(shell, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot);
             FireNavigationFinished();
         }
 
@@ -136,9 +141,9 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
         }
     }
 
-    protected private void SwitchPagesInContainer(SimpleShell shell, IView previousShellSectionContainer, IView previousPage, bool isPreviousPageRoot)
+    protected private void SwitchPagesInContainer(SimpleShell shell, IView previousShellItemContainer, IView previousShellSectionContainer, IView previousPage, bool isPreviousPageRoot)
     {
-        RemovePlatformPageFromContainer(previousPage, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
+        RemovePlatformPageFromContainer(previousPage, previousShellItemContainer, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
         AddPlatformPageToContainer(currentPage, shell, isCurrentPageRoot: isCurrentPageRoot);
     }
 
@@ -147,6 +152,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
         ArgsNavigationRequest args,
         SimpleShell shell,
         IReadOnlyList<IView> newPageStack,
+        IView previousShellItemContainer,
         IView previousShellSectionContainer,
         IView previousPage,
         bool isPreviousPageRoot);

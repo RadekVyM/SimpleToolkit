@@ -30,7 +30,7 @@ public abstract partial class BaseSimpleStackNavigationManager
         }
     }
 
-    protected virtual void RemovePlatformPageFromContainer(IView oldPage, IView oldShellSectionContainer, bool isCurrentPageRoot, bool isPreviousPageRoot)
+    protected virtual void RemovePlatformPageFromContainer(IView oldPage, IView oldShellItemContainer, IView oldShellSectionContainer, bool isCurrentPageRoot, bool isPreviousPageRoot)
     {
         var oldPageView = GetPlatformView(oldPage);
 
@@ -41,7 +41,10 @@ public abstract partial class BaseSimpleStackNavigationManager
             parent.RemoveView(oldPageView);
 
         if (oldShellSectionContainer is not null && currentShellSectionContainer != oldShellSectionContainer)
-            RemoveShellSectionContainer(oldShellSectionContainer);
+            RemoveShellGroupContainer(oldShellSectionContainer);
+
+        if (oldShellItemContainer is not null && currentShellItemContainer != oldShellItemContainer)
+            RemoveShellGroupContainer(oldShellItemContainer);
 
         if (!isCurrentPageRoot && isPreviousPageRoot && this.rootPageContainer is not null)
             RemoveRootPageContainer(this.rootPageContainer);
@@ -50,7 +53,8 @@ public abstract partial class BaseSimpleStackNavigationManager
     protected private void AddPlatformRootPage(bool onTop, PlatformView newPageView)
     {
         var r = AddToContainer(this.rootPageContainer, navigationFrame, onTop);
-        var s = AddToContainer(currentShellSectionContainer, r, onTop);
+        var i = AddToContainer(currentShellItemContainer, r, onTop);
+        var s = AddToContainer(currentShellSectionContainer, i, onTop);
         AddToContainer(newPageView, s, onTop);
     }
 
@@ -138,11 +142,11 @@ public abstract partial class BaseSimpleStackNavigationManager
         return oldChildren;
     }
 
-    protected private void RemoveShellSectionContainer(IView oldShellSectionContainer)
+    protected private void RemoveShellGroupContainer(IView oldShellGroupContainer)
     {
-        var oldContainer = GetPlatformView(oldShellSectionContainer);
+        var oldContainer = GetPlatformView(oldShellGroupContainer);
 
-        if (GetPageContainerNavHost(oldShellSectionContainer) is NavFrame oldNavHost)
+        if (GetPageContainerNavHost(oldShellGroupContainer) is NavFrame oldNavHost)
             oldNavHost.RemoveAllViews();
 
         if (oldContainer.Parent is ViewGroup parent)

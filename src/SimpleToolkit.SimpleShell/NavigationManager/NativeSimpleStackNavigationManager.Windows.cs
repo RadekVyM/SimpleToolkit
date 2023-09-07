@@ -12,6 +12,7 @@ public partial class NativeSimpleStackNavigationManager
 {
     protected async Task NavigateNativelyToPageInContainer(
         SimpleShell shell,
+        IView previousShellItemContainer,
         IView previousShellSectionContainer,
         IView previousPage,
         bool isPreviousPageRoot)
@@ -37,7 +38,7 @@ public partial class NativeSimpleStackNavigationManager
         AddPlatformPageToContainer(currentPage, shell, true, isCurrentPageRoot: isCurrentPageRoot);
 
         if (from is not null && previousPage != currentPage)
-            RemovePlatformPageFromContainer(previousPage, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
+            RemovePlatformPageFromContainer(previousPage, previousShellItemContainer, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
     }
 
     protected void HandleNewStack(IReadOnlyList<IView> newPageStack, bool animated = true)

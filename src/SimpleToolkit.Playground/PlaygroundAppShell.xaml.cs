@@ -195,7 +195,7 @@ namespace SimpleToolkit.SimpleShell.Playground
         {
             Resources.TryGetValue("AnotherSimpleShellSectionContainer", out object template);
 
-            SimpleShell.SetShellSectionContainerTemplate(iconsTab, template as DataTemplate);
+            SimpleShell.SetShellGroupContainerTemplate(iconsTab, template as DataTemplate);
         }
 
         private record DesignLanguageItem(string Title, Action Action)

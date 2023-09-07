@@ -186,7 +186,7 @@
     <Tab
         x:Name="iconsTab"
         Title="Icons"
-        shell:SimpleShell.ShellSectionContainerTemplate="{StaticResource SimpleShellSectionContainer}">
+        shell:SimpleShell.ShellGroupContainerTemplate="{StaticResource SimpleShellSectionContainer}">
         <Tab.Icon>
             <FontImageSource Glyph="&#xf86d;" FontFamily="FontAwesomeSolid" Size="44"/>
         </Tab.Icon>
@@ -205,7 +205,7 @@
         Title="Buttons"
         Icon="flame_empty.png"
         controls:SimpleShellIcon.SelectedIcon="flame_filled.png">
-        <shell:SimpleShell.ShellSectionContainer>
+        <shell:SimpleShell.ShellGroupContainer>
             <Grid
                 RowDefinitions="auto, *">
                 <Label
@@ -216,7 +216,7 @@
                 <shell:SimpleNavigationHost
                     Grid.Row="1"/>
             </Grid>
-        </shell:SimpleShell.ShellSectionContainer>
+        </shell:SimpleShell.ShellGroupContainer>
         
         <ShellContent
             Title="Buttons"
@@ -242,7 +242,7 @@
         Title="Flame tab" Route="FirstTab"
         Icon="flame_empty.png"
         controls:SimpleShellIcon.SelectedIcon="flame_filled.png"
-        shell:SimpleShell.ShellSectionContainerTemplate="{StaticResource TabViewShellSectionContainer}">
+        shell:SimpleShell.ShellGroupContainerTemplate="{StaticResource TabViewShellSectionContainer}">
         <ShellContent
             Title="Yellow"
             Icon="flame_empty.png"
@@ -282,7 +282,7 @@
         Title="Case tab" Route="SecondTab"
         Icon="case_empty.png"
         controls:SimpleShellIcon.SelectedIcon="case_filled.png"
-        shell:SimpleShell.ShellSectionContainerTemplate="{StaticResource TabViewShellSectionContainer}">
+        shell:SimpleShell.ShellGroupContainerTemplate="{StaticResource TabViewShellSectionContainer}">
         <ShellContent
             Title="Blue"
             Icon="case_empty.png"
