@@ -21,13 +21,19 @@ public partial class NativeSimpleStackNavigationManager
         var oldPageView = GetPlatformView(previousPage);
         var newSectionContainer = GetPlatformView(currentShellSectionContainer);
         var oldSectionContainer = GetPlatformView(previousShellSectionContainer);
+        var newItemContainer = GetPlatformView(currentShellItemContainer);
+        var oldItemContainer = GetPlatformView(previousShellItemContainer);
 
-        var to = newSectionContainer == oldSectionContainer ?
-            newPageView :
-            newSectionContainer ?? newPageView;
-        var from = newSectionContainer == oldSectionContainer ?
-            oldPageView :
-            oldSectionContainer ?? oldPageView;
+        var to = newItemContainer == oldItemContainer ?
+            (newSectionContainer == oldSectionContainer ?
+                newPageView :
+                newSectionContainer ?? newPageView) :
+                newItemContainer ?? newSectionContainer ?? newPageView;
+        var from = newItemContainer == oldItemContainer ?
+            (newSectionContainer == oldSectionContainer ?
+                oldPageView :
+                oldSectionContainer ?? oldPageView) :
+                oldItemContainer ?? oldSectionContainer ?? oldPageView;
 
         to.Transitions = new TransitionCollection { new EntranceThemeTransition() };
 
