@@ -41,7 +41,7 @@ namespace SimpleToolkit.SimpleShell.Playground
 #endif
             if (UsedAppShell is not AppShellType.Normal)
             {
-                builder.UseSimpleShell(false);
+                builder.UseSimpleShell(true);
             }
 
             return builder.Build();

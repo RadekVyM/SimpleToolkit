@@ -18,7 +18,7 @@ public abstract partial class BaseSimpleStackNavigationManager
         if (isCurrentPageRoot)
             AddPlatformRootPage(onTop, newPageView);
         else
-            AddViewToContainer(newPageView, navigationFrame, onTop);
+            AddToContainer(newPageView, navigationFrame, onTop);
     }
 
     protected virtual void RemovePlatformPageFromContainer(IView oldPage, IView oldShellSectionContainer, bool isCurrentPageRoot, bool isPreviousPageRoot)
@@ -42,50 +42,39 @@ public abstract partial class BaseSimpleStackNavigationManager
 
     protected private void AddPlatformRootPage(bool onTop, PlatformView newPageView)
     {
-        var container = GetPlatformView(this.rootPageContainer);
-        PlatformView sectionContainer = null;
-        NavFrame sectionNavHost = null;
+        var r = AddToContainer(this.rootPageContainer, navigationFrame, onTop);
+        var s = AddToContainer(currentShellSectionContainer, r, onTop);
+        AddToContainer(newPageView, s, onTop);
+    }
 
-        if (
-            currentShellSectionContainer is not null &&
-            GetPageContainerNavHost(currentShellSectionContainer) is NavFrame snh)
-        {
-            sectionContainer = GetPlatformView(currentShellSectionContainer);
-            sectionNavHost = snh;
-        }
+    private NavFrame AddToContainer(IView childContainer, NavFrame parentNavHost, bool onTop)
+    {
+        _ = parentNavHost ?? throw new ArgumentNullException(nameof(parentNavHost), $"{nameof(SimpleNavigationHost)} is missing");
 
-        if (container is not null &&
-            GetPageContainerNavHost(this.rootPageContainer) is NavFrame rootNavHost)
-        {
-            if (!navigationFrame.Children.Contains(container))
-                AddViewToContainer(container, navigationFrame, onTop);
+        if (childContainer is null)
+            return parentNavHost;
 
-            if (sectionContainer is not null)
-            {
-                AddViewToContainer(newPageView, sectionNavHost, onTop);
-                
-                if (!rootNavHost.Children.Contains(sectionContainer))
-                    AddViewToContainer(sectionContainer, rootNavHost, onTop);
-            }
-            else
-            {
-                AddViewToContainer(newPageView, rootNavHost, onTop);
-            }
-        }
+        var platformChildContainer = GetPlatformView(childContainer);
+
+        AddToContainer(platformChildContainer, parentNavHost, onTop);
+
+        if (GetPageContainerNavHost(childContainer) is NavFrame navHost)
+            return navHost;
+
+        return null;
+    }
+
+    private void AddToContainer(PlatformView child, NavFrame parentNavHost, bool onTop)
+    {
+        _ = parentNavHost ?? throw new ArgumentNullException(nameof(parentNavHost), $"{nameof(SimpleNavigationHost)} is missing");
+
+        if (parentNavHost.Children.Contains(child))
+            parentNavHost.Children.Remove(child);
+
+        if (onTop)
+            parentNavHost.Children.Add(child);
         else
-        {
-            if (sectionContainer is not null)
-            {
-                AddViewToContainer(newPageView, sectionNavHost, onTop);
-                
-                if (!navigationFrame.Children.Contains(sectionContainer))
-                    AddViewToContainer(sectionContainer, navigationFrame, onTop);
-            }
-            else
-            {
-                AddViewToContainer(newPageView, navigationFrame, onTop);
-            }
-        }
+            parentNavHost.Children.Insert(0, child);
     }
 
     protected virtual void ReplaceRootPageContainer(IView rootPageContainer, bool isCurrentPageRoot)
@@ -150,17 +139,6 @@ public abstract partial class BaseSimpleStackNavigationManager
 
         if (oldContainer.Parent is NavFrame parent)
             parent.Children.Remove(oldContainer);
-    }
-
-    protected private static void AddViewToContainer(PlatformView view, NavFrame container, bool onTop)
-    {
-        if (container.Children.Contains(view))
-            container.Children.Remove(view);
-
-        if (onTop)
-            container.Children.Add(view);
-        else
-            container.Children.Insert(0, view);
     }
 }
 

@@ -63,10 +63,7 @@ public abstract partial class BaseSimpleStackNavigationManager
 
         var platformChildContainer = GetPlatformView(childContainer);
 
-        if (!parentNavHost.Contains(platformChildContainer))
-            parentNavHost.AddView(platformChildContainer);
-
-        parentNavHost.BringChildToFront(onTop ? platformChildContainer : parentNavHost.GetChildAt(0));
+        AddToContainer(platformChildContainer, parentNavHost, onTop);
 
         if (GetPageContainerNavHost(childContainer) is NavFrame navHost)
             return navHost;
