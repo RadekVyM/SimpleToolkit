@@ -133,6 +133,8 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
                 destinationPage: visualCurrent,
                 originShellSectionContainer: previousShellSectionContainer as VisualElement,
                 destinationShellSectionContainer: currentShellSectionContainer as VisualElement,
+                originShellItemContainer: previousShellItemContainer as VisualElement,
+                destinationShellItemContainer: currentShellItemContainer as VisualElement,
                 shell: shell,
                 progress: progress,
                 transitionType: transitionType,
