@@ -75,6 +75,8 @@ public abstract partial class BaseSimpleStackNavigationManager
         var i = AddToContainer(currentShellItemContainer, r, onTop);
         var s = AddToContainer(currentShellSectionContainer, i, onTop);
         AddToContainer(newPageView, s, onTop);
+
+        navigationFrame.LayoutSubviews();
     }
 
     private NavFrame AddToContainer(IView childContainer, NavFrame parentNavHost, bool onTop)

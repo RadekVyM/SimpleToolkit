@@ -14,7 +14,8 @@ public partial class NativeSimpleStackNavigationManager
         IView previousShellItemContainer,
         IView previousShellSectionContainer,
         IView previousPage,
-        bool isPreviousPageRoot)
+        bool isPreviousPageRoot,
+        bool animated = true)
     {
         AddPlatformPageToContainer(currentPage, shell, false, isCurrentPageRoot: isCurrentPageRoot);
 
@@ -25,19 +26,31 @@ public partial class NativeSimpleStackNavigationManager
         var newItemContainer = GetPlatformView(currentShellItemContainer);
         var oldItemContainer = GetPlatformView(previousShellItemContainer);
 
-        var to = newItemContainer == oldItemContainer ?
-            (newSectionContainer == oldSectionContainer ?
-                newPageView :
-                newSectionContainer ?? newPageView) :
-                newItemContainer ?? newSectionContainer ?? newPageView;
-        var from = newItemContainer == oldItemContainer ?
-            (newSectionContainer == oldSectionContainer ?
-                oldPageView :
-                oldSectionContainer ?? oldPageView) :
-                oldItemContainer ?? oldSectionContainer ?? oldPageView;
+        var to = GetFirstDifferent(newItemContainer, newSectionContainer, newPageView, oldItemContainer, oldSectionContainer);
+        var from = GetFirstDifferent(oldItemContainer, oldSectionContainer, oldPageView, newItemContainer, newSectionContainer);
 
         if (from is not null)
         {
+            /*
+             to.Alpha = 0;
+
+            UIView.AnimateNotify(0.2, () =>
+            {
+                to.Alpha = 1;
+                from.Alpha = 0;
+            },
+            (finished) =>
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    if (previousPage != currentPage)
+                        RemovePlatformPageFromContainer(previousPage, previousShellItemContainer, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
+
+                    from.Alpha = 1;
+                });
+            });
+             */
+
             UIView.TransitionNotify(from, to, 0.2, UIViewAnimationOptions.TransitionCrossDissolve, (finished) =>
             {
                 MainThread.BeginInvokeOnMainThread(() =>

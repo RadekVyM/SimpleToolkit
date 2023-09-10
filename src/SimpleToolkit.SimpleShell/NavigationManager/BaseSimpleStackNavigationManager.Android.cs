@@ -37,17 +37,17 @@ public abstract partial class BaseSimpleStackNavigationManager
         if (oldPageView is null)
             return;
 
-        if (oldPageView?.Parent is ViewGroup parent)
-            parent.RemoveView(oldPageView);
-
-        if (oldShellSectionContainer is not null && currentShellSectionContainer != oldShellSectionContainer)
-            RemoveShellGroupContainer(oldShellSectionContainer);
+        if (!isCurrentPageRoot && isPreviousPageRoot && this.rootPageContainer is not null)
+            RemoveRootPageContainer(this.rootPageContainer);
 
         if (oldShellItemContainer is not null && currentShellItemContainer != oldShellItemContainer)
             RemoveShellGroupContainer(oldShellItemContainer);
 
-        if (!isCurrentPageRoot && isPreviousPageRoot && this.rootPageContainer is not null)
-            RemoveRootPageContainer(this.rootPageContainer);
+        if (oldShellSectionContainer is not null && currentShellSectionContainer != oldShellSectionContainer)
+            RemoveShellGroupContainer(oldShellSectionContainer);
+
+        if (oldPageView?.Parent is ViewGroup parent)
+            parent.RemoveView(oldPageView);
     }
 
     protected private void AddPlatformRootPage(bool onTop, PlatformView newPageView)

@@ -15,7 +15,8 @@ public partial class NativeSimpleStackNavigationManager
         IView previousShellItemContainer,
         IView previousShellSectionContainer,
         IView previousPage,
-        bool isPreviousPageRoot)
+        bool isPreviousPageRoot,
+        bool animated = true)
     {
         var newPageView = GetPlatformView(currentPage);
         var oldPageView = GetPlatformView(previousPage);
@@ -23,17 +24,9 @@ public partial class NativeSimpleStackNavigationManager
         var oldSectionContainer = GetPlatformView(previousShellSectionContainer);
         var newItemContainer = GetPlatformView(currentShellItemContainer);
         var oldItemContainer = GetPlatformView(previousShellItemContainer);
-
-        var to = newItemContainer == oldItemContainer ?
-            (newSectionContainer == oldSectionContainer ?
-                newPageView :
-                newSectionContainer ?? newPageView) :
-                newItemContainer ?? newSectionContainer ?? newPageView;
-        var from = newItemContainer == oldItemContainer ?
-            (newSectionContainer == oldSectionContainer ?
-                oldPageView :
-                oldSectionContainer ?? oldPageView) :
-                oldItemContainer ?? oldSectionContainer ?? oldPageView;
+        
+        var to = GetFirstDifferent(newItemContainer, newSectionContainer, newPageView, oldItemContainer, oldSectionContainer);
+        var from = GetFirstDifferent(oldItemContainer, oldSectionContainer, oldPageView, newItemContainer, newSectionContainer);
 
         to.Transitions = new TransitionCollection { new EntranceThemeTransition() };
 

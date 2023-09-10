@@ -1,5 +1,6 @@
 ﻿using SimpleToolkit.SimpleShell.Transitions;
 using SimpleToolkit.SimpleShell.Handlers;
+using Microsoft.Maui.Controls;
 #if ANDROID
 using NavFrame = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
 using RootContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
@@ -26,7 +27,7 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
     protected RootContainer rootContainer;
 
 
-    public NativeSimpleStackNavigationManager(IMauiContext mauiContext) : base(mauiContext) { }
+    public NativeSimpleStackNavigationManager(IMauiContext mauiContext) : base(mauiContext, true) { }
 
 
     public virtual void Connect(IStackNavigation navigationView, RootContainer rootContainer, NavFrame navigationFrame)
@@ -53,6 +54,7 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
 
     protected override async void NavigateToPage(
         SimpleShellTransitionType transitionType,
+        PresentationMode presentationMode,
         ArgsNavigationRequest args,
         SimpleShell shell,
         IReadOnlyList<IView> newPageStack,
@@ -62,25 +64,50 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
         bool isPreviousPageRoot)
     {
         var oldRootPage = NavigationStack.FirstOrDefault();
+        var newRootPage = newPageStack.FirstOrDefault();
 
         if (transitionType == SimpleShellTransitionType.Switching && isCurrentPageRoot)
         {
             HandleNewStack(newPageStack);
-            await NavigateNativelyToPageInContainer(shell, previousShellItemContainer, previousShellSectionContainer, oldRootPage, true);
+            await NavigateNativelyToPageInContainer(
+                shell,
+                previousShellItemContainer,
+                previousShellSectionContainer,
+                oldRootPage,
+                true,
+                presentationMode == PresentationMode.Animated);
             FireNavigationFinished();
             return;
+        }
+
+        if (oldRootPage != newRootPage)
+        {
+            // Navigating to a page with a different root page in its navigation stack
+            RemovePlatformPageFromContainer(oldRootPage, previousShellItemContainer, previousShellSectionContainer, true, true);
+            AddPlatformPageToContainer(newRootPage, shell, isCurrentPageRoot: true);
         }
 
         if (isCurrentPageRoot)
             SwitchPagesInContainer(shell, previousShellItemContainer, previousShellSectionContainer, oldRootPage, true);
 
-        HandleNewStack(newPageStack, !(transitionType == SimpleShellTransitionType.Switching && !isCurrentPageRoot));
+        HandleNewStack(newPageStack, !(transitionType == SimpleShellTransitionType.Switching && !isCurrentPageRoot) && presentationMode == PresentationMode.Animated);
         FireNavigationFinished();
     }
 
-    protected override void OnBackStackChanged(IReadOnlyList<IView> newPageStack)
+    protected override void OnBackStackChanged(IReadOnlyList<IView> newPageStack, SimpleShell shell)
     {
+        var oldRootPage = NavigationStack.FirstOrDefault();
+        var newRootPage = newPageStack.FirstOrDefault();
+
         HandleNewStack(newPageStack, false);
+
+        if (oldRootPage != newRootPage)
+        {
+            // Navigating to a page with a different root page in its navigation stack
+            RemovePlatformPageFromContainer(oldRootPage, currentShellItemContainer, currentShellSectionContainer, true, true);
+            AddPlatformPageToContainer(newRootPage, shell, isCurrentPageRoot: true);
+        }
+
         FireNavigationFinished();
     }
 }

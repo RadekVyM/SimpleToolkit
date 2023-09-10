@@ -20,7 +20,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 {
     public partial class SimpleStackNavigationManager : BaseSimpleStackNavigationManager
     {
-        public SimpleStackNavigationManager(IMauiContext mauiContext) : base(mauiContext) { }
+        public SimpleStackNavigationManager(IMauiContext mauiContext) : base(mauiContext, false) { }
 
 
         public virtual void Connect(IStackNavigation navigationView, NavFrame navigationFrame)
@@ -37,6 +37,7 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
 
         protected override void NavigateToPage(
             SimpleShellTransitionType transitionType,
+            PresentationMode presentationMode,
             ArgsNavigationRequest args,
             SimpleShell shell,
             IReadOnlyList<IView> newPageStack,
@@ -54,10 +55,10 @@ namespace SimpleToolkit.SimpleShell.NavigationManager
                 return;
             }
 
-            NavigateToPageInContainer(transitionType, shell, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot);
+            NavigateToPageInContainer(transitionType, presentationMode, shell, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot);
         }
         
-        protected override void OnBackStackChanged(IReadOnlyList<IView> newPageStack)
+        protected override void OnBackStackChanged(IReadOnlyList<IView> newPageStack, SimpleShell shell)
         {
             NavigationStack = newPageStack;
             FireNavigationFinished();

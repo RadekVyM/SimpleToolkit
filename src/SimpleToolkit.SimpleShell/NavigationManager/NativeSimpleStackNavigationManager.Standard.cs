@@ -9,7 +9,8 @@ public partial class NativeSimpleStackNavigationManager
         IView previousShellItemContainer,
         IView previousShellSectionContainer,
         IView previousPage,
-        bool isPreviousPageRoot)
+        bool isPreviousPageRoot,
+        bool animated = true)
     {
         throw new NotImplementedException();
     }

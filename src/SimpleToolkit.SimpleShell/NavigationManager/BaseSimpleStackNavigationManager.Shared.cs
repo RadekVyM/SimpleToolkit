@@ -23,6 +23,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
 {
     protected const string TransitionAnimationKey = nameof(SimpleShellTransition);
 
+    private readonly bool alwaysAddBackRootPageContainerWhenReplaced;
     protected IMauiContext mauiContext;
     protected NavFrame navigationFrame;
     protected IView currentPage;
@@ -35,9 +36,10 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
     public IReadOnlyList<IView> NavigationStack { get; protected set; } = new List<IView>();
 
 
-    public BaseSimpleStackNavigationManager(IMauiContext mauiContext)
+    public BaseSimpleStackNavigationManager(IMauiContext mauiContext, bool alwaysAddBackRootPageContainerWhenReplaced)
     {
         this.mauiContext = mauiContext;
+        this.alwaysAddBackRootPageContainerWhenReplaced = alwaysAddBackRootPageContainerWhenReplaced;
     }
 
 
@@ -53,7 +55,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
         if (!initialNavigation &&
             newPageStack[newPageStack.Count - 1] == previousNavigationStack[previousNavigationStackCount - 1])
         {
-            OnBackStackChanged(newPageStack);
+            OnBackStackChanged(newPageStack, shell);
             return;
         }
 
@@ -78,11 +80,16 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
         else if (previousNavigationStack.Count < newPageStack.Count)
             transitionType = SimpleShellTransitionType.Pushing;
 
-        NavigateToPage(transitionType, args, shell, newPageStack, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot);
+        var presentationMode = PresentationMode.NotAnimated;
+        if (currentPage is BindableObject bindableCurrentPage)
+            presentationMode = Shell.GetPresentationMode(bindableCurrentPage);
+
+        NavigateToPage(transitionType, presentationMode, args, shell, newPageStack, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot);
     }
 
     protected private void NavigateToPageInContainer(
         SimpleShellTransitionType transitionType,
+        PresentationMode presentationMode,
         SimpleShell shell,
         IView previousShellItemContainer,
         IView previousShellSectionContainer,
@@ -92,7 +99,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
         var transition = currentPage is VisualElement visualCurrentPage ? SimpleShell.GetTransition(visualCurrentPage) : null;
         transition ??= SimpleShell.GetTransition(shell);
 
-        if (transition is not null && currentPage is VisualElement visualCurrent && previousPage is VisualElement visualPrevious)
+        if (presentationMode == PresentationMode.Animated && transition is not null && currentPage is VisualElement visualCurrent && previousPage is VisualElement visualPrevious)
         {
             var animation = new Animation(progress =>
             {
@@ -151,6 +158,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
 
     protected abstract void NavigateToPage(
         SimpleShellTransitionType transitionType,
+        PresentationMode presentationMode,
         ArgsNavigationRequest args,
         SimpleShell shell,
         IReadOnlyList<IView> newPageStack,
@@ -159,7 +167,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
         IView previousPage,
         bool isPreviousPageRoot);
 
-    protected abstract void OnBackStackChanged(IReadOnlyList<IView> newPageStack);
+    protected abstract void OnBackStackChanged(IReadOnlyList<IView> newPageStack, SimpleShell shell);
 
     protected virtual PlatformView GetPlatformView(IView view)
     {
@@ -174,8 +182,11 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
             return;
         }
 
-        ReplaceRootPageContainer(rootPageContainer, isCurrentPageRoot);
-        this.rootPageContainer = rootPageContainer;
+        if (this.rootPageContainer != rootPageContainer)
+        {
+            ReplaceRootPageContainer(rootPageContainer, alwaysAddBackRootPageContainerWhenReplaced || isCurrentPageRoot);
+            this.rootPageContainer = rootPageContainer;
+        }
     }
 
     protected virtual object GetPageContainerNavHost(IView pageContainer)
@@ -197,5 +208,14 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
     protected private void FireNavigationFinished()
     {
         StackNavigation?.NavigationFinished(NavigationStack);
+    }
+
+    protected T GetFirstDifferent<T>(T item, T section, T page, T differentItem, T differentSection) where T : class
+    {
+        return item == differentItem ?
+            (section == differentSection ?
+                page :
+                section ?? page) :
+                item ?? section ?? page;
     }
 }

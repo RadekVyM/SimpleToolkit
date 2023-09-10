@@ -8,7 +8,7 @@ namespace SimpleToolkit.SimpleShell.Playground
 {
     public static class MauiProgram
     {
-        internal const AppShellType UsedAppShell = AppShellType.ShellItems;
+        internal const AppShellType UsedAppShell = AppShellType.Playground;
 
         public static MauiApp CreateMauiApp()
         {
