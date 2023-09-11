@@ -36,10 +36,10 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
     public IReadOnlyList<IView> NavigationStack { get; protected set; } = new List<IView>();
 
 
-    public BaseSimpleStackNavigationManager(IMauiContext mauiContext, bool alwaysAddBackRootPageContainerWhenReplaced)
+    public BaseSimpleStackNavigationManager(IMauiContext mauiContext, bool alwaysAddRootPageContainerBackWhenReplaced)
     {
         this.mauiContext = mauiContext;
-        this.alwaysAddBackRootPageContainerWhenReplaced = alwaysAddBackRootPageContainerWhenReplaced;
+        this.alwaysAddBackRootPageContainerWhenReplaced = alwaysAddRootPageContainerBackWhenReplaced;
     }
 
 
