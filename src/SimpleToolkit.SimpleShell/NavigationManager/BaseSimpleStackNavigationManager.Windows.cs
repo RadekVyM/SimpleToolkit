@@ -28,10 +28,20 @@ public abstract partial class BaseSimpleStackNavigationManager
         if (oldPageView is null)
             return;
 
-        var container = GetPlatformView(this.rootPageContainer);
-
         if (oldPageView?.Parent is NavFrame parent)
+        {
             parent.Children.Remove(oldPageView);
+        }
+        else
+        {
+            if (GetPageContainerNavHost(oldShellSectionContainer) is NavFrame sectionNavHost)
+                sectionNavHost.Children.Remove(oldPageView);
+            if (GetPageContainerNavHost(oldShellItemContainer) is NavFrame itemNavHost)
+                itemNavHost.Children.Remove(oldPageView);
+            if (GetPageContainerNavHost(this.rootPageContainer) is NavFrame rootNavHost)
+                rootNavHost.Children.Remove(oldPageView);
+            navigationFrame.Children.Remove(oldPageView);
+        }
 
         if (oldShellSectionContainer is not null && currentShellSectionContainer != oldShellSectionContainer)
             RemoveShellGroupContainer(oldShellSectionContainer);
@@ -39,8 +49,8 @@ public abstract partial class BaseSimpleStackNavigationManager
         if (oldShellItemContainer is not null && currentShellItemContainer != oldShellItemContainer)
             RemoveShellGroupContainer(oldShellItemContainer);
 
-        if (!isCurrentPageRoot && isPreviousPageRoot && container is not null)
-            RemoveRootPageContainer(container);
+        if (!isCurrentPageRoot && isPreviousPageRoot && this.rootPageContainer is not null)
+            RemoveRootPageContainer(this.rootPageContainer);
     }
 
     protected private void AddPlatformRootPage(bool onTop, PlatformView newPageView)
@@ -88,7 +98,7 @@ public abstract partial class BaseSimpleStackNavigationManager
         IList<UIElement> oldChildren = new List<UIElement>();
 
         if (oldContainer is not null)
-            oldChildren = RemoveRootPageContainer(oldContainer);
+            oldChildren = RemoveRootPageContainer(this.rootPageContainer);
 
         // Old container is being replaced or added
         if (newContainer is not null && isCurrentPageRoot)
@@ -118,11 +128,12 @@ public abstract partial class BaseSimpleStackNavigationManager
         }
     }
 
-    protected private IList<UIElement> RemoveRootPageContainer(PlatformView oldContainer)
+    protected private IList<UIElement> RemoveRootPageContainer(IView oldRootContainer)
     {
+        var oldContainer = GetPlatformView(oldRootContainer);
         var oldChildren = new List<UIElement>();
 
-        if (GetPageContainerNavHost(this.rootPageContainer) is NavFrame oldNavHost)
+        if (GetPageContainerNavHost(oldRootContainer) is NavFrame oldNavHost)
         {
             oldChildren = oldNavHost.Children.ToList();
             oldNavHost.Children.Clear();
