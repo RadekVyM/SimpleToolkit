@@ -1,9 +1,8 @@
-﻿using System;
-using SimpleToolkit.SimpleShell.Transitions;
+﻿using SimpleToolkit.SimpleShell.Transitions;
 
 namespace SimpleToolkit.SimpleShell.Extensions
 {
-	public static class SimpleShellTransitionExtensions
+    public static class SimpleShellTransitionExtensions
 	{
         /// <summary>
         /// Combines two page transitions.

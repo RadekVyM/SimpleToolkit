@@ -61,7 +61,7 @@ public partial class ImageDetailPage : ContentPage, IQueryAttributable
             duration: static args => 600u,
             easing: static args => Easing.CubicOut)
             .CombinedWith(
-                transition: SimpleShell.Current.GetTransition(),
+                transition: SimpleShell.Current.GetTransition() as SimpleShellTransition,
                 when: static args => args.TransitionType != SimpleShellTransitionType.Pushing));
     }
 

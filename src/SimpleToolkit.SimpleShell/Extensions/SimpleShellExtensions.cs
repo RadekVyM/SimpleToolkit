@@ -8,7 +8,7 @@ namespace SimpleToolkit.SimpleShell.Extensions
         /// Gets the page transition.
         /// </summary>
         /// <param name="page">Page with required transition.</param>
-        public static SimpleShellTransition GetTransition(this Page page)
+        public static ISimpleShellTransition GetTransition(this Page page)
         {
             return SimpleShell.GetTransition(page);
         }
@@ -18,7 +18,7 @@ namespace SimpleToolkit.SimpleShell.Extensions
         /// </summary>
         /// <param name="page">Destination page of a navigation with this transition.</param>
         /// <param name="transition">Transition of a navigation to the page.</param>
-        public static void SetTransition(this Page page, SimpleShellTransition transition)
+        public static void SetTransition(this Page page, ISimpleShellTransition transition)
         {
             SimpleShell.SetTransition(page, transition);
         }

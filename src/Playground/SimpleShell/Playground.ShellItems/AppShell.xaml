@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <shell:SimpleShell
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -63,28 +63,42 @@
                 Route="RedPage"/>
         </Tab>
     </TabBar>
+    
+    <ShellContent
+        Title="Blue"
+        ContentTemplate="{DataTemplate pages:BluePage}"
+        Route="BluePage"/>
+
+    <ShellContent
+        Title="Orange"
+        ContentTemplate="{DataTemplate pages:OrangePage}"
+        Route="OrangePage"/>
 
 
     <shell:SimpleShell.RootPageContainer>
         <Grid
-            RowDefinitions="*, 50">
+            RowDefinitions="*, auto">
             <shell:SimpleNavigationHost/>
-            <HorizontalStackLayout
-                x:Name="tabBar"
+            <ScrollView
                 Grid.Row="1"
-                Margin="20,5"
-                HorizontalOptions="Center" Spacing="10"
-                BindableLayout.ItemsSource="{Binding ShellContents, Source={x:Reference thisShell}}">
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate
-                        x:DataType="BaseShellItem">
-                        <Button
-                            Clicked="ShellItemButtonClicked"
-                            Background="Black"
-                            Text="{Binding Title}"/>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
-            </HorizontalStackLayout>
+                HorizontalScrollBarVisibility="Never"
+                Orientation="Horizontal">
+                <HorizontalStackLayout
+                    x:Name="tabBar"
+                    Margin="20,5"
+                    HorizontalOptions="Center" Spacing="10"
+                    BindableLayout.ItemsSource="{Binding ShellContents, Source={x:Reference thisShell}}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate
+                            x:DataType="BaseShellItem">
+                            <Button
+                                Clicked="ShellItemButtonClicked"
+                                Background="Black"
+                                Text="{Binding Title}"/>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </HorizontalStackLayout>
+            </ScrollView>
         </Grid>
     </shell:SimpleShell.RootPageContainer>
 

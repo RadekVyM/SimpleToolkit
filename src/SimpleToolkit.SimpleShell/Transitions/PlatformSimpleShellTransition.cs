@@ -1,9 +1,9 @@
 ﻿namespace SimpleToolkit.SimpleShell.Transitions;
 
-public class PlatformSimpleShellTransition
+public class PlatformSimpleShellTransition : ISimpleShellTransition
 {
 #if ANDROID
-    public Func<SimpleShellTransitionArgs, bool> SwitchingDestinationPageInFront { get; init; }
+    public Func<SimpleShellTransitionArgs, bool> DestinationPageInFrontOnSwitching { get; init; }
     public Func<SimpleShellTransitionArgs, int?> SwitchingEnterAnimation { get; init; }
     public Func<SimpleShellTransitionArgs, int?> SwitchingLeaveAnimation { get; init; }
     public Func<SimpleShellTransitionArgs, int?> PushingEnterAnimation { get; init; }

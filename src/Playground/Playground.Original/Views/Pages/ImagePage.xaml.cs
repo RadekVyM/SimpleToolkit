@@ -17,7 +17,7 @@ public partial class ImagePage : ContentPage
             duration: static args => 500u,
             easing: static args => Easing.SpringOut)
             .CombinedWith(
-                transition: SimpleShell.Current.GetTransition(),
+                transition: SimpleShell.Current.GetTransition() as SimpleShellTransition,
                 when: static args => args.TransitionType != SimpleShellTransitionType.Pushing));
     }
 

@@ -6,7 +6,7 @@ namespace SimpleToolkit.SimpleShell
 	public partial class SimpleShell
 	{
         public static readonly BindableProperty TransitionProperty =
-            BindableProperty.CreateAttached("Transition", typeof(SimpleShellTransition), typeof(Page), null);
+            BindableProperty.CreateAttached("Transition", typeof(ISimpleShellTransition), typeof(Page), null);
 
         public static readonly BindableProperty ShellGroupContainerTemplateProperty =
             BindableProperty.CreateAttached("ShellGroupContainerTemplate", typeof(DataTemplate), typeof(ShellGroupItem), null, propertyChanged: OnShellGroupContainerTemplateChanged);
@@ -14,13 +14,13 @@ namespace SimpleToolkit.SimpleShell
         public static readonly BindableProperty ShellGroupContainerProperty =
             BindableProperty.CreateAttached("ShellGroupContainer", typeof(IView), typeof(ShellGroupItem), null, propertyChanged: OnShellGroupContainerChanged);
 
-        public static SimpleShellTransition GetTransition(BindableObject item)
+        public static ISimpleShellTransition GetTransition(BindableObject item)
         {
             _ = item ?? throw new ArgumentNullException(nameof(item));
-            return (SimpleShellTransition)item.GetValue(TransitionProperty);
+            return (ISimpleShellTransition)item.GetValue(TransitionProperty);
         }
 
-        public static void SetTransition(BindableObject item, SimpleShellTransition value)
+        public static void SetTransition(BindableObject item, ISimpleShellTransition value)
         {
             _ = item ?? throw new ArgumentNullException(nameof(item));
             item.SetValue(TransitionProperty, value);

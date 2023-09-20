@@ -96,10 +96,14 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
         IView previousPage,
         bool isPreviousPageRoot)
     {
-        var transition = currentPage is VisualElement visualCurrentPage ? SimpleShell.GetTransition(visualCurrentPage) : null;
-        transition ??= SimpleShell.GetTransition(shell);
+        var pageTransition = currentPage is VisualElement visualCurrentPage ? SimpleShell.GetTransition(visualCurrentPage) : null;
+        pageTransition ??= SimpleShell.GetTransition(shell);
 
-        if (presentationMode == PresentationMode.Animated && transition is not null && currentPage is VisualElement visualCurrent && previousPage is VisualElement visualPrevious)
+        if (
+            presentationMode == PresentationMode.Animated &&
+            pageTransition is SimpleShellTransition transition &&
+            currentPage is VisualElement visualCurrent &&
+            previousPage is VisualElement visualPrevious)
         {
             var animation = new Animation(progress =>
             {

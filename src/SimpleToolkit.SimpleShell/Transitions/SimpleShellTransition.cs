@@ -3,7 +3,7 @@
 /// <summary>
 /// Page transition in <see cref="SimpleShell"/>.
 /// </summary>
-public class SimpleShellTransition
+public class SimpleShellTransition : ISimpleShellTransition
 {
     internal const uint DefaultDuration = 250;
     internal const bool DefaultDestinationPageInFrontOnSwitching = true;
