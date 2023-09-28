@@ -41,6 +41,8 @@ namespace SimpleToolkit.SimpleShell
 
         public static new SimpleShell Current => Shell.Current as SimpleShell;
 
+        public static bool UsesPlatformTransitions { get; internal set; }
+
         public virtual IView Content
         {
             get => (IView)GetValue(ContentProperty);

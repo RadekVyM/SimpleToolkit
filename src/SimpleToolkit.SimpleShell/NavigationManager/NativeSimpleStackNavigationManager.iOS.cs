@@ -3,6 +3,7 @@
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using SimpleToolkit.SimpleShell.Platform;
+using SimpleToolkit.SimpleShell.Transitions;
 using UIKit;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager;
@@ -15,9 +16,11 @@ public partial class NativeSimpleStackNavigationManager
         IView previousShellSectionContainer,
         IView previousPage,
         bool isPreviousPageRoot,
+        PlatformSimpleShellTransition transition,
+        Func<SimpleShellTransitionArgs> args,
         bool animated = true)
     {
-        AddPlatformPageToContainer(currentPage, shell, false, isCurrentPageRoot: isCurrentPageRoot);
+        AddPlatformPageToContainer(currentPage, shell, GetValue(transition, args, transition?.DestinationPageInFrontOnSwitching, false), isCurrentPageRoot: isCurrentPageRoot);
 
         var newPageView = GetPlatformView(currentPage);
         var oldPageView = GetPlatformView(previousPage);
@@ -31,40 +34,54 @@ public partial class NativeSimpleStackNavigationManager
 
         if (from is not null)
         {
-            /*
-             to.Alpha = 0;
-
-            UIView.AnimateNotify(0.2, () =>
+            if (animated)
             {
-                to.Alpha = 1;
-                from.Alpha = 0;
-            },
-            (finished) =>
-            {
-                MainThread.BeginInvokeOnMainThread(() =>
+                if (transition is null || transition?.SwitchingAnimation is null)
                 {
-                    if (previousPage != currentPage)
-                        RemovePlatformPageFromContainer(previousPage, previousShellItemContainer, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
-
-                    from.Alpha = 1;
-                });
-            });
-             */
-
-            UIView.TransitionNotify(from, to, 0.2, UIViewAnimationOptions.TransitionCrossDissolve, (finished) =>
-            {
-                MainThread.BeginInvokeOnMainThread(() =>
+                    UIView.TransitionNotify(from, to, 0.2, UIViewAnimationOptions.TransitionCrossDissolve, (finished) =>
+                    {
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            if (previousPage != currentPage)
+                                RemovePlatformPageFromContainer(previousPage, previousShellItemContainer, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
+                        });
+                    });
+                }
+                else
                 {
-                    if (previousPage != currentPage)
-                        RemovePlatformPageFromContainer(previousPage, previousShellItemContainer, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
-                });
-            });
+                    transition?.SwitchingAnimationStarting(args())?.Invoke(from, to);
+
+                    UIView.AnimateNotify(0.2, () =>
+                    {
+                        transition?.SwitchingAnimation(args())?.Invoke(from, to);
+                    },
+                    (finished) =>
+                    {
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            if (previousPage != currentPage)
+                                RemovePlatformPageFromContainer(previousPage, previousShellItemContainer, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
+
+                            transition?.SwitchingAnimationFinished(args())?.Invoke(from, to);
+                        });
+                    });
+                }
+            }
+            else
+            {
+                if (previousPage != currentPage)
+                    RemovePlatformPageFromContainer(previousPage, previousShellItemContainer, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
+            }
         }
 
         return Task.CompletedTask;
     }
 
-    protected async void HandleNewStack(IReadOnlyList<IView> newPageStack, bool animated = true)
+    protected async void HandleNewStack(
+        IReadOnlyList<IView> newPageStack,
+        PlatformSimpleShellTransition transition,
+        Func<SimpleShellTransitionArgs> args,
+        bool animated = true)
     {
         var oldPageStack = NavigationStack;
         NavigationStack = newPageStack;
@@ -76,7 +93,7 @@ public partial class NativeSimpleStackNavigationManager
             .Select(p =>
             {
                 if (p.ToHandler(mauiContext) is not PageHandler pageHandler)
-                    throw new InvalidOperationException("Handler of a page which you are navigating to is not inhereted from PageHandler");
+                    throw new InvalidOperationException("Handler of a page which you are navigating to is not inherited from PageHandler");
 
                 return pageHandler.ViewController;
             })

@@ -107,16 +107,16 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
         {
             var animation = new Animation(progress =>
             {
-                transition.Callback?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, progress));
+                transition.Callback?.Invoke(CreateArgs(progress));
             });
 
             visualPrevious.AbortAnimation(TransitionAnimationKey);
-            AddPlatformPageToContainer(currentPage, shell, ShouldBeAbove(transition, CreateArgs(visualCurrent, visualPrevious, transitionType, 0)), isCurrentPageRoot: isCurrentPageRoot);
+            AddPlatformPageToContainer(currentPage, shell, ShouldBeAbove(transition, CreateArgs(0)), isCurrentPageRoot: isCurrentPageRoot);
 
-            transition.Starting?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, 0));
+            transition.Starting?.Invoke(CreateArgs(0));
 
-            var duration = transition.Duration?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, 0)) ?? SimpleShellTransition.DefaultDuration;
-            var easing = transition.Easing?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, 0)) ?? Easing.Linear;
+            var duration = transition.Duration?.Invoke(CreateArgs(0)) ?? SimpleShellTransition.DefaultDuration;
+            var easing = transition.Easing?.Invoke(CreateArgs(0)) ?? Easing.Linear;
 
             animation.Commit(
                 visualCurrent,
@@ -126,31 +126,31 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
                 finished: (v, canceled) =>
                 {
                     RemovePlatformPageFromContainer(previousPage, previousShellItemContainer, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
-                    transition.Finished?.Invoke(CreateArgs(visualCurrent, visualPrevious, transitionType, v));
+                    transition.Finished?.Invoke(CreateArgs(v));
 
                     FireNavigationFinished();
                 });
+
+            SimpleShellTransitionArgs CreateArgs(double progress)
+            {
+                return new SimpleShellTransitionArgs(
+                    originPage: visualPrevious,
+                    destinationPage: visualCurrent,
+                    originShellSectionContainer: previousShellSectionContainer as VisualElement,
+                    destinationShellSectionContainer: currentShellSectionContainer as VisualElement,
+                    originShellItemContainer: previousShellItemContainer as VisualElement,
+                    destinationShellItemContainer: currentShellItemContainer as VisualElement,
+                    shell: shell,
+                    progress: progress,
+                    transitionType: transitionType,
+                    isOriginPageRoot: isPreviousPageRoot,
+                    isDestinationPageRoot: isCurrentPageRoot);
+            }
         }
         else
         {
             SwitchPagesInContainer(shell, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot);
             FireNavigationFinished();
-        }
-
-        SimpleShellTransitionArgs CreateArgs(VisualElement visualCurrent, VisualElement visualPrevious, SimpleShellTransitionType transitionType, double progress)
-        {
-            return new SimpleShellTransitionArgs(
-                originPage: visualPrevious,
-                destinationPage: visualCurrent,
-                originShellSectionContainer: previousShellSectionContainer as VisualElement,
-                destinationShellSectionContainer: currentShellSectionContainer as VisualElement,
-                originShellItemContainer: previousShellItemContainer as VisualElement,
-                destinationShellItemContainer: currentShellItemContainer as VisualElement,
-                shell: shell,
-                progress: progress,
-                transitionType: transitionType,
-                isOriginPageRoot: isPreviousPageRoot,
-                isDestinationPageRoot: isCurrentPageRoot);
         }
     }
 

@@ -4,6 +4,7 @@ using Android.Views.Animations;
 using AndroidX.Fragment.App;
 using Microsoft.Maui.Platform;
 using SimpleToolkit.SimpleShell.Platform;
+using SimpleToolkit.SimpleShell.Transitions;
 using AView = Android.Views.View;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager;
@@ -16,6 +17,8 @@ public partial class NativeSimpleStackNavigationManager
         IView previousShellSectionContainer,
         IView previousPage,
         bool isPreviousPageRoot,
+        PlatformSimpleShellTransition transition,
+        Func<SimpleShellTransitionArgs> args,
         bool animated = true)
     {
         var newPageView = GetPlatformView(currentPage);
@@ -28,44 +31,38 @@ public partial class NativeSimpleStackNavigationManager
         var to = GetFirstDifferent(newItemContainer, newSectionContainer, newPageView, oldItemContainer, oldSectionContainer);
         var from = GetFirstDifferent(oldItemContainer, oldSectionContainer, oldPageView, newItemContainer, newSectionContainer);
 
-        to?.Animation?.Cancel();
-        to?.ClearAnimation();
-        from?.Animation?.Cancel();
-        from?.ClearAnimation();
+        ClearAnimations(oldPageView, oldSectionContainer, oldItemContainer, to, from);
 
-        if (oldPageView?.Parent is Android.Views.ViewGroup pageVg)
-            pageVg.ClearDisappearingChildren();
-        if (oldSectionContainer?.Parent is Android.Views.ViewGroup sectionVg)
-            sectionVg.ClearDisappearingChildren();
-        if (oldItemContainer?.Parent is Android.Views.ViewGroup itemVg)
-            itemVg.ClearDisappearingChildren();
-
-        AddPlatformPageToContainer(currentPage, shell, false, isCurrentPageRoot: isCurrentPageRoot);
+        AddPlatformPageToContainer(currentPage, shell, GetValue(transition, args, transition?.DestinationPageInFrontOnSwitching, false), isCurrentPageRoot: isCurrentPageRoot);
 
         if (from is not null)
         {
-            var enterAnimation = AnimationUtils.LoadAnimation(mauiContext.Context, Resource.Animation.simpleshell_fade_in);
-            var leaveAnimation = AnimationUtils.LoadAnimation(mauiContext.Context, Resource.Animation.simpleshell_fade_out);
-            var noneAnimation = AnimationUtils.LoadAnimation(mauiContext.Context, Resource.Animation.simpleshell_none);
+            if (animated)
+            {
+                var context = mauiContext.Context;
+                var enterAnimation = AnimationUtils.LoadAnimation(context, GetValue(transition, args, transition?.SwitchingEnterAnimation, Resource.Animation.simpleshell_fade_in));
+                var leaveAnimation = AnimationUtils.LoadAnimation(context, GetValue(transition, args, transition?.SwitchingLeaveAnimation, Resource.Animation.simpleshell_fade_out));
+                var noneAnimation = AnimationUtils.LoadAnimation(context, Resource.Animation.simpleshell_none);
 
-            noneAnimation.Duration = leaveAnimation.Duration;
+                noneAnimation.Duration = leaveAnimation.Duration;
 
-            to.Visibility = Android.Views.ViewStates.Invisible;
+                to.Visibility = Android.Views.ViewStates.Invisible;
 
-            // The delay is needed to play the animation, but ideally it should not be
-            await Task.Delay(10).ConfigureAwait(true);
+                // The delay is needed to play the animation, but ideally it should not be
+                await Task.Delay(10).ConfigureAwait(true);
 
-            to.StartAnimation(enterAnimation);
-            from.StartAnimation(leaveAnimation);
-            to.Visibility = Android.Views.ViewStates.Visible;
-            from.Visibility = Android.Views.ViewStates.Visible;
+                to.StartAnimation(enterAnimation);
+                from.StartAnimation(leaveAnimation);
+                to.Visibility = Android.Views.ViewStates.Visible;
+                from.Visibility = Android.Views.ViewStates.Visible;
 
-            if (from != oldPageView)
-                oldPageView?.StartAnimation(noneAnimation);
-            if (from != oldSectionContainer)
-                oldSectionContainer?.StartAnimation(noneAnimation);
-            if (from != oldItemContainer)
-                oldItemContainer?.StartAnimation(noneAnimation);
+                if (from != oldPageView)
+                    oldPageView?.StartAnimation(noneAnimation);
+                if (from != oldSectionContainer)
+                    oldSectionContainer?.StartAnimation(noneAnimation);
+                if (from != oldItemContainer)
+                    oldItemContainer?.StartAnimation(noneAnimation);
+            }
 
             // Animation is played even if the view is removed from its container in the meantime
             // The view is moved to a disappearing children collection of the container
@@ -74,7 +71,11 @@ public partial class NativeSimpleStackNavigationManager
         }
     }
 
-    protected void HandleNewStack(IReadOnlyList<IView> newPageStack, bool animated = true)
+    protected void HandleNewStack(
+        IReadOnlyList<IView> newPageStack,
+        PlatformSimpleShellTransition transition,
+        Func<SimpleShellTransitionArgs> args,
+        bool animated = true)
     {
         var isRootNavigation = newPageStack.Count == 1 && NavigationStack.Count == 1;
         var switchFragments = (NavigationStack.Count == 0) ||
@@ -99,8 +100,12 @@ public partial class NativeSimpleStackNavigationManager
             var shouldPop = ShouldPop(newPageStack, oldPageStack);
 
             transaction.SetCustomAnimations(
-                shouldPop ? Resource.Animation.simpleshell_none : Resource.Animation.simpleshell_enter_right,
-                shouldPop ? Resource.Animation.simpleshell_exit_right : Resource.Animation.simpleshell_none);
+                shouldPop ?
+                    GetValue(transition, args, transition?.PoppingEnterAnimation, Resource.Animation.simpleshell_none) :
+                    GetValue(transition, args, transition?.PushingEnterAnimation, Resource.Animation.simpleshell_enter_right),
+                shouldPop ?
+                    GetValue(transition, args, transition?.PoppingLeaveAnimation, Resource.Animation.simpleshell_exit_right) :
+                    GetValue(transition, args, transition?.PushingLeaveAnimation, Resource.Animation.simpleshell_none));
         }
         transaction.Replace(rootContainer.Id, fragment);
         transaction.Commit();
@@ -128,6 +133,21 @@ public partial class NativeSimpleStackNavigationManager
 
         return (lastSame is null && oldPageStack.Count > 0 && newPageStack[0] != oldPageStack[0])
             || lastSame == newPageStack[newPageStack.Count - 1];
+    }
+
+    private static void ClearAnimations(AView oldPageView, AView oldSectionContainer, AView oldItemContainer, AView to, AView from)
+    {
+        to?.Animation?.Cancel();
+        to?.ClearAnimation();
+        from?.Animation?.Cancel();
+        from?.ClearAnimation();
+
+        if (oldPageView?.Parent is Android.Views.ViewGroup pageVg)
+            pageVg.ClearDisappearingChildren();
+        if (oldSectionContainer?.Parent is Android.Views.ViewGroup sectionVg)
+            sectionVg.ClearDisappearingChildren();
+        if (oldItemContainer?.Parent is Android.Views.ViewGroup itemVg)
+            itemVg.ClearDisappearingChildren();
     }
 }
 

@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Media.Animation;
 using ContentPresenter = Microsoft.UI.Xaml.Controls.ContentPresenter;
 using HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment;
 using VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment;
+using SimpleToolkit.SimpleShell.Transitions;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager;
 
@@ -16,6 +17,8 @@ public partial class NativeSimpleStackNavigationManager
         IView previousShellSectionContainer,
         IView previousPage,
         bool isPreviousPageRoot,
+        PlatformSimpleShellTransition transition,
+        Func<SimpleShellTransitionArgs> args,
         bool animated = true)
     {
         var newPageView = GetPlatformView(currentPage);
@@ -40,7 +43,11 @@ public partial class NativeSimpleStackNavigationManager
             RemovePlatformPageFromContainer(previousPage, previousShellItemContainer, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
     }
 
-    protected void HandleNewStack(IReadOnlyList<IView> newPageStack, bool animated = true)
+    protected void HandleNewStack(
+        IReadOnlyList<IView> newPageStack,
+        PlatformSimpleShellTransition transition,
+        Func<SimpleShellTransitionArgs> args,
+        bool animated = true)
     {
         var isRootNavigation = newPageStack.Count == 1 && NavigationStack.Count == 1;
         var switchFragments = (NavigationStack.Count == 0) ||

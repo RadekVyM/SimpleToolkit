@@ -75,6 +75,7 @@
         Route="OrangePage"/>
 
 
+    <!-- TODO: Grid or something is broken again on iOS. The auto option does not work. I had to set MinimumHeightRequest to the stacklayout -->
     <shell:SimpleShell.RootPageContainer>
         <Grid
             RowDefinitions="*, auto">
@@ -87,6 +88,7 @@
                     x:Name="tabBar"
                     Margin="20,5"
                     HorizontalOptions="Center" Spacing="10"
+                    MinimumHeightRequest="40"
                     BindableLayout.ItemsSource="{Binding ShellContents, Source={x:Reference thisShell}}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate

@@ -65,17 +65,23 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
     {
         var oldRootPage = NavigationStack.FirstOrDefault();
         var newRootPage = newPageStack.FirstOrDefault();
+        var animated = presentationMode == PresentationMode.Animated;
+        var pageTransition = currentPage is VisualElement visualCurrentPage ? SimpleShell.GetTransition(visualCurrentPage) : null;
+        pageTransition ??= SimpleShell.GetTransition(shell);
+        var transition = pageTransition is PlatformSimpleShellTransition pt ? pt : null;
 
         if (transitionType == SimpleShellTransitionType.Switching && isCurrentPageRoot)
         {
-            HandleNewStack(newPageStack);
+            HandleNewStack(newPageStack, transition, CreateArgs);
             await NavigateNativelyToPageInContainer(
                 shell,
                 previousShellItemContainer,
                 previousShellSectionContainer,
                 oldRootPage,
                 true,
-                presentationMode == PresentationMode.Animated);
+                transition,
+                CreateArgs,
+                animated);
             FireNavigationFinished();
             return;
         }
@@ -90,8 +96,25 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
         if (isCurrentPageRoot)
             SwitchPagesInContainer(shell, previousShellItemContainer, previousShellSectionContainer, oldRootPage, true);
 
-        HandleNewStack(newPageStack, !(transitionType == SimpleShellTransitionType.Switching && !isCurrentPageRoot) && presentationMode == PresentationMode.Animated);
+        HandleNewStack(newPageStack, transition, CreateArgs, !(transitionType == SimpleShellTransitionType.Switching && !isCurrentPageRoot) && animated);
         FireNavigationFinished();
+
+
+        SimpleShellTransitionArgs CreateArgs()
+        {
+            return new SimpleShellTransitionArgs(
+                originPage: currentPage as VisualElement,
+                destinationPage: previousPage as VisualElement,
+                originShellSectionContainer: previousShellSectionContainer as VisualElement,
+                destinationShellSectionContainer: currentShellSectionContainer as VisualElement,
+                originShellItemContainer: previousShellItemContainer as VisualElement,
+                destinationShellItemContainer: currentShellItemContainer as VisualElement,
+                shell: shell,
+                progress: 0,
+                transitionType: transitionType,
+                isOriginPageRoot: isPreviousPageRoot,
+                isDestinationPageRoot: isCurrentPageRoot);
+        }
     }
 
     protected override void OnBackStackChanged(IReadOnlyList<IView> newPageStack, SimpleShell shell)
@@ -99,7 +122,7 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
         var oldRootPage = NavigationStack.FirstOrDefault();
         var newRootPage = newPageStack.FirstOrDefault();
 
-        HandleNewStack(newPageStack, false);
+        HandleNewStack(newPageStack, null, null, false);
 
         if (oldRootPage != newRootPage)
         {
@@ -109,5 +132,17 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
         }
 
         FireNavigationFinished();
+    }
+
+    private static T GetValue<T>(
+        PlatformSimpleShellTransition transition,
+        Func<SimpleShellTransitionArgs> args,
+        Func<SimpleShellTransitionArgs, T> value,
+        T defaultValue)
+    {
+        if (transition is null || value is null)
+            return defaultValue;
+
+        return value(args());
     }
 }

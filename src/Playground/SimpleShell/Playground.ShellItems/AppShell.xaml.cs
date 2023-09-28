@@ -2,6 +2,7 @@
 using SimpleToolkit.SimpleShell;
 using SimpleToolkit.SimpleShell.Transitions;
 using SimpleToolkit.SimpleShell.Extensions;
+using Playground.Core;
 
 namespace Playground.ShellItems;
 
@@ -17,64 +18,38 @@ public partial class AppShell : SimpleShell
 
         InitializeComponent();
 
-        this.SetTransition(
-            callback: static args =>
+        if (SimpleShell.UsesPlatformTransitions)
+        {
+            this.SetTransition(new PlatformSimpleShellTransition
             {
-                switch (args.TransitionType)
+#if ANDROID
+                SwitchingEnterAnimation = static (args) => Resource.Animation.simpleshell_enter_right,
+                SwitchingLeaveAnimation = static (args) => Resource.Animation.simpleshell_exit_left,
+                PushingEnterAnimation = static (args) => Resource.Animation.simpleshell_enter_right,
+                PushingLeaveAnimation = static (args) => Resource.Animation.simpleshell_exit_left,
+                PoppingEnterAnimation = static (args) => Resource.Animation.simpleshell_enter_left,
+                PoppingLeaveAnimation = static (args) => Resource.Animation.simpleshell_exit_right,
+#elif IOS || MACCATALYST
+                SwitchingAnimation = static (args) => static (from, to) =>
                 {
-                    case SimpleShellTransitionType.Switching:
-                        if (args.OriginShellSectionContainer == args.DestinationShellSectionContainer)
-                        {
-                            // Navigatating within the same ShellSection
-                            args.OriginPage.Opacity = 1 - args.Progress;
-                            args.DestinationPage.Opacity = args.Progress;
-                        }
-                        else
-                        {
-                            // Navigatating between different ShellSections
-                            (args.OriginShellSectionContainer ?? args.OriginPage).Opacity = 1 - args.Progress;
-                            (args.DestinationShellSectionContainer ?? args.DestinationPage).Opacity = args.Progress;
-                        }
-                        break;
-                    case SimpleShellTransitionType.Pushing:
-                        // Hide the page until it is fully measured
-                        args.DestinationPage.Opacity = args.DestinationPage.Width < 0 ? 0.01 : 1;
-                        // Slide the page in from right
-                        args.DestinationPage.TranslationX = (1 - args.Progress) * args.DestinationPage.Width;
-                        break;
-                    case SimpleShellTransitionType.Popping:
-                        // Slide the page out to right
-                        args.OriginPage.TranslationX = args.Progress * args.OriginPage.Width;
-                        break;
+                    from.Alpha = 0;
+                    to.Alpha = 1;
+                },
+                SwitchingAnimationStarting = static (args) => static (from, to) =>
+                {
+                    to.Alpha = 0;
+                },
+                SwitchingAnimationFinished = static (args) => static (from, to) =>
+                {
+                    from.Alpha = 1;
                 }
-            },
-            finished: static args =>
-            {
-                args.OriginPage.Opacity = 1;
-                args.OriginPage.TranslationX = 0;
-                args.DestinationPage.Opacity = 1;
-                args.DestinationPage.TranslationX = 0;
-                if (args.OriginShellSectionContainer is not null)
-                    args.OriginShellSectionContainer.Opacity = 1;
-                if (args.DestinationShellSectionContainer is not null)
-                    args.DestinationShellSectionContainer.Opacity = 1;
-            },
-            destinationPageInFront: static args => args.TransitionType switch
-            {
-                SimpleShellTransitionType.Popping => false,
-                _ => true
-            },
-            duration: static args => args.TransitionType switch
-            {
-                SimpleShellTransitionType.Switching => 300u,
-                _ => 200u
-            },
-            easing: static args => args.TransitionType switch
-            {
-                SimpleShellTransitionType.Pushing => Easing.SinIn,
-                SimpleShellTransitionType.Popping => Easing.SinOut,
-                _ => Easing.Linear
+#endif
             });
+        }
+        else
+        {
+            this.SetTransition(Transitions.DefaultCustomTransition);
+        }
     }
 
     protected override void OnNavigated(ShellNavigatedEventArgs args)
