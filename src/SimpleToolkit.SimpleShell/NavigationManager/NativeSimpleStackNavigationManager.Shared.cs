@@ -66,20 +66,17 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
         var oldRootPage = NavigationStack.FirstOrDefault();
         var newRootPage = newPageStack.FirstOrDefault();
         var animated = presentationMode == PresentationMode.Animated;
-        var pageTransition = currentPage is VisualElement visualCurrentPage ? SimpleShell.GetTransition(visualCurrentPage) : null;
-        pageTransition ??= SimpleShell.GetTransition(shell);
-        var transition = pageTransition is PlatformSimpleShellTransition pt ? pt : null;
 
         if (transitionType == SimpleShellTransitionType.Switching && isCurrentPageRoot)
         {
-            HandleNewStack(newPageStack, transition, CreateArgs);
+            HandleNewStack(newPageStack, GetTransition, CreateArgs);
             await NavigateNativelyToPageInContainer(
                 shell,
                 previousShellItemContainer,
                 previousShellSectionContainer,
                 oldRootPage,
                 true,
-                transition,
+                GetTransition,
                 CreateArgs,
                 animated);
             FireNavigationFinished();
@@ -96,15 +93,20 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
         if (isCurrentPageRoot)
             SwitchPagesInContainer(shell, previousShellItemContainer, previousShellSectionContainer, oldRootPage, true);
 
-        HandleNewStack(newPageStack, transition, CreateArgs, !(transitionType == SimpleShellTransitionType.Switching && !isCurrentPageRoot) && animated);
+        HandleNewStack(newPageStack, GetTransition, CreateArgs, !(transitionType == SimpleShellTransitionType.Switching && !isCurrentPageRoot) && animated);
         FireNavigationFinished();
 
+
+        PlatformSimpleShellTransition GetTransition(IView page)
+        {
+            return NativeSimpleStackNavigationManager.GetTransition(page, shell);
+        }
 
         SimpleShellTransitionArgs CreateArgs()
         {
             return new SimpleShellTransitionArgs(
-                originPage: currentPage as VisualElement,
-                destinationPage: previousPage as VisualElement,
+                originPage: previousPage as VisualElement,
+                destinationPage: currentPage as VisualElement,
                 originShellSectionContainer: previousShellSectionContainer as VisualElement,
                 destinationShellSectionContainer: currentShellSectionContainer as VisualElement,
                 originShellItemContainer: previousShellItemContainer as VisualElement,
@@ -122,7 +124,7 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
         var oldRootPage = NavigationStack.FirstOrDefault();
         var newRootPage = newPageStack.FirstOrDefault();
 
-        HandleNewStack(newPageStack, null, null, false);
+        HandleNewStack(newPageStack, GetTransition, null, false);
 
         if (oldRootPage != newRootPage)
         {
@@ -132,6 +134,18 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
         }
 
         FireNavigationFinished();
+
+        PlatformSimpleShellTransition GetTransition(IView page)
+        {
+            return NativeSimpleStackNavigationManager.GetTransition(page, shell);
+        }
+    }
+
+    private static PlatformSimpleShellTransition GetTransition(IView page, SimpleShell shell)
+    {
+        var pageTransition = page is VisualElement visualCurrentPage ? SimpleShell.GetTransition(visualCurrentPage) : null;
+        pageTransition ??= SimpleShell.GetTransition(shell);
+        return pageTransition is PlatformSimpleShellTransition pt ? pt : null;
     }
 
     private static T GetValue<T>(
@@ -143,6 +157,17 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
         if (transition is null || value is null)
             return defaultValue;
 
-        return value(args());
+        return value(args?.Invoke());
+    }
+
+    private static T GetValue<T>(
+        PlatformSimpleShellTransition transition,
+        Func<T> value,
+        T defaultValue)
+    {
+        if (transition is null || value is null)
+            return defaultValue;
+
+        return value();
     }
 }

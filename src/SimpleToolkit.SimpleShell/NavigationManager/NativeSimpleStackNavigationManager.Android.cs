@@ -17,10 +17,11 @@ public partial class NativeSimpleStackNavigationManager
         IView previousShellSectionContainer,
         IView previousPage,
         bool isPreviousPageRoot,
-        PlatformSimpleShellTransition transition,
+        Func<IView, PlatformSimpleShellTransition> pageTransition,
         Func<SimpleShellTransitionArgs> args,
         bool animated = true)
     {
+        var transition = pageTransition(currentPage);
         var newPageView = GetPlatformView(currentPage);
         var oldPageView = GetPlatformView(previousPage);
         var newSectionContainer = GetPlatformView(currentShellSectionContainer);
@@ -73,10 +74,11 @@ public partial class NativeSimpleStackNavigationManager
 
     protected void HandleNewStack(
         IReadOnlyList<IView> newPageStack,
-        PlatformSimpleShellTransition transition,
+        Func<IView, PlatformSimpleShellTransition> pageTransition,
         Func<SimpleShellTransitionArgs> args,
         bool animated = true)
     {
+        var transition = pageTransition(currentPage);
         var isRootNavigation = newPageStack.Count == 1 && NavigationStack.Count == 1;
         var switchFragments = (NavigationStack.Count == 0) ||
             (!isRootNavigation && newPageStack[newPageStack.Count - 1] != NavigationStack[NavigationStack.Count - 1]);

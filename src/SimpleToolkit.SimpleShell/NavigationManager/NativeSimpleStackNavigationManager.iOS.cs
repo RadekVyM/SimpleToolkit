@@ -1,10 +1,12 @@
 ﻿#if IOS || MACCATALYST
 
+using Microsoft.Maui.Controls;
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using SimpleToolkit.SimpleShell.Platform;
 using SimpleToolkit.SimpleShell.Transitions;
 using UIKit;
+using static System.TimeZoneInfo;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager;
 
@@ -16,12 +18,11 @@ public partial class NativeSimpleStackNavigationManager
         IView previousShellSectionContainer,
         IView previousPage,
         bool isPreviousPageRoot,
-        PlatformSimpleShellTransition transition,
+        Func<IView, PlatformSimpleShellTransition> pageTransition,
         Func<SimpleShellTransitionArgs> args,
         bool animated = true)
     {
-        AddPlatformPageToContainer(currentPage, shell, GetValue(transition, args, transition?.DestinationPageInFrontOnSwitching, false), isCurrentPageRoot: isCurrentPageRoot);
-
+        var transition = pageTransition(currentPage);
         var newPageView = GetPlatformView(currentPage);
         var oldPageView = GetPlatformView(previousPage);
         var newSectionContainer = GetPlatformView(currentShellSectionContainer);
@@ -31,6 +32,8 @@ public partial class NativeSimpleStackNavigationManager
 
         var to = GetFirstDifferent(newItemContainer, newSectionContainer, newPageView, oldItemContainer, oldSectionContainer);
         var from = GetFirstDifferent(oldItemContainer, oldSectionContainer, oldPageView, newItemContainer, newSectionContainer);
+
+        AddPlatformPageToContainer(currentPage, shell, GetValue(transition, args, transition?.DestinationPageInFrontOnSwitching, false), isCurrentPageRoot: isCurrentPageRoot);
 
         if (from is not null)
         {
@@ -51,7 +54,7 @@ public partial class NativeSimpleStackNavigationManager
                 {
                     transition?.SwitchingAnimationStarting(args())?.Invoke(from, to);
 
-                    UIView.AnimateNotify(0.2, () =>
+                    UIView.AnimateNotify(GetValue(transition, args, transition?.SwitchingAnimationDuration, 0.2d), () =>
                     {
                         transition?.SwitchingAnimation(args())?.Invoke(from, to);
                     },
@@ -79,7 +82,7 @@ public partial class NativeSimpleStackNavigationManager
 
     protected async void HandleNewStack(
         IReadOnlyList<IView> newPageStack,
-        PlatformSimpleShellTransition transition,
+        Func<IView, PlatformSimpleShellTransition> pageTransition,
         Func<SimpleShellTransitionArgs> args,
         bool animated = true)
     {
@@ -100,8 +103,27 @@ public partial class NativeSimpleStackNavigationManager
             .Prepend(root)
             .ToArray();
 
-        await controller.HandleNewStack(newControllers, animated);
+        await controller.HandleNewStack(
+            newControllers,
+            GetTransitionPairs(newPageStack, pageTransition),
+            animated);
         DisconnectHandlers(oldPageStack.Skip(1).Except(newPageStack));
+    }
+
+    private NativeSimpleShellControllerTransitionPair[] GetTransitionPairs(
+        IReadOnlyList<IView> newPageStack,
+        Func<IView, PlatformSimpleShellTransition> pageTransition)
+    {
+        return newPageStack
+            .Select(page =>
+            {
+                var transition = pageTransition?.Invoke(page);
+
+                return new NativeSimpleShellControllerTransitionPair(
+                    GetValue(transition, transition?.PushingAnimation, null),
+                    GetValue(transition, transition?.PoppingAnimation, null));
+            })
+            .ToArray();
     }
 
     protected static void DisconnectHandlers(IEnumerable<IView> pageStack)

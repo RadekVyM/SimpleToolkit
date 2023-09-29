@@ -8,12 +8,16 @@ namespace SimpleToolkit.SimpleShell.Platform;
 
 // Based on https://github.com/dotnet/maui/blob/main/src/Controls/src/Core/Compatibility/Handlers/Shell/iOS/ShellSectionRenderer.cs
 
+public record NativeSimpleShellControllerTransitionPair(IUIViewControllerAnimatedTransitioning PushingTransition, IUIViewControllerAnimatedTransitioning PoppingTransition);
+
 public class NativeSimpleShellSectionController : UINavigationController
 {
     private SimpleShell shell;
     private TaskCompletionSource<bool> popCompletionTask;
     private Dictionary<UIViewController, TaskCompletionSource<bool>> completionTasks =
         new Dictionary<UIViewController, TaskCompletionSource<bool>>();
+    private Dictionary<UIViewController, NativeSimpleShellControllerTransitionPair> transitions =
+        new Dictionary<UIViewController, NativeSimpleShellControllerTransitionPair>();
     private bool disposed;
 
 
@@ -28,9 +32,11 @@ public class NativeSimpleShellSectionController : UINavigationController
     }
 
 
-    public async Task HandleNewStack(UIViewController[] stack, bool animated)
+    public async Task HandleNewStack(UIViewController[] stack, NativeSimpleShellControllerTransitionPair[] newTransitions, bool animated)
     {
         var lastInStack = stack[stack.Length - 1];
+
+        UpdateTransitions(stack, newTransitions);
 
         if (ViewControllers[ViewControllers.Length - 1] == lastInStack)
         {
@@ -113,6 +119,16 @@ public class NativeSimpleShellSectionController : UINavigationController
         ViewControllers = newViewControllers;
     }
 
+    private void UpdateTransitions(UIViewController[] viewControllers, NativeSimpleShellControllerTransitionPair[] newTransitions)
+    {
+        transitions.Clear();
+
+        for (int i = 0; i < viewControllers.Length; i++)
+        {
+            transitions[viewControllers[i]] = newTransitions[i];
+        }
+    }
+
     private async void SendPoppedOnCompletion(Task<bool> popTask)
     {
         if (popTask is null)
@@ -160,9 +176,9 @@ public class NativeSimpleShellSectionController : UINavigationController
     {
         readonly NativeSimpleShellSectionController self;
 
-        public NavDelegate(NativeSimpleShellSectionController renderer)
+        public NavDelegate(NativeSimpleShellSectionController controller)
         {
-            self = renderer;
+            self = controller;
         }
 
         // This is currently working around a Mono Interpreter bug
@@ -172,6 +188,16 @@ public class NativeSimpleShellSectionController : UINavigationController
         [Foundation.Preserve(Conditional = true)]
         public new IUIViewControllerAnimatedTransitioning GetAnimationControllerForOperation(UINavigationController navigationController, UINavigationControllerOperation operation, UIViewController fromViewController, UIViewController toViewController)
         {
+            var transitions = self.transitions;
+
+            if (transitions.TryGetValue(toViewController, out var transition))
+            {
+                return operation switch
+                {
+                    UINavigationControllerOperation.Pop => transition.PoppingTransition,
+                    _ => transition.PushingTransition,
+                };
+            }
             return null;
         }
 

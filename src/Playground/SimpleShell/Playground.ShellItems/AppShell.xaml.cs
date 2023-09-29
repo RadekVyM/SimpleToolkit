@@ -3,6 +3,10 @@ using SimpleToolkit.SimpleShell;
 using SimpleToolkit.SimpleShell.Transitions;
 using SimpleToolkit.SimpleShell.Extensions;
 using Playground.Core;
+#if IOS || MACCATALYST
+using CoreGraphics;
+using Foundation;
+#endif
 
 namespace Playground.ShellItems;
 
@@ -30,6 +34,7 @@ public partial class AppShell : SimpleShell
                 PoppingEnterAnimation = static (args) => Resource.Animation.simpleshell_enter_left,
                 PoppingLeaveAnimation = static (args) => Resource.Animation.simpleshell_exit_right,
 #elif IOS || MACCATALYST
+                SwitchingAnimationDuration = static (args) => 0.6,
                 SwitchingAnimation = static (args) => static (from, to) =>
                 {
                     from.Alpha = 0;
@@ -42,7 +47,9 @@ public partial class AppShell : SimpleShell
                 SwitchingAnimationFinished = static (args) => static (from, to) =>
                 {
                     from.Alpha = 1;
-                }
+                },
+                PushingAnimation = static () => new AppleTransition(true),
+                PoppingAnimation = static () => new AppleTransition(false),
 #endif
             });
         }
@@ -76,3 +83,69 @@ public partial class AppShell : SimpleShell
         await GoToAsync("..");
     }
 }
+
+#if IOS || MACCATALYST
+
+public class AppleTransition : NSObject, UIKit.IUIViewControllerAnimatedTransitioning
+{
+    private readonly bool pushing;
+
+    public AppleTransition(bool pushing)
+    {
+        this.pushing = pushing;
+    }
+
+    public void AnimateTransition(UIKit.IUIViewControllerContextTransitioning transitionContext)
+    {
+        var fromView = transitionContext.GetViewFor(UIKit.UITransitionContext.FromViewKey);
+        var toView = transitionContext.GetViewFor(UIKit.UITransitionContext.ToViewKey);
+        var duration = TransitionDuration(transitionContext);
+
+        var container = transitionContext.ContainerView;
+
+        if (pushing)
+            container.AddSubview(toView);
+        else
+            container.InsertSubviewBelow(toView, fromView);
+
+        var toViewFrame = toView.Frame;
+        toView.Frame = new CGRect(x: pushing ? toView.Frame.Width : -toView.Frame.Width, y: toView.Frame.Location.Y, width: toView.Frame.Width, height: toView.Frame.Height);
+
+        var animations = () =>
+        {
+            UIKit.UIView.AddKeyframeWithRelativeStartTime(0.0, 0.5, () =>
+            {
+                toView.Alpha = 1;
+                if (pushing)
+                    fromView.Alpha = 0;
+            });
+            UIKit.UIView.AddKeyframeWithRelativeStartTime(0.0, 1, () =>
+            {
+                toView.Frame = toViewFrame;
+                fromView.Frame = new CGRect(x: pushing ? -fromView.Frame.Width : fromView.Frame.Width, y: fromView.Frame.Location.Y, width: fromView.Frame.Width, height: fromView.Frame.Height);
+                if (!pushing)
+                    fromView.Alpha = 0;
+            });
+        };
+
+        UIKit.UIView.AnimateKeyframes(
+            duration,
+            0,
+            UIKit.UIViewKeyframeAnimationOptions.CalculationModeCubic,
+            animations,
+            (finished) =>
+            {
+                container.AddSubview(toView);
+                transitionContext.CompleteTransition(!transitionContext.TransitionWasCancelled);
+                fromView.Alpha = 1;
+                toView.Alpha = 1;
+            });
+    }
+
+    public double TransitionDuration(UIKit.IUIViewControllerContextTransitioning transitionContext)
+    {
+        return 0.3;
+    }
+}
+
+#endif

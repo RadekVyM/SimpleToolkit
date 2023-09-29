@@ -17,7 +17,7 @@ public partial class NativeSimpleStackNavigationManager
         IView previousShellSectionContainer,
         IView previousPage,
         bool isPreviousPageRoot,
-        PlatformSimpleShellTransition transition,
+        Func<IView, PlatformSimpleShellTransition> pageTransition,
         Func<SimpleShellTransitionArgs> args,
         bool animated = true)
     {
@@ -45,7 +45,7 @@ public partial class NativeSimpleStackNavigationManager
 
     protected void HandleNewStack(
         IReadOnlyList<IView> newPageStack,
-        PlatformSimpleShellTransition transition,
+        Func<IView, PlatformSimpleShellTransition> pageTransition,
         Func<SimpleShellTransitionArgs> args,
         bool animated = true)
     {

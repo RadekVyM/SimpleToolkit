@@ -18,9 +18,12 @@ public class PlatformSimpleShellTransition : ISimpleShellTransition
     public delegate void TransitionAnimation(UIKit.UIView from, UIKit.UIView to);
 
     public Func<SimpleShellTransitionArgs, bool> DestinationPageInFrontOnSwitching { get; init; }
+    public Func<SimpleShellTransitionArgs, double> SwitchingAnimationDuration { get; init; }
     public Func<SimpleShellTransitionArgs, TransitionAnimation> SwitchingAnimation { get; init; }
     public Func<SimpleShellTransitionArgs, TransitionAnimation> SwitchingAnimationStarting { get; init; }
     public Func<SimpleShellTransitionArgs, TransitionAnimation> SwitchingAnimationFinished { get; init; }
+    public Func<UIKit.IUIViewControllerAnimatedTransitioning> PushingAnimation { get; init; }
+    public Func<UIKit.IUIViewControllerAnimatedTransitioning> PoppingAnimation { get; init; }
 
     public PlatformSimpleShellTransition()
 	{
