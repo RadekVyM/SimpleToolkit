@@ -13,7 +13,7 @@ public partial class NativeSimpleShellSectionHandler
     {
         CreateNavigationManager();
 
-        var root = new WFrame { IsNavigationStackEnabled = false };
+        var root = new WFrame { IsNavigationStackEnabled = true };
         RootContentContainer = new WGrid();
 
         return root;

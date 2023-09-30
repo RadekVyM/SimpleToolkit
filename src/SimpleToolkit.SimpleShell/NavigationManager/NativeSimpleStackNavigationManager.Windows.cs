@@ -2,6 +2,7 @@
 
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media.Animation;
+using Microsoft.UI.Xaml.Navigation;
 using ContentPresenter = Microsoft.UI.Xaml.Controls.ContentPresenter;
 using HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment;
 using VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment;
@@ -21,22 +22,30 @@ public partial class NativeSimpleStackNavigationManager
         Func<SimpleShellTransitionArgs> args,
         bool animated = true)
     {
+        var transition = pageTransition(currentPage);
         var newPageView = GetPlatformView(currentPage);
         var oldPageView = GetPlatformView(previousPage);
         var newSectionContainer = GetPlatformView(currentShellSectionContainer);
         var oldSectionContainer = GetPlatformView(previousShellSectionContainer);
         var newItemContainer = GetPlatformView(currentShellItemContainer);
         var oldItemContainer = GetPlatformView(previousShellItemContainer);
-        
+
         var to = GetFirstDifferent(newItemContainer, newSectionContainer, newPageView, oldItemContainer, oldSectionContainer);
         var from = GetFirstDifferent(oldItemContainer, oldSectionContainer, oldPageView, newItemContainer, newSectionContainer);
 
-        to.Transitions = new TransitionCollection { new EntranceThemeTransition() };
+        ClearTransitions(newPageView, newSectionContainer, newItemContainer);
+        
+        var switchingTransition = GetValue(transition, args, transition?.SwitchingAnimation, new EntranceThemeTransition());
+
+        if (animated && switchingTransition is not null)
+            to.Transitions = new TransitionCollection { switchingTransition };
+        else
+            to.Transitions = new TransitionCollection { };
 
         // Here we go again 😶
         // The delay is needed to play the animation, but ideally it should not be
         await Task.Delay(10);
-        
+
         AddPlatformPageToContainer(currentPage, shell, true, isCurrentPageRoot: isCurrentPageRoot);
 
         if (from is not null && previousPage != currentPage)
@@ -49,6 +58,7 @@ public partial class NativeSimpleStackNavigationManager
         Func<SimpleShellTransitionArgs> args,
         bool animated = true)
     {
+        var transition = pageTransition(currentPage);
         var isRootNavigation = newPageStack.Count == 1 && NavigationStack.Count == 1;
         var switchFragments = (NavigationStack.Count == 0) ||
             (!isRootNavigation && newPageStack[newPageStack.Count - 1] != NavigationStack[NavigationStack.Count - 1]);
@@ -62,14 +72,31 @@ public partial class NativeSimpleStackNavigationManager
             navigationFrame :
             GetPlatformView(newPageStack[newPageStack.Count - 1]);
 
-        var transition = animated ?
-            new SlideNavigationTransitionInfo()
-            {
-                Effect = ShouldPop(newPageStack, oldPageStack) ? SlideNavigationTransitionEffect.FromLeft : SlideNavigationTransitionEffect.FromRight
-            } :
+        var shouldPop = ShouldPop(newPageStack, oldPageStack);
+        var defaultTransitionInfo = new SlideNavigationTransitionInfo()
+        {
+            Effect = SlideNavigationTransitionEffect.FromRight
+        };
+
+        var transitionInfo = animated ?
+            (shouldPop ?
+                GetValue(transition, args, transition?.PoppingAnimation, defaultTransitionInfo) :
+                GetValue(transition, args, transition?.PushingAnimation, defaultTransitionInfo)) :
             null;
         var destinationPageType = GetDestinationPageType();
-        rootContainer.Navigate(destinationPageType, platformView, transition);
+
+        if (shouldPop)
+        {
+            rootContainer.BackStack.Insert(0, new PageStackEntry(destinationPageType, platformView, transitionInfo));
+            rootContainer.GoBack(transitionInfo);
+        }
+        else
+        {
+            rootContainer.Navigate(destinationPageType, platformView, transitionInfo);
+        }
+
+        rootContainer.BackStack.Clear();
+        rootContainer.ForwardStack.Clear();
     }
 
     protected virtual Type GetDestinationPageType() =>
@@ -132,6 +159,16 @@ public partial class NativeSimpleStackNavigationManager
 
         return (lastSame is null && oldPageStack.Count > 0 && newPageStack[0] != oldPageStack[0])
             || lastSame == newPageStack[newPageStack.Count - 1];
+    }
+
+    private static void ClearTransitions(FrameworkElement newPageView, FrameworkElement newSectionContainer, FrameworkElement newItemContainer)
+    {
+        if (newPageView is not null)
+            newPageView.Transitions = new TransitionCollection { };
+        if (newSectionContainer is not null)
+            newSectionContainer.Transitions = new TransitionCollection { };
+        if (newItemContainer is not null)
+            newItemContainer.Transitions = new TransitionCollection { };
     }
 }
 

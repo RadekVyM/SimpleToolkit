@@ -14,6 +14,7 @@ public class PlatformSimpleShellTransition : ISimpleShellTransition
     public PlatformSimpleShellTransition()
 	{
 	}
+
 #elif IOS || MACCATALYST
     public delegate void TransitionAnimation(UIKit.UIView from, UIKit.UIView to);
 
@@ -28,9 +29,14 @@ public class PlatformSimpleShellTransition : ISimpleShellTransition
     public PlatformSimpleShellTransition()
 	{
 	}
+
 #elif WINDOWS
+    public Func<SimpleShellTransitionArgs, Microsoft.UI.Xaml.Media.Animation.EntranceThemeTransition> SwitchingAnimation { get; init; }
+    public Func<SimpleShellTransitionArgs, Microsoft.UI.Xaml.Media.Animation.NavigationTransitionInfo> PushingAnimation { get; init; }
+    public Func<SimpleShellTransitionArgs, Microsoft.UI.Xaml.Media.Animation.NavigationTransitionInfo> PoppingAnimation { get; init; }
+
 	public PlatformSimpleShellTransition()
-	{
-	}
+    {
+    }
 #endif
 }

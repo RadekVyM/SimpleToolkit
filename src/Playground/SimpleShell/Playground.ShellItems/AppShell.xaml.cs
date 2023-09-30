@@ -50,6 +50,10 @@ public partial class AppShell : SimpleShell
                 },
                 PushingAnimation = static () => new AppleTransition(true),
                 PoppingAnimation = static () => new AppleTransition(false),
+#elif WINDOWS
+                SwitchingAnimation = static (args) => new Microsoft.UI.Xaml.Media.Animation.EntranceThemeTransition { FromVerticalOffset = -50 },
+                PushingAnimation = static (args) => new Microsoft.UI.Xaml.Media.Animation.DrillInNavigationTransitionInfo(),
+                PoppingAnimation = static (args) => new Microsoft.UI.Xaml.Media.Animation.EntranceNavigationTransitionInfo(),
 #endif
             });
         }
