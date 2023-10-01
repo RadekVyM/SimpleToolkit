@@ -1,7 +1,6 @@
 ﻿#if ANDROID
 
 using Android.Views.Animations;
-using AndroidX.Fragment.App;
 using Microsoft.Maui.Platform;
 using SimpleToolkit.SimpleShell.Platform;
 using SimpleToolkit.SimpleShell.Transitions;
@@ -9,9 +8,11 @@ using AView = Android.Views.View;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager;
 
-public partial class NativeSimpleStackNavigationManager
+public partial class PlatformSimpleStackNavigationManager
 {
-    protected async Task NavigateNativelyToPageInContainer(
+    private SimpleFragment currentFragment;
+
+    protected async Task NavigateWithPlatformTransitionToPageInContainer(
         SimpleShell shell,
         IView previousShellItemContainer,
         IView previousShellSectionContainer,
@@ -57,6 +58,7 @@ public partial class NativeSimpleStackNavigationManager
                 to.Visibility = Android.Views.ViewStates.Visible;
                 from.Visibility = Android.Views.ViewStates.Visible;
 
+                // Make sure that all the disappearing containers stay visible
                 if (from != oldPageView)
                     oldPageView?.StartAnimation(noneAnimation);
                 if (from != oldSectionContainer)
@@ -88,10 +90,21 @@ public partial class NativeSimpleStackNavigationManager
         if (!switchFragments)
             return;
 
+        var previousFragment = currentFragment;
+        var shouldPop = ShouldPop(newPageStack, oldPageStack);
+        var destinationPageInFront =
+            shouldPop ?
+                GetValue(transition, args, transition?.DestinationPageInFrontOnPopping, false) :
+                GetValue(transition, args, transition?.DestinationPageInFrontOnPushing, true);
+
         var platformView = isCurrentPageRoot ?
             navigationFrame :
             GetPlatformView(newPageStack[newPageStack.Count - 1]);
-        var fragment = CreateFragment(platformView);
+        currentFragment = CreateFragment(platformView);
+
+        if (previousFragment is not null)
+            previousFragment.OnTop = !destinationPageInFront;
+        currentFragment.OnTop = destinationPageInFront;
 
         var fragmentManager = mauiContext.Context.GetFragmentManager();
         var transaction = fragmentManager.BeginTransaction();
@@ -99,8 +112,6 @@ public partial class NativeSimpleStackNavigationManager
         transaction.SetReorderingAllowed(true);
         if (animated)
         {
-            var shouldPop = ShouldPop(newPageStack, oldPageStack);
-
             transaction.SetCustomAnimations(
                 shouldPop ?
                     GetValue(transition, args, transition?.PoppingEnterAnimation, Resource.Animation.simpleshell_none) :
@@ -109,11 +120,11 @@ public partial class NativeSimpleStackNavigationManager
                     GetValue(transition, args, transition?.PoppingLeaveAnimation, Resource.Animation.simpleshell_exit_right) :
                     GetValue(transition, args, transition?.PushingLeaveAnimation, Resource.Animation.simpleshell_none));
         }
-        transaction.Replace(rootContainer.Id, fragment);
+        transaction.Replace(rootContainer.Id, currentFragment);
         transaction.Commit();
     }
 
-    private static Fragment CreateFragment(AView view)
+    private static SimpleFragment CreateFragment(AView view)
     {
         if (view.Parent is Android.Views.ViewGroup vg)
             vg.RemoveView(view);

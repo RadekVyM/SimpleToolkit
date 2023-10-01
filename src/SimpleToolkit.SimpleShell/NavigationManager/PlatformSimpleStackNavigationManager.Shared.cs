@@ -1,6 +1,5 @@
 ﻿using SimpleToolkit.SimpleShell.Transitions;
 using SimpleToolkit.SimpleShell.Handlers;
-using Microsoft.Maui.Controls;
 #if ANDROID
 using NavFrame = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
 using RootContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
@@ -22,12 +21,12 @@ using PlatformView = System.Object;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager;
 
-public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigationManager, ISimpleStackNavigationManager
+public partial class PlatformSimpleStackNavigationManager : BaseSimpleStackNavigationManager, ISimpleStackNavigationManager
 {
     protected RootContainer rootContainer;
 
 
-    public NativeSimpleStackNavigationManager(IMauiContext mauiContext) : base(mauiContext, true) { }
+    public PlatformSimpleStackNavigationManager(IMauiContext mauiContext) : base(mauiContext, true) { }
 
 
     public virtual void Connect(IStackNavigation navigationView, RootContainer rootContainer, NavFrame navigationFrame)
@@ -70,7 +69,7 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
         if (transitionType == SimpleShellTransitionType.Switching && isCurrentPageRoot)
         {
             HandleNewStack(newPageStack, GetTransition, CreateArgs);
-            await NavigateNativelyToPageInContainer(
+            await NavigateWithPlatformTransitionToPageInContainer(
                 shell,
                 previousShellItemContainer,
                 previousShellSectionContainer,
@@ -99,7 +98,7 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
 
         PlatformSimpleShellTransition GetTransition(IView page)
         {
-            return NativeSimpleStackNavigationManager.GetTransition(page, shell);
+            return PlatformSimpleStackNavigationManager.GetTransition(page, shell);
         }
 
         SimpleShellTransitionArgs CreateArgs()
@@ -137,7 +136,7 @@ public partial class NativeSimpleStackNavigationManager : BaseSimpleStackNavigat
 
         PlatformSimpleShellTransition GetTransition(IView page)
         {
-            return NativeSimpleStackNavigationManager.GetTransition(page, shell);
+            return PlatformSimpleStackNavigationManager.GetTransition(page, shell);
         }
     }
 

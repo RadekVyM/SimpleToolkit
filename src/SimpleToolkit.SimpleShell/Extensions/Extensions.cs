@@ -1,55 +1,54 @@
-﻿namespace SimpleToolkit.SimpleShell.Extensions
+﻿namespace SimpleToolkit.SimpleShell.Extensions;
+
+internal static class ElementExtensions
 {
-    internal static class ElementExtensions
+    public static SimpleNavigationHost FindSimpleNavigationHost(this IView view)
     {
-        public static SimpleNavigationHost FindSimpleNavigationHost(this IView view)
-        {
-            if (view is null)
-                return null;
-
-            switch (view)
-            {
-                case SimpleNavigationHost navigationHost:
-                    return navigationHost;
-                case IBindableLayout layout:
-                    foreach (var child in layout.Children)
-                    {
-                        var found = FindSimpleNavigationHost(child as IView);
-                        if (found is not null)
-                            return found;
-                    }
-                    break;
-                case IContentView contenView:
-                    return FindSimpleNavigationHost(contenView.Content as IView);
-            }
-
+        if (view is null)
             return null;
+
+        switch (view)
+        {
+            case SimpleNavigationHost navigationHost:
+                return navigationHost;
+            case IBindableLayout layout:
+                foreach (var child in layout.Children)
+                {
+                    var found = FindSimpleNavigationHost(child as IView);
+                    if (found is not null)
+                        return found;
+                }
+                break;
+            case IContentView contenView:
+                return FindSimpleNavigationHost(contenView.Content as IView);
         }
 
-        public static T FindParentOfType<T>(this Element element, bool includeThis = false)
-            where T : IElement
+        return null;
+    }
+
+    public static T FindParentOfType<T>(this Element element, bool includeThis = false)
+        where T : IElement
+    {
+        if (includeThis && element is T view)
+            return view;
+
+        foreach (var parent in element.GetParentsPath())
         {
-            if (includeThis && element is T view)
-                return view;
-
-            foreach (var parent in element.GetParentsPath())
-            {
-                if (parent is T parentView)
-                    return parentView;
-            }
-
-            return default;
+            if (parent is T parentView)
+                return parentView;
         }
 
-        public static IEnumerable<Element> GetParentsPath(this Element self)
-        {
-            Element current = self;
+        return default;
+    }
 
-            while (!(current.RealParent == null || current.RealParent is IApplication))
-            {
-                current = current.RealParent;
-                yield return current;
-            }
+    public static IEnumerable<Element> GetParentsPath(this Element self)
+    {
+        Element current = self;
+
+        while (!(current.RealParent == null || current.RealParent is IApplication))
+        {
+            current = current.RealParent;
+            yield return current;
         }
     }
 }

@@ -6,7 +6,7 @@ using UIKit;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 
-public partial class NativeSimpleShellSectionHandler
+public partial class PlatformSimpleShellSectionHandler
 {
     public UIViewController RootContentController { get; private set; }
     public UINavigationController ViewController { get; private set; }
@@ -22,7 +22,7 @@ public partial class NativeSimpleShellSectionHandler
         };
 
         var shell = VirtualView.FindParentOfType<SimpleShell>();
-        var navigationController = new NativeSimpleShellSectionController(RootContentController, shell);
+        var navigationController = new PlatformSimpleShellSectionController(RootContentController, shell);
 
         ViewController = navigationController;
         AddToParentController(navigationController);

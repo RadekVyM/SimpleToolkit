@@ -12,17 +12,17 @@ using PageContainer = System.Object;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 
-public partial class NativeSimpleShellSectionHandler : BaseSimpleShellSectionHandler<PageContainer>
+public partial class PlatformSimpleShellSectionHandler : BaseSimpleShellSectionHandler<PageContainer>
 {
-    private new NativeSimpleStackNavigationManager navigationManager => base.navigationManager as NativeSimpleStackNavigationManager;
+    private new PlatformSimpleStackNavigationManager navigationManager => base.navigationManager as PlatformSimpleStackNavigationManager;
 
 
-    public NativeSimpleShellSectionHandler(IPropertyMapper mapper, CommandMapper commandMapper)
+    public PlatformSimpleShellSectionHandler(IPropertyMapper mapper, CommandMapper commandMapper)
         : base(mapper ?? Mapper, commandMapper ?? CommandMapper)
     {
     }
 
-    public NativeSimpleShellSectionHandler() : base(Mapper, CommandMapper)
+    public PlatformSimpleShellSectionHandler() : base(Mapper, CommandMapper)
     {
     }
 
@@ -58,5 +58,5 @@ public partial class NativeSimpleShellSectionHandler : BaseSimpleShellSectionHan
     }
 
     protected override ISimpleStackNavigationManager CreateNavigationManager() =>
-        base.navigationManager ??= new NativeSimpleStackNavigationManager(MauiContext ?? throw new InvalidOperationException("MauiContext cannot be null"));
+        base.navigationManager ??= new PlatformSimpleStackNavigationManager(MauiContext ?? throw new InvalidOperationException("MauiContext cannot be null"));
 }

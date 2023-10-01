@@ -16,64 +16,51 @@ using NavFrame = System.Object;
 using PlatformView = System.Object;
 #endif
 
-namespace SimpleToolkit.SimpleShell.NavigationManager
+namespace SimpleToolkit.SimpleShell.NavigationManager;
+
+public partial class SimpleStackNavigationManager : BaseSimpleStackNavigationManager
 {
-    public partial class SimpleStackNavigationManager : BaseSimpleStackNavigationManager
+    public SimpleStackNavigationManager(IMauiContext mauiContext) : base(mauiContext, false) { }
+
+
+    public virtual void Connect(IStackNavigation navigationView, NavFrame navigationFrame)
     {
-        public SimpleStackNavigationManager(IMauiContext mauiContext) : base(mauiContext, false) { }
+        this.navigationFrame = navigationFrame;
+        StackNavigation = navigationView;
+    }
 
+    public virtual void Disconnect(IStackNavigation navigationView, NavFrame navigationFrame)
+    {
+        this.navigationFrame = null;
+        StackNavigation = null;
+    }
 
-        public virtual void Connect(IStackNavigation navigationView, NavFrame navigationFrame)
+    protected override void NavigateToPage(
+        SimpleShellTransitionType transitionType,
+        PresentationMode presentationMode,
+        ArgsNavigationRequest args,
+        SimpleShell shell,
+        IReadOnlyList<IView> newPageStack,
+        IView previousShellItemContainer,
+        IView previousShellSectionContainer,
+        IView previousPage,
+        bool isPreviousPageRoot)
+    {
+        NavigationStack = newPageStack;
+
+        if (args.RequestType == NavigationRequestType.Remove || args.RequestType == NavigationRequestType.Insert)
         {
-            this.navigationFrame = navigationFrame;
-            StackNavigation = navigationView;
-        }
-
-        public virtual void Disconnect(IStackNavigation navigationView, NavFrame navigationFrame)
-        {
-            this.navigationFrame = null;
-            StackNavigation = null;
-        }
-
-        protected override void NavigateToPage(
-            SimpleShellTransitionType transitionType,
-            PresentationMode presentationMode,
-            ArgsNavigationRequest args,
-            SimpleShell shell,
-            IReadOnlyList<IView> newPageStack,
-            IView previousShellItemContainer,
-            IView previousShellSectionContainer,
-            IView previousPage,
-            bool isPreviousPageRoot)
-        {
-            NavigationStack = newPageStack;
-
-            if (args.RequestType == NavigationRequestType.Remove || args.RequestType == NavigationRequestType.Insert)
-            {
-                SwitchPagesInContainer(shell, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot);
-                FireNavigationFinished();
-                return;
-            }
-
-            NavigateToPageInContainer(transitionType, presentationMode, shell, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot);
-        }
-        
-        protected override void OnBackStackChanged(IReadOnlyList<IView> newPageStack, SimpleShell shell)
-        {
-            NavigationStack = newPageStack;
+            SwitchPagesInContainer(shell, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot);
             FireNavigationFinished();
+            return;
         }
 
-        private int GetChildrenCount()
-        {
-#if ANDROID
-            return navigationFrame.ChildCount;
-#elif IOS || MACCATALYST
-            return navigationFrame.Subviews.Length;
-#elif WINDOWS
-            return navigationFrame.Children.Count;
-#endif
-            return 0;
-        }
+        NavigateToPageInContainer(transitionType, presentationMode, shell, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot);
+    }
+    
+    protected override void OnBackStackChanged(IReadOnlyList<IView> newPageStack, SimpleShell shell)
+    {
+        NavigationStack = newPageStack;
+        FireNavigationFinished();
     }
 }

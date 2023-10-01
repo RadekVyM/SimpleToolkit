@@ -5,7 +5,7 @@ using WFrame = Microsoft.UI.Xaml.Controls.Frame;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 
-public partial class NativeSimpleShellSectionHandler
+public partial class PlatformSimpleShellSectionHandler
 {
     protected WGrid RootContentContainer { get; private set; }
 

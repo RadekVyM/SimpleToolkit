@@ -4,9 +4,9 @@ using SimpleToolkit.SimpleShell.Transitions;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager;
 
-public partial class NativeSimpleStackNavigationManager
+public partial class PlatformSimpleStackNavigationManager
 {
-    protected Task NavigateNativelyToPageInContainer(
+    protected Task NavigateWithPlatformTransitionToPageInContainer(
         SimpleShell shell,
         IView previousShellItemContainer,
         IView previousShellSectionContainer,

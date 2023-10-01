@@ -22,6 +22,7 @@ public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener
     private bool isAnimating = false;
     private float previousZIndex = 0f;
 
+    public bool OnTop { get; set; }
     public event EventHandler AnimationFinished;
 
 
@@ -79,10 +80,10 @@ public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener
         if (result is AnimationSet set)
             set.Animations[0].SetAnimationListener(this);
 
-        if (nextAnim != Resource.Animation.simpleshell_none)
+        if (OnTop)
         {
             previousZIndex = ViewCompat.GetTranslationZ(View);
-            ViewCompat.SetTranslationZ(View, 10f);
+            ViewCompat.SetTranslationZ(View, 1000f);
         }
 
         return result;

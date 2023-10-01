@@ -1,18 +1,16 @@
 ﻿#if IOS || MACCATALYST
 
-using Microsoft.Maui.Controls;
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using SimpleToolkit.SimpleShell.Platform;
 using SimpleToolkit.SimpleShell.Transitions;
 using UIKit;
-using static System.TimeZoneInfo;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager;
 
-public partial class NativeSimpleStackNavigationManager
+public partial class PlatformSimpleStackNavigationManager
 {
-    protected Task NavigateNativelyToPageInContainer(
+    protected Task NavigateWithPlatformTransitionToPageInContainer(
         SimpleShell shell,
         IView previousShellItemContainer,
         IView previousShellSectionContainer,
@@ -38,43 +36,9 @@ public partial class NativeSimpleStackNavigationManager
         if (from is not null)
         {
             if (animated)
-            {
-                if (transition is null || transition?.SwitchingAnimation is null)
-                {
-                    UIView.TransitionNotify(from, to, 0.2, UIViewAnimationOptions.TransitionCrossDissolve, (finished) =>
-                    {
-                        MainThread.BeginInvokeOnMainThread(() =>
-                        {
-                            if (previousPage != currentPage)
-                                RemovePlatformPageFromContainer(previousPage, previousShellItemContainer, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
-                        });
-                    });
-                }
-                else
-                {
-                    transition?.SwitchingAnimationStarting(args())?.Invoke(from, to);
-
-                    UIView.AnimateNotify(GetValue(transition, args, transition?.SwitchingAnimationDuration, 0.2d), () =>
-                    {
-                        transition?.SwitchingAnimation(args())?.Invoke(from, to);
-                    },
-                    (finished) =>
-                    {
-                        MainThread.BeginInvokeOnMainThread(() =>
-                        {
-                            if (previousPage != currentPage)
-                                RemovePlatformPageFromContainer(previousPage, previousShellItemContainer, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
-
-                            transition?.SwitchingAnimationFinished(args())?.Invoke(from, to);
-                        });
-                    });
-                }
-            }
-            else
-            {
-                if (previousPage != currentPage)
-                    RemovePlatformPageFromContainer(previousPage, previousShellItemContainer, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
-            }
+                SwitchPlatformPages(from, to, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot, args, transition);
+            else if (previousPage != currentPage)
+                RemovePlatformPageFromContainer(previousPage, previousShellItemContainer, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
         }
 
         return Task.CompletedTask;
@@ -88,7 +52,7 @@ public partial class NativeSimpleStackNavigationManager
     {
         var oldPageStack = NavigationStack;
         NavigationStack = newPageStack;
-        var controller = rootContainer.NextResponder as NativeSimpleShellSectionController;
+        var controller = rootContainer.NextResponder as PlatformSimpleShellSectionController;
         var root = navigationFrame.NextResponder as UIViewController;
 
         var newControllers = newPageStack
@@ -110,7 +74,50 @@ public partial class NativeSimpleStackNavigationManager
         DisconnectHandlers(oldPageStack.Skip(1).Except(newPageStack));
     }
 
-    private NativeSimpleShellControllerTransitionPair[] GetTransitionPairs(
+    private void SwitchPlatformPages(
+        UIView from,
+        UIView to,
+        IView previousShellItemContainer,
+        IView previousShellSectionContainer,
+        IView previousPage,
+        bool isPreviousPageRoot,
+        Func<SimpleShellTransitionArgs> args,
+        PlatformSimpleShellTransition transition)
+    {
+        if (transition is null || transition?.SwitchingAnimation is null)
+        {
+            // Default transition
+            UIView.TransitionNotify(from, to, 0.2, UIViewAnimationOptions.TransitionCrossDissolve, (finished) =>
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    if (previousPage != currentPage)
+                        RemovePlatformPageFromContainer(previousPage, previousShellItemContainer, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
+                });
+            });
+        }
+        else
+        {
+            transition?.SwitchingAnimationStarting(args())?.Invoke(from, to);
+
+            UIView.AnimateNotify(GetValue(transition, args, transition?.SwitchingAnimationDuration, 0.2d), () =>
+            {
+                transition?.SwitchingAnimation(args())?.Invoke(from, to);
+            },
+            (finished) =>
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    if (previousPage != currentPage)
+                        RemovePlatformPageFromContainer(previousPage, previousShellItemContainer, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
+
+                    transition?.SwitchingAnimationFinished(args())?.Invoke(from, to);
+                });
+            });
+        }
+    }
+
+    private static PlatformSimpleShellControllerTransitionPair[] GetTransitionPairs(
         IReadOnlyList<IView> newPageStack,
         Func<IView, PlatformSimpleShellTransition> pageTransition)
     {
@@ -119,7 +126,7 @@ public partial class NativeSimpleStackNavigationManager
             {
                 var transition = pageTransition?.Invoke(page);
 
-                return new NativeSimpleShellControllerTransitionPair(
+                return new PlatformSimpleShellControllerTransitionPair(
                     GetValue(transition, transition?.PushingAnimation, null),
                     GetValue(transition, transition?.PoppingAnimation, null));
             })

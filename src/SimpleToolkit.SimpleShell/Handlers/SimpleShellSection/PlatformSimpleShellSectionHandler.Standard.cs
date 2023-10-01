@@ -2,7 +2,7 @@
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 
-public partial class NativeSimpleShellSectionHandler
+public partial class PlatformSimpleShellSectionHandler
 {
     protected System.Object RootContentContainer => throw new NotImplementedException();
 

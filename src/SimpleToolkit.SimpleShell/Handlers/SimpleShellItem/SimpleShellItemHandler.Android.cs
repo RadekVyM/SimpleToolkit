@@ -4,28 +4,25 @@ using Microsoft.Maui.Controls.Platform.Compatibility;
 using Microsoft.Maui.Handlers;
 using AView = Android.Views.View;
 
-namespace SimpleToolkit.SimpleShell.Handlers
+namespace SimpleToolkit.SimpleShell.Handlers;
+
+public partial class SimpleShellItemHandler : ElementHandler<ShellItem, CustomFrameLayout>
 {
-    public partial class SimpleShellItemHandler : ElementHandler<ShellItem, CustomFrameLayout>
+    protected override CustomFrameLayout CreatePlatformElement()
     {
-        protected override CustomFrameLayout CreatePlatformElement()
+        return new CustomFrameLayout(MauiContext.Context)
         {
-            shellSectionContainer = new CustomFrameLayout(MauiContext.Context)
-            {
-                Id = AView.GenerateViewId()
-            };
+            Id = AView.GenerateViewId()
+        };
+    }
 
-            return shellSectionContainer;
-        }
-
-        private void UpdateShellSectionContainerContent()
+    private void UpdatePlatformViewContent()
+    {
+        if (currentShellSectionHandler.PlatformView != PlatformView.GetChildAt(0))
         {
-            if (currentShellSectionHandler.PlatformView != shellSectionContainer.GetChildAt(0))
-            {
-                shellSectionContainer.RemoveAllViews();
-                if (currentShellSectionHandler.PlatformView is not null)
-                    shellSectionContainer.AddView(currentShellSectionHandler.PlatformView);
-            }
+            PlatformView.RemoveAllViews();
+            if (currentShellSectionHandler.PlatformView is not null)
+                PlatformView.AddView(currentShellSectionHandler.PlatformView);
         }
     }
 }

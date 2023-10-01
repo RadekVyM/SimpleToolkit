@@ -10,11 +10,11 @@ public partial class SimpleShellSectionHandler
     protected override CustomFrameLayout CreatePlatformElement()
     {
         CreateNavigationManager();
-        var container = new CustomFrameLayout(MauiContext.Context)
+
+        return new CustomFrameLayout(MauiContext.Context)
         {
             Id = AView.GenerateViewId()
         };
-        return container;
     }
 }
 

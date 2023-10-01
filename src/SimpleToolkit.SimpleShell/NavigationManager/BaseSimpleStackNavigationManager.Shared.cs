@@ -23,7 +23,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
 {
     protected const string TransitionAnimationKey = nameof(SimpleShellTransition);
 
-    private readonly bool alwaysAddBackRootPageContainerWhenReplaced;
+    private readonly bool alwaysAddRootPageContainerBackWhenReplaced;
     protected IMauiContext mauiContext;
     protected NavFrame navigationFrame;
     protected IView currentPage;
@@ -39,7 +39,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
     public BaseSimpleStackNavigationManager(IMauiContext mauiContext, bool alwaysAddRootPageContainerBackWhenReplaced)
     {
         this.mauiContext = mauiContext;
-        this.alwaysAddBackRootPageContainerWhenReplaced = alwaysAddRootPageContainerBackWhenReplaced;
+        this.alwaysAddRootPageContainerBackWhenReplaced = alwaysAddRootPageContainerBackWhenReplaced;
     }
 
 
@@ -188,7 +188,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
 
         if (this.rootPageContainer != rootPageContainer)
         {
-            ReplaceRootPageContainer(rootPageContainer, alwaysAddBackRootPageContainerWhenReplaced || isCurrentPageRoot);
+            ReplaceRootPageContainer(rootPageContainer, alwaysAddRootPageContainerBackWhenReplaced || isCurrentPageRoot);
             this.rootPageContainer = rootPageContainer;
         }
     }

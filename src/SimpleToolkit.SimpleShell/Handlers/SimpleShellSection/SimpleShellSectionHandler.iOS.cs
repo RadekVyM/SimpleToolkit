@@ -8,8 +8,8 @@ namespace SimpleToolkit.SimpleShell.Handlers;
 
 public partial class SimpleShellSectionHandler
 {
-    public UIViewController ContentController { get; private set; }
-    public UIViewController ViewController { get; private set; }
+    public UIViewController ContentController { get; protected set; }
+    public UIViewController ViewController { get; protected set; }
 
     protected override UIView CreatePlatformElement()
     {

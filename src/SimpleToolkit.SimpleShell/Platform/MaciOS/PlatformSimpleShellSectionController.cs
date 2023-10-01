@@ -8,23 +8,23 @@ namespace SimpleToolkit.SimpleShell.Platform;
 
 // Based on https://github.com/dotnet/maui/blob/main/src/Controls/src/Core/Compatibility/Handlers/Shell/iOS/ShellSectionRenderer.cs
 
-public record NativeSimpleShellControllerTransitionPair(IUIViewControllerAnimatedTransitioning PushingTransition, IUIViewControllerAnimatedTransitioning PoppingTransition);
+public record PlatformSimpleShellControllerTransitionPair(IUIViewControllerAnimatedTransitioning PushingTransition, IUIViewControllerAnimatedTransitioning PoppingTransition);
 
-public class NativeSimpleShellSectionController : UINavigationController
+public class PlatformSimpleShellSectionController : UINavigationController
 {
     private SimpleShell shell;
     private TaskCompletionSource<bool> popCompletionTask;
     private Dictionary<UIViewController, TaskCompletionSource<bool>> completionTasks =
         new Dictionary<UIViewController, TaskCompletionSource<bool>>();
-    private Dictionary<UIViewController, NativeSimpleShellControllerTransitionPair> transitions =
-        new Dictionary<UIViewController, NativeSimpleShellControllerTransitionPair>();
+    private Dictionary<UIViewController, PlatformSimpleShellControllerTransitionPair> transitions =
+        new Dictionary<UIViewController, PlatformSimpleShellControllerTransitionPair>();
     private bool disposed;
 
 
-    public NativeSimpleShellSectionController(UIViewController rootViewController, SimpleShell shell)
+    public PlatformSimpleShellSectionController(UIViewController rootViewController, SimpleShell shell)
         : base(rootViewController)
     {
-        Delegate = new NavDelegate(this);
+        Delegate = new ControllerDelegate(this);
 
         this.NavigationBarHidden = true;
         this.ToolbarHidden = true;
@@ -32,7 +32,7 @@ public class NativeSimpleShellSectionController : UINavigationController
     }
 
 
-    public async Task HandleNewStack(UIViewController[] stack, NativeSimpleShellControllerTransitionPair[] newTransitions, bool animated)
+    public async Task HandleNewStack(UIViewController[] stack, PlatformSimpleShellControllerTransitionPair[] newTransitions, bool animated)
     {
         var lastInStack = stack[stack.Length - 1];
 
@@ -119,7 +119,7 @@ public class NativeSimpleShellSectionController : UINavigationController
         ViewControllers = newViewControllers;
     }
 
-    private void UpdateTransitions(UIViewController[] viewControllers, NativeSimpleShellControllerTransitionPair[] newTransitions)
+    private void UpdateTransitions(UIViewController[] viewControllers, PlatformSimpleShellControllerTransitionPair[] newTransitions)
     {
         transitions.Clear();
 
@@ -172,11 +172,11 @@ public class NativeSimpleShellSectionController : UINavigationController
         }
     }
 
-    class NavDelegate : UINavigationControllerDelegate
+    class ControllerDelegate : UINavigationControllerDelegate
     {
-        readonly NativeSimpleShellSectionController self;
+        readonly PlatformSimpleShellSectionController self;
 
-        public NavDelegate(NativeSimpleShellSectionController controller)
+        public ControllerDelegate(PlatformSimpleShellSectionController controller)
         {
             self = controller;
         }

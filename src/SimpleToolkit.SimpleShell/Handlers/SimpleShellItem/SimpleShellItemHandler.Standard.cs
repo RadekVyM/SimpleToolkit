@@ -2,18 +2,17 @@
 
 using Microsoft.Maui.Handlers;
 
-namespace SimpleToolkit.SimpleShell.Handlers
-{
-    public partial class SimpleShellItemHandler : ElementHandler<ShellItem, System.Object>
-    {
-        protected override System.Object CreatePlatformElement()
-        {
-            throw new NotImplementedException();
-        }
+namespace SimpleToolkit.SimpleShell.Handlers;
 
-        private void UpdateShellSectionContainerContent()
-        {
-        }
+public partial class SimpleShellItemHandler : ElementHandler<ShellItem, System.Object>
+{
+    protected override System.Object CreatePlatformElement()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void UpdatePlatformViewContent()
+    {
     }
 }
 

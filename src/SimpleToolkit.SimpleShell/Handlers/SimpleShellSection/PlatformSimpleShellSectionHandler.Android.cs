@@ -5,7 +5,7 @@ using AView = Android.Views.View;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 
-public partial class NativeSimpleShellSectionHandler
+public partial class PlatformSimpleShellSectionHandler
 {
     protected CustomFrameLayout RootContentContainer { get; private set; }
 

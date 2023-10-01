@@ -5,44 +5,43 @@ using Microsoft.Maui.Platform;
 using SimpleToolkit.SimpleShell.Platform;
 using UIKit;
 
-namespace SimpleToolkit.SimpleShell.Handlers
-{ 
-    public partial class SimpleNavigationHostHandler : ViewHandler<ISimpleNavigationHost, UIView>
+namespace SimpleToolkit.SimpleShell.Handlers;
+
+public partial class SimpleNavigationHostHandler : ViewHandler<ISimpleNavigationHost, UIView>
+{
+    public static IPropertyMapper<ISimpleNavigationHost, SimpleNavigationHostHandler> Mapper = new PropertyMapper<ISimpleNavigationHost, SimpleNavigationHostHandler>(ViewHandler.ViewMapper)
     {
-        public static IPropertyMapper<ISimpleNavigationHost, SimpleNavigationHostHandler> Mapper = new PropertyMapper<ISimpleNavigationHost, SimpleNavigationHostHandler>(ViewHandler.ViewMapper)
+    };
+
+    public static CommandMapper<ISimpleNavigationHost, SimpleNavigationHostHandler> CommandMapper = new(ViewHandler.ViewCommandMapper)
+    {
+    };
+
+
+    public SimpleNavigationHostHandler(IPropertyMapper mapper, CommandMapper commandMapper)
+        : base(mapper ?? Mapper, commandMapper ?? CommandMapper)
+    {
+    }
+
+    public SimpleNavigationHostHandler()
+        : base(Mapper, CommandMapper)
+    {
+    }
+
+
+    protected override UIView CreatePlatformView()
+    {
+        return new SimpleContentView
         {
+            View = VirtualView
         };
+    }
 
-        public static CommandMapper<ISimpleNavigationHost, SimpleNavigationHostHandler> CommandMapper = new(ViewHandler.ViewCommandMapper)
-        {
-        };
-
-
-        public SimpleNavigationHostHandler(IPropertyMapper mapper, CommandMapper commandMapper)
-            : base(mapper ?? Mapper, commandMapper ?? CommandMapper)
-        {
-        }
-
-        public SimpleNavigationHostHandler()
-            : base(Mapper, CommandMapper)
-        {
-        }
-
-
-        protected override UIView CreatePlatformView()
-        {
-            return new SimpleContentView
-            {
-                View = VirtualView
-            };
-        }
-
-        public virtual void SetContent(UIView view)
-        {
-            PlatformView.ClearSubviews();
-            if (view is not null)
-                PlatformView.AddSubview(view);
-        }
+    public virtual void SetContent(UIView view)
+    {
+        PlatformView.ClearSubviews();
+        if (view is not null)
+            PlatformView.AddSubview(view);
     }
 }
 
