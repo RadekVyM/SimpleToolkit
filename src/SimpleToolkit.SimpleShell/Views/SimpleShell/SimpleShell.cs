@@ -101,7 +101,7 @@ public partial class SimpleShell : Shell, ISimpleShell
         // System.InvalidOperationException: 'Handler is already being set elsewhere'
         // But it is really weird because it looks like nothing is called in the OnHandlerChanging() method. Page do not even override it
         // There is also the HandlerChanging event for those who need to do something on handler changing
-        // This situation overall causes problems - e.g. when I try to navigate to deeper to the stack after coming back to the app, the app crashes with 'pending navigation' exception
+        // This situation overall causes problems - e.g. when I try to navigate deeper to the stack after coming back to the app, the app crashes with 'pending navigation' exception
 
         //base.OnHandlerChanging(args);
 
