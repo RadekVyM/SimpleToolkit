@@ -1,8 +1,89 @@
 # `SimpleShell` page transitions
 
-`SimpleShell` allows you to define custom transitions between pages during navigation.
+`SimpleShell` allows you to define custom transition animations between pages during navigation.
 
-## `SimpleShellTransition`
+There are two types of transitions that can be used or defined:
+
+- Platform-specific transitions - transitions provided by the platform-specific APIs and controls. These transitions are used by default.
+- Universal transitions - fully cross-platform transitions that are defined using only .NET MAUI APIs.
+
+These two types **cannot** be combined in one application. You can only use one or the other.
+
+## Platform-specific transitions
+
+Platform-specific transitions are transitions provided by the platform-specific APIs and controls:
+
+- [View animations](https://developer.android.com/develop/ui/views/animations/view-animation) and [fragment transactions](https://developer.android.com/guide/fragments/transactions) on Android
+- [`UIView` animations](https://developer.apple.com/documentation/uikit/uiview/1622451-animate) and [`UINavigationController` transitions](https://developer.apple.com/documentation/uikit/uiviewcontrolleranimatedtransitioning) on iOS/Mac Catalyst
+- [`EntranceThemeTransition`](https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.animation.entrancethemetransition) and [`NavigationTransitionInfo`](https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.animation.navigationtransitioninfo) objects on Windows (WinUI)
+
+There are predefined platform-specific transitions in `SimpleShell`, which are used by default. Defining your own custom platform-specific transitions requires knowledge of the underlying technologies.
+
+### Custom platform-specific transitions
+
+Custom platform-specific transition configuration is represented by a `PlatformSimpleShellTransition` object, which contains different properties by platform.
+
+Transitions can be defined separately for each state of the navigation. There are three states:
+
+- Switching - new root page (`ShellContent`) is being set
+- Pushing - new page is being pushed to the navigation stack
+- Popping - existing page is being popped from the navigation stack
+
+These are all the `PlatformSimpleShellTransition` properties by platform:
+
+- **Android**:
+
+  - `DestinationPageInFrontOnSwitching`
+  - `DestinationPageInFrontOnPushing`
+  - `DestinationPageInFrontOnPopping`
+  - `SwitchingEnterAnimation`
+  - `SwitchingLeaveAnimation`
+  - `PushingEnterAnimation`
+  - `PushingLeaveAnimation`
+  - `PoppingEnterAnimation`
+  - `PoppingLeaveAnimation`
+
+- **iOS/Mac Catalyst**:
+
+  - `DestinationPageInFrontOnSwitching`
+  - `SwitchingAnimationDuration`
+  - `SwitchingAnimation`
+  - `SwitchingAnimationStarting`
+  - `SwitchingAnimationFinished`
+  - `PushingAnimation`
+  - `PoppingAnimation`
+
+- **Windows (WinUI)**:
+
+  - `SwitchingAnimation`
+  - `PushingAnimation`
+  - `PoppingAnimation`
+
+The `PlatformSimpleShellTransition` class implements the `ISimpleShellTransition` interface.
+
+#### Setting a transition
+
+`PlatformSimpleShellTransition` can be set to any page via the `SimpleShell.Transition` attached property. If you set a transition on your `SimpleShell` object, that transition will be used as the default transition for all pages.
+
+When navigating from one page to another, **transition of the destination page is played**.
+
+Setting a transition can be simplified using the `SetTransition()` extension method:
+
+```csharp
+public static void SetTransition(
+    this Page page,
+    ISimpleShellTransition transition)
+```
+
+### When to use platform-specific transitions
+
+- When platform-specific look and feel of page transitions is required
+- When you do not want to define your own transitions
+- When you do not need to take a full control over your transitions appearance
+
+## Universal transitions
+
+### `SimpleShellTransition`
 
 Each transition is represented by a `SimpleShellTransition` object which contains these read-only properties settable via its constructors:
 
@@ -24,19 +105,17 @@ Each of these methods takes a `SimpleShellTransitionArgs` object as a parameter.
 - `IsDestinationPageRoot` - whether the destination page is a root page
 - `Progress` - progress of the transition. Number from 0 to 1
 - `TransitionType` - type of the transition that is represented by `SimpleShellTransitionType` enumeration:
-    - `Switching` - new root page (`ShellContent`) is being set
-    - `Pushing` - new page is being pushed to the navigation stack
-    - `Popping` - existing page is being popped from the navigation stack
+  - `Switching` - new root page (`ShellContent`) is being set
+  - `Pushing` - new page is being pushed to the navigation stack
+  - `Popping` - existing page is being popped from the navigation stack
 
-## Setting a transition
+### Setting a transition
 
 `SimpleShellTransition` can be set to any page via `SimpleShell.Transition` attached property. If you set a transition on your `SimpleShell` object, that transition will be used as the default transition for all pages.
 
 When navigating from one page to another, **transition of the destination page is played**.
 
-> Every `ShellContent` needs to be placed inside a `Tab` element to play the transition while navigating between two root pages.
-
-### Extension methods
+#### Extension methods
 
 Setting transition can be simplified using several extension methods. These are headers of the methods:
 
@@ -66,7 +145,7 @@ public static void SetTransition(
     Func<SimpleShellTransitionArgs, Easing> easing = null)
 ```
 
-## Example
+### Example
 
 The default transition for all pages can be set, for example, in the constructor of your `AppShell`:
 
@@ -157,7 +236,7 @@ public YellowDetailPage()
 }
 ```
 
-### Combining transitions
+#### Combining transitions
 
 Two transitions can be combined into one when you want to use different transitions under different conditions:
 

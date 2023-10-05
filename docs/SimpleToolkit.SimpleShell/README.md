@@ -227,6 +227,8 @@ The visual structure of a `SimpleShell` app can be manually defined using severa
 
 The hosting area for pages is represented by the `SimpleNavigationHost` view that can occur somewhere in a container view hierarchy **just once**.
 
+#### `SimpleShell` properties
+
 `SimpleShell` provides you with some additional **bindable properties** that you can bind to when creating custom navigation controls:
 
 - `CurrentPage` - the currently selected `Page`
@@ -235,6 +237,15 @@ The hosting area for pages is represented by the `SimpleNavigationHost` view tha
 - `ShellSections` - read-only list of all `ShellSection`s in the shell
 - `ShellContents` - read-only list of all `ShellContent`s in the shell
 - `RootPageContainer` - a view that wraps all root pages (`ShellContent`s)
+
+#### Navigation
+
+Navigation between pages works almost the same as in .NET MAUI `Shell`, just use the common `Shell.Current.GoToAsync()`. `SimpleShell` differs only in these cases:
+
+- The `animate` parameter value has no effect on whether the transition animation is played or not.
+- When platform-specific transition animations are used, the `Task` returned by the `GoToAsync()` method will complete once the navigation has been initiated, not once the animation has been completed. In other words, the returned `Task` does not wait on the completion of the animation.
+
+> See [.NET MAUI documentation](https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/shell/navigation) for more information.
 
 The code behind of the XAML sample above:
 
@@ -264,13 +275,6 @@ public partial class AppShell : SimpleToolkit.SimpleShell.SimpleShell
     }
 }
 ```
-
-Navigation between pages works almost the same as in .NET MAUI `Shell`, just use the common `Shell.Current.GoToAsync()`. `SimpleShell` differs only in these cases:
-
-- The `animate` parameter value has no effect on whether the transition animation is played or not.
-- When platform-specific transition animations are used, the `Task` returned by the `GoToAsync()` method will complete once the navigation has been initiated, not once the animation has been completed. In other words, the returned `Task` does not wait on the completion of the animation.
-
-> See [.NET MAUI documentation](https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/shell/navigation) for more information.
 
 Output:
 
@@ -303,7 +307,7 @@ Output:
 
 ## `RootPageContainer`
 
-We usually do not want tab bars, floating buttons and other navigation elements to be visible on all of our pages. Because of this, we can specify a `RootPageContainer` view that will wrap all the root pages (`ShellContent`s).
+We usually do not want tab bars, floating buttons and other navigation elements to be visible on all of our pages. Because of this, we can specify a `RootPageContainer` view that wraps all the root pages (`ShellContent`s).
 
 Let's move the tab bar from the above sample to `RootPageContainer`:
 
@@ -387,7 +391,7 @@ Tab bar is not visible on the detail page:
 
 You can also specify a container view for each `ShellItem` or `ShellSection` via the `ShellGroupContainerTemplate` attached property. The container view is defined using `DataTemplate` which allows the container to be created on demand in response to navigation.
 
-The view defined in `ShellGroupContainerTemplate` property has to contain a `SimpleNavigationHost` element somewhere in its view hieararchy. This element will host the root pages.
+The view defined in the `ShellGroupContainerTemplate` property has to contain a `SimpleNavigationHost` element somewhere in its view hieararchy. This element will host the root pages.
 
 Let's change the main tab bar from the above sample to display `ShellSection`s instead of all the root pages:
 
@@ -422,7 +426,7 @@ The `ShellSection` with two root pages will contain a top tab bar:
 <Tab
     Title="Yellow-Green"
     Route="YellowGreenTab">
-    <simpleShell:SimpleShell.ShellSectionContainerTemplate>
+    <simpleShell:SimpleShell.ShellGroupContainerTemplate>
         <DataTemplate
             x:DataType="ShellSection">
             <Grid
@@ -445,7 +449,7 @@ The `ShellSection` with two root pages will contain a top tab bar:
                     Grid.Row="1"/>
             </Grid>
         </DataTemplate>
-    </simpleShell:SimpleShell.ShellSectionContainerTemplate>
+    </simpleShell:SimpleShell.ShellGroupContainerTemplate>
 
     <ShellContent
         Title="Yellow"
