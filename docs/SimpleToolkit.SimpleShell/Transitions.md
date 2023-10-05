@@ -33,31 +33,37 @@ These are all the `PlatformSimpleShellTransition` properties by platform:
 
 - **Android**:
 
-  - `DestinationPageInFrontOnSwitching`
-  - `DestinationPageInFrontOnPushing`
-  - `DestinationPageInFrontOnPopping`
-  - `SwitchingEnterAnimation`
-  - `SwitchingLeaveAnimation`
-  - `PushingEnterAnimation`
-  - `PushingLeaveAnimation`
-  - `PoppingEnterAnimation`
-  - `PoppingLeaveAnimation`
+  - `SwitchingEnterAnimation` - a method returning the ID of an animation that is applied to the entering page on page switching
+  - `SwitchingLeaveAnimation` - a method returning the ID of an animation that is applied to the leaving page on page switching
+  - `PushingEnterAnimation` - a method returning the ID of an animation that is applied to the entering page on page pushing
+  - `PushingLeaveAnimation` - a method returning the ID of an animation that is applied to the leaving page on page pushing
+  - `PoppingEnterAnimation` - a method returning the ID of an animation that is applied to the entering page on page popping
+  - `PoppingLeaveAnimation` - a method returning the ID of an animation that is applied to the leaving page on page popping
+  - `DestinationPageInFrontOnSwitching` - a method returning whether the destination page should be displayed in front of the origin page on page switching
+  - `DestinationPageInFrontOnPushing` - a method returning whether the destination page should be displayed in front of the origin page on page pushing
+  - `DestinationPageInFrontOnPopping` - a method returning whether the destination page should be displayed in front of the origin page on page popping
+
+> Visit the official documentation for more information about the [view animations](https://developer.android.com/develop/ui/views/animations/view-animation).
 
 - **iOS/Mac Catalyst**:
 
-  - `DestinationPageInFrontOnSwitching`
-  - `SwitchingAnimationDuration`
-  - `SwitchingAnimation`
-  - `SwitchingAnimationStarting`
-  - `SwitchingAnimationFinished`
-  - `PushingAnimation`
-  - `PoppingAnimation`
+  - `DestinationPageInFrontOnSwitching` - a method returning whether the destination page should be displayed in front of the origin page on page switching
+  - `SwitchingAnimation` - a method returning a switching animation represented by an action with two parameters for platform views (of type `UIView`) of the origin and destination pages. This is where you change any animatable properties of the platform views. The change will be automatically animated.
+  - `SwitchingAnimationDuration` - a method returning a duration of the animation
+  - `SwitchingAnimationStarting` - a method returning an action which is called before the animation starts. All preparatory work (such as setting initial values of the animated properties) should be done in this action. This action has two parameters for platform views (of type `UIView`) of the origin and destination pages.
+  - `SwitchingAnimationFinished` - a method returning an action which is called right after the animation plays. All cleaning work (such as setting the values of the animated properties back to initial values) should be done in this action. This action has two parameters for platform views (of type `UIView`) of the origin and destination pages.
+  - `PushingAnimation` - a method returning an object of type `IUIViewControllerAnimatedTransitioning`, which represents the animation that is played on page pushing
+  - `PoppingAnimation` - a method returning an object of type `IUIViewControllerAnimatedTransitioning`, which represents the animation that is played on page popping
+
+> Visit the official documentation for more information about the [`UIView` animations](https://developer.apple.com/documentation/uikit/uiview/1622451-animate), [`IUIViewControllerAnimatedTransitioning` interface](https://developer.apple.com/documentation/uikit/uiviewcontrolleranimatedtransitioning) and [`UINavigationController` transitions](https://developer.apple.com/documentation/uikit/uiviewcontrolleranimatedtransitioning).
 
 - **Windows (WinUI)**:
 
-  - `SwitchingAnimation`
-  - `PushingAnimation`
-  - `PoppingAnimation`
+  - `SwitchingAnimation` - a method returning an `EntranceThemeTransition` object that is applied on page switching
+  - `PushingAnimation` - a method returning an `NavigationTransitionInfo` object that is applied on page pushing
+  - `PoppingAnimation` - a method returning an `NavigationTransitionInfo` object that is applied on page popping
+
+> Visit the official WinUI documentation for more information about the [`EntranceThemeTransition`](https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.animation.entrancethemetransition) and [`NavigationTransitionInfo`](https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.animation.navigationtransitioninfo) classes.
 
 The `PlatformSimpleShellTransition` class implements the `ISimpleShellTransition` interface.
 
@@ -87,12 +93,12 @@ public static void SetTransition(
 
 Each transition is represented by a `SimpleShellTransition` object which contains these read-only properties settable via its constructors:
 
-- `Callback` - method that is called when progress of the transition changes. Progress of the transition is passed to the method through a parameter of type `SimpleShellTransitionArgs`
-- `Starting` - method that is called when the transition starts
-- `Finished` - method that is called when the transition finishes
-- `Duration` - method returning duration of the transition
-- `DestinationPageInFront` - method returning whether the destination page should be displayed in front of the origin page when navigating from one page to another
-- `Easing` - method returning an easing of the transition animation
+- `Callback` - a method that is called when progress of the transition changes. Progress of the transition is passed to the method through a parameter of type `SimpleShellTransitionArgs`
+- `Starting` - a method that is called when the transition starts
+- `Finished` - a method that is called when the transition finishes
+- `Duration` - a method returning duration of the transition
+- `DestinationPageInFront` - a method returning whether the destination page should be displayed in front of the origin page when navigating from one page to another
+- `Easing` - a method returning an easing of the transition animation
 
 Each of these methods takes a `SimpleShellTransitionArgs` object as a parameter. Usefull information about currently running transition can be obtained from this object:
 
