@@ -77,7 +77,7 @@
     <MenuItem
         Text="Hello"/>
 
-
+    
     <!-- TODO: Grid or something is broken again on iOS. The auto option does not work. I had to set MinimumHeightRequest to the stacklayout -->
     <shell:SimpleShell.RootPageContainer>
         <Grid

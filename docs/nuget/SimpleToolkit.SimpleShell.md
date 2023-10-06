@@ -1,10 +1,10 @@
 # SimpleToolkit.SimpleShell
 
-The *SimpleToolkit.SimpleShell* package provides you with a simplified implementation of .NET MAUI `Shell` that lets you easily create a custom navigation experience in your .NET MAUI applications.
+The _SimpleToolkit.SimpleShell_ package provides you with a simplified implementation of .NET MAUI `Shell` that lets you easily create a custom navigation experience in your .NET MAUI applications.
 
 ## Getting Started
 
-In order to use *SimpleToolkit.SimpleShell*, you need to call the `UseSimpleShell()` extension method in your `MauiProgram.cs` file:
+In order to use _SimpleToolkit.SimpleShell_, you need to call the `UseSimpleShell()` extension method in your `MauiProgram.cs` file:
 
 ```csharp
 builder.UseSimpleShell();
@@ -42,23 +42,15 @@ Let's say we have four root pages - `YellowPage`, `GreenPage`, `RedPage` and `Bl
             Route="GreenPage"/>
     </Tab>
 
-    <Tab
+    <ShellContent
         Title="Red"
-        Route="RedTab">
-        <ShellContent
-            Title="Red"
-            ContentTemplate="{DataTemplate pages:RedPage}"
-            Route="RedPage"/>
-    </Tab>
+        ContentTemplate="{DataTemplate pages:RedPage}"
+        Route="RedPage"/>
 
-    <Tab
+    <ShellContent
         Title="Blue"
-        Route="BlueTab">
-        <ShellContent
-            Title="Blue"
-            ContentTemplate="{DataTemplate pages:BluePage}"
-            Route="BluePage"/>
-    </Tab>
+        ContentTemplate="{DataTemplate pages:BluePage}"
+        Route="BluePage"/>
 
     <simpleShell:SimpleShell.RootPageContainer>
         <Grid

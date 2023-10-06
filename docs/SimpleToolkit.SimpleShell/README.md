@@ -7,6 +7,8 @@ The _SimpleToolkit.SimpleShell_ package provides you with a simplified implement
 - A single place to describe the logical hierarchy of an app.
 - A URI-based navigation scheme that permits navigation to any page in the app.
 
+**`SimpleShell` does not come with any navigation controls.** `SimpleShell` just gives you the ability to use custom navigation controls along with the URI-based navigation and automatic navigation stack management.
+
 > Before you begin using `SimpleShell`, I highly recommend familiarizing yourself with the original .NET MAUI `Shell` - especially with the URI-based [navigation](https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/shell/navigation), which works exactly the same as in `SimpleShell`.
 
 ## Getting Started
@@ -266,7 +268,7 @@ public partial class AppShell : SimpleToolkit.SimpleShell.SimpleShell
 
         // Navigate to a new tab if it is not the current tab
         if (!CurrentState.Location.OriginalString.Contains(shellItem.Route))
-            await GoToAsync($"///{shellItem.Route}", true);
+            await GoToAsync($"///{shellItem.Route}");
     }
 
     private async void BackButtonClicked(object sender, EventArgs e)

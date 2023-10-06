@@ -50,8 +50,8 @@ These are all the `PlatformSimpleShellTransition` properties by platform:
   - `DestinationPageInFrontOnSwitching` - a method returning whether the destination page should be displayed in front of the origin page on page switching
   - `SwitchingAnimation` - a method returning a switching animation represented by an action with two parameters for platform views (of type `UIView`) of the origin and destination pages. This is where you change any animatable properties of the platform views. The change will be automatically animated.
   - `SwitchingAnimationDuration` - a method returning a duration of the animation
-  - `SwitchingAnimationStarting` - a method returning an action which is called before the animation starts. All preparatory work (such as setting initial values of the animated properties) should be done in this action. This action has two parameters for platform views (of type `UIView`) of the origin and destination pages.
-  - `SwitchingAnimationFinished` - a method returning an action which is called right after the animation plays. All cleaning work (such as setting the values of the animated properties back to initial values) should be done in this action. This action has two parameters for platform views (of type `UIView`) of the origin and destination pages.
+  - `SwitchingAnimationStarting` - a method returning an action which is called before the animation starts. All preparatory work (such as setting initial values of the animated properties) should be done in this action. This action has two parameters for platform views (of type `UIView`) of the origin and destination pages
+  - `SwitchingAnimationFinished` - a method returning an action which is called right after the animation plays. All cleaning work (such as setting the values of the animated properties back to initial values) should be done in this action. This action has two parameters for platform views (of type `UIView`) of the origin and destination pages
   - `PushingAnimation` - a method returning an object of type `IUIViewControllerAnimatedTransitioning`, which represents the animation that is played on page pushing
   - `PoppingAnimation` - a method returning an object of type `IUIViewControllerAnimatedTransitioning`, which represents the animation that is played on page popping
 
@@ -81,11 +81,13 @@ public static void SetTransition(
     ISimpleShellTransition transition)
 ```
 
+#### Example
+
 ### When to use platform-specific transitions
 
-- When platform-specific look and feel of page transitions is required
-- When you do not want to define your own transitions
-- When you do not need to take a full control over your transitions appearance
+- When you do not want to define your own transitions. You can use the predefined ones.
+- When you do not need to take a full control over your transitions appearance.
+- When platform-specific look and feel of page transitions is required.
 
 ## Universal transitions
 

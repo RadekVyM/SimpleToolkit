@@ -18,7 +18,7 @@ public partial class AppShell : SimpleShell
         InitializeComponent();
 
 
-        this.SetTransition(Transitions.DefaultCustomTransition);
+        this.SetTransition(Transitions.DefaultUniversalTransition);
     }
 
     private async void ShellItemButtonClicked(object sender, EventArgs e)
