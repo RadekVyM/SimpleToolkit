@@ -278,6 +278,17 @@ public partial class AppShell : SimpleToolkit.SimpleShell.SimpleShell
 }
 ```
 
+This diagram shows the current visual structure of our shell:
+
+<p align="center">
+    <picture>
+        <source srcset="../images/content_container_dark.png" media="(prefers-color-scheme: dark)">
+        <img src="../images/content_container_light.png" width="850">
+    </picture>
+</p>
+
+> Solid-lined rectangles represent containers.
+
 Output:
 
 <p align="center">
@@ -306,15 +317,6 @@ Output:
         </tr>
     </table>
 </p>
-
-This diagram shows the current visual structure of our shell:
-
-<picture>
-    <source srcset="../images/content_container_dark.png" media="(prefers-color-scheme: dark)">
-    <img src="../images/content_container_light.png">
-</picture>
-
-> Solid-lined rectangles represent containers.
 
 ## `RootPageContainer`
 
@@ -369,6 +371,17 @@ Let's move the tab bar from the above sample to `RootPageContainer`:
 
 The `RootPageContainer` view must contain a `SimpleNavigationHost` element somewhere in its view hieararchy. This element will host all the root pages.
 
+This diagram shows the current visual structure of our shell:
+
+<p align="center">
+    <picture>
+        <source srcset="../images/rootpage_container_dark.png" media="(prefers-color-scheme: dark)">
+        <img src="../images/rootpage_container_light.png" width="850">
+    </picture>
+</p>
+
+> Solid-lined rectangles represent containers.
+
 Tab bar is not visible on the detail page:
 
 <p align="center">
@@ -397,15 +410,6 @@ Tab bar is not visible on the detail page:
         </tr>
     </table>
 </p>
-
-This diagram shows the current visual structure of our shell:
-
-<picture>
-    <source srcset="../images/rootpage_container_dark.png" media="(prefers-color-scheme: dark)">
-    <img src="../images/rootpage_container_light.png">
-</picture>
-
-> Solid-lined rectangles represent containers.
 
 ## `ShellGroupContainer`
 
@@ -485,6 +489,19 @@ The `ShellSection` with two root pages will contain a top tab bar:
 
 Binding context of a view defined in the template is a respective `ShellSection` (`Tab`) instance.
 
+This diagram shows the current visual structure of our shell:
+
+<p align="center">
+    <picture>
+        <source srcset="../images/shellsection_container_dark.png" media="(prefers-color-scheme: dark)">
+        <img src="../images/shellsection_container_light.png" width="850">
+    </picture>
+</p>
+
+> Solid-lined rectangles represent containers.
+
+The yellow and green pages are grouped under one tab:
+
 <p align="center">
     <table align="center">
         <tr>
@@ -511,15 +528,6 @@ Binding context of a view defined in the template is a respective `ShellSection`
         </tr>
     </table>
 </p>
-
-This diagram shows the current visual structure of our shell:
-
-<picture>
-    <source srcset="../images/shellsection_container_dark.png" media="(prefers-color-scheme: dark)">
-    <img src="../images/shellsection_container_light.png">
-</picture>
-
-> Solid-lined rectangles represent containers.
 
 ## Transitions
 
