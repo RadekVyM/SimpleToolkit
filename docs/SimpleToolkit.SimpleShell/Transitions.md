@@ -19,6 +19,10 @@ Platform-specific transitions are transitions provided by the platform-specific 
 
 There are predefined platform-specific transitions in `SimpleShell`, which are used by default. Defining your own custom platform-specific transitions requires knowledge of the underlying technologies.
 
+By using platform-specific APIs more directly, transition animations of this type are quite a bit smoother than the universal ones. On the other hand, these animations will probably never look the same on all supported platforms.
+
+I recommend choosing this type of transitions when platform-specific look and feel of your transitions is required and when you do not need to take a full control over your transitions appearance.
+
 ### Custom platform-specific transitions
 
 Custom platform-specific transition configuration is represented by a `PlatformSimpleShellTransition` object, which contains different properties by platform.
@@ -82,12 +86,6 @@ public static void SetTransition(
 ```
 
 #### Example
-
-### When to use platform-specific transitions
-
-- When you do not want to define your own transitions. You can use the predefined ones.
-- When you do not need to take a full control over your transitions appearance.
-- When platform-specific look and feel of page transitions is required.
 
 ## Universal transitions
 

@@ -59,6 +59,14 @@ Here are some of my samples that were built using this library:
 
 > Check out a list of all samples [here](./docs/Samples.md).
 
+## Supported platforms
+
+This library supports all these platforms:
+
+- Android
+- iOS/Mac Catalyst
+- Windows (WinUI)
+
 ## SimpleToolkit.Core
 
 [![SimpleToolkit.Core](https://img.shields.io/nuget/v/SimpleToolkit.Core.svg?label=SimpleToolkit.Core)](https://www.nuget.org/packages/SimpleToolkit.Core/)

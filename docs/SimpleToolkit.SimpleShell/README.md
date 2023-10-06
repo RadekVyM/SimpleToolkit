@@ -307,6 +307,15 @@ Output:
     </table>
 </p>
 
+This diagram shows the current visual structure of our shell:
+
+<picture>
+    <source srcset="../images/content_container_dark.png" media="(prefers-color-scheme: dark)">
+    <img src="../images/content_container_light.png">
+</picture>
+
+> Solid-lined rectangles represent containers.
+
 ## `RootPageContainer`
 
 We usually do not want tab bars, floating buttons and other navigation elements to be visible on all of our pages. Because of this, we can specify a `RootPageContainer` view that wraps all the root pages (`ShellContent`s).
@@ -388,6 +397,15 @@ Tab bar is not visible on the detail page:
         </tr>
     </table>
 </p>
+
+This diagram shows the current visual structure of our shell:
+
+<picture>
+    <source srcset="../images/rootpage_container_dark.png" media="(prefers-color-scheme: dark)">
+    <img src="../images/rootpage_container_light.png">
+</picture>
+
+> Solid-lined rectangles represent containers.
 
 ## `ShellGroupContainer`
 
@@ -493,6 +511,15 @@ Binding context of a view defined in the template is a respective `ShellSection`
         </tr>
     </table>
 </p>
+
+This diagram shows the current visual structure of our shell:
+
+<picture>
+    <source srcset="../images/shellsection_container_dark.png" media="(prefers-color-scheme: dark)">
+    <img src="../images/shellsection_container_light.png">
+</picture>
+
+> Solid-lined rectangles represent containers.
 
 ## Transitions
 
