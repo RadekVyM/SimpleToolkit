@@ -291,32 +291,40 @@ This diagram shows the current visual structure of our shell:
 
 Output:
 
-<p align="center">
-    <table align="center">
-        <tr>
-            <th>
-                <p align="center">Android</p>
-            </th>
-            <th>
-                <p align="center">iOS</p>
-            </th>
-            <th>
-                <p align="center">Windows</p>
-            </th>
-        </tr>
-        <tr>
-            <td>
-                <img src="../images/android_simpleshell_content.gif" width="200"/>
-            </td>
-            <td>
-                <img src="../images/ios_simpleshell_content.gif" width="200"/>
-            </td>
-            <td>
-                <img src="../images/windows_simpleshell_content.gif" width="280"/>
-            </td>
-        </tr>
-    </table>
-</p>
+<table>
+    <tr>
+        <th align="center">
+            Android
+        </th>
+        <th align="center">
+            iOS
+        </th>
+    </tr>
+    <tr>
+        <td align="center">
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/ae980939-b701-4a53-b789-7d26a4265ea2"/>
+        </td>
+        <td align="center">
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/5b9befb7-db1a-4500-a9ca-b86ab5b829e3"/>
+        </td>
+    </tr>
+    <tr>
+        <th align="center">
+            macOS
+        </th>
+        <th align="center">
+            Windows
+        </th>
+    </tr>
+    <tr>
+        <td align="center">
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/4d104c10-ec97-4851-ae82-d756c5cdde2b"/>
+        </td>
+        <td align="center">
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/eee4439a-5918-4fcc-aef3-4b8476c2392d"/>
+        </td>
+    </tr>
+</table>
 
 ## `RootPageContainer`
 
@@ -384,32 +392,40 @@ This diagram shows the current visual structure of our shell:
 
 Tab bar is not visible on the detail page:
 
-<p align="center">
-    <table align="center">
-        <tr>
-            <th>
-                <p align="center">Android</p>
-            </th>
-            <th>
-                <p align="center">iOS</p>
-            </th>
-            <th>
-                <p align="center">Windows</p>
-            </th>
-        </tr>
-        <tr>
-            <td>
-                <img src="../images/android_simpleshell_rootpagecontainer.gif" width="200"/>
-            </td>
-            <td>
-                <img src="../images/ios_simpleshell_rootpagecontainer.gif" width="200"/>
-            </td>
-            <td>
-                <img src="../images/windows_simpleshell_rootpagecontainer.gif" width="280"/>
-            </td>
-        </tr>
-    </table>
-</p>
+<table>
+    <tr>
+        <th align="center">
+            Android
+        </th>
+        <th align="center">
+            iOS
+        </th>
+    </tr>
+    <tr>
+        <td align="center">
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/b37e1561-be40-4aef-a255-060cfbfc9572"/>
+        </td>
+        <td align="center">
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/84cf922e-f698-4f96-b06c-561df5c61e1c"/>
+        </td>
+    </tr>
+    <tr>
+        <th align="center">
+            macOS
+        </th>
+        <th align="center">
+            Windows
+        </th>
+    </tr>
+    <tr>
+        <td align="center">
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/f90f09bb-ce7c-4002-9e21-9bd7d7afb962"/>
+        </td>
+        <td align="center">
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/04ac5e38-af50-4066-95ec-f2fd0d30c672"/>
+        </td>
+    </tr>
+</table>
 
 ## `ShellGroupContainer`
 
@@ -502,32 +518,40 @@ This diagram shows the current visual structure of our shell:
 
 The yellow and green pages are grouped under one tab:
 
-<p align="center">
-    <table align="center">
-        <tr>
-            <th>
-                <p align="center">Android</p>
-            </th>
-            <th>
-                <p align="center">iOS</p>
-            </th>
-            <th>
-                <p align="center">Windows</p>
-            </th>
-        </tr>
-        <tr>
-            <td>
-                <img src="../images/android_simpleshell_shellsectioncontainer.gif" width="200"/>
-            </td>
-            <td>
-                <img src="../images/ios_simpleshell_shellsectioncontainer.gif" width="200"/>
-            </td>
-            <td>
-                <img src="../images/windows_simpleshell_shellsectioncontainer.gif" width="280"/>
-            </td>
-        </tr>
-    </table>
-</p>
+<table>
+    <tr>
+        <th align="center">
+            Android
+        </th>
+        <th align="center">
+            iOS
+        </th>
+    </tr>
+    <tr>
+        <td align="center">
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/6d49a71b-dc7d-4a8a-9030-ba3a48a59568"/>
+        </td>
+        <td align="center">
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/2e7e471a-1f23-4e9e-9e29-2a88bb231f40"/>
+        </td>
+    </tr>
+    <tr>
+        <th align="center">
+            macOS
+        </th>
+        <th align="center">
+            Windows
+        </th>
+    </tr>
+    <tr>
+        <td align="center">
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/40478570-d732-4d72-a153-23f8457b07e7"/>
+        </td>
+        <td align="center">
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/fd321f04-6c51-4110-993b-ae22ae2ca26b"/>
+        </td>
+    </tr>
+</table>
 
 ## Transitions
 
