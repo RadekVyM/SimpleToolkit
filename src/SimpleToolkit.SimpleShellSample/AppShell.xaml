@@ -48,23 +48,15 @@
             Route="GreenPage"/>
     </Tab>
 
-    <Tab
+    <ShellContent
         Title="Red"
-        Route="RedTab">
-        <ShellContent
-            Title="Red"
-            ContentTemplate="{DataTemplate pages:RedPage}"
-            Route="RedPage"/>
-    </Tab>
+        ContentTemplate="{DataTemplate pages:RedPage}"
+        Route="RedPage"/>
 
-    <Tab
+    <ShellContent
         Title="Blue"
-        Route="BlueTab">
-        <ShellContent
-            Title="Blue"
-            ContentTemplate="{DataTemplate pages:BluePage}"
-            Route="BluePage"/>
-    </Tab>
+        ContentTemplate="{DataTemplate pages:BluePage}"
+        Route="BluePage"/>
 
     <simpleShell:SimpleShell.RootPageContainer>
         <Grid
