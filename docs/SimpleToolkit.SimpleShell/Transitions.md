@@ -25,7 +25,7 @@ I recommend choosing this type of transitions when platform-specific look and fe
 
 ### Custom platform-specific transitions
 
-Custom platform-specific transition configuration is represented by a `PlatformSimpleShellTransition` object, which contains different properties by platform.
+Custom platform-specific transition configuration is represented by a `PlatformSimpleShellTransition` object, which contains different properties by platform. The `PlatformSimpleShellTransition` class implements the `ISimpleShellTransition` interface.
 
 Transitions can be defined separately for each state of the navigation. There are three states:
 
@@ -67,13 +67,32 @@ These are all the `PlatformSimpleShellTransition` properties by platform:
   - `PushingAnimation` - a method returning an `NavigationTransitionInfo` object that is applied on page pushing
   - `PoppingAnimation` - a method returning an `NavigationTransitionInfo` object that is applied on page popping
 
-> Visit the official WinUI documentation for more information about the [`EntranceThemeTransition`](https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.animation.entrancethemetransition) and [`NavigationTransitionInfo`](https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.animation.navigationtransitioninfo) classes.
+> Visit the official WinUI documentation for more information about the [`EntranceThemeTransition`](https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.media.animation.entrancethemetransition) and [`NavigationTransitionInfo`](https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.media.animation.navigationtransitioninfo) classes.
 
-The `PlatformSimpleShellTransition` class implements the `ISimpleShellTransition` interface.
+If a property is set to `null`, the default option is used.
+
+#### `SimpleShellTransitionArgs`
+
+Each of these methods takes a `SimpleShellTransitionArgs` object as a parameter. This object provides useful information which can help deciding which animation should be used:
+
+- `OriginPage` of type `VisualElement` - page from which the navigation is initiated
+- `DestinationPage` of type `VisualElement` - destination page of the navigation
+- `OriginShellSectionContainer` of type `VisualElement` - `ShellGroupContainer` from which the navigation is initiated. Can be `null` if no container is defined
+- `DestinationShellSectionContainer` of type `VisualElement` - destination `ShellGroupContainer` of the navigation. Can be `null` if no container is defined
+- `OriginShellItemContainer` of type `VisualElement` - `ShellGroupContainer` from which the navigation is initiated. Can be `null` if no container is defined
+- `DestinationShellItemContainer` of type `VisualElement` - destination `ShellGroupContainer` of the navigation. Can be `null` if no container is defined
+- `Shell` - current instance of `SimpleShell`
+- `IsOriginPageRoot` - whether the origin page is a root page
+- `IsDestinationPageRoot` - whether the destination page is a root page
+- `Progress` - progress of the transition. Number from 0 to 1. For platform-specific transitions, this property is always set to 0
+- `TransitionType` - type of the transition that is represented by `SimpleShellTransitionType` enumeration:
+  - `Switching` - new root page (`ShellContent`) is being set
+  - `Pushing` - new page is being pushed to the navigation stack
+  - `Popping` - existing page is being popped from the navigation stack
 
 #### Setting a transition
 
-`PlatformSimpleShellTransition` can be set to any page via the `SimpleShell.Transition` attached property. If you set a transition on your `SimpleShell` object, that transition will be used as the default transition for all pages.
+`PlatformSimpleShellTransition` can be set to any page via the `SimpleShell.Transition` attached property. If you set a transition on your `SimpleShell` object, that transition will be used as the default transition for all pages. Transitions can be set on each page individually.
 
 When navigating from one page to another, **transition of the destination page is played**.
 
@@ -89,9 +108,17 @@ public static void SetTransition(
 
 ## Universal transitions
 
+Although, these platform-specific transition animations can be modified, it is quite limited. If you want to take full control over the transitions, you need to disable the platform-specific ones by setting the `usePlatformTransitions` parameter of the `UseSimpleShell()` extension method to `false` and define your own platform-independent animations:
+
+```csharp
+builder.UseSimpleShell(usePlatformTransitions: false);
+```
+
+Universal transitions are fully cross-platform transitions that are defined using only .NET MAUI APIs. `SimpleShell` comes with no predefined universal transitions.
+
 ### `SimpleShellTransition`
 
-Each transition is represented by a `SimpleShellTransition` object which contains these read-only properties settable via its constructors:
+Each universal transition is represented by a `SimpleShellTransition` object which contains these read-only properties settable via its constructors:
 
 - `Callback` - a method that is called when progress of the transition changes. Progress of the transition is passed to the method through a parameter of type `SimpleShellTransitionArgs`
 - `Starting` - a method that is called when the transition starts
@@ -100,20 +127,9 @@ Each transition is represented by a `SimpleShellTransition` object which contain
 - `DestinationPageInFront` - a method returning whether the destination page should be displayed in front of the origin page when navigating from one page to another
 - `Easing` - a method returning an easing of the transition animation
 
-Each of these methods takes a `SimpleShellTransitionArgs` object as a parameter. Usefull information about currently running transition can be obtained from this object:
+Each of these methods takes a `SimpleShellTransitionArgs` object as a parameter. Useful information about currently running transition can be obtained from this object.
 
-- `OriginPage` of type `VisualElement` - page from which the navigation is initiated
-- `DestinationPage` of type `VisualElement` - destination page of the navigation
-- `OriginShellSectionContainer` of type `VisualElement` - `ShellSectionContainer` from which the navigation is initiated. Can be `null` if no container is defined
-- `DestinationShellSectionContainer` of type `VisualElement` - destination `ShellSectionContainer` of the navigation. Can be `null` if no container is defined
-- `Shell` - current instance of `SimpleShell`
-- `IsOriginPageRoot` - whether the origin page is a root page
-- `IsDestinationPageRoot` - whether the destination page is a root page
-- `Progress` - progress of the transition. Number from 0 to 1
-- `TransitionType` - type of the transition that is represented by `SimpleShellTransitionType` enumeration:
-  - `Switching` - new root page (`ShellContent`) is being set
-  - `Pushing` - new page is being pushed to the navigation stack
-  - `Popping` - existing page is being popped from the navigation stack
+The `SimpleShellTransition` class implements the `ISimpleShellTransition` interface.
 
 ### Setting a transition
 
@@ -223,7 +239,7 @@ public AppShell()
 }
 ```
 
-Output:
+The universal transition looks the same on all platforms:
 
 https://github.com/RadekVyM/SimpleToolkit/assets/65116078/694efb22-2a1f-4ec2-b169-307499357ae4
 

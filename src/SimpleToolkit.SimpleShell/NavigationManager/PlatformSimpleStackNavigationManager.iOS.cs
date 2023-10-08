@@ -69,7 +69,7 @@ public partial class PlatformSimpleStackNavigationManager
 
         await controller.HandleNewStack(
             newControllers,
-            GetTransitionPairs(newPageStack, pageTransition),
+            GetTransitionPairs(newPageStack, newControllers, pageTransition, args),
             animated);
         DisconnectHandlers(oldPageStack.Skip(1).Except(newPageStack));
     }
@@ -117,22 +117,6 @@ public partial class PlatformSimpleStackNavigationManager
         }
     }
 
-    private static PlatformSimpleShellControllerTransitionPair[] GetTransitionPairs(
-        IReadOnlyList<IView> newPageStack,
-        Func<IView, PlatformSimpleShellTransition> pageTransition)
-    {
-        return newPageStack
-            .Select(page =>
-            {
-                var transition = pageTransition?.Invoke(page);
-
-                return new PlatformSimpleShellControllerTransitionPair(
-                    GetValue(transition, transition?.PushingAnimation, null),
-                    GetValue(transition, transition?.PoppingAnimation, null));
-            })
-            .ToArray();
-    }
-
     protected static void DisconnectHandlers(IEnumerable<IView> pageStack)
     {
         foreach (var page in pageStack)
@@ -140,6 +124,25 @@ public partial class PlatformSimpleStackNavigationManager
             var handler = page.Handler;
             handler?.DisconnectHandler();
         }
+    }
+
+    private static IDictionary<UIViewController, PlatformSimpleShellControllerTransitionPair> GetTransitionPairs(
+        IReadOnlyList<IView> newPageStack,
+        UIViewController[] newControllers,
+        Func<IView, PlatformSimpleShellTransition> pageTransition,
+        Func<SimpleShellTransitionArgs> args)
+    {
+        var dictionary = new Dictionary<UIViewController, PlatformSimpleShellControllerTransitionPair>();
+        var lastIndex = newControllers.Length - 1;
+        var transition = pageTransition?.Invoke(newPageStack[lastIndex]);
+
+        dictionary[newControllers[lastIndex]] = new PlatformSimpleShellControllerTransitionPair(
+            GetValue(transition, args, transition?.PushingAnimation, null),
+            GetValue(transition, args, transition?.PoppingAnimation, null));
+
+        // TODO: Add a pair for interactive transition, if I find out how to implement it
+
+        return dictionary;
     }
 }
 

@@ -87,8 +87,8 @@ public static class Transitions
                 {
                     from.Alpha = 1;
                 },
-                PushingAnimation = static () => new AppleTransition(true),
-                PoppingAnimation = static () => new AppleTransition(false),
+                PushingAnimation = static (args) => new AppleTransition(true),
+                PoppingAnimation = static (args) => new AppleTransition(false),
 #elif WINDOWS
                 SwitchingAnimation = static (args) => new Microsoft.UI.Xaml.Media.Animation.EntranceThemeTransition { FromVerticalOffset = -50 },
                 PushingAnimation = static (args) => new Microsoft.UI.Xaml.Media.Animation.DrillInNavigationTransitionInfo(),

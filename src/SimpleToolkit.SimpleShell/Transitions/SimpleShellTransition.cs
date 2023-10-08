@@ -1,7 +1,7 @@
 ﻿namespace SimpleToolkit.SimpleShell.Transitions;
 
 /// <summary>
-/// Page transition in <see cref="SimpleShell"/>.
+/// Universal page transition in <see cref="SimpleShell"/>.
 /// </summary>
 public class SimpleShellTransition : ISimpleShellTransition
 {

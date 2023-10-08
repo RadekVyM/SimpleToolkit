@@ -32,11 +32,11 @@ public class PlatformSimpleShellSectionController : UINavigationController
     }
 
 
-    public async Task HandleNewStack(UIViewController[] stack, PlatformSimpleShellControllerTransitionPair[] newTransitions, bool animated)
+    public async Task HandleNewStack(UIViewController[] stack, IDictionary<UIViewController, PlatformSimpleShellControllerTransitionPair> newTransitions, bool animated)
     {
         var lastInStack = stack[stack.Length - 1];
 
-        UpdateTransitions(stack, newTransitions);
+        UpdateTransitions(newTransitions);
 
         if (ViewControllers[ViewControllers.Length - 1] == lastInStack)
         {
@@ -119,14 +119,9 @@ public class PlatformSimpleShellSectionController : UINavigationController
         ViewControllers = newViewControllers;
     }
 
-    private void UpdateTransitions(UIViewController[] viewControllers, PlatformSimpleShellControllerTransitionPair[] newTransitions)
+    private void UpdateTransitions(IDictionary<UIViewController, PlatformSimpleShellControllerTransitionPair> newTransitions)
     {
-        transitions.Clear();
-
-        for (int i = 0; i < viewControllers.Length; i++)
-        {
-            transitions[viewControllers[i]] = newTransitions[i];
-        }
+        transitions = new Dictionary<UIViewController, PlatformSimpleShellControllerTransitionPair>(newTransitions);
     }
 
     private async void SendPoppedOnCompletion(Task<bool> popTask)
