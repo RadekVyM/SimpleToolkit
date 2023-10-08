@@ -2,7 +2,7 @@
 
 `SimpleShell` allows you to define custom transition animations between pages during navigation.
 
-There are two types of transitions that can be used or defined:
+There are two types of transitions that can be used:
 
 - Platform-specific transitions - transitions provided by the platform-specific APIs and controls. These transitions are used by default.
 - Universal transitions - fully cross-platform transitions that are defined using only .NET MAUI APIs.
@@ -15,7 +15,7 @@ Platform-specific transitions are transitions provided by the platform-specific 
 
 - [View animations](https://developer.android.com/develop/ui/views/animations/view-animation) and [fragment transactions](https://developer.android.com/guide/fragments/transactions) on Android
 - [`UIView` animations](https://developer.apple.com/documentation/uikit/uiview/1622451-animate) and [`UINavigationController` transitions](https://developer.apple.com/documentation/uikit/uiviewcontrolleranimatedtransitioning) on iOS/Mac Catalyst
-- [`EntranceThemeTransition`](https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.animation.entrancethemetransition) and [`NavigationTransitionInfo`](https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.animation.navigationtransitioninfo) objects on Windows (WinUI)
+- [`EntranceThemeTransition`](https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.animation.entrancethemetransition) and [`NavigationTransitionInfo`](https://learn.microsoft.com/en-us/uwp/api/windows.ui.xaml.media.animation.navigationtransitioninfo) objects and the [`Frame`](https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.controls.frame) control on Windows (WinUI)
 
 There are predefined platform-specific transitions in `SimpleShell`, which are used by default. Defining your own custom platform-specific transitions requires knowledge of the underlying technologies.
 
@@ -59,7 +59,7 @@ These are all the `PlatformSimpleShellTransition` properties by platform:
   - `PushingAnimation` - a method returning an object of type `IUIViewControllerAnimatedTransitioning`, which represents the animation that is played on page pushing
   - `PoppingAnimation` - a method returning an object of type `IUIViewControllerAnimatedTransitioning`, which represents the animation that is played on page popping
 
-> Visit the official documentation for more information about the [`UIView` animations](https://developer.apple.com/documentation/uikit/uiview/1622451-animate), [`IUIViewControllerAnimatedTransitioning` interface](https://developer.apple.com/documentation/uikit/uiviewcontrolleranimatedtransitioning) and [`UINavigationController` transitions](https://developer.apple.com/documentation/uikit/uiviewcontrolleranimatedtransitioning).
+> Visit the official documentation for more information about the [`UIView` animations](https://developer.apple.com/documentation/uikit/uiview/1622451-animate), [`IUIViewControllerAnimatedTransitioning` interface](https://developer.apple.com/documentation/uikit/uiviewcontrolleranimatedtransitioning) and [`UINavigationController` transitions](https://developer.apple.com/documentation/uikit/uinavigationcontroller).
 
 - **Windows (WinUI)**:
 
@@ -77,10 +77,10 @@ Each of these methods takes a `SimpleShellTransitionArgs` object as a parameter.
 
 - `OriginPage` of type `VisualElement` - page from which the navigation is initiated
 - `DestinationPage` of type `VisualElement` - destination page of the navigation
-- `OriginShellSectionContainer` of type `VisualElement` - `ShellGroupContainer` from which the navigation is initiated. Can be `null` if no container is defined
-- `DestinationShellSectionContainer` of type `VisualElement` - destination `ShellGroupContainer` of the navigation. Can be `null` if no container is defined
-- `OriginShellItemContainer` of type `VisualElement` - `ShellGroupContainer` from which the navigation is initiated. Can be `null` if no container is defined
-- `DestinationShellItemContainer` of type `VisualElement` - destination `ShellGroupContainer` of the navigation. Can be `null` if no container is defined
+- `OriginShellSectionContainer` of type `VisualElement` - `ShellSection` container from which the navigation is initiated. Can be `null` if no container is defined
+- `DestinationShellSectionContainer` of type `VisualElement` - destination `ShellSection` container of the navigation. Can be `null` if no container is defined
+- `OriginShellItemContainer` of type `VisualElement` - `ShellItem` container from which the navigation is initiated. Can be `null` if no container is defined
+- `DestinationShellItemContainer` of type `VisualElement` - destination `ShellItem` container of the navigation. Can be `null` if no container is defined
 - `Shell` - current instance of `SimpleShell`
 - `IsOriginPageRoot` - whether the origin page is a root page
 - `IsDestinationPageRoot` - whether the destination page is a root page
