@@ -1,4 +1,5 @@
 ﻿using SimpleToolkit.SimpleShellSample.Views.Pages;
+using SimpleToolkit.SimpleShell.Extensions;
 
 namespace SimpleToolkit.SimpleShellSample;
 
@@ -9,6 +10,8 @@ public partial class AppShell : SimpleToolkit.SimpleShell.SimpleShell
 		InitializeComponent();
 
 		Routing.RegisterRoute(nameof(YellowDetailPage), typeof(YellowDetailPage));
+
+        this.SetTransition(Transitions.CustomPlatformTransition);
     }
 
     private async void ShellItemButtonClicked(object sender, EventArgs e)

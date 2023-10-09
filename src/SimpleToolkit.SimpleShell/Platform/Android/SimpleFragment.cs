@@ -1,5 +1,6 @@
 ﻿#if ANDROID
 
+using Android.Animation;
 using Android.OS;
 using Android.Views;
 using Android.Views.Animations;
@@ -14,7 +15,7 @@ namespace SimpleToolkit.SimpleShell.Platform;
 
 // Based on: https://github.com/dotnet/maui/blob/main/src/Controls/src/Core/Compatibility/Handlers/Shell/Android/ShellContentFragment.cs
 
-public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener
+public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener, Animator.IAnimatorListener
 {
     private CustomFrameLayout root;
     private AView view;
@@ -32,16 +33,34 @@ public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener
     }
 
 
+    void AndroidAnimation.IAnimationListener.OnAnimationStart(AndroidAnimation animation)
+    {
+    }
+
+    void AndroidAnimation.IAnimationListener.OnAnimationRepeat(AndroidAnimation animation)
+    {
+    }
+
     async void AndroidAnimation.IAnimationListener.OnAnimationEnd(AndroidAnimation animation)
     {
-        View?.SetLayerType(LayerType.None, null);
-        AnimationFinished?.Invoke(this, EventArgs.Empty);
-        isAnimating = false;
+        await OnAnimationEnd();
+    }
 
-        await Task.Delay(50);
+    void Animator.IAnimatorListener.OnAnimationStart(Animator animation)
+    {
+    }
 
-        if (View is not null)
-            ViewCompat.SetTranslationZ(View, previousZIndex);
+    void Animator.IAnimatorListener.OnAnimationRepeat(Animator animation)
+    {
+    }
+
+    async void Animator.IAnimatorListener.OnAnimationEnd(Animator animation)
+    {
+        await OnAnimationEnd();
+    }
+
+    void Animator.IAnimatorListener.OnAnimationCancel(Animator animation)
+    {
     }
 
     public override void OnResume()
@@ -51,13 +70,47 @@ public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener
             AnimationFinished?.Invoke(this, EventArgs.Empty);
     }
 
+    public override Animator OnCreateAnimator(int transit, bool enter, int nextAnim)
+    {
+        var result = base.OnCreateAnimator(transit, enter, nextAnim);
+
+        if (result is null && nextAnim != 0)
+            result = AnimatorInflater.LoadAnimator(Context, nextAnim);
+
+        if (result is null)
+        {
+            AnimationFinished?.Invoke(this, EventArgs.Empty);
+            return result;
+        }
+
+        if (enter)
+            View.SetLayerType(LayerType.Hardware, null);
+
+        result.AddListener(this);
+
+        if (OnTop)
+        {
+            previousZIndex = ViewCompat.GetTranslationZ(View);
+            ViewCompat.SetTranslationZ(View, 1000f);
+        }
+
+        return result;
+    }
+
     public override AndroidAnimation OnCreateAnimation(int transit, bool enter, int nextAnim)
     {
         var result = base.OnCreateAnimation(transit, enter, nextAnim);
         isAnimating = true;
 
         if (result is null && nextAnim != 0)
-            result = AnimationUtils.LoadAnimation(Context, nextAnim);
+        {
+            var name = Resources.GetResourceTypeName(nextAnim);
+
+            if (name == "animator")
+                return null;
+            else
+                result = AnimationUtils.LoadAnimation(Context, nextAnim);
+        }
 
         if (result is null)
         {
@@ -89,24 +142,13 @@ public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener
         return result;
     }
 
-    public void OnAnimationRepeat(AndroidAnimation animation)
-    {
-    }
-
-    public void OnAnimationStart(AndroidAnimation animation)
-    {
-    }
-
     public override AView OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        return view;
-    }
+        // The view needs to be placed in a container for translations pivots to work
+        var frame = new CustomFrameLayout(Context);
+        frame.AddView(view);
 
-    private void Destroy()
-    {
-        root?.RemoveAllViews();
-        root?.Dispose();
-        root = null;
+        return frame;
     }
 
     protected override void Dispose(bool disposing)
@@ -130,6 +172,25 @@ public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener
     {
         base.OnDestroy();
         Destroy();
+    }
+
+    private void Destroy()
+    {
+        root?.RemoveAllViews();
+        root?.Dispose();
+        root = null;
+    }
+
+    private async Task OnAnimationEnd()
+    {
+        View?.SetLayerType(LayerType.None, null);
+        AnimationFinished?.Invoke(this, EventArgs.Empty);
+        isAnimating = false;
+
+        await Task.Delay(50);
+
+        if (View is not null)
+            ViewCompat.SetTranslationZ(View, previousZIndex);
     }
 }
 

@@ -278,7 +278,7 @@ public partial class AppShell : SimpleToolkit.SimpleShell.SimpleShell
 }
 ```
 
-This diagram shows the current visual structure of our shell:
+This diagram shows simplified visual structure of our shell:
 
 <p align="center">
     <picture>
@@ -379,7 +379,7 @@ Let's move the tab bar from the above sample to `RootPageContainer`:
 
 The `RootPageContainer` view must contain a `SimpleNavigationHost` element somewhere in its view hieararchy. This element will host all the root pages.
 
-This diagram shows the current visual structure of our shell:
+This diagram shows simplified visual structure of our shell:
 
 <p align="center">
     <picture>
@@ -505,7 +505,7 @@ The `ShellSection` with two root pages will contain a top tab bar:
 
 Binding context of a view defined in the template is a respective `ShellSection` (`Tab`) instance.
 
-This diagram shows the current visual structure of our shell:
+This diagram shows simplified visual structure of our shell:
 
 <p align="center">
     <picture>

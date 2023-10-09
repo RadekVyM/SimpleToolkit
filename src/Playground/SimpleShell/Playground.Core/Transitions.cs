@@ -66,33 +66,33 @@ public static class Transitions
     public static PlatformSimpleShellTransition CustomPlatformTransition { get; } = new PlatformSimpleShellTransition
     {
 #if ANDROID
-                SwitchingEnterAnimation = static (args) => Resource.Animation.simpleshell_enter_right,
-                SwitchingLeaveAnimation = static (args) => Resource.Animation.simpleshell_exit_left,
-                PushingEnterAnimation = static (args) => Resource.Animation.simpleshell_enter_right,
-                PushingLeaveAnimation = static (args) => Resource.Animation.simpleshell_exit_left,
-                PoppingEnterAnimation = static (args) => Resource.Animation.simpleshell_enter_left,
-                PoppingLeaveAnimation = static (args) => Resource.Animation.simpleshell_exit_right,
+        SwitchingEnterAnimation = static (args) => Resource.Animation.simpleshell_enter_right,
+        SwitchingLeaveAnimation = static (args) => Resource.Animation.simpleshell_exit_left,
+        PushingEnterAnimation = static (args) => Resource.Animation.simpleshell_enter_right,
+        PushingLeaveAnimation = static (args) => Resource.Animation.simpleshell_exit_left,
+        PoppingEnterAnimation = static (args) => Resource.Animation.simpleshell_enter_left,
+        PoppingLeaveAnimation = static (args) => Resource.Animation.simpleshell_exit_right,
 #elif IOS || MACCATALYST
-                SwitchingAnimationDuration = static (args) => 0.6,
-                SwitchingAnimation = static (args) => static (from, to) =>
-                {
-                    from.Alpha = 0;
-                    to.Alpha = 1;
-                },
-                SwitchingAnimationStarting = static (args) => static (from, to) =>
-                {
-                    to.Alpha = 0;
-                },
-                SwitchingAnimationFinished = static (args) => static (from, to) =>
-                {
-                    from.Alpha = 1;
-                },
-                PushingAnimation = static (args) => new AppleTransition(true),
-                PoppingAnimation = static (args) => new AppleTransition(false),
+        SwitchingAnimationDuration = static (args) => 0.6,
+        SwitchingAnimation = static (args) => static (from, to) =>
+        {
+            from.Alpha = 0;
+            to.Alpha = 1;
+        },
+        SwitchingAnimationStarting = static (args) => static (from, to) =>
+        {
+            to.Alpha = 0;
+        },
+        SwitchingAnimationFinished = static (args) => static (from, to) =>
+        {
+            from.Alpha = 1;
+        },
+        PushingAnimation = static (args) => new AppleTransition(true),
+        PoppingAnimation = static (args) => new AppleTransition(false),
 #elif WINDOWS
-                SwitchingAnimation = static (args) => new Microsoft.UI.Xaml.Media.Animation.EntranceThemeTransition { FromVerticalOffset = -50 },
-                PushingAnimation = static (args) => new Microsoft.UI.Xaml.Media.Animation.DrillInNavigationTransitionInfo(),
-                PoppingAnimation = static (args) => new Microsoft.UI.Xaml.Media.Animation.EntranceNavigationTransitionInfo(),
+        SwitchingAnimation = static (args) => new Microsoft.UI.Xaml.Media.Animation.EntranceThemeTransition { FromVerticalOffset = -50 },
+        PushingAnimation = static (args) => new Microsoft.UI.Xaml.Media.Animation.DrillInNavigationTransitionInfo(),
+        PoppingAnimation = static (args) => new Microsoft.UI.Xaml.Media.Animation.EntranceNavigationTransitionInfo(),
 #endif
     };
 }
