@@ -7,12 +7,14 @@ public static class Transitions
     public static PlatformSimpleShellTransition CustomPlatformTransition { get; } = new PlatformSimpleShellTransition
     {
 #if ANDROID
+        SwitchingEnterAnimation = static (args) => Resource.Animation.nav_default_enter_anim,
+        SwitchingLeaveAnimation = static (args) => Resource.Animation.nav_default_exit_anim,
         PushingEnterAnimation = static (args) => Resource.Animator.flip_right_in,
         PushingLeaveAnimation = static (args) => Resource.Animator.flip_right_out,
         PoppingEnterAnimation = static (args) => Resource.Animator.flip_left_in,
         PoppingLeaveAnimation = static (args) => Resource.Animator.flip_left_out,
 #elif IOS || MACCATALYST
-        SwitchingAnimationDuration = static (args) => 0.6,
+        SwitchingAnimationDuration = static (args) => 0.3,
         SwitchingAnimation = static (args) => static (from, to) =>
         {
             from.Alpha = 0;

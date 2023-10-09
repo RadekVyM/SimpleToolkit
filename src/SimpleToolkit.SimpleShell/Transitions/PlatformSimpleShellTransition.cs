@@ -28,19 +28,19 @@ public class PlatformSimpleShellTransition : ISimpleShellTransition
     /// </summary>
     public Func<SimpleShellTransitionArgs, int> SwitchingLeaveAnimation { get; init; }
     /// <summary>
-    /// ID of an animation that is applied to the entering page on page pushing.
+    /// ID of an animation or animator that is applied to the entering page on page pushing.
     /// </summary>
     public Func<SimpleShellTransitionArgs, int> PushingEnterAnimation { get; init; }
     /// <summary>
-    /// ID of an animation that is applied to the leaving page on page pushing.
+    /// ID of an animation or animator that is applied to the leaving page on page pushing.
     /// </summary>
     public Func<SimpleShellTransitionArgs, int> PushingLeaveAnimation { get; init; }
     /// <summary>
-    /// ID of an animation that is applied to the entering page on page popping.
+    /// ID of an animation or animator that is applied to the entering page on page popping.
     /// </summary>
     public Func<SimpleShellTransitionArgs, int> PoppingEnterAnimation { get; init; }
     /// <summary>
-    /// ID of an animation that is applied to the leaving page on page popping.
+    /// ID of an animation or animator that is applied to the leaving page on page popping.
     /// </summary>
     public Func<SimpleShellTransitionArgs, int> PoppingLeaveAnimation { get; init; }
 

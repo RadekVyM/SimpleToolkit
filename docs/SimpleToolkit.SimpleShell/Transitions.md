@@ -39,10 +39,10 @@ These are all the `PlatformSimpleShellTransition` properties by platform:
 
   - `SwitchingEnterAnimation` - a method returning the ID of an animation that is applied to the entering page on page switching
   - `SwitchingLeaveAnimation` - a method returning the ID of an animation that is applied to the leaving page on page switching
-  - `PushingEnterAnimation` - a method returning the ID of an animation that is applied to the entering page on page pushing
-  - `PushingLeaveAnimation` - a method returning the ID of an animation that is applied to the leaving page on page pushing
-  - `PoppingEnterAnimation` - a method returning the ID of an animation that is applied to the entering page on page popping
-  - `PoppingLeaveAnimation` - a method returning the ID of an animation that is applied to the leaving page on page popping
+  - `PushingEnterAnimation` - a method returning the ID of an animation or animator that is applied to the entering page on page pushing
+  - `PushingLeaveAnimation` - a method returning the ID of an animation or animator that is applied to the leaving page on page pushing
+  - `PoppingEnterAnimation` - a method returning the ID of an animation or animator that is applied to the entering page on page popping
+  - `PoppingLeaveAnimation` - a method returning the ID of an animation or animator that is applied to the leaving page on page popping
   - `DestinationPageInFrontOnSwitching` - a method returning whether the destination page should be displayed in front of the origin page on page switching
   - `DestinationPageInFrontOnPushing` - a method returning whether the destination page should be displayed in front of the origin page on page pushing
   - `DestinationPageInFrontOnPopping` - a method returning whether the destination page should be displayed in front of the origin page on page popping
