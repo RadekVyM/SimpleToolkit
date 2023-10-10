@@ -90,6 +90,107 @@ Each of these methods takes a `SimpleShellTransitionArgs` object as a parameter.
   - `Pushing` - new page is being pushed to the navigation stack
   - `Popping` - existing page is being popped from the navigation stack
 
+#### `PlatformSimpleShellTransition` object
+
+Lets define a new class called `Transitions` and create a new `CustomPlatformTransition` property for custom platform-specific transitions configuration:
+
+```csharp
+public static class Transitions
+{
+    public static PlatformSimpleShellTransition CustomPlatformTransition => new PlatformSimpleShellTransition
+    {
+#if ANDROID
+        SwitchingEnterAnimation = static (args) => Resource.Animation.nav_default_enter_anim,
+        SwitchingLeaveAnimation = static (args) => Resource.Animation.nav_default_exit_anim,
+        PushingEnterAnimation = static (args) => Resource.Animator.flip_right_in,
+        PushingLeaveAnimation = static (args) => Resource.Animator.flip_right_out,
+        PoppingEnterAnimation = static (args) => Resource.Animator.flip_left_in,
+        PoppingLeaveAnimation = static (args) => Resource.Animator.flip_left_out,
+#elif IOS || MACCATALYST
+        SwitchingAnimationDuration = static (args) => 0.3,
+        SwitchingAnimation = static (args) => static (from, to) =>
+        {
+            from.Alpha = 0;
+            to.Alpha = 1;
+        },
+        SwitchingAnimationStarting = static (args) => static (from, to) =>
+        {
+            to.Alpha = 0;
+        },
+        SwitchingAnimationFinished = static (args) => static (from, to) =>
+        {
+            from.Alpha = 1;
+        },
+        PushingAnimation = static (args) => new AppleTransitioning(true),
+        PoppingAnimation = static (args) => new AppleTransitioning(false),
+#elif WINDOWS
+        PushingAnimation = static (args) => new Microsoft.UI.Xaml.Media.Animation.DrillInNavigationTransitionInfo(),
+        PoppingAnimation = static (args) => new Microsoft.UI.Xaml.Media.Animation.DrillInNavigationTransitionInfo(),
+#endif
+    };
+}
+```
+
+> This code can be also found in the [Sample.SimpleShell project](../../src/Samples/Sample.SimpleShell).
+
+As you can see, conditional compilation is used to access properties of different platforms. For each platform, different transitions are defined.
+
+<details>
+    <summary>Android</summary>
+
+On Android, just IDs of predefined or custom-defined Android animations and animators are returned. These IDs can be accessed through the `Resource` class.
+
+Custom Android animations and animators can be defined in the `/Platforms/Android/Resources/anims` and `/Platforms/Android/Resources/animator`. The `flip_right_in` animator, for example, looks like this:
+
+```xml
+<set
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:ordering="together">
+    <!-- Before rotating, immediately set the alpha to 0. -->
+    <objectAnimator
+        android:valueFrom="1.0"
+        android:valueTo="0.0"
+        android:propertyName="alpha"
+        android:duration="0" />
+
+    <!-- Rotate. -->
+    <objectAnimator
+        android:valueFrom="180"
+        android:valueTo="0"
+        android:propertyName="rotationY"
+        android:interpolator="@android:interpolator/accelerate_decelerate"
+        android:duration="300" />
+
+    <!-- Halfway through the rotation, set the alpha to 1. See startOffset. -->
+    <objectAnimator
+        android:valueFrom="0.0"
+        android:valueTo="1.0"
+        android:propertyName="alpha"
+        android:startOffset="150"
+        android:duration="1" />
+</set>
+```
+
+</details>
+
+<details>
+    <summary>iOS/Mac Catalyst implementation</summary>
+
+On iOS/Mac Catalyst, the switching transition animation is just a simple fade animation. The pushing and popping transtions are represented by the custom `AppleTransitioning` class:
+
+```csharp
+
+```
+
+</details>
+
+<details>
+    <summary>Windows (WinUI)</summary>
+
+On Windows, just the pushing and popping transtions are set to the `DrillInNavigationTransitionInfo` object.
+
+</details>
+
 #### Setting a transition
 
 `PlatformSimpleShellTransition` can be set to any page via the `SimpleShell.Transition` attached property. If you set a transition on your `SimpleShell` object, that transition will be used as the default transition for all pages. Transitions can be set on each page individually.
@@ -104,7 +205,18 @@ public static void SetTransition(
     ISimpleShellTransition transition)
 ```
 
-#### Example
+Setting `Transitions.CustomPlatformTransition` to `AppShell` in its constructor:
+
+```csharp
+public AppShell()
+{
+	InitializeComponent();
+
+	Routing.RegisterRoute(nameof(YellowDetailPage), typeof(YellowDetailPage));
+
+    this.SetTransition(Transitions.CustomPlatformTransition);
+}
+```
 
 ## Universal transitions
 

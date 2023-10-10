@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playground.Original", "Play
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleToolkit.Core", "SimpleToolkit.Core\SimpleToolkit.Core.csproj", "{F38F8824-2D2A-4601-81D5-F1AAD7870928}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleToolkit.SimpleShellSample", "SimpleToolkit.SimpleShellSample\SimpleToolkit.SimpleShellSample.csproj", "{648738C7-922B-46B4-A40D-2BB25292DF83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.SimpleShell", "Samples\Sample.SimpleShell\Sample.SimpleShell.csproj", "{648738C7-922B-46B4-A40D-2BB25292DF83}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Playground", "Playground", "{3CD71F7F-BBF6-4380-9EC2-D8EB9E6E0364}"
 EndProject
@@ -22,6 +22,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playground.NoTabs", "Playground\SimpleShell\Playground.NoTabs\Playground.NoTabs.csproj", "{997D44AB-EA1E-4BC7-B337-72A12AA7E3C7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playground.ShellItems", "Playground\SimpleShell\Playground.ShellItems\Playground.ShellItems.csproj", "{CF369419-20E7-4866-9317-FE296515895E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{7ADF018F-53B1-41E8-B7DE-B5C283AAFB81}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,6 +76,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D0CDE37C-2A42-407C-9BC1-54EE23786DD4} = {3CD71F7F-BBF6-4380-9EC2-D8EB9E6E0364}
+		{648738C7-922B-46B4-A40D-2BB25292DF83} = {7ADF018F-53B1-41E8-B7DE-B5C283AAFB81}
 		{AE0FBB53-F83E-4B40-BDE7-C21A33FEF652} = {3CD71F7F-BBF6-4380-9EC2-D8EB9E6E0364}
 		{8DD2BA5E-49C9-46DE-AC3E-D3D13D0E3998} = {AE0FBB53-F83E-4B40-BDE7-C21A33FEF652}
 		{997D44AB-EA1E-4BC7-B337-72A12AA7E3C7} = {AE0FBB53-F83E-4B40-BDE7-C21A33FEF652}
