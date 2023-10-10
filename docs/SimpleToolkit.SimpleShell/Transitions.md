@@ -92,7 +92,7 @@ Each of these methods takes a `SimpleShellTransitionArgs` object as a parameter.
 
 #### `PlatformSimpleShellTransition` object
 
-Lets define a new class called `Transitions` and create a new `CustomPlatformTransition` property for custom platform-specific transitions configuration:
+Let's define a new class called `Transitions` and create a new `CustomPlatformTransition` property for custom platform-specific transitions configuration:
 
 ```csharp
 public static class Transitions
@@ -140,7 +140,7 @@ As you can see, conditional compilation is used to access properties of differen
 
 On Android, just IDs of predefined or custom-defined Android animations and animators are returned. These IDs can be accessed through the `Resource` class.
 
-Custom Android animations and animators can be defined in the `/Platforms/Android/Resources/anims` and `/Platforms/Android/Resources/animator`. The `flip_right_in` animator, for example, looks like this:
+Custom Android animations and animators can be defined in the `/Platforms/Android/Resources/anim` and `/Platforms/Android/Resources/animator` folders. The `flip_right_in` animator, for example, looks like this:
 
 ```xml
 <set
