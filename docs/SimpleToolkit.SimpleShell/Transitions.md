@@ -4,8 +4,8 @@
 
 There are two types of transitions that can be used:
 
-- Platform-specific transitions - transitions provided by the platform-specific APIs and controls. These transitions are used by default.
-- Universal transitions - fully cross-platform transitions that are defined using only .NET MAUI APIs.
+- **Platform-specific transitions** - transitions provided by the platform-specific APIs and controls. These transitions are used by default.
+- **Universal transitions** - fully cross-platform transitions that are defined using only .NET MAUI APIs.
 
 These two types **cannot** be combined in one application. You can only use one or the other.
 
@@ -284,6 +284,43 @@ public AppShell()
 }
 ```
 
+This is how these custom platform-specific transitions look:
+
+<table>
+    <tr>
+        <th align="center">
+            Android
+        </th>
+        <th align="center">
+            iOS
+        </th>
+    </tr>
+    <tr>
+        <td align="center">
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/5ad6f2a9-3407-4e57-9b32-6e96a32c7701"/>
+        </td>
+        <td align="center">
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/ac0e6ee9-efd0-489f-8401-edf76ebdc999"/>
+        </td>
+    </tr>
+    <tr>
+        <th align="center">
+            macOS
+        </th>
+        <th align="center">
+            Windows
+        </th>
+    </tr>
+    <tr>
+        <td align="center">
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/ac653d62-1642-4c77-840d-b1d848558548"/>
+        </td>
+        <td align="center">
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/788e8eb4-6710-4e86-bcc7-d22274aa89c3"/>
+        </td>
+    </tr>
+</table>
+
 ## Universal transitions
 
 Although, platform-specific transition animations can be modified, it is quite limited (especially on Windows). If you want to take full control over the transitions, you need to disable the platform-specific ones by setting the `usePlatformTransitions` parameter of the `UseSimpleShell()` extension method to `false` and define your own platform-independent (universal) animations:
@@ -292,11 +329,11 @@ Although, platform-specific transition animations can be modified, it is quite l
 builder.UseSimpleShell(usePlatformTransitions: false);
 ```
 
-Universal transitions are fully cross-platform transitions that are defined using only .NET MAUI APIs. `SimpleShell` comes with no predefined universal transitions.
+Universal transitions are fully cross-platform transitions that are **defined using only .NET MAUI APIs**. `SimpleShell` comes with no predefined universal transitions.
 
 ### `SimpleShellTransition`
 
-Each universal transition is represented by a `SimpleShellTransition` object which contains these read-only properties settable via its constructors:
+Each universal transition is represented by a `SimpleShellTransition` object which contains these read-only properties settable via its class constructors:
 
 - `Callback` - a method that is called when progress of the transition changes. Progress of the transition is passed to the method through a parameter of type `SimpleShellTransitionArgs`
 - `Starting` - a method that is called when the transition starts
@@ -322,7 +359,7 @@ Setting transition can be simplified using several extension methods. These are 
 ```csharp
 public static void SetTransition(
     this Page page,
-    SimpleShellTransition transition)
+    ISimpleShellTransition transition)
 
 public static void SetTransition(
     this Page page,
@@ -417,7 +454,7 @@ public AppShell()
 }
 ```
 
-The universal transition looks the same on all platforms:
+Universal transitions look the same on all platforms:
 
 https://github.com/RadekVyM/SimpleToolkit/assets/65116078/694efb22-2a1f-4ec2-b169-307499357ae4
 
