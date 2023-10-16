@@ -113,11 +113,11 @@ The code behind of the XAML sample above:
 ```csharp
 public partial class AppShell : SimpleToolkit.SimpleShell.SimpleShell
 {
-	public AppShell()
-	{
-		InitializeComponent();
+    public AppShell()
+    {
+        InitializeComponent();
 
-		Routing.RegisterRoute(nameof(YellowDetailPage), typeof(YellowDetailPage));
+        Routing.RegisterRoute(nameof(YellowDetailPage), typeof(YellowDetailPage));
     }
 
     private async void ShellItemButtonClicked(object sender, EventArgs e)
