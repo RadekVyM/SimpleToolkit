@@ -245,7 +245,7 @@ The hosting area for pages is represented by the `SimpleNavigationHost` view tha
 Navigation between pages works almost the same as in .NET MAUI `Shell`, just use the common `Shell.Current.GoToAsync()`. `SimpleShell` differs only in these cases:
 
 - The `animate` parameter value has no effect on whether the transition animation is played or not.
-- When platform-specific transition animations are used, the `Task` returned by the `GoToAsync()` method will complete once the navigation has been initiated, not once the animation has been completed. In other words, the returned `Task` does not wait on the completion of the animation.
+- When platform-specific transition animations are used, the `Task` returned by the `GoToAsync()` method will complete once the navigation has been initiated, not once the animation has been completed. In other words, the returned `Task` does not wait on the completion of the animation. The same applies to `Navigated` events.
 
 > See [.NET MAUI documentation](https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/shell/navigation) for more information.
 
@@ -429,9 +429,9 @@ Tab bar is not visible on the detail page:
 
 ## `ShellGroupContainer`
 
-You can also specify a container view for each `ShellItem` or `ShellSection` via the `ShellGroupContainerTemplate` attached property. The container view is defined using `DataTemplate` which allows the container to be created on demand in response to navigation.
+You can also specify a container view for each `ShellItem` or `ShellSection` via the `SimpleShell.ShellGroupContainerTemplate` attached property. The container view is defined using `DataTemplate` which allows the container to be created on demand in response to navigation. The created view is cached in the `SimpleShell.ShellGroupContainer` attached property.
 
-The view defined in the `ShellGroupContainerTemplate` property has to contain a `SimpleNavigationHost` element somewhere in its view hieararchy. This element will host the root pages.
+A view defined in the `SimpleShell.ShellGroupContainerTemplate` property has to contain a `SimpleNavigationHost` element somewhere in its view hieararchy. This element will host the root pages.
 
 Let's change the main tab bar from the above sample to display `ShellSection`s instead of all the root pages:
 
