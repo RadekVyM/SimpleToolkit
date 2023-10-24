@@ -1,30 +1,28 @@
 ﻿#if IOS || MACCATALYST
 
-using System;
 using UIKit;
 
-namespace SimpleToolkit.Core
+namespace SimpleToolkit.Core;
+
+public static partial class ViewBoundsExtensions
 {
-    public static partial class ViewBoundsExtensions
+    public static Rect GetBoundsOnScreen(this VisualElement view)
     {
-        public static Rect GetBoundsOnScreen(this VisualElement view)
-        {
-            if (view?.Handler?.PlatformView is not UIView platformView)
-                return new Rect();
+        if (view?.Handler?.PlatformView is not UIView platformView)
+            return new Rect();
 
-            var superview = platformView;
+        var superview = platformView;
 
-            while (superview.Superview is not null)
-                superview = superview.Superview;
+        while (superview.Superview is not null)
+            superview = superview.Superview;
 
-            var convertPoint = platformView.ConvertRectToView(platformView.Bounds, superview);
+        var convertPoint = platformView.ConvertRectToView(platformView.Bounds, superview);
 
-            return new Rect(
-                convertPoint.X,
-                convertPoint.Y,
-                convertPoint.Width,
-                convertPoint.Height);
-        }
+        return new Rect(
+            convertPoint.X,
+            convertPoint.Y,
+            convertPoint.Width,
+            convertPoint.Height);
     }
 }
 

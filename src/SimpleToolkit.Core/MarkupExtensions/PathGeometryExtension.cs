@@ -1,25 +1,24 @@
 ﻿using Microsoft.Maui.Controls.Shapes;
 
-namespace SimpleToolkit.Core.MarkupExtensions
+namespace SimpleToolkit.Core.MarkupExtensions;
+
+public class PathGeometryExtension : IMarkupExtension<Geometry>
 {
-    public class PathGeometryExtension : IMarkupExtension<Geometry>
+    /// <summary>
+    /// String representation of a path.
+    /// </summary>
+    public string Path { get; set; }
+
+    public Geometry ProvideValue(IServiceProvider serviceProvider)
     {
-        /// <summary>
-        /// String representation of a path.
-        /// </summary>
-        public string Path { get; set; }
+        var pathGeometryConverter = new PathGeometryConverter();
+        var path = pathGeometryConverter.ConvertFromInvariantString(Path) as Geometry;
 
-        public Geometry ProvideValue(IServiceProvider serviceProvider)
-        {
-            var pathGeometryConverter = new PathGeometryConverter();
-            var path = pathGeometryConverter.ConvertFromInvariantString(Path) as Geometry;
+        return path;
+    }
 
-            return path;
-        }
-
-        object IMarkupExtension.ProvideValue(IServiceProvider serviceProvider)
-        {
-            return (this as IMarkupExtension<Geometry>).ProvideValue(serviceProvider);
-        }
+    object IMarkupExtension.ProvideValue(IServiceProvider serviceProvider)
+    {
+        return (this as IMarkupExtension<Geometry>).ProvideValue(serviceProvider);
     }
 }
