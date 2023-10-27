@@ -3,6 +3,7 @@
 using SimpleToolkit.SimpleShell.Extensions;
 using SimpleToolkit.SimpleShell.Platform;
 using UIKit;
+using PlatformContentView = Microsoft.Maui.Platform.ContentView;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 
@@ -17,7 +18,7 @@ public partial class SimpleShellSectionHandler
 
         ContentController = new SimpleShellSectionContentController
         {
-            View = new SimpleContentView(),
+            View = new PlatformContentView(),
         };
 
         var navigationController = new SimpleShellSectionController(ContentController);

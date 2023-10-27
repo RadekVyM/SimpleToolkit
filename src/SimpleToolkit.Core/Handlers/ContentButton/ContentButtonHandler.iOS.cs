@@ -19,6 +19,7 @@ public partial class ContentButtonHandler : ContentViewHandler
 
         var buttonPlatformView = new ButtonContentView
         {
+            CrossPlatformLayout = VirtualView,
             AccessibilityTraits = UIAccessibilityTrait.Button
         };
         buttonPlatformView.AddGestureRecognizer(new UITapGestureRecognizer(OnViewTapped));

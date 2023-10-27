@@ -9,7 +9,7 @@ using SimpleToolkit.Core.Platform;
 
 namespace SimpleToolkit.Core.Handlers;
 
-public partial class ContentButtonHandler : ViewHandler<IContentButton, SimpleContentPanel>
+public partial class ContentButtonHandler : ViewHandler<IContentButton, ContentPanel>
 {
     private bool alreadyReleased = true;
     private PointerEventHandler pointerPressedHandler;
@@ -40,14 +40,13 @@ public partial class ContentButtonHandler : ViewHandler<IContentButton, SimpleCo
     }
 
 
-    protected override SimpleContentPanel CreatePlatformView()
+    protected override ContentPanel CreatePlatformView()
     {
         _ = VirtualView ?? throw new InvalidOperationException($"{nameof(VirtualView)} must be set to create a SimpleContentPanel");
 
-        var view = new SimpleContentPanel
+        var view = new ContentPanel
         {
-            CrossPlatformMeasure = VirtualView.CrossPlatformMeasure,
-            CrossPlatformArrange = VirtualView.CrossPlatformArrange,
+            CrossPlatformLayout = VirtualView,
             IsTabStop = true,
             UseSystemFocusVisuals = true,
             FocusVisualMargin = new Microsoft.UI.Xaml.Thickness(-3)
@@ -63,11 +62,10 @@ public partial class ContentButtonHandler : ViewHandler<IContentButton, SimpleCo
         _ = PlatformView ?? throw new InvalidOperationException($"{nameof(PlatformView)} should have been set by base class.");
         _ = VirtualView ?? throw new InvalidOperationException($"{nameof(VirtualView)} should have been set by base class.");
 
-        PlatformView.CrossPlatformMeasure = VirtualView.CrossPlatformMeasure;
-        PlatformView.CrossPlatformArrange = VirtualView.CrossPlatformArrange;
+        PlatformView.CrossPlatformLayout = VirtualView;
     }
 
-    protected override void ConnectHandler(SimpleContentPanel platformView)
+    protected override void ConnectHandler(ContentPanel platformView)
     {
         pointerPressedHandler = new PointerEventHandler(OnPointerPressed);
         pointerReleasedHandler = new PointerEventHandler(OnPointerReleased);
@@ -83,9 +81,8 @@ public partial class ContentButtonHandler : ViewHandler<IContentButton, SimpleCo
         base.ConnectHandler(platformView);
     }
 
-    protected override void DisconnectHandler(SimpleContentPanel platformView)
+    protected override void DisconnectHandler(ContentPanel platformView)
     {
-        platformView.Dispose();
         platformView.RemoveHandler(UIElement.PointerPressedEvent, pointerPressedHandler);
         platformView.RemoveHandler(UIElement.PointerReleasedEvent, pointerReleasedHandler);
         platformView.RemoveHandler(UIElement.PointerExitedEvent, pointerExitedHandler);

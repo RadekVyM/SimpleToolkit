@@ -4,6 +4,7 @@ using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Widget;
 using AndroidX.AppCompat.Widget;
+using Microsoft.Maui.Graphics.Platform;
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using Color = Microsoft.Maui.Graphics.Color;
@@ -24,7 +25,7 @@ public partial class IconHandler : ViewHandler<Icon, ImageView>
 
     ImageSourcePartLoader imageSourcePartLoader;
     public ImageSourcePartLoader SourceLoader =>
-        imageSourcePartLoader ??= new ImageSourcePartLoader(this, () => VirtualView, OnSetImageSource);
+        imageSourcePartLoader ??= new ImageSourcePartLoader(new SourceSetter(this));
 
     public override bool NeedsContainer =>
         VirtualView?.Background != null ||
@@ -80,9 +81,6 @@ public partial class IconHandler : ViewHandler<Icon, ImageView>
         base.PlatformArrange(frame);
     }
 
-    private void OnSetImageSource(Drawable obj) =>
-        PlatformView.SetImageDrawable(obj);
-
     private void ApplyTint(Color color)
     {
         PlatformView.ClearColorFilter();
@@ -98,6 +96,17 @@ public partial class IconHandler : ViewHandler<Icon, ImageView>
 
     public static void MapTintColor(IconHandler handler, Icon icon) =>
         handler.ApplyTint(icon.TintColor);
+
+    class SourceSetter(IconHandler handler) : SimpleIconSourcePartSetter(handler)
+    {
+        public override void SetImageSource(Drawable platformImage)
+        {
+            if (Handler is null || Handler?.PlatformView is not ImageView image)
+                return;
+
+            image.SetImageDrawable(platformImage);
+        }
+    }
 }
 
 #endif

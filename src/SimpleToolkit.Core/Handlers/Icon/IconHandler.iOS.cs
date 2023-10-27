@@ -20,7 +20,7 @@ public class IconHandler : ViewHandler<Icon, UIImageView>
 
     ImageSourcePartLoader imageSourcePartLoader;
     public ImageSourcePartLoader SourceLoader =>
-        imageSourcePartLoader ??= new ImageSourcePartLoader(this, () => VirtualView, OnSetImageSource);
+        imageSourcePartLoader ??= new ImageSourcePartLoader(new SourceSetter(this));
 
     public override bool NeedsContainer =>
         VirtualView?.Background != null ||
@@ -99,6 +99,18 @@ public class IconHandler : ViewHandler<Icon, UIImageView>
 
     public static void MapTintColor(IconHandler handler, Icon icon) => 
         handler.ApplyTint(icon.TintColor);
+
+    class SourceSetter(IconHandler handler) : SimpleIconSourcePartSetter(handler)
+    {
+        public override void SetImageSource(UIImage platformImage)
+        {
+            if (Handler is null || platformImage is null)
+                return;
+
+            Handler.PlatformView.Image = platformImage.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
+            Handler.PlatformView.TintColor = Handler.VirtualView.TintColor?.ToPlatform();
+        }
+    }
 }
 
 #endif

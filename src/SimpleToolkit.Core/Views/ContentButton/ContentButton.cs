@@ -120,7 +120,7 @@ public class ContentButton : ContentView, IContentButton
         if (button.Command is not null)
             CommandCanExecuteChanged(button, EventArgs.Empty);
         else
-            button.SetValueCore(IsEnabledProperty, true);
+            button.SetValueFromRenderer(IsEnabledProperty, true);
     }
 
     private static void CommandCanExecuteChanged(object sender, EventArgs e)
@@ -129,7 +129,7 @@ public class ContentButton : ContentView, IContentButton
 
         if (button.Command is not null)
         {
-            button.SetValueCore(IsEnabledProperty, button.Command.CanExecute(button.CommandParameter));
+            button.SetValueFromRenderer(IsEnabledProperty, button.Command.CanExecute(button.CommandParameter));
             button.UpdateState();
         }
     }

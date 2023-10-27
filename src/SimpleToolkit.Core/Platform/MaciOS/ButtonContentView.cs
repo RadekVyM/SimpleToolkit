@@ -2,7 +2,6 @@
 
 using CoreGraphics;
 using Foundation;
-using Microsoft.Maui.Platform;
 using UIKit;
 using PlatformContentView = Microsoft.Maui.Platform.ContentView;
 
@@ -14,33 +13,6 @@ public class ButtonContentView : PlatformContentView
     public event EventHandler<ContentButtonEventArgs> EndedTouching;
     public event EventHandler<ContentButtonEventArgs> CancelledTouching;
     public event EventHandler<ContentButtonEventArgs> MovedTouching;
-
-    // I need to oveverride these methods because of the CrossPlatformMeasure() and CrossPlatformArrange() methods
-    public override CGSize SizeThatFits(CGSize size)
-    {
-        if (View is not IContentView contentView)
-            return base.SizeThatFits(size);
-
-        var width = size.Width;
-        var height = size.Height;
-
-        var crossPlatformSize = contentView.CrossPlatformMeasure(width, height);
-
-        return crossPlatformSize.ToCGSize();
-    }
-
-    public override void LayoutSubviews()
-    {
-        base.LayoutSubviews();
-
-        if (View is not IContentView contentView)
-            return;
-
-        var bounds = AdjustForSafeArea(Bounds).ToRectangle();
-
-        contentView.CrossPlatformMeasure(bounds.Width, bounds.Height);
-        contentView.CrossPlatformArrange(bounds);
-    }
 
     public override void SetNeedsLayout()
     {
