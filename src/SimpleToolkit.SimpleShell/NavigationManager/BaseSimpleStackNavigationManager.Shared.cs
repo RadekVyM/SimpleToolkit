@@ -175,6 +175,16 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
 
     protected virtual PlatformView GetPlatformView(IView view)
     {
+#if IOS || MACCATALYST
+        // The ToPlatform() method does not return the actual view of a page controller
+        // This causes problems with page backgrounds which were not present before following PR was merged:
+        // https://github.com/dotnet/maui/pull/15832/files
+        var controller = view?.ToUIViewController(mauiContext);
+
+        if (controller is PageViewController pc)
+            return pc.View;
+#endif
+
         return view?.ToPlatform(mauiContext);
     }
 

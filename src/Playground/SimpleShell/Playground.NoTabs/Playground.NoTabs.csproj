@@ -49,12 +49,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Playground.Core\Playground.Core.csproj" />
-	  <ProjectReference Include="..\..\..\SimpleToolkit.SimpleShell\SimpleToolkit.SimpleShell.csproj" />
+		<ProjectReference Include="..\Playground.Core\Playground.Core.csproj" />
+		<ProjectReference Include="..\..\..\SimpleToolkit.SimpleShell\SimpleToolkit.SimpleShell.csproj" />
 	</ItemGroup>
 
 </Project>

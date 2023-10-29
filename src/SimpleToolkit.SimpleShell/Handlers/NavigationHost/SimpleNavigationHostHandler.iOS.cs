@@ -2,8 +2,8 @@
 
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
+using SimpleToolkit.SimpleShell.Platform;
 using UIKit;
-using PlatformContentView = Microsoft.Maui.Platform.ContentView;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 
@@ -31,7 +31,7 @@ public partial class SimpleNavigationHostHandler : ViewHandler<ISimpleNavigation
 
     protected override UIView CreatePlatformView()
     {
-        return new PlatformContentView
+        return new SimpleContentView
         {
             View = VirtualView
         };

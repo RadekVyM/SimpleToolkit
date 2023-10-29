@@ -52,22 +52,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\Fonts\Font-Awesome-Solid.otf" />
-	  <None Remove="Resources\Images\arrow_left.svg" />
-	  <None Remove="Resources\Images\avatar_empty.png" />
-	  <None Remove="Resources\Images\avatar_filled.png" />
-	  <None Remove="Resources\Images\bird_empty.png" />
-	  <None Remove="Resources\Images\bird_filled.png" />
-	  <None Remove="Resources\Images\case_empty.png" />
-	  <None Remove="Resources\Images\case_filled.png" />
-	  <None Remove="Resources\Images\flame_empty.png" />
-	  <None Remove="Resources\Images\flame_filled.png" />
-	  <None Remove="Resources\Images\pizza_empty.png" />
-	  <None Remove="Resources\Images\pizza_filled.png" />
-	  <None Remove="Resources\Images\sandy_beach.jpg" />
-	  <None Remove="Resources\Images\settings.png" />
-	  <None Remove="Resources\Images\speaker.png" />
-	  <None Remove="Resources\Images\star.png" />
+		<None Remove="Resources\Fonts\Font-Awesome-Solid.otf" />
+		<None Remove="Resources\Images\arrow_left.svg" />
+		<None Remove="Resources\Images\avatar_empty.png" />
+		<None Remove="Resources\Images\avatar_filled.png" />
+		<None Remove="Resources\Images\bird_empty.png" />
+		<None Remove="Resources\Images\bird_filled.png" />
+		<None Remove="Resources\Images\case_empty.png" />
+		<None Remove="Resources\Images\case_filled.png" />
+		<None Remove="Resources\Images\flame_empty.png" />
+		<None Remove="Resources\Images\flame_filled.png" />
+		<None Remove="Resources\Images\pizza_empty.png" />
+		<None Remove="Resources\Images\pizza_filled.png" />
+		<None Remove="Resources\Images\sandy_beach.jpg" />
+		<None Remove="Resources\Images\settings.png" />
+		<None Remove="Resources\Images\speaker.png" />
+		<None Remove="Resources\Images\star.png" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)'!='DEBUG'">
@@ -77,54 +77,31 @@
 	</ItemGroup>
 		
 	<ItemGroup Condition="'$(Configuration)'=='DEBUG'">
-	  <ProjectReference Include="..\..\SimpleToolkit.SimpleShell.Controls\SimpleToolkit.SimpleShell.Controls.csproj" />
-	  <ProjectReference Include="..\..\SimpleToolkit.SimpleShell\SimpleToolkit.SimpleShell.csproj" />
+		<ProjectReference Include="..\..\SimpleToolkit.SimpleShell.Controls\SimpleToolkit.SimpleShell.Controls.csproj" />
+		<ProjectReference Include="..\..\SimpleToolkit.SimpleShell\SimpleToolkit.SimpleShell.csproj" />
 	</ItemGroup>
 		
 	<ItemGroup>
-	  <Compile Update="PlaygroundAppShell.xaml.cs">
-	    <DependentUpon>PlaygroundAppShell.xaml</DependentUpon>
-	  </Compile>
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+		<PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="2.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="NormalAppShell.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="PlaygroundAppShell.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+		<ProjectReference Include="..\SimpleShell\Playground.Core\Playground.Core.csproj" />
 	</ItemGroup>
+	
+	<!-- Build Properties must be defined within these property groups to ensure successful publishing
+       to the Mac App Store. See: https://aka.ms/maui-publish-app-store#define-build-properties-in-your-project-file -->
+	<PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst')) and '$(Configuration)' == 'Debug'">
+		<CodesignEntitlements>Platforms/MacCatalyst/Entitlements.Debug.plist</CodesignEntitlements>
+	</PropertyGroup>
 
-	<ItemGroup>
-		<MauiXaml Update="NormalAppShell.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\Pages\ContentButtonPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\Pages\IconPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\Pages\ImagePage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\Pages\PopoverPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\Pages\PurplePage.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="WorkPage.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="2.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\SimpleShell\Playground.Core\Playground.Core.csproj" />
-	</ItemGroup>
+	<PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst')) and '$(Configuration)' == 'Release'">
+		<CodesignEntitlements>Platforms/MacCatalyst/Entitlements.Release.plist</CodesignEntitlements>
+		<UseHardenedRuntime>true</UseHardenedRuntime>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
+		<CreatePackage>false</CreatePackage>
+	</PropertyGroup>
 </Project>

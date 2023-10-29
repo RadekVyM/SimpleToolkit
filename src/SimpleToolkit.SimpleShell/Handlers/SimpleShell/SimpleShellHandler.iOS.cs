@@ -3,7 +3,6 @@
 using Microsoft.Maui.Handlers;
 using SimpleToolkit.SimpleShell.Platform;
 using UIKit;
-using PlatformContentView = Microsoft.Maui.Platform.ContentView;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 
@@ -13,7 +12,7 @@ public partial class SimpleShellHandler : ViewHandler<ISimpleShell, UIView>
     {
         ViewController = new SimpleShellController
         {
-            View = new PlatformContentView
+            View = new SimpleContentView
             {
                 View = VirtualView
             }

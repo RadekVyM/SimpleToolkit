@@ -2,8 +2,8 @@
 
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
+using SimpleToolkit.SimpleShell.Platform;
 using UIKit;
-using PlatformContentView = Microsoft.Maui.Platform.ContentView;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 
@@ -11,7 +11,7 @@ public partial class SimpleShellItemHandler : ElementHandler<ShellItem, UIView>
 {
     protected override UIView CreatePlatformElement()
     {
-        return new PlatformContentView();
+        return new SimpleContentView();
     }
 
     private void UpdatePlatformViewContent()

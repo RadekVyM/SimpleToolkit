@@ -31,8 +31,9 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
-	  <CreatePackage>false</CreatePackage>
+		<CreatePackage>false</CreatePackage>
 	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
@@ -52,6 +53,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 	</ItemGroup>
 
@@ -60,13 +63,6 @@
 	</ItemGroup>
 		
 	<ItemGroup Condition="'$(Configuration)'=='DEBUG'">
-	  <ProjectReference Include="..\..\SimpleToolkit.SimpleShell\SimpleToolkit.SimpleShell.csproj" />
-	</ItemGroup>
-	
-	<ItemGroup>
-	  <None Remove="Platforms\Android\Resources\animator\" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Platforms\Android\Resources\animator\" />
+		<ProjectReference Include="..\..\SimpleToolkit.SimpleShell\SimpleToolkit.SimpleShell.csproj" />
 	</ItemGroup>
 </Project>

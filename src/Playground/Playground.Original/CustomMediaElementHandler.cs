@@ -149,6 +149,9 @@ public class CustomMauiMediaElement : MauiMediaElement
         // Is it the right ViewController?
         if (controller is not null)
         {
+            if (controller is PageViewController)
+                return controller;
+
             if (controller is UICollectionViewController)
                 return controller;
 

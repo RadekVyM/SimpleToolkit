@@ -41,6 +41,11 @@
 	<ItemGroup Condition="'$(Configuration)'!='DEBUG'">
 		<PackageReference Include="SimpleToolkit.Core" Version="3.0.0" PrivateAssets="buildTransitive" />
 	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)'=='DEBUG'">
 		<ProjectReference Include="..\SimpleToolkit.Core\SimpleToolkit.Core.csproj" />

@@ -37,15 +37,14 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
-	  <CreatePackage>false</CreatePackage>
+		<CreatePackage>false</CreatePackage>
 	</PropertyGroup>
-
+	
 	<ItemGroup>
-	  <None Remove="Platforms\" />
-	  <None Remove="Platforms\Android\" />
-	  <None Remove="Platforms\Android\Resources\" />
-	  <None Remove="Platforms\Android\Resources\anim\" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 	</ItemGroup>
+
 	<ItemGroup>
         <None Include="..\..\docs\Nuget\SimpleToolkit.SimpleShell.md">
             <Pack>True</Pack>
@@ -62,12 +61,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Platform\Android\" />
-	  <Folder Include="Platform\Windows\" />
-	  <Folder Include="Platforms\" />
-	  <Folder Include="Platforms\Android\" />
-	  <Folder Include="Platforms\Android\Resources\" />
-	  <Folder Include="Platforms\Android\Resources\anim\" />
+		<Folder Include="Platform\Android\" />
+		<Folder Include="Platform\Windows\" />
+		<Folder Include="Platforms\" />
+		<Folder Include="Platforms\Android\" />
+		<Folder Include="Platforms\Android\Resources\" />
+		<Folder Include="Platforms\Android\Resources\anim\" />
 	</ItemGroup>
 
 </Project>
