@@ -5,7 +5,6 @@ using Microsoft.Maui.Platform;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml;
 using Windows.System;
-using SimpleToolkit.Core.Platform;
 
 namespace SimpleToolkit.Core.Handlers;
 
@@ -73,10 +72,10 @@ public partial class ContentButtonHandler : ViewHandler<IContentButton, ContentP
         keyDownHandler = new KeyEventHandler(OnKeyDown);
 
         //platformView.Clicked = VirtualView.OnClicked;
-        platformView.AddHandler(UIElement.PointerPressedEvent, pointerPressedHandler, true);
-        platformView.AddHandler(UIElement.PointerReleasedEvent, pointerReleasedHandler, true);
-        platformView.AddHandler(UIElement.PointerExitedEvent, pointerExitedHandler, true);
-        platformView.AddHandler(UIElement.KeyDownEvent, keyDownHandler, true);
+        platformView.AddHandler(UIElement.PointerPressedEvent, pointerPressedHandler, false);
+        platformView.AddHandler(UIElement.PointerReleasedEvent, pointerReleasedHandler, false);
+        platformView.AddHandler(UIElement.PointerExitedEvent, pointerExitedHandler, false);
+        platformView.AddHandler(UIElement.KeyDownEvent, keyDownHandler, false);
 
         base.ConnectHandler(platformView);
     }
@@ -103,8 +102,8 @@ public partial class ContentButtonHandler : ViewHandler<IContentButton, ContentP
         if (!alreadyReleased)
         {
             VirtualView.OnReleased(GetPointerPosition(e));
+            VirtualView.OnClicked();
         }
-        VirtualView.OnClicked();
 
         alreadyReleased = true;
     }

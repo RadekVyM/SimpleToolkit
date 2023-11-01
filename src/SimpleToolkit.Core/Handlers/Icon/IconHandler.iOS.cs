@@ -6,7 +6,7 @@ using UIKit;
 
 namespace SimpleToolkit.Core.Handlers;
 
-public class IconHandler : ViewHandler<Icon, UIImageView>
+public class IconHandler : ViewHandler<Icon, UIImageView>, IImageHandler
 {
     public static IPropertyMapper<Icon, IconHandler> Mapper = new PropertyMapper<Icon, IconHandler>(ViewHandler.ViewMapper)
     {
@@ -26,6 +26,7 @@ public class IconHandler : ViewHandler<Icon, UIImageView>
         VirtualView?.Background != null ||
         base.NeedsContainer;
 
+    Microsoft.Maui.IImage IImageHandler.VirtualView => VirtualView;
 
     public IconHandler() : base(Mapper)
     {
@@ -36,9 +37,16 @@ public class IconHandler : ViewHandler<Icon, UIImageView>
     }
 
 
+    public void OnWindowChanged()
+    {
+        // SourceManager is not public
+        //if (SourceLoader.SourceManager.RequiresReload(PlatformView))
+            UpdateValue(nameof(Icon.Source));
+    }
+
     protected override UIImageView CreatePlatformView()
     {
-        var imageView = new MauiImageView();
+        var imageView = new MauiImageView(this);
 
         imageView.ContentMode = Aspect.AspectFit.ToUIViewContentMode();
         imageView.ClipsToBounds = imageView.ContentMode == UIViewContentMode.ScaleAspectFill;
@@ -46,31 +54,11 @@ public class IconHandler : ViewHandler<Icon, UIImageView>
         return imageView;
     }
 
-    protected override void ConnectHandler(UIImageView platformView)
-    {
-        base.ConnectHandler(platformView);
-
-        if (PlatformView is MauiImageView imageView)
-            imageView.WindowChanged += OnWindowChanged;
-    }
-
     protected override void DisconnectHandler(UIImageView platformView)
     {
         base.DisconnectHandler(platformView);
 
-        if (platformView is MauiImageView imageView)
-            imageView.WindowChanged -= OnWindowChanged;
-
         SourceLoader.Reset();
-    }
-
-    void OnSetImageSource(UIImage obj)
-    {
-        if (obj is null)
-            return;
-
-        PlatformView.Image = obj.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
-        PlatformView.TintColor = VirtualView.TintColor?.ToPlatform();
     }
 
     private void ApplyTint(Color color)
@@ -82,13 +70,6 @@ public class IconHandler : ViewHandler<Icon, UIImageView>
             PlatformView.TintAdjustmentMode = UIViewTintAdjustmentMode.Normal;
             PlatformView.TintColor = color.ToPlatform();
         }
-    }
-
-    void OnWindowChanged(object sender, EventArgs e)
-    {
-        // SourceManager is not public
-        //if (SourceLoader.SourceManager.IsResolutionDependent)
-        UpdateValue(nameof(Icon.Source));
     }
 
     public static void MapSource(IconHandler handler, Icon icon) =>
@@ -104,11 +85,14 @@ public class IconHandler : ViewHandler<Icon, UIImageView>
     {
         public override void SetImageSource(UIImage platformImage)
         {
-            if (Handler is null || platformImage is null)
+            if (Handler?.PlatformView is not UIImageView imageView)
                 return;
 
-            Handler.PlatformView.Image = platformImage.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
-            Handler.PlatformView.TintColor = Handler.VirtualView.TintColor?.ToPlatform();
+            imageView.Image = platformImage.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
+            imageView.TintColor = Handler.VirtualView.TintColor?.ToPlatform();
+
+            if (Handler?.VirtualView is Microsoft.Maui.IImage image && image.Source is IStreamImageSource)
+                imageView.InvalidateMeasure(image);
         }
     }
 }
