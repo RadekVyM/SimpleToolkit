@@ -18,7 +18,7 @@ public interface ISimpleShell : IView, IElement, ITransform, IShellController, I
     /// </summary>
     new Page CurrentPage { get; }
     /// <summary>
-    /// The currently selected <see cref="ShellItem"/> or <see cref="FlyoutItem"/>.
+    /// The currently selected <see cref="ShellItem"/>.
     /// </summary>
     ShellItem CurrentItem { get; set; }
     /// <summary>
@@ -37,4 +37,12 @@ public interface ISimpleShell : IView, IElement, ITransform, IShellController, I
     /// All <see cref="ShellContent"/> items of this shell.
     /// </summary>
     IReadOnlyList<ShellContent> ShellContents { get; }
+    /// <summary>
+    /// All <see cref="FlyoutItem"/> items of this shell.
+    /// </summary>
+    IReadOnlyList<FlyoutItem> FlyoutItems { get; }
+    /// <summary>
+    /// All <see cref="TabBar"/> items of this shell.
+    /// </summary>
+    IReadOnlyList<TabBar> TabBars { get; }
 }

@@ -38,6 +38,10 @@ public partial class SimpleShell : Shell, ISimpleShell
         BindableProperty.Create(nameof(ShellSections), typeof(IReadOnlyList<ShellSection>), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
     public static readonly BindableProperty ShellContentsProperty =
         BindableProperty.Create(nameof(ShellContents), typeof(IReadOnlyList<ShellContent>), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
+    public static readonly BindableProperty FlyoutItemsProperty =
+        BindableProperty.Create(nameof(FlyoutItems), typeof(IReadOnlyList<FlyoutItem>), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
+    public static readonly BindableProperty TabBarsProperty =
+        BindableProperty.Create(nameof(TabBars), typeof(IReadOnlyList<TabBar>), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
 
     public static new SimpleShell Current => Shell.Current as SimpleShell;
 
@@ -85,6 +89,18 @@ public partial class SimpleShell : Shell, ISimpleShell
         private protected set => SetValue(ShellContentsProperty, value);
     }
 
+    public new IReadOnlyList<FlyoutItem> FlyoutItems
+    {
+        get => (IReadOnlyList<FlyoutItem>)GetValue(FlyoutItemsProperty);
+        private protected set => SetValue(FlyoutItemsProperty, value);
+    }
+
+    public IReadOnlyList<TabBar> TabBars
+    {
+        get => (IReadOnlyList<TabBar>)GetValue(TabBarsProperty);
+        private protected set => SetValue(TabBarsProperty, value);
+    }
+
 
     public SimpleShell()
     {
@@ -105,11 +121,9 @@ public partial class SimpleShell : Shell, ISimpleShell
 
         //base.OnHandlerChanging(args);
 
-
-        if (args.OldHandler is not null)
-        {
-            //Handler.UpdateValue(nameof(ISimpleShell.Content));
-        }
+        SetDefaultShellPropertyValues();
+        UpdateVisualStates();
+        UpdateItemsCollections();
     }
 
     private void UpdateVisualStates()
@@ -213,8 +227,7 @@ public partial class SimpleShell : Shell, ISimpleShell
         // Update collections if the logical structure of the shell changes
         if (e.Element is BaseShellItem)
         {
-            ShellSections = GetShellSections().ToList();
-            ShellContents = GetShellContents().ToList();
+            UpdateItemsCollections();
         }
     }
 
@@ -222,11 +235,30 @@ public partial class SimpleShell : Shell, ISimpleShell
     {
         SetDefaultShellPropertyValues();
         UpdateVisualStates();
+        UpdateItemsCollections();
 
-        ShellSections = GetShellSections().ToList();
-        ShellContents = GetShellContents().ToList();
         DescendantAdded += SimpleShellDescendantChanged;
         DescendantRemoved += SimpleShellDescendantChanged;
+    }
+
+    private void UpdateItemsCollections()
+    {
+        var newShellSections = GetShellSections().ToList();
+        var newShellContents = GetShellContents().ToList();
+        var newFlyoutItems = Items.OfType<FlyoutItem>().ToList();
+        var newTabBars = Items.OfType<TabBar>().ToList();
+
+        if (ShouldUpdate(ShellSections, newShellSections))
+            ShellSections = newShellSections;
+        if (ShouldUpdate(ShellContents, newShellContents))
+            ShellContents = newShellContents;
+        if (ShouldUpdate(FlyoutItems, newFlyoutItems))
+            FlyoutItems = newFlyoutItems;
+        if (ShouldUpdate(TabBars, newTabBars))
+            TabBars = newTabBars;
+
+        static bool ShouldUpdate<T>(IEnumerable<T> items, IEnumerable<T> newItems)
+            => items is null || !items.SequenceEqual(newItems);
     }
 
     private static void OnContentChanged(BindableObject bindable, object oldValue, object newValue)

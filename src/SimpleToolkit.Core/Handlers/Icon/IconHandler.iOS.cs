@@ -88,8 +88,8 @@ public class IconHandler : ViewHandler<Icon, UIImageView>, IImageHandler
             if (Handler?.PlatformView is not UIImageView imageView)
                 return;
 
-            imageView.Image = platformImage.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
-            imageView.TintColor = Handler.VirtualView.TintColor?.ToPlatform();
+            imageView.Image = platformImage?.ImageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate);
+            imageView.TintColor = Handler.VirtualView?.TintColor?.ToPlatform();
 
             if (Handler?.VirtualView is Microsoft.Maui.IImage image && image.Source is IStreamImageSource)
                 imageView.InvalidateMeasure(image);

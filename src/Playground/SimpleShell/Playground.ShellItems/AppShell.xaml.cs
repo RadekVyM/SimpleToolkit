@@ -34,6 +34,11 @@ public partial class AppShell : SimpleShell
         // Just to check if handlers are set to correct items
         var shellItemHandlers = Items.Select(i => i.Handler).ToArray();
         var shellSectionHandlers = ShellSections?.Select(i => i.Handler).ToArray();
+        var items = Items;
+
+        var tabBars = TabBars;
+        var flyoutItems = FlyoutItems;
+        //var menuItems = items.OfType<MenuShellItem>().Select(m => m.MenuItem);
     }
 
     private async void ShellItemButtonClicked(object sender, EventArgs e)

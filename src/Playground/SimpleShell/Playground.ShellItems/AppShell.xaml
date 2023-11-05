@@ -69,10 +69,12 @@
         ContentTemplate="{DataTemplate pages:BluePage}"
         Route="BluePage"/>
 
-    <ShellContent
-        Title="Orange"
-        ContentTemplate="{DataTemplate pages:OrangePage}"
-        Route="OrangePage"/>
+    <FlyoutItem>
+        <ShellContent
+            Title="Orange"
+            ContentTemplate="{DataTemplate pages:OrangePage}"
+            Route="OrangePage"/>
+    </FlyoutItem>
 
     <MenuItem
         Text="Hello"/>

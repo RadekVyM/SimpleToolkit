@@ -6,8 +6,8 @@ namespace Playground.Original.Views.Pages
 {
     public partial class ContentButtonPage : ContentPage
     {
-        private const string WideText = "wide content that should change size of the button";
-        private const string ShortText = "short text";
+        private const string WideText = "a wide content that should change the size of the button";
+        private const string ShortText = "a short text";
 
         bool commandParameter => (bool)contentButton.CommandParameter;
 

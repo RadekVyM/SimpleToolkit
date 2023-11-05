@@ -29,6 +29,14 @@ This method also takes a boolean parameter `usePlatformTransitions`, which defau
 
 Even though `SimpleShell` inherits from the `Shell` class, many of its properites are not mapped to any platform controls. However, you can bind these properties to your custom controls.
 
+### XAML namespace
+
+All `SimpleShell` related controls and attached properties can be found in the following XAML namespace:
+
+```xml
+xmlns:simpleShell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
+```
+
 ### Logical navigation structure
 
 Let's say we want to have an app with four root pages - `YellowPage`, `GreenPage`, `RedPage` and `BluePage` - and one detail page - `YellowDetailPage`. Logical navigation structure of the app can be defined in `SimpleShell` like this:
@@ -238,6 +246,8 @@ The hosting area for pages is represented by the `SimpleNavigationHost` view tha
 - `CurrentShellContent` - the currently selected `ShellContent`
 - `ShellSections` - read-only list of all `ShellSection`s in the shell
 - `ShellContents` - read-only list of all `ShellContent`s in the shell
+- `FlyoutItems` - read-only list of all `FlyoutItem`s in the shell
+- `TabBars` - read-only list of all `TabBar`s in the shell
 - `RootPageContainer` - a view that wraps all root pages (`ShellContent`s)
 
 #### Navigation

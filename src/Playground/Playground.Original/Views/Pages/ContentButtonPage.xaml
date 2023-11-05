@@ -21,6 +21,26 @@
         <VerticalStackLayout
             HorizontalOptions="Fill" VerticalOptions="Center"
             Spacing="20">
+            
+            <simpleCore:ContentButton>
+                <HorizontalStackLayout
+                    Padding="12,10"
+                    Spacing="10"
+                    HorizontalOptions="Center">
+                    <simpleCore:Icon
+                        Source="star.png"
+                        TintColor="Red"
+                        VerticalOptions="Center"
+                        HeightRequest="18"
+                        WidthRequest="18"/>
+                    <Label
+                        Text="Sign in with email"
+                        TextColor="Black"
+                        FontAttributes="Bold"
+                        VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </simpleCore:ContentButton>
+
             <simpleCore:ContentButton
                 Clicked="VariableButtonClicked"
                 HorizontalOptions="Center">
@@ -31,12 +51,15 @@
                 
                     <VerticalStackLayout Padding="6">
                         <Label
+                            HorizontalTextAlignment="Center"
                             Text="I am a button"/>
                         <Label
+                            HorizontalTextAlignment="Center"
                             Text="with"/>
                         <Label
                             x:Name="variableContentLabel"
-                            Text="default content"/>
+                            HorizontalTextAlignment="Center"
+                            Text="the default content"/>
                     </VerticalStackLayout>
                 </Border>
             </simpleCore:ContentButton>
