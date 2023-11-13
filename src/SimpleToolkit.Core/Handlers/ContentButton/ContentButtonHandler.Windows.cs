@@ -5,6 +5,7 @@ using Microsoft.Maui.Platform;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml;
 using Windows.System;
+using SimpleToolkit.Core.Platform;
 
 namespace SimpleToolkit.Core.Handlers;
 
@@ -43,7 +44,7 @@ public partial class ContentButtonHandler : ViewHandler<IContentButton, ContentP
     {
         _ = VirtualView ?? throw new InvalidOperationException($"{nameof(VirtualView)} must be set to create a SimpleContentPanel");
 
-        var view = new ContentPanel
+        var view = new SimpleContentButtonPanel
         {
             CrossPlatformLayout = VirtualView,
             IsTabStop = true,
@@ -71,7 +72,10 @@ public partial class ContentButtonHandler : ViewHandler<IContentButton, ContentP
         pointerExitedHandler = new PointerEventHandler(OnPointerExited);
         keyDownHandler = new KeyEventHandler(OnKeyDown);
 
-        //platformView.Clicked = VirtualView.OnClicked;
+        if (platformView is SimpleContentButtonPanel buttonPanel)
+        {
+            //buttonPanel.Clicked = VirtualView.OnClicked;
+        }
         platformView.AddHandler(UIElement.PointerPressedEvent, pointerPressedHandler, false);
         platformView.AddHandler(UIElement.PointerReleasedEvent, pointerReleasedHandler, false);
         platformView.AddHandler(UIElement.PointerExitedEvent, pointerExitedHandler, false);
