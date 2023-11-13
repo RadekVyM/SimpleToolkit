@@ -25,7 +25,7 @@ builder.UseSimpleToolkit();
 All controls can be found in the following XAML namespace:
 
 ```xml
-xmlns:simpleShell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
+xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
 ```
 
 ## Helpers
