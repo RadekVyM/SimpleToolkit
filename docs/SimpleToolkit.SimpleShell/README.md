@@ -25,7 +25,7 @@ This method also takes a boolean parameter `usePlatformTransitions`, which defau
 
 ## SimpleShell
 
-`SimpleShell` is a simplified implementation of .NET MAUI `Shell`. All `SimpleShell` is is just a set of containers for your application content with the ability to put the hosting area for pages wherever you want. This gives you the flexibility to add custom tab bars, navigation bars, flyouts, etc. to your `Shell` application while using a great URI-based navigation.
+`SimpleShell` is a simplified implementation of .NET MAUI `Shell`. All `SimpleShell` is is just a set of containers for your application content with the ability to put the hosting area for pages wherever you want. This gives you the flexibility to add custom tab bars, navigation bars, flyouts, etc. to your `Shell` application while using the URI-based navigation.
 
 Even though `SimpleShell` inherits from the `Shell` class, many of its properites are not mapped to any platform controls. However, you can bind these properties to your custom controls.
 
@@ -37,9 +37,9 @@ All `SimpleShell` related controls and attached properties can be found in the f
 xmlns:simpleShell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
 ```
 
-### Logical navigation structure
+### Logical hierarchy
 
-Let's say we want to have an app with four root pages - `YellowPage`, `GreenPage`, `RedPage` and `BluePage` - and one detail page - `YellowDetailPage`. Logical navigation structure of the app can be defined in `SimpleShell` like this:
+Let's say we want to have an app with four root pages - `YellowPage`, `GreenPage`, `RedPage` and `BluePage` - and one detail page - `YellowDetailPage`. In `SimpleShell`, the logical hierarchy of the app can be defined like this:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -91,11 +91,11 @@ Let's say we want to have an app with four root pages - `YellowPage`, `GreenPage
 </simpleShell:SimpleShell>
 ```
 
-As you can see, the logical navigation structure is defined using `ShellContent`, `Tab`, `TabBar` and `FlyoutItem` elements as in the original .NET MAUI `Shell`.
+As you can see, the logical hierarchy is defined using `ShellContent`, `Tab`, `TabBar` and `FlyoutItem` elements as in the original .NET MAUI `Shell`.
 
 > I refer to the `TabBar` and `FlyoutItem` elements as `ShellItem` and to the `Tab` element as `ShellSection`. The `ShellItem` and `ShellSection` classes are their predecessors.
 
-Semantics of the `TabBar` and `FlyoutItem` elements is ignored in `SimpleShell`. It does not matter which one you use. You can even use the `ShellItem` element instead.
+Semantics of the `TabBar` and `FlyoutItem` elements is ignored in `SimpleShell`. It does not matter which one you use. You can even use the `ShellItem` element instead. You can also use multiple `TabBar` elements at once.
 
 As in the original .NET MAUI `Shell`, `ShellItem` and `ShellSection` elements can be left out and implicitly generated:
 
@@ -255,7 +255,7 @@ The hosting area for pages is represented by the `SimpleNavigationHost` view tha
 Navigation between pages works almost the same as in .NET MAUI `Shell`, just use the common `Shell.Current.GoToAsync()`. `SimpleShell` differs only in these cases:
 
 - The `animate` parameter value has no effect on whether the transition animation is played or not.
-- When platform-specific transition animations are used, the `Task` returned by the `GoToAsync()` method will complete once the navigation has been initiated, not once the animation has been completed. In other words, the returned `Task` does not wait on the completion of the animation. The same applies to `Navigated` events.
+- When platform-specific transition animations are used, the `Task` returned by the `GoToAsync()` method will complete once the navigation has been initiated, not once the animation has been completed. In other words, the returned `Task` is not waiting for the animation to complete. The same applies to `Navigated` events.
 
 > See [.NET MAUI documentation](https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/shell/navigation) for more information.
 
@@ -288,7 +288,7 @@ public partial class AppShell : SimpleToolkit.SimpleShell.SimpleShell
 }
 ```
 
-This diagram shows simplified visual structure of our shell:
+This diagram shows a simplified visual structure of our shell:
 
 <p align="center">
     <picture>
@@ -389,7 +389,7 @@ Let's move the tab bar from the above sample to `RootPageContainer`:
 
 The `RootPageContainer` view must contain a `SimpleNavigationHost` element somewhere in its view hieararchy. This element will host all the root pages.
 
-This diagram shows simplified visual structure of our shell:
+This diagram shows a simplified visual structure of our shell:
 
 <p align="center">
     <picture>
@@ -515,7 +515,7 @@ The `ShellSection` with two root pages will contain a top tab bar:
 
 Binding context of a view defined in the template is a respective `ShellSection` (`Tab`) instance.
 
-This diagram shows simplified visual structure of our shell:
+This diagram shows a simplified visual structure of our shell:
 
 <p align="center">
     <picture>
