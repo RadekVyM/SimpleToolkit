@@ -53,9 +53,9 @@ These are all the `PlatformSimpleShellTransition` properties by platform:
 
   - `DestinationPageInFrontOnSwitching` - a method returning whether the destination page should be displayed in front of the origin page on page switching
   - `SwitchingAnimation` - a method returning a switching animation represented by an action with two parameters for platform views (of type `UIView`) of the origin and destination pages. This is where you change any animatable properties of the platform views. The change will be automatically animated.
-  - `SwitchingAnimationDuration` - a method returning a duration of the animation
-  - `SwitchingAnimationStarting` - a method returning an action which is called before the animation starts. All preparatory work (such as setting initial values of the animated properties) should be done in this action. This action has two parameters for platform views (of type `UIView`) of the origin and destination pages
-  - `SwitchingAnimationFinished` - a method returning an action which is called right after the animation plays. All cleaning work (such as setting the values of the animated properties back to initial values) should be done in this action. This action has two parameters for platform views (of type `UIView`) of the origin and destination pages
+  - `SwitchingAnimationDuration` - a method returning a duration of the switching animation
+  - `SwitchingAnimationStarting` - a method returning an action which is called before the switching animation starts. All preparatory work (such as setting initial values of the animated properties) should be done in this action. This action has two parameters for platform views (of type `UIView`) of the origin and destination pages
+  - `SwitchingAnimationFinished` - a method returning an action which is called right after the switching animation plays. All cleaning work (such as setting the values of the animated properties back to initial values) should be done in this action. This action has two parameters for platform views (of type `UIView`) of the origin and destination pages
   - `PushingAnimation` - a method returning an object of type `IUIViewControllerAnimatedTransitioning`, which represents the animation that is played on page pushing
   - `PoppingAnimation` - a method returning an object of type `IUIViewControllerAnimatedTransitioning`, which represents the animation that is played on page popping
 
@@ -64,8 +64,8 @@ These are all the `PlatformSimpleShellTransition` properties by platform:
 - **Windows (WinUI)**:
 
   - `SwitchingAnimation` - a method returning an `EntranceThemeTransition` object that is applied on page switching
-  - `PushingAnimation` - a method returning an `NavigationTransitionInfo` object that is applied on page pushing
-  - `PoppingAnimation` - a method returning an `NavigationTransitionInfo` object that is applied on page popping
+  - `PushingAnimation` - a method returning a `NavigationTransitionInfo` object that is applied on page pushing
+  - `PoppingAnimation` - a method returning a `NavigationTransitionInfo` object that is applied on page popping
 
 > Visit the official WinUI documentation for more information about the [`EntranceThemeTransition`](https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.media.animation.entrancethemetransition) and [`NavigationTransitionInfo`](https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.media.animation.navigationtransitioninfo) classes.
 
@@ -131,7 +131,7 @@ public static class Transitions
 }
 ```
 
-> This code can be also found in the [Sample.SimpleShell project](../../src/Samples/Sample.SimpleShell).
+> This code can also be found in the [Sample.SimpleShell project](../../src/Samples/Sample.SimpleShell).
 
 As you can see, conditional compilation is used to access properties of different platforms. For each platform, different transitions are defined:
 
@@ -271,7 +271,7 @@ public static void SetTransition(
     ISimpleShellTransition transition)
 ```
 
-Setting `Transitions.CustomPlatformTransition` to `AppShell` in its constructor:
+Setting `Transitions.CustomPlatformTransition` on `AppShell` in its constructor:
 
 ```csharp
 public AppShell()
@@ -348,7 +348,7 @@ The `SimpleShellTransition` class implements the `ISimpleShellTransition` interf
 
 ### Setting a transition
 
-`SimpleShellTransition` can be set to any page via `SimpleShell.Transition` attached property. If you set a transition on your `SimpleShell` object, that transition will be used as the default transition for all pages.
+`SimpleShellTransition` can be set on any page via `SimpleShell.Transition` attached property. If you set a transition on your `SimpleShell` object, that transition will be used as the default transition for all pages.
 
 When navigating from one page to another, **transition of the destination page is played**.
 
