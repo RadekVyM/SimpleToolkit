@@ -1,6 +1,6 @@
 # SimpleToolkit.Core
 
-The *SimpleToolkit.Core* package is a set of simple .NET MAUI controls and helpers.
+The _SimpleToolkit.Core_ package is a set of simple .NET MAUI controls and helpers.
 
 ## Controls
 
@@ -16,6 +16,14 @@ In order to use the controls listed above, you need to call the `UseSimpleToolki
 
 ```csharp
 builder.UseSimpleToolkit();
+```
+
+### XAML namespace
+
+All controls can be found in the following XAML namespace:
+
+```xml
+xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
 ```
 
 ## Helpers

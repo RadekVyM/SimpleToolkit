@@ -9,6 +9,7 @@ The _SimpleToolkit.SimpleShell_ package provides you with a simplified implement
 
 **`SimpleShell` does not come with any navigation controls.** `SimpleShell` just gives you the ability to use custom navigation controls along with the URI-based navigation and automatic navigation stack management.
 
+> [!IMPORTANT]
 > Before you begin using `SimpleShell`, I highly recommend familiarizing yourself with the original .NET MAUI `Shell` - especially with the URI-based [navigation](https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/shell/navigation), which works exactly the same as in `SimpleShell`.
 
 ## Getting Started
@@ -257,6 +258,7 @@ Navigation between pages works almost the same as in .NET MAUI `Shell`, just use
 - The `animate` parameter value has no effect on whether the transition animation is played or not.
 - When platform-specific transition animations are used, the `Task` returned by the `GoToAsync()` method will complete once the navigation has been initiated, not once the animation has been completed. In other words, the returned `Task` is not waiting for the animation to complete. The same applies to `Navigated` events.
 
+> [!TIP]
 > See [.NET MAUI documentation](https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/shell/navigation) for more information.
 
 The code behind of the XAML sample above:

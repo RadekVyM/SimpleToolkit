@@ -47,6 +47,7 @@ These are all the `PlatformSimpleShellTransition` properties by platform:
   - `DestinationPageInFrontOnPushing` - a method returning whether the destination page should be displayed in front of the origin page on page pushing
   - `DestinationPageInFrontOnPopping` - a method returning whether the destination page should be displayed in front of the origin page on page popping
 
+> [!TIP]
 > Visit the official documentation for more information about the [view animations](https://developer.android.com/develop/ui/views/animations/view-animation).
 
 - **iOS/Mac Catalyst**:
@@ -59,6 +60,7 @@ These are all the `PlatformSimpleShellTransition` properties by platform:
   - `PushingAnimation` - a method returning an object of type `IUIViewControllerAnimatedTransitioning`, which represents the animation that is played on page pushing
   - `PoppingAnimation` - a method returning an object of type `IUIViewControllerAnimatedTransitioning`, which represents the animation that is played on page popping
 
+> [!TIP]
 > Visit the official documentation for more information about the [`UIView` animations](https://developer.apple.com/documentation/uikit/uiview/1622451-animate), [`IUIViewControllerAnimatedTransitioning` interface](https://developer.apple.com/documentation/uikit/uiviewcontrolleranimatedtransitioning) and [`UINavigationController` transitions](https://developer.apple.com/documentation/uikit/uinavigationcontroller).
 
 - **Windows (WinUI)**:
@@ -67,6 +69,7 @@ These are all the `PlatformSimpleShellTransition` properties by platform:
   - `PushingAnimation` - a method returning a `NavigationTransitionInfo` object that is applied on page pushing
   - `PoppingAnimation` - a method returning a `NavigationTransitionInfo` object that is applied on page popping
 
+> [!TIP]
 > Visit the official WinUI documentation for more information about the [`EntranceThemeTransition`](https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.media.animation.entrancethemetransition) and [`NavigationTransitionInfo`](https://learn.microsoft.com/en-us/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.media.animation.navigationtransitioninfo) classes.
 
 If a property is set to `null`, the default option is used.
@@ -131,6 +134,7 @@ public static class Transitions
 }
 ```
 
+> [!NOTE]
 > This code can also be found in the [Sample.SimpleShell project](../../src/Samples/Sample.SimpleShell).
 
 As you can see, conditional compilation is used to access properties of different platforms. For each platform, different transitions are defined:
@@ -208,7 +212,7 @@ public class AppleTransitioning : Foundation.NSObject, UIKit.IUIViewControllerAn
             toView.Frame = offsetFrame;
             toView.Alpha = 0;
         }
-             
+
         var animations = () =>
         {
             UIKit.UIView.AddKeyframeWithRelativeStartTime(0.0, 1, () =>
@@ -495,4 +499,5 @@ public YellowDetailPage()
 
 `when` delegate determines when the second `transition` should be used.
 
+> [!NOTE]
 > In this example, scale transition is used only when the page is being pushed to the navigation stack, otherwise the default transition defined in the shell is used.
