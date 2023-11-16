@@ -20,7 +20,7 @@ In order to use _SimpleToolkit.SimpleShell_, you need to call the `UseSimpleShel
 builder.UseSimpleShell();
 ```
 
-This method also takes a boolean parameter `usePlatformTransitions`, which defaults to `true` and controls wheter platform-specific animated transitions between pages are used.
+This method also takes a boolean `usePlatformTransitions` parameter, which defaults to `true` and controls whether platform-specific animated transitions between pages are used.
 
 `SimpleShell` uses platform-specific animated transitions by default. Although, these animated transitions can be modified, it is quite limited. If you want to take full control over the transitions, you need to disable the platform-specific ones by setting the `usePlatformTransitions` parameter to `false` and define your own [platform-independent animations](Transitions.md).
 
