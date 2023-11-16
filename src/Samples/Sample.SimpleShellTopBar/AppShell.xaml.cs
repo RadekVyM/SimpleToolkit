@@ -22,6 +22,6 @@ public partial class AppShell : SimpleToolkit.SimpleShell.SimpleShell
 
         // Navigate to a new tab if it is not the current tab
         if (!CurrentState.Location.OriginalString.Contains(shellItem.Route))
-            await GoToAsync($"///{shellItem.Route}", true);
+            await GoToAsync($"///{shellItem.Route}");
     }
 }

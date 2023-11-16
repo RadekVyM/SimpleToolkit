@@ -126,13 +126,13 @@ namespace Playground.Original
             var shellItem = button.BindingContext as BaseShellItem;
 
             if (!CurrentState.Location.OriginalString.Contains(shellItem.Route))
-                await this.GoToAsync($"///{shellItem.Route}", true);
+                await this.GoToAsync($"///{shellItem.Route}");
         }
 
         private async void TabBarItemSelected(object sender, TabItemSelectedEventArgs e)
         {
             if (!CurrentState.Location.OriginalString.Contains(e.ShellItem.Route))
-                await this.GoToAsync($"///{e.ShellItem.Route}", true);
+                await this.GoToAsync($"///{e.ShellItem.Route}");
         }
 
         private async void BackButtonClicked(object sender, EventArgs e)
