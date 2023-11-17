@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <simpleShell:SimpleShell
     x:Class="Sample.SimpleShellTopBar.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -10,7 +10,9 @@
     Shell.FlyoutBehavior="Disabled"
     Title="Sample.SimpleShellTopBar"
     
-    x:Name="thisShell">
+    x:Name="thisShell"
+    
+    Background="{AppThemeBinding Default=White, Dark=Black}">
 
     <ShellContent
         Title="First"
@@ -43,7 +45,6 @@
                         x:DataType="BaseShellItem">
                         <Button
                             Clicked="ShellItemButtonClicked"
-                            Background="Black"
                             Text="{Binding Title}"/>
                     </DataTemplate>
                 </BindableLayout.ItemTemplate>
