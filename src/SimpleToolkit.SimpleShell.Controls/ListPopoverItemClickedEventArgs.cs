@@ -1,15 +1,14 @@
-﻿namespace SimpleToolkit.SimpleShell.Controls
-{
-    public delegate void ListPopoverItemSelectedEventHandler(object sender, ListPopoverItemSelectedEventArgs e);
+﻿namespace SimpleToolkit.SimpleShell.Controls;
 
+public delegate void ListPopoverItemSelectedEventHandler(object sender, ListPopoverItemSelectedEventArgs e);
+
+/// <summary>
+/// Arguments of <see cref="ListPopover"/> selection event.
+/// </summary>
+public class ListPopoverItemSelectedEventArgs : EventArgs
+{
     /// <summary>
-    /// Arguments of <see cref="ListPopover"/> selection event.
+    /// The selected item.
     /// </summary>
-    public class ListPopoverItemSelectedEventArgs : EventArgs
-    {
-        /// <summary>
-        /// The selected item.
-        /// </summary>
-        public object Item { get; internal set; }
-    }
+    public object Item { get; internal set; }
 }

@@ -1,9 +1,15 @@
 # ContentButton
 
-In order to use the control, you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
+In order to use this control, you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
 
 ```csharp
 builder.UseSimpleToolkit();
+```
+
+`ContentButton` can be found in the following XAML namespace:
+
+```xml
+xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
 ```
 
 `ContentButton` is just a button that can hold whatever content you want:

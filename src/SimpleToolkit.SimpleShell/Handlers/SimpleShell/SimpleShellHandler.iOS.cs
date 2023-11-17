@@ -4,27 +4,26 @@ using Microsoft.Maui.Handlers;
 using SimpleToolkit.SimpleShell.Platform;
 using UIKit;
 
-namespace SimpleToolkit.SimpleShell.Handlers
+namespace SimpleToolkit.SimpleShell.Handlers;
+
+public partial class SimpleShellHandler : ViewHandler<ISimpleShell, UIView>
 {
-    public partial class SimpleShellHandler : ViewHandler<ISimpleShell, UIView>
+    protected override UIView CreatePlatformView()
     {
-        protected override UIView CreatePlatformView()
+        ViewController = new SimpleShellController
         {
-            ViewController = new SimpleShellController
+            View = new SimpleContentView
             {
-                View = new SimpleContentView
-                {
-                    View = VirtualView
-                }
-            };
+                View = VirtualView
+            }
+        };
 
-            return ViewController.View;
-        }
+        return ViewController.View;
+    }
 
-        protected virtual UIView GetNavigationHostContent()
-        {
-            return (navigationHost?.Handler as SimpleNavigationHostHandler)?.PlatformView?.Subviews.FirstOrDefault();
-        }
+    protected virtual UIView GetNavigationHostContent()
+    {
+        return (navigationHost?.Handler as SimpleNavigationHostHandler)?.PlatformView?.Subviews.FirstOrDefault();
     }
 }
 

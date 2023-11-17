@@ -2,89 +2,60 @@
 
 using CoreGraphics;
 using Foundation;
-using Microsoft.Maui.Platform;
 using UIKit;
 using PlatformContentView = Microsoft.Maui.Platform.ContentView;
 
-namespace SimpleToolkit.Core.Platform
+namespace SimpleToolkit.Core.Platform;
+
+public class ButtonContentView : PlatformContentView
 {
-    public class ButtonContentView : PlatformContentView
+    public event EventHandler<ContentButtonEventArgs> BeganTouching;
+    public event EventHandler<ContentButtonEventArgs> EndedTouching;
+    public event EventHandler<ContentButtonEventArgs> CancelledTouching;
+    public event EventHandler<ContentButtonEventArgs> MovedTouching;
+
+    public override void SetNeedsLayout()
     {
-        public event EventHandler<ContentButtonEventArgs> BeganTouching;
-        public event EventHandler<ContentButtonEventArgs> EndedTouching;
-        public event EventHandler<ContentButtonEventArgs> CancelledTouching;
-        public event EventHandler<ContentButtonEventArgs> MovedTouching;
+        base.SetNeedsLayout();
+        Superview?.SetNeedsLayout();
+    }
 
-        // I need to oveverride these methods because of the CrossPlatformMeasure() and CrossPlatformArrange() methods
-        public override CGSize SizeThatFits(CGSize size)
-        {
-            if (View is not IContentView contentView)
-                return base.SizeThatFits(size);
+    public override void TouchesBegan(NSSet touches, UIEvent evt)
+    {
+        base.TouchesBegan(touches, evt);
+        BeganTouching?.Invoke(this, GetContentButtonEventArgs(touches));
+    }
 
-            var width = size.Width;
-            var height = size.Height;
+    public override void TouchesEnded(NSSet touches, UIEvent evt)
+    {
+        base.TouchesEnded(touches, evt);
+        EndedTouching?.Invoke(this, GetContentButtonEventArgs(touches));
+    }
 
-            var crossPlatformSize = contentView.CrossPlatformMeasure(width, height);
+    public override void TouchesCancelled(NSSet touches, UIEvent evt)
+    {
+        base.TouchesCancelled(touches, evt);
+        CancelledTouching?.Invoke(this, GetContentButtonEventArgs(touches));
+    }
 
-            return crossPlatformSize.ToCGSize();
-        }
+    public override void TouchesMoved(NSSet touches, UIEvent evt)
+    {
+        base.TouchesMoved(touches, evt);
+        MovedTouching?.Invoke(this, GetContentButtonEventArgs(touches));
+    }
 
-        public override void LayoutSubviews()
-        {
-            base.LayoutSubviews();
+    private ContentButtonEventArgs GetContentButtonEventArgs(NSSet touches)
+    {
+        return new ContentButtonEventArgs { InteractionPosition = GetPosition(touches) };
+    }
 
-            if (View is not IContentView contentView)
-                return;
+    private Point GetPosition(NSSet touches)
+    {
+        var first = touches.FirstOrDefault() as UITouch;
 
-            var bounds = AdjustForSafeArea(Bounds).ToRectangle();
+        var location = first is not null ? first.LocationInView(this) : new CGPoint(0, 0);
 
-            contentView.CrossPlatformMeasure(bounds.Width, bounds.Height);
-            contentView.CrossPlatformArrange(bounds);
-        }
-
-        public override void SetNeedsLayout()
-        {
-            base.SetNeedsLayout();
-            Superview?.SetNeedsLayout();
-        }
-
-        public override void TouchesBegan(NSSet touches, UIEvent evt)
-        {
-            base.TouchesBegan(touches, evt);
-            BeganTouching?.Invoke(this, GetContentButtonEventArgs(touches));
-        }
-
-        public override void TouchesEnded(NSSet touches, UIEvent evt)
-        {
-            base.TouchesEnded(touches, evt);
-            EndedTouching?.Invoke(this, GetContentButtonEventArgs(touches));
-        }
-
-        public override void TouchesCancelled(NSSet touches, UIEvent evt)
-        {
-            base.TouchesCancelled(touches, evt);
-            CancelledTouching?.Invoke(this, GetContentButtonEventArgs(touches));
-        }
-
-        public override void TouchesMoved(NSSet touches, UIEvent evt)
-        {
-            base.TouchesMoved(touches, evt);
-            MovedTouching?.Invoke(this, GetContentButtonEventArgs(touches));
-        }
-
-        private ContentButtonEventArgs GetContentButtonEventArgs(NSSet touches)
-        {
-            return new ContentButtonEventArgs { InteractionPosition = GetPosition(touches) };
-        }
-
-        private Point GetPosition(NSSet touches)
-        {
-            var first = touches.FirstOrDefault() as UITouch;
-
-            var location = first is not null ? first.LocationInView(this) : new CGPoint(0, 0);
-
-            return new Point(location.X, location.Y);
-        }
+        return new Point(location.X, location.Y);
     }
 }
 

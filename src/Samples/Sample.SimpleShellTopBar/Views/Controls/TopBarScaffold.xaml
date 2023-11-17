@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Sample.SimpleShellTopBar.Views.Controls.TopBarScaffold"
+    
+    x:Name="scaffold">
+
+    <ContentView.Content>
+        <Grid
+            RowDefinitions="auto, *"
+            CompressedLayout.IsHeadless="True">
+            <Grid
+                x:Name="topBar"
+                ColumnDefinitions="50, *, 50"
+                Padding="0, 5"
+                MinimumHeightRequest="60">
+                <Button
+                    IsVisible="{Binding Source={x:Reference scaffold}, Path=IsBackButtonVisible}}"
+                    Text="◀"
+                    Background="Black"
+                    VerticalOptions="Center" HorizontalOptions="Center"
+                    Padding="2"
+                    HeightRequest="30" WidthRequest="30"
+                    Clicked="BackButtonClicked"/>
+
+                <ContentView
+                    x:Name="titleContent"
+                    Grid.Column="1"
+                    CompressedLayout.IsHeadless="True"/>
+            </Grid>
+
+            <ContentView
+                x:Name="pageContent"
+                Content="{Binding Source={x:Reference scaffold}, Path=PageContent}"
+                Grid.Row="1"
+                CompressedLayout.IsHeadless="True"/>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

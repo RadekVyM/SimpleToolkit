@@ -1,18 +1,33 @@
 # SimpleToolkit.SimpleShell
 
-The *SimpleToolkit.SimpleShell* package provides you with a simplified implementation of .NET MAUI `Shell` that lets you easily create a custom navigation experience in your .NET MAUI applications.
+The _SimpleToolkit.SimpleShell_ package provides you with a simplified implementation of .NET MAUI `Shell` that lets you easily create a custom navigation experience in your .NET MAUI applications. Same as .NET MAUI `Shell`, `SimpleShell` provides you with:
+
+- A single place to describe the logical hierarchy of an app.
+- A URI-based navigation scheme that permits navigation to any page in the app.
+
+**`SimpleShell` does not come with any navigation controls.** `SimpleShell` just gives you the ability to use custom navigation controls along with the URI-based navigation and automatic navigation stack management.
 
 ## Getting Started
 
-In order to use *SimpleToolkit.SimpleShell*, you need to call the `UseSimpleShell()` extension method in your `MauiProgram.cs` file:
+In order to use _SimpleToolkit.SimpleShell_, you need to call the `UseSimpleShell()` extension method in your `MauiProgram.cs` file:
 
 ```csharp
 builder.UseSimpleShell();
 ```
 
+This method also takes a boolean parameter `usePlatformTransitions`, which defaults to `true` and controls wheter platform-specific animated transitions between pages are used.
+
+### XAML namespace
+
+All `SimpleShell` related controls and attached properties can be found in the following XAML namespace:
+
+```xml
+xmlns:simpleShell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
+```
+
 ## SimpleShell
 
-`SimpleShell` is a simplified implementation of .NET MAUI `Shell`. All `SimpleShell` is is just a container for your content with the ability to put the hosting area for pages wherever you want, giving you the flexibility to add custom tab bars, navigation bars, flyouts, etc. to your `Shell` application while using great `Shell` URI-based navigation.
+`SimpleShell` is a simplified implementation of .NET MAUI `Shell`. All `SimpleShell` is is just a set of containers for your application content with the ability to put the hosting area for pages wherever you want. This gives you the flexibility to add custom tab bars, navigation bars, flyouts, etc. to your `Shell` application while using the URI-based navigation.
 
 Let's say we have four root pages - `YellowPage`, `GreenPage`, `RedPage` and `BluePage` - and one detail page - `YellowDetailPage`. Shell with a simple app bar and tab bar can be defined like this:
 
@@ -42,23 +57,15 @@ Let's say we have four root pages - `YellowPage`, `GreenPage`, `RedPage` and `Bl
             Route="GreenPage"/>
     </Tab>
 
-    <Tab
+    <ShellContent
         Title="Red"
-        Route="RedTab">
-        <ShellContent
-            Title="Red"
-            ContentTemplate="{DataTemplate pages:RedPage}"
-            Route="RedPage"/>
-    </Tab>
+        ContentTemplate="{DataTemplate pages:RedPage}"
+        Route="RedPage"/>
 
-    <Tab
+    <ShellContent
         Title="Blue"
-        Route="BlueTab">
-        <ShellContent
-            Title="Blue"
-            ContentTemplate="{DataTemplate pages:BluePage}"
-            Route="BluePage"/>
-    </Tab>
+        ContentTemplate="{DataTemplate pages:BluePage}"
+        Route="BluePage"/>
 
     <simpleShell:SimpleShell.RootPageContainer>
         <Grid
@@ -105,27 +112,18 @@ Let's say we have four root pages - `YellowPage`, `GreenPage`, `RedPage` and `Bl
 </simpleShell:SimpleShell>
 ```
 
-As you can see, the logical navigation structure is defined with `ShellContent`, `Tab`, etc. as in normal .NET MAUI `Shell`. However, visual structure is defined manually using the `Content` or `RootPageContainer` property. The hosting area for pages is represented by the `SimpleNavigationHost` view.
-
-SimpleShell provides you with some **bindable properties** that you can bind to when creating custom navigation controls:
-
-- `CurrentPage` - the currently selected `Page`
-- `CurrentShellSection` - the currently selected `ShellSection` (`Tab`)
-- `CurrentShellContent` - the currently selected `ShellContent`
-- `ShellSections` - read-only list of all `ShellSection`s in the shell
-- `ShellContents` - read-only list of all `ShellContent`s in the shell
-- `RootPageContainer` - a view that will wrap all root pages (`ShellContent`s)
+As you can see, the logical hierarchy is defined using `ShellContent`, `Tab`, `TabBar` and `FlyoutItem` elements as in the original .NET MAUI `Shell`. However, visual structure is defined manually using the `Content` or `RootPageContainer` property. The hosting area for pages is represented by the `SimpleNavigationHost` view.
 
 The code behind of the XAML sample above:
 
 ```csharp
 public partial class AppShell : SimpleToolkit.SimpleShell.SimpleShell
 {
-	public AppShell()
-	{
-		InitializeComponent();
+    public AppShell()
+    {
+        InitializeComponent();
 
-		Routing.RegisterRoute(nameof(YellowDetailPage), typeof(YellowDetailPage));
+        Routing.RegisterRoute(nameof(YellowDetailPage), typeof(YellowDetailPage));
     }
 
     private async void ShellItemButtonClicked(object sender, EventArgs e)
@@ -135,7 +133,7 @@ public partial class AppShell : SimpleToolkit.SimpleShell.SimpleShell
 
         // Navigate to a new tab if it is not the current tab
         if (!CurrentState.Location.OriginalString.Contains(shellItem.Route))
-            await GoToAsync($"///{shellItem.Route}", true);
+            await GoToAsync($"///{shellItem.Route}");
     }
 
     private async void BackButtonClicked(object sender, EventArgs e)
@@ -145,7 +143,12 @@ public partial class AppShell : SimpleToolkit.SimpleShell.SimpleShell
 }
 ```
 
-Navigation between pages works exactly the same as in .NET MAUI `Shell`, just use the common `Shell.Current.GoToAsync()`. Pages that are not part of the shell hierarchy can be registered using the `Routing.RegisterRoute()` method.
+Navigation between pages works almost the same as in .NET MAUI `Shell`, just use the common `Shell.Current.GoToAsync()`. `SimpleShell` differs only in these cases:
+
+- The `animate` parameter value has no effect on whether the transition animation is played or not.
+- When platform-specific transition animations are used, the `Task` returned by the `GoToAsync()` method will complete once the navigation has been initiated, not once the animation has been completed. In other words, the returned `Task` is not waiting for the animation to complete. The same applies to `Navigated` events.
+
+Pages that are not part of the shell hierarchy can be registered using the `Routing.RegisterRoute()` method.
 
 ## Why not use `SimpleShell` and use .NET MAUI `Shell` instead
 

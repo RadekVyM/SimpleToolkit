@@ -6,19 +6,20 @@ The library consists of three NuGet packages:
 
 - [SimpleToolkit.Core](#simpletoolkitcore) - set of simple .NET MAUI controls and helpers
 
-    [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.Core.svg?label=SimpleToolkit.Core)](https://www.nuget.org/packages/SimpleToolkit.Core/)
+  [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.Core.svg?label=SimpleToolkit.Core)](https://www.nuget.org/packages/SimpleToolkit.Core/)
 
 - [SimpleToolkit.SimpleShell](#simpletoolkitsimpleshell) - simplified implementation of .NET MAUI `Shell`
 
-    [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.svg?label=SimpleToolkit.SimpleShell)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell/)
+  [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.svg?label=SimpleToolkit.SimpleShell)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell/)
 
 - [SimpleToolkit.SimpleShell.Controls](#simpletoolkitsimpleshellcontrols) - collection of ready-to-use, navigation-related controls
 
-    [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.Controls.svg?label=SimpleToolkit.SimpleShell.Controls)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell.Controls/)
+  [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.Controls.svg?label=SimpleToolkit.SimpleShell.Controls)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell.Controls/)
 
 I have split the content of this library into three NuGet packages because there may be people who want to use only the `SimpleShell` control, for example, and do not want to use other controls.
 
-> ⚠ **Warning:** Long-term support is not guaranteed. Use at your own risk.
+> [!CAUTION]
+> Long-term support is not guaranteed. Use at your own risk.
 
 ## [Samples](./docs/Samples.md)
 
@@ -57,14 +58,23 @@ Here are some of my samples that were built using this library:
     <a href="https://github.com/RadekVyM/HamburgerMenuApp"><em>Hamburger Menu App</em></a>
 </p>
 
+> [!TIP]
 > Check out a list of all samples [here](./docs/Samples.md).
+
+## Supported platforms
+
+This library supports all these platforms:
+
+- Android
+- iOS/Mac Catalyst
+- Windows (WinUI)
 
 ## SimpleToolkit.Core
 
 [![SimpleToolkit.Core](https://img.shields.io/nuget/v/SimpleToolkit.Core.svg?label=SimpleToolkit.Core)](https://www.nuget.org/packages/SimpleToolkit.Core/)
 [![Documentation](https://img.shields.io/badge/-Documentation%20-forestgreen)](./docs/SimpleToolkit.Core)
 
-The *SimpleToolkit.Core* package is a set of simple .NET MAUI controls and helpers.
+The _SimpleToolkit.Core_ package is a set of simple .NET MAUI controls and helpers.
 
 These are all the controls this package has to offer:
 
@@ -78,7 +88,7 @@ In order to use the controls listed above, you need to call the `UseSimpleToolki
 builder.UseSimpleToolkit();
 ```
 
-The package also contains some useful helpers for managing the safe area of an application window. For example, there are helpers that allow you to force application content to be displayed behind system bars (status and navigation bars) on Android and iOS.
+This package also contains some useful helpers. For example, there are helpers that allow you to force application content to be displayed behind the system bars (status and navigation bars) on Android and iOS.
 
 See [documentation](./docs/SimpleToolkit.Core) for more information.
 
@@ -87,9 +97,14 @@ See [documentation](./docs/SimpleToolkit.Core) for more information.
 [![SimpleToolkit.SimpleShell](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.svg?label=SimpleToolkit.SimpleShell)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell/)
 [![Documentation](https://img.shields.io/badge/-Documentation%20-forestgreen)](./docs/SimpleToolkit.SimpleShell)
 
-The *SimpleToolkit.SimpleShell* package provides you with a simplified implementation of .NET MAUI `Shell` that lets you easily create a custom navigation experience in your .NET MAUI applications. The implementation is simply called `SimpleShell`.
+The _SimpleToolkit.SimpleShell_ package provides you with a simplified implementation of .NET MAUI `Shell` that lets you easily create a custom navigation experience in your .NET MAUI applications. The implementation is simply called `SimpleShell`.
 
-All `SimpleShell` is is just a simple container for your content with the ability to put the hosting area for pages wherever you want, giving you the flexibility to add custom tab bars, navigation bars, flyouts, etc. to your `Shell` application while using great `Shell` URI-based navigation.
+All `SimpleShell` is is just a set of containers for your application content with the ability to put the hosting area for pages wherever you want. This gives you the **flexibility** to add custom tab bars, navigation bars, flyouts, etc. to your `Shell` application.
+
+Bear in mind that **`SimpleShell` does not come with any navigation controls.** `SimpleShell` just gives you the ability to use custom navigation controls along with the URI-based navigation and automatic navigation stack management.
+
+> [!IMPORTANT]
+> Before you begin using `SimpleShell`, I highly recommend familiarizing yourself with the original .NET MAUI `Shell` - especially with the URI-based [navigation](https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/shell/navigation), which works exactly the same as in `SimpleShell`. The `SimpleShell` class inherits from the `Shell` class.
 
 In order to use `SimpleShell`, you need to call the `UseSimpleShell()` extension method in your `MauiProgram.cs` file:
 
@@ -111,7 +126,7 @@ See [documentation](./docs/SimpleToolkit.SimpleShell) for more information.
 [![SimpleToolkit.SimpleShell.Controls](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.Controls.svg?label=SimpleToolkit.SimpleShell.Controls)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell.Controls/)
 [![Documentation](https://img.shields.io/badge/-Documentation%20-forestgreen)](./docs/SimpleToolkit.SimpleShell.Controls)
 
-*SimpleToolkit.SimpleShell.Controls* is a collection of ready-to-use, navigation-related controls (not only) for `SimpleShell`.
+_SimpleToolkit.SimpleShell.Controls_ is a collection of ready-to-use, navigation-related controls (not only) for `SimpleShell`.
 
 The package currently supports only two controls:
 
@@ -138,6 +153,7 @@ All controls can be styled using different design languages. These are currently
     </a>
 </p>
 
+> [!CAUTION]
 > I am still not decided if I want to continue and how to develop the `SimpleToolkit.SimpleShell.Controls` package. **The package API is likely to change in the future.** For this reason, this package is still in preview and has poor documentation.
 
 See [documentation](./docs/SimpleToolkit.SimpleShell.Controls) for more information.

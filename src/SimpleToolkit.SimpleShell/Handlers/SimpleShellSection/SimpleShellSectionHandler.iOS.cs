@@ -1,58 +1,43 @@
 ﻿#if IOS || MACCATALYST
 
-using Microsoft.Maui.Handlers;
 using SimpleToolkit.SimpleShell.Extensions;
 using SimpleToolkit.SimpleShell.Platform;
 using UIKit;
 
-namespace SimpleToolkit.SimpleShell.Handlers
+namespace SimpleToolkit.SimpleShell.Handlers;
+
+public partial class SimpleShellSectionHandler
 {
-    public partial class SimpleShellSectionHandler : ElementHandler<ShellSection, UIView>
+    public UIViewController ContentController { get; protected set; }
+    public UIViewController ViewController { get; protected set; }
+
+    protected override UIView CreatePlatformElement()
     {
-        public UIViewController ContentController { get; private set; }
-        public UIViewController ViewController { get; private set; }
+        CreateNavigationManager();
 
-        protected override UIView CreatePlatformElement()
+        ContentController = new SimpleShellSectionContentController
         {
-            CreateNavigationManager();
+            View = new SimpleContentView(),
+        };
 
-            ContentController = new SimpleShellSectionContentController
-            {
-                View = new SimpleContentView(),
-            };
+        var navigationController = new SimpleShellSectionController(ContentController);
 
-            var navigationController = new SimpleShellSectionController(ContentController);
+        navigationController.PopGestureRecognized += NavigationControllerPopGestureRecognized;
 
-            navigationController.PopGestureRecognized += NavigationControllerPopGestureRecognized;
+        ViewController = navigationController;
+        AddToParentController(navigationController);
 
-            ViewController = navigationController;
-            AddToParentController(navigationController);
+        return navigationController.View;
+    }
 
-            return navigationController.View;
-        }
+    private void NavigationControllerPopGestureRecognized(object sender, EventArgs e)
+    {
+        var shell = VirtualView.FindParentOfType<SimpleShell>();
 
-        private void AddToParentController(SimpleShellSectionController navigationController)
-        {
-            var shell = VirtualView.FindParentOfType<SimpleShell>();
+        if (shell is null)
+            return;
 
-            if (shell.Handler is not SimpleShellHandler shellHandler)
-                return;
-
-            var shellController = shellHandler.ViewController;
-
-            shellController?.AddChildViewController(navigationController);
-            navigationController.DidMoveToParentViewController(shellController);
-        }
-
-        private void NavigationControllerPopGestureRecognized(object sender, EventArgs e)
-        {
-            var shell = VirtualView.FindParentOfType<SimpleShell>();
-
-            if (shell is null)
-                return;
-
-            shell.SendBackButtonPressed();
-        }
+        shell.SendBackButtonPressed();
     }
 }
 

@@ -1,15 +1,12 @@
 ﻿#if !(ANDROID || IOS || MACCATALYST || WINDOWS)
 
-using Microsoft.Maui.Handlers;
+namespace SimpleToolkit.SimpleShell.Handlers;
 
-namespace SimpleToolkit.SimpleShell.Handlers
+public partial class SimpleShellSectionHandler
 {
-    public partial class SimpleShellSectionHandler : ElementHandler<ShellSection, System.Object>
+    protected override System.Object CreatePlatformElement()
     {
-        protected override System.Object CreatePlatformElement()
-        {
-            throw new NotImplementedException();
-        }
+        throw new NotImplementedException();
     }
 }
 

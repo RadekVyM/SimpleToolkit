@@ -1,7 +1,5 @@
-﻿namespace SimpleToolkit.SimpleShell.Controls
+﻿namespace SimpleToolkit.SimpleShell.Controls;
+
+public static class AppHostBuilderExtensions
 {
-    public static class AppHostBuilderExtensions
-    {
-        
-    }
 }

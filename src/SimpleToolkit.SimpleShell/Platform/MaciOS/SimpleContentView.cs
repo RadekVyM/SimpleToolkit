@@ -10,7 +10,7 @@ namespace SimpleToolkit.SimpleShell.Platform;
 // Source:
 // https://github.com/dotnet/maui/blob/ed7809fd61e5a68b2b9378f8d7add39ae8c61096/src/Core/src/Platform/iOS/MauiView.cs
 
-public class SimpleContentView : UIView
+public class SimpleContentView : UIView, ICrossPlatformLayoutBacking
 {
     private static bool? _respondsToSafeArea;
 
@@ -18,7 +18,7 @@ public class SimpleContentView : UIView
     private double _lastMeasureWidth = double.NaN;
 
     private WeakReference<IView> _reference;
-    private WeakReference<Microsoft.Maui.ILayout> _crossPlatformLayoutReference;
+    private WeakReference<ICrossPlatformLayout> _crossPlatformLayoutReference;
 
 
     public IView View
@@ -27,10 +27,10 @@ public class SimpleContentView : UIView
         set => _reference = value is null ? null : new(value);
     }
 
-    public Microsoft.Maui.ILayout CrossPlatformLayout
+    public ICrossPlatformLayout CrossPlatformLayout
     {
         get => _crossPlatformLayoutReference is not null && _crossPlatformLayoutReference.TryGetTarget(out var v) ? v : null;
-        set => _crossPlatformLayoutReference = value is null ? null : new WeakReference<Microsoft.Maui.ILayout>(value);
+        set => _crossPlatformLayoutReference = value is null ? null : new WeakReference<ICrossPlatformLayout>(value);
     }
 
     private bool RespondsToSafeArea()
@@ -74,7 +74,7 @@ public class SimpleContentView : UIView
         base.SafeAreaInsetsDidChange();
 
         //if (View is ISafeAreaView2 isav2)
-            //isav2.SafeAreaInsets = this.SafeAreaInsets.ToThickness();
+        //isav2.SafeAreaInsets = this.SafeAreaInsets.ToThickness();
     }
 
     private Size CrossPlatformMeasure(double widthConstraint, double heightConstraint)

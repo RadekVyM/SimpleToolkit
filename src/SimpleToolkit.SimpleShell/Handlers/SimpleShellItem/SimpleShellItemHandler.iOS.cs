@@ -5,23 +5,21 @@ using Microsoft.Maui.Platform;
 using SimpleToolkit.SimpleShell.Platform;
 using UIKit;
 
-namespace SimpleToolkit.SimpleShell.Handlers
-{
-    public partial class SimpleShellItemHandler : ElementHandler<ShellItem, UIView>
-    {
-        protected override UIView CreatePlatformElement()
-        {
-            shellSectionContainer = new SimpleContentView();
-            return shellSectionContainer;
-        }
+namespace SimpleToolkit.SimpleShell.Handlers;
 
-        private void UpdateShellSectionContainerContent()
+public partial class SimpleShellItemHandler : ElementHandler<ShellItem, UIView>
+{
+    protected override UIView CreatePlatformElement()
+    {
+        return new SimpleContentView();
+    }
+
+    private void UpdatePlatformViewContent()
+    {
+        if (currentShellSectionHandler.PlatformView != PlatformView.Subviews.FirstOrDefault())
         {
-            if (currentShellSectionHandler.PlatformView != (UIKit.UIView)shellSectionContainer.Subviews.FirstOrDefault())
-            {
-                shellSectionContainer.ClearSubviews();
-                shellSectionContainer.AddSubview(currentShellSectionHandler.PlatformView);
-            }
+            PlatformView.ClearSubviews();
+            PlatformView.AddSubview(currentShellSectionHandler.PlatformView);
         }
     }
 }

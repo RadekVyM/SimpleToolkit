@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<shell:SimpleShell
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:shell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
+    xmlns:pages="clr-namespace:Playground.Core.Views.Pages;assembly=Playground.Core"
+    x:Class="Playground.ShellItems.AppShell"
+    Title="ShellItemsAppShell"
+
+    x:Name="thisShell"
+
+    Background="White">
+
+    <TabBar>
+        <shell:SimpleShell.ShellGroupContainerTemplate>
+            <DataTemplate>
+                <Grid
+                    RowDefinitions="auto, *">
+                    <Label
+                        Text="ShellItem Container"
+                        Margin="10"/>
+                    <shell:SimpleNavigationHost
+                        Grid.Row="1"/>
+                </Grid>
+            </DataTemplate>
+        </shell:SimpleShell.ShellGroupContainerTemplate>
+
+        <ShellContent
+            Title="Yellow"
+            ContentTemplate="{DataTemplate pages:YellowPage}"
+            Route="YellowPage"/>
+
+        <Tab>
+            <shell:SimpleShell.ShellGroupContainerTemplate>
+                <DataTemplate>
+                    <Grid
+                        RowDefinitions="auto, *">
+                        <Label
+                            Text="ShellSection Container"
+                            Margin="10"/>
+                        <shell:SimpleNavigationHost
+                            Grid.Row="1"/>
+                    </Grid>
+                </DataTemplate>
+            </shell:SimpleShell.ShellGroupContainerTemplate>
+            <ShellContent
+                Title="Green"
+                ContentTemplate="{DataTemplate pages:GreenPage}"
+                Route="GreenPage"/>
+        </Tab>
+    </TabBar>
+
+    <TabBar>
+        <Tab>
+            <ShellContent
+                Title="Gray"
+                ContentTemplate="{DataTemplate pages:GrayPage}"
+                Route="GrayPage"/>
+
+            <ShellContent
+                Title="Red"
+                ContentTemplate="{DataTemplate pages:RedPage}"
+                Route="RedPage"/>
+        </Tab>
+    </TabBar>
+    
+    <ShellContent
+        Title="Blue"
+        ContentTemplate="{DataTemplate pages:BluePage}"
+        Route="BluePage"/>
+
+    <FlyoutItem>
+        <ShellContent
+            Title="Orange"
+            ContentTemplate="{DataTemplate pages:OrangePage}"
+            Route="OrangePage"/>
+    </FlyoutItem>
+
+    <MenuItem
+        Text="Hello"/>
+
+    
+    <!-- TODO: Grid or something is broken again on iOS. The auto option does not work. I had to set MinimumHeightRequest to the stacklayout -->
+    <shell:SimpleShell.RootPageContainer>
+        <Grid
+            RowDefinitions="*, auto">
+            <shell:SimpleNavigationHost/>
+            <ScrollView
+                Grid.Row="1"
+                HorizontalScrollBarVisibility="Never"
+                Orientation="Horizontal">
+                <HorizontalStackLayout
+                    x:Name="tabBar"
+                    Margin="20,5"
+                    HorizontalOptions="Center" Spacing="10"
+                    MinimumHeightRequest="40"
+                    BindableLayout.ItemsSource="{Binding ShellContents, Source={x:Reference thisShell}}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate
+                            x:DataType="BaseShellItem">
+                            <Button
+                                Clicked="ShellItemButtonClicked"
+                                Background="Black"
+                                Text="{Binding Title}"/>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </HorizontalStackLayout>
+            </ScrollView>
+        </Grid>
+    </shell:SimpleShell.RootPageContainer>
+
+    <shell:SimpleShell.Content>
+        <Grid
+            RowDefinitions="50, *">
+            <Button
+                x:Name="backButton"
+                Clicked="BackButtonClicked"
+                Text="Back"
+                Margin="20,5"
+                HorizontalOptions="Start"
+                Background="Black"/>
+            <Label
+                Margin="20,5"
+                HorizontalOptions="Center" VerticalOptions="Center"
+                Text="{Binding CurrentShellContent.Title, Source={x:Reference thisShell}}"
+                FontAttributes="Bold" FontSize="18"/>
+            <shell:SimpleNavigationHost
+                Grid.Row="1"/>
+        </Grid>
+    </shell:SimpleShell.Content>
+</shell:SimpleShell>

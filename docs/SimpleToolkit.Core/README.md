@@ -20,6 +20,14 @@ In order to use the controls listed above, you need to call the `UseSimpleToolki
 builder.UseSimpleToolkit();
 ```
 
+### XAML namespace
+
+All controls can be found in the following XAML namespace:
+
+```xml
+xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
+```
+
 ## Helpers
 
 These are all the helpers this package has to offer:

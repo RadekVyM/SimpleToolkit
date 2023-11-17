@@ -1,9 +1,8 @@
-﻿namespace SimpleToolkit.SimpleShell
+﻿namespace SimpleToolkit.SimpleShell;
+
+/// <summary>
+/// Container for pages in <see cref="SimpleShell"/>.
+/// </summary>
+public class SimpleNavigationHost : View, ISimpleNavigationHost
 {
-    /// <summary>
-    /// A container for pages in a <see cref="SimpleShell"/>.
-    /// </summary>
-    public class SimpleNavigationHost : View, ISimpleNavigationHost
-    {
-    }
 }
