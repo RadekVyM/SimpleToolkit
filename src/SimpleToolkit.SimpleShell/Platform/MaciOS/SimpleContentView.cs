@@ -102,6 +102,14 @@ public class SimpleContentView : UIView, ICrossPlatformLayoutBacking
         return crossPlatformSize.ToCGSize();
     }
 
+    public override void AddSubview(UIView view)
+    {
+        //view.TranslatesAutoresizingMaskIntoConstraints = false;
+        view.Frame = Bounds;
+        view.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
+        base.AddSubview(view);
+    }
+
     // TODO: Possibly reconcile this code with ViewHandlerExtensions.LayoutVirtualView
     // If you make changes here please review if those changes should also
     // apply to ViewHandlerExtensions.LayoutVirtualView
@@ -114,7 +122,9 @@ public class SimpleContentView : UIView, ICrossPlatformLayoutBacking
         {
             // Only resize a subview when it does not match the size of the parent
             if (subview.Bounds.Width != Bounds.Width || subview.Bounds.Height != Bounds.Height)
-                subview.Frame = new CoreGraphics.CGRect(subview.Frame.X, subview.Frame.Y, Bounds.Width, Bounds.Height);
+            {
+                //subview.Frame = new CoreGraphics.CGRect(0, 0, Bounds.Width, Bounds.Height);
+            }
         }
 
         if (_crossPlatformLayoutReference is null)

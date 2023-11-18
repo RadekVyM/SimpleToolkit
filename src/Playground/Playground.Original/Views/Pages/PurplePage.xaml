@@ -40,6 +40,16 @@
                                 HorizontalOptions="Center" VerticalOptions="Center" />
                         </Grid>
                     </SwipeView>
+
+                    <Button
+                        Text="Translate"
+                        Margin="0, 10"
+                        Clicked="Button_Clicked"/>
+
+                    <ContentView
+                        x:Name="translateContentView"
+                        HeightRequest="50" WidthRequest="50"
+                        Background="Purple"/>
                 </VerticalStackLayout>
             </CollectionView.Header>
 

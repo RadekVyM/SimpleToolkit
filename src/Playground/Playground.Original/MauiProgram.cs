@@ -42,7 +42,7 @@ namespace Playground.Original
 #endif
             if (UsedAppShell is not AppShellType.Normal)
             {
-                builder.UseSimpleShell(true);
+                builder.UseSimpleShell(false);
             }
 
             return builder.Build();
