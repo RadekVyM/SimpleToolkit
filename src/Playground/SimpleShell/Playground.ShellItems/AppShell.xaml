@@ -4,12 +4,17 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:shell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
     xmlns:pages="clr-namespace:Playground.Core.Views.Pages;assembly=Playground.Core"
+    xmlns:converters="clr-namespace:Playground.ShellItems.Converters"
     x:Class="Playground.ShellItems.AppShell"
     Title="ShellItemsAppShell"
 
     x:Name="thisShell"
 
     Background="White">
+
+    <shell:SimpleShell.Resources>
+        <converters:EqualsConverter x:Key="EqualsConverter"/>
+    </shell:SimpleShell.Resources>
 
     <TabBar>
         <shell:SimpleShell.ShellGroupContainerTemplate>
@@ -100,8 +105,22 @@
                             x:DataType="BaseShellItem">
                             <Button
                                 Clicked="ShellItemButtonClicked"
-                                Background="Black"
-                                Text="{Binding Title}"/>
+                                Background="#555"
+                                Text="{Binding Title}">
+                                <Button.Triggers>
+                                    <DataTrigger
+                                        TargetType="Button"
+                                        Value="True">
+                                        <DataTrigger.Binding>
+                                            <MultiBinding Converter="{StaticResource EqualsConverter}">
+                                                <Binding Path="."/>
+                                                <Binding Path="CurrentShellContent" Source="{x:Reference thisShell}"/>
+                                            </MultiBinding>
+                                        </DataTrigger.Binding>
+                                        <Setter Property="Background" Value="Black"/>
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </HorizontalStackLayout>
