@@ -1,4 +1,5 @@
-﻿using SimpleToolkit.SimpleShell.Extensions;
+﻿using Microsoft.Maui.Platform;
+using SimpleToolkit.SimpleShell.Extensions;
 using SimpleToolkit.SimpleShell.Transitions;
 
 namespace SimpleToolkit.SimpleShell;
@@ -57,7 +58,13 @@ public partial class SimpleShell
 
         if (group.IsSet(ShellGroupContainerProperty))
         {
+            var oldContainer = GetShellGroupContainer(group);
+
             SetShellGroupContainer(group, null);
+
+            // If the initial value of ShellGroupContainerProperty is null, update has to be invoked manually
+            if (oldContainer is null)
+                group.Handler?.UpdateValue(ShellGroupContainerProperty.PropertyName);
         }
     }
 

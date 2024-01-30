@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<shell:SimpleShell
+    x:Class="Playground.Containers.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Playground.Containers"
+    xmlns:pages="clr-namespace:Playground.Core.Views.Pages;assembly=Playground.Core"
+    xmlns:shell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
+    x:Name="thisShell"
+    Title="Playground.Containers"
+    Background="White">
+
+    <ShellItem x:Name="shellItem">
+        <Tab x:Name="firstTab">
+            <ShellContent
+                Title="Yellow"
+                ContentTemplate="{DataTemplate pages:YellowPage}"
+                Route="YellowPage" />
+            <ShellContent
+                Title="Green"
+                ContentTemplate="{DataTemplate pages:GreenPage}"
+                Route="GreenPage" />
+        </Tab>
+
+        <Tab x:Name="secondTab">
+            <ShellContent
+                Title="Gray"
+                ContentTemplate="{DataTemplate pages:GrayPage}"
+                Route="GrayPage" />
+
+            <ShellContent
+                Title="Red"
+                ContentTemplate="{DataTemplate pages:RedPage}"
+                Route="RedPage" />
+        </Tab>
+    </ShellItem>
+
+    <ShellContent
+        Title="Blue"
+        ContentTemplate="{DataTemplate pages:BluePage}"
+        Route="BluePage" />
+
+    <shell:SimpleShell.RootPageContainer>
+        <Grid RowDefinitions="*, auto">
+            <shell:SimpleNavigationHost />
+
+            <ScrollView
+                Grid.Row="1"
+                HorizontalScrollBarVisibility="Never"
+                Orientation="Horizontal">
+                <HorizontalStackLayout
+                    x:Name="tabBar"
+                    Margin="20,5"
+                    BindableLayout.ItemsSource="{Binding ShellContents, Source={x:Reference thisShell}}"
+                    HorizontalOptions="Center"
+                    MinimumHeightRequest="40"
+                    Spacing="10">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="BaseShellItem">
+                            <Button
+                                Background="Black"
+                                Clicked="ShellItemButtonClicked"
+                                Text="{Binding Title}" />
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </HorizontalStackLayout>
+            </ScrollView>
+        </Grid>
+    </shell:SimpleShell.RootPageContainer>
+
+    <shell:SimpleShell.Content>
+        <Grid RowDefinitions="auto, auto, auto, auto, *, auto">
+            <HorizontalStackLayout>
+                <Button Clicked="RecreateItemContainerClicked" Text="Recreate" />
+                <Button Clicked="ClearItemContainerClicked" Text="Clear" />
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Grid.Row="1">
+                <Button Clicked="RecreateFirstTabContainerClicked" Text="Recreate" />
+                <Button Clicked="ClearFirstTabContainerClicked" Text="Clear" />
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Grid.Row="2">
+                <Button Clicked="RecreateSecondTabContainerClicked" Text="Recreate" />
+                <Button Clicked="ClearSecondTabContainerClicked" Text="Clear" />
+            </HorizontalStackLayout>
+
+            <Button
+                x:Name="backButton"
+                Grid.Row="3"
+                Margin="20,5"
+                Background="Black"
+                Clicked="BackButtonClicked"
+                HorizontalOptions="Start"
+                Text="Back" />
+
+            <Label
+                Grid.Row="3"
+                Margin="20,5"
+                FontAttributes="Bold"
+                FontSize="18"
+                HorizontalOptions="Center"
+                Text="{Binding CurrentShellContent.Title, Source={x:Reference thisShell}}"
+                VerticalOptions="Center" />
+
+            <shell:SimpleNavigationHost Grid.Row="4" />
+        </Grid>
+    </shell:SimpleShell.Content>
+</shell:SimpleShell>

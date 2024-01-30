@@ -1,13 +1,13 @@
 ﻿#if ANDROID
 
-using FrameLayout = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
 using AView = Android.Views.View;
+using Android.Views;
 
 namespace SimpleToolkit.SimpleShell.Extensions;
 
 internal static class PlatformViewExtensions
 {
-    public static IList<AView> GetChildViews(this FrameLayout layout)
+    public static IList<AView> GetChildViews(this ViewGroup layout)
     {
         var count = layout.ChildCount;
         IList<AView> children = new List<AView>();
@@ -18,7 +18,7 @@ internal static class PlatformViewExtensions
         return children;
     }
 
-    public static bool Contains(this FrameLayout layout, AView view)
+    public static bool Contains(this ViewGroup layout, AView view)
     {
         var count = layout.ChildCount;
 

@@ -30,8 +30,8 @@ public partial class PlatformSimpleStackNavigationManager
         var newItemContainer = GetPlatformView(currentShellItemContainer);
         var oldItemContainer = GetPlatformView(previousShellItemContainer);
 
-        var to = GetFirstDifferent(newItemContainer, newSectionContainer, newPageView, oldItemContainer, oldSectionContainer);
-        var from = GetFirstDifferent(oldItemContainer, oldSectionContainer, oldPageView, newItemContainer, newSectionContainer);
+        var to = BaseSimpleStackNavigationManager.GetFirstDifferent(newItemContainer, newSectionContainer, newPageView, oldItemContainer, oldSectionContainer);
+        var from = BaseSimpleStackNavigationManager.GetFirstDifferent(oldItemContainer, oldSectionContainer, oldPageView, newItemContainer, newSectionContainer);
 
         ClearTransitions(newPageView, newSectionContainer, newItemContainer);
         
