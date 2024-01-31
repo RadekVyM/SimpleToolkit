@@ -63,7 +63,9 @@ public partial class SimpleStackNavigationManager : BaseSimpleStackNavigationMan
     
     protected override void OnBackStackChanged(IReadOnlyList<IView> newPageStack, SimpleShell shell)
     {
+        var oldPageStack = NavigationStack;
         NavigationStack = newPageStack;
+        DisconnectHandlers(oldPageStack, newPageStack);
         FireNavigationFinished();
     }
 }
