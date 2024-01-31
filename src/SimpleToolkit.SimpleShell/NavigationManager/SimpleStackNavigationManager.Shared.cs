@@ -56,7 +56,7 @@ public partial class SimpleStackNavigationManager : BaseSimpleStackNavigationMan
             return;
         }
 
-        var pagesToDisconnect = oldPageStack.Skip(1).Except(newPageStack).ToList();
+        var pagesToDisconnect = GetPagesToDisconnect(oldPageStack, newPageStack);
 
         NavigateToPageInContainer(transitionType, presentationMode, shell, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot, pagesToDisconnect);
     }

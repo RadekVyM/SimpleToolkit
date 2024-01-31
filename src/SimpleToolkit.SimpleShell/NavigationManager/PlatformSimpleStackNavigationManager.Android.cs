@@ -86,9 +86,13 @@ public partial class PlatformSimpleStackNavigationManager
             (!isRootNavigation && newPageStack[newPageStack.Count - 1] != NavigationStack[NavigationStack.Count - 1]);
         var oldPageStack = NavigationStack;
         NavigationStack = newPageStack;
+        var pagesToDisconnect = GetPagesToDisconnect(oldPageStack, newPageStack);
 
         if (!switchFragments)
+        {
+            DisconnectHandlers(pagesToDisconnect);
             return;
+        }
 
         var previousFragment = currentFragment;
         var shouldPop = ShouldPop(newPageStack, oldPageStack);
@@ -132,7 +136,7 @@ public partial class PlatformSimpleStackNavigationManager
             if (sender is SimpleFragment fragment)
                 fragment.ClearAnimationFinished();
 
-            DisconnectHandlers(oldPageStack, newPageStack);
+            DisconnectHandlers(pagesToDisconnect);
         }
     }
 

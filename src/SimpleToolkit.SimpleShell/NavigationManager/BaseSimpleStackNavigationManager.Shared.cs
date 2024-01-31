@@ -255,9 +255,14 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
                 item ?? section ?? page;
     }
 
+    protected private static IList<IView> GetPagesToDisconnect(IEnumerable<IView> oldPageStack, IEnumerable<IView> newPageStack)
+    {
+        return oldPageStack.Skip(1).Except(newPageStack).ToList();
+    }
+
     protected static void DisconnectHandlers(IEnumerable<IView> oldPageStack, IEnumerable<IView> newPageStack)
     {
-        var pageStack = oldPageStack.Skip(1).Except(newPageStack);
+        var pageStack = GetPagesToDisconnect(oldPageStack, newPageStack);
         DisconnectHandlers(pageStack);
     }
 
@@ -268,6 +273,22 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
             if (page is not BindableObject bindablePage || !SimpleShell.GetShouldAutoDisconnectPageHandler(bindablePage))
                 return;
 
+            // Wait until the page is unloaded
+            if (page is VisualElement v && v.IsLoaded)
+                v.Unloaded += OnPageUnloaded;
+            else
+                DisconnectHandler(page);
+        }
+
+        static void OnPageUnloaded(object sender, EventArgs e)
+        {
+            var page = sender as VisualElement;
+            page.Unloaded -= OnPageUnloaded;
+            DisconnectHandler(page);
+        }
+
+        static void DisconnectHandler(IView page)
+        {
             var handler = page.Handler;
             handler?.DisconnectHandler();
         }

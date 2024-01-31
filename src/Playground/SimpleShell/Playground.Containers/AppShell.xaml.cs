@@ -7,7 +7,7 @@ using PlatformContainer = Android.Views.ViewGroup;
 #elif IOS || MACCATALYST
 using PlatformContainer = UIKit.UIView;
 #elif WINDOWS
-
+using PlatformContainer = Microsoft.UI.Xaml.Controls.Panel;
 #endif
 
 namespace Playground.Containers;
@@ -105,7 +105,8 @@ public partial class AppShell : SimpleShell
         hasParent = platformContainer.Superview is not null;
         navHostChildrenCount = platformNavHost.Subviews.Length;
 #elif WINDOWS
-
+        hasParent = platformContainer.Parent is not null;
+        navHostChildrenCount = platformNavHost.Children.Count;
 #endif
 
         return $"Parent: {hasParent}; Children: {navHostChildrenCount}";
