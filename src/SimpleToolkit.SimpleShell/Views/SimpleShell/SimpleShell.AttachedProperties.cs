@@ -1,5 +1,4 @@
-﻿using Microsoft.Maui.Platform;
-using SimpleToolkit.SimpleShell.Extensions;
+﻿using SimpleToolkit.SimpleShell.Extensions;
 using SimpleToolkit.SimpleShell.Transitions;
 
 namespace SimpleToolkit.SimpleShell;
@@ -8,6 +7,9 @@ public partial class SimpleShell
 {
     public static readonly BindableProperty TransitionProperty =
         BindableProperty.CreateAttached("Transition", typeof(ISimpleShellTransition), typeof(Page), null);
+
+    public static readonly BindableProperty ShouldAutoDisconnectPageHandlerProperty =
+        BindableProperty.CreateAttached("ShouldAutoDisconnectPageHandler", typeof(bool), typeof(Page), true);
 
     public static readonly BindableProperty ShellGroupContainerTemplateProperty =
         BindableProperty.CreateAttached("ShellGroupContainerTemplate", typeof(DataTemplate), typeof(ShellGroupItem), null, propertyChanged: OnShellGroupContainerTemplateChanged);
@@ -25,6 +27,18 @@ public partial class SimpleShell
     {
         _ = item ?? throw new ArgumentNullException(nameof(item));
         item.SetValue(TransitionProperty, value);
+    }
+
+    public static bool GetShouldAutoDisconnectPageHandler(BindableObject item)
+    {
+        _ = item ?? throw new ArgumentNullException(nameof(item));
+        return (bool)item.GetValue(ShouldAutoDisconnectPageHandlerProperty);
+    }
+
+    public static void SetShouldAutoDisconnectPageHandler(BindableObject item, bool value)
+    {
+        _ = item ?? throw new ArgumentNullException(nameof(item));
+        item.SetValue(ShouldAutoDisconnectPageHandlerProperty, value);
     }
 
     public static DataTemplate GetShellGroupContainerTemplate(BindableObject item)

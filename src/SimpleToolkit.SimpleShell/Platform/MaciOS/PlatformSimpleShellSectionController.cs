@@ -225,6 +225,7 @@ public class PlatformSimpleShellSectionController : UINavigationController
         void OnInteractionChanged(IUIViewControllerTransitionCoordinatorContext context)
         {
             //System.Diagnostics.Debug.WriteLine($"{context.CompletionVelocity}");
+            System.Diagnostics.Debug.WriteLine($"{context.TransitionDuration}");
 
             if (!context.IsCancelled)
             {

@@ -2,7 +2,7 @@
 using SimpleToolkit.SimpleShell.Transitions;
 using Microsoft.Maui.Controls.Internals;
 #if ANDROID
-using NavFrame = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
+using NavFrame = Android.Widget.FrameLayout;
 using PlatformView = Android.Views.View;
 #elif __IOS__ || MACCATALYST
 using UIKit;
@@ -46,6 +46,7 @@ public partial class SimpleStackNavigationManager : BaseSimpleStackNavigationMan
         IView previousPage,
         bool isPreviousPageRoot)
     {
+        var oldPageStack = NavigationStack;
         NavigationStack = newPageStack;
 
         if (args.RequestType == NavigationRequestType.Remove || args.RequestType == NavigationRequestType.Insert)
@@ -55,7 +56,9 @@ public partial class SimpleStackNavigationManager : BaseSimpleStackNavigationMan
             return;
         }
 
-        NavigateToPageInContainer(transitionType, presentationMode, shell, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot);
+        var pagesToDisconnect = oldPageStack.Skip(1).Except(newPageStack).ToList();
+
+        NavigateToPageInContainer(transitionType, presentationMode, shell, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot, pagesToDisconnect);
     }
     
     protected override void OnBackStackChanged(IReadOnlyList<IView> newPageStack, SimpleShell shell)

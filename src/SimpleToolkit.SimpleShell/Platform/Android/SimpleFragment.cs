@@ -4,9 +4,9 @@ using Android.Animation;
 using Android.OS;
 using Android.Views;
 using Android.Views.Animations;
+using Android.Widget;
 using AndroidX.Core.View;
 using AndroidX.Fragment.App;
-using Microsoft.Maui.Controls.Platform.Compatibility;
 using AndroidAnimation = Android.Views.Animations.Animation;
 using AnimationSet = Android.Views.Animations.AnimationSet;
 using AView = Android.Views.View;
@@ -17,7 +17,7 @@ namespace SimpleToolkit.SimpleShell.Platform;
 
 public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener, Animator.IAnimatorListener
 {
-    private CustomFrameLayout root;
+    private FrameLayout root;
     private AView view;
     private bool disposed;
     private bool isAnimating = false;
@@ -61,6 +61,11 @@ public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener, Ani
 
     void Animator.IAnimatorListener.OnAnimationCancel(Animator animation)
     {
+    }
+
+    public void ClearAnimationFinished()
+    {
+        AnimationFinished = null;
     }
 
     public override void OnResume()
@@ -145,7 +150,7 @@ public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener, Ani
     public override AView OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         // The view needs to be placed in a container for translations pivots to work
-        var frame = new CustomFrameLayout(Context);
+        var frame = new FrameLayout(Context);
         frame.AddView(view);
 
         return frame;

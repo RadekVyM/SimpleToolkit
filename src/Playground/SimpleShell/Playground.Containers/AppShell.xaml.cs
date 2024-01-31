@@ -1,5 +1,14 @@
-﻿using Playground.Core.Views.Pages;
+﻿using Playground.Containers.Extensions;
+using Playground.Core.Views.Pages;
 using SimpleToolkit.SimpleShell;
+
+#if ANDROID
+using PlatformContainer = Android.Views.ViewGroup;
+#elif IOS || MACCATALYST
+using PlatformContainer = UIKit.UIView;
+#elif WINDOWS
+
+#endif
 
 namespace Playground.Containers;
 
@@ -8,6 +17,7 @@ public partial class AppShell : SimpleShell
     private int itemContainerIndex = 0;
     private int firstTabContainerIndex = 0;
     private int secondTabContainerIndex = 0;
+
 
     public AppShell()
     {
@@ -18,6 +28,13 @@ public partial class AppShell : SimpleShell
         Routing.RegisterRoute(nameof(FirstGreenDetailPage), typeof(FirstGreenDetailPage));
 
         InitializeComponent();
+
+        Navigated += AppShellNavigated;
+    }
+
+    private async void AppShellNavigated(object? sender, ShellNavigatedEventArgs e)
+    {
+        await UpdateStatsDelayed();
     }
 
     private DataTemplate CreateContainer(string text)
@@ -47,6 +64,53 @@ public partial class AppShell : SimpleShell
         }
     }
 
+    private async Task UpdateStatsDelayed()
+    {
+        await Task.Delay(300);
+        UpdateStats();
+    }
+
+    private void UpdateStats()
+    {
+        contentContainerLabel.Text = GetContainerStats(contentContainer);
+        rootContainerLabel.Text = GetContainerStats(rootContainer);
+        itemContainerLabel.Text = GetShellItemStats(shellItem);
+        firstTabContainerLabel.Text = GetShellItemStats(firstTab);
+        secondTabContainerLabel.Text = GetShellItemStats(secondTab);
+    }
+
+    private string GetShellItemStats(BaseShellItem shellItem)
+    {
+        var container = SimpleShell.GetShellGroupContainer(shellItem);
+        return GetContainerStats(container);
+    }
+
+    private string GetContainerStats(IView? container)
+    {
+        if (container?.Handler?.PlatformView is not PlatformContainer platformContainer)
+            return "none";
+
+        var navHost = container.FindSimpleNavigationHost();
+
+        if (navHost?.Handler?.PlatformView is not PlatformContainer platformNavHost)
+            return "none";
+
+        bool hasParent = false;
+        int navHostChildrenCount = 0;
+
+#if ANDROID
+        hasParent = platformContainer.Parent is not null;
+        navHostChildrenCount = platformNavHost.ChildCount;
+#elif IOS || MACCATALYST
+        hasParent = platformContainer.Superview is not null;
+        navHostChildrenCount = platformNavHost.Subviews.Length;
+#elif WINDOWS
+
+#endif
+
+        return $"Parent: {hasParent}; Children: {navHostChildrenCount}";
+    }
+
     private async void ShellItemButtonClicked(object sender, EventArgs e)
     {
         var button = sender as Button;
@@ -65,33 +129,44 @@ public partial class AppShell : SimpleShell
         await GoToAsync("..");
     }
 
-    private void RecreateItemContainerClicked(object sender, EventArgs e)
+    private async void RecreateItemContainerClicked(object sender, EventArgs e)
     {
         SimpleShell.SetShellGroupContainerTemplate(shellItem, CreateContainer($"Item Container: {++itemContainerIndex}"));
+        await UpdateStatsDelayed();
     }
 
-    private void ClearItemContainerClicked(object sender, EventArgs e)
+    private async void ClearItemContainerClicked(object sender, EventArgs e)
     {
         SimpleShell.SetShellGroupContainerTemplate(shellItem, null);
+        await UpdateStatsDelayed();
     }
 
-    private void RecreateFirstTabContainerClicked(object sender, EventArgs e)
+    private async void RecreateFirstTabContainerClicked(object sender, EventArgs e)
     {
         SimpleShell.SetShellGroupContainerTemplate(firstTab, CreateContainer($"First Tab Container: {++firstTabContainerIndex}"));
+        await UpdateStatsDelayed();
     }
 
-    private void ClearFirstTabContainerClicked(object sender, EventArgs e)
+    private async void ClearFirstTabContainerClicked(object sender, EventArgs e)
     {
         SimpleShell.SetShellGroupContainerTemplate(firstTab, null);
+        await UpdateStatsDelayed();
     }
 
-    private void RecreateSecondTabContainerClicked(object sender, EventArgs e)
+    private async void RecreateSecondTabContainerClicked(object sender, EventArgs e)
     {
         SimpleShell.SetShellGroupContainerTemplate(secondTab, CreateContainer($"Second Tab Container: {++secondTabContainerIndex}"));
+        await UpdateStatsDelayed();
     }
 
-    private void ClearSecondTabContainerClicked(object sender, EventArgs e)
+    private async void ClearSecondTabContainerClicked(object sender, EventArgs e)
     {
         SimpleShell.SetShellGroupContainerTemplate(secondTab, null);
+        await UpdateStatsDelayed();
+    }
+
+    private void RefreshClicked(object sender, EventArgs e)
+    {
+        UpdateStats();
     }
 }

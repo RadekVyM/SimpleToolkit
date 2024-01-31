@@ -1,6 +1,6 @@
 ﻿using Microsoft.Maui.Platform;
 #if ANDROID
-using SectionContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
+using SectionContainer = Android.Widget.FrameLayout;
 #elif IOS || MACCATALYST
 using SectionContainer = UIKit.UIView;
 #elif WINDOWS
@@ -74,9 +74,6 @@ public partial class SimpleShellItemHandler : IAppearanceObserver
         }
 
         currentShellSectionHandler?.SetRootPageContainer(rootPageContainer);
-
-        //UpdateSearchHandler();
-        //MapMenuItems();
 
         if (currentShellSection is not null)
             currentShellSection.PropertyChanged += OnCurrentShellSectionPropertyChanged;

@@ -71,7 +71,8 @@ public partial class PlatformSimpleStackNavigationManager
             newControllers,
             GetTransitionPairs(newPageStack, newControllers, pageTransition, args),
             animated);
-        DisconnectHandlers(oldPageStack.Skip(1).Except(newPageStack));
+
+        DisconnectHandlers(oldPageStack, newPageStack);
     }
 
     private void SwitchPlatformPages(
@@ -114,15 +115,6 @@ public partial class PlatformSimpleStackNavigationManager
                     transition?.SwitchingAnimationFinished(args())?.Invoke(from, to);
                 });
             });
-        }
-    }
-
-    protected static void DisconnectHandlers(IEnumerable<IView> pageStack)
-    {
-        foreach (var page in pageStack)
-        {
-            var handler = page.Handler;
-            handler?.DisconnectHandler();
         }
     }
 

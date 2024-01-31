@@ -65,6 +65,13 @@
     <ItemGroup>
         <ProjectReference Include="..\Playground.Core\Playground.Core.csproj" />
         <ProjectReference Include="..\..\..\SimpleToolkit.SimpleShell\SimpleToolkit.SimpleShell.csproj" />
+        <ProjectReference Include="..\..\..\SimpleToolkit.Core\SimpleToolkit.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Extensions\" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Extensions\" />
+    </ItemGroup>
 </Project>

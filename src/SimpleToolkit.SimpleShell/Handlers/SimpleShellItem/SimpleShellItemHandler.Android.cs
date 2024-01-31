@@ -1,16 +1,16 @@
 ﻿#if ANDROID
 
-using Microsoft.Maui.Controls.Platform.Compatibility;
+using Android.Widget;
 using Microsoft.Maui.Handlers;
 using AView = Android.Views.View;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 
-public partial class SimpleShellItemHandler : ElementHandler<ShellItem, CustomFrameLayout>
+public partial class SimpleShellItemHandler : ElementHandler<ShellItem, FrameLayout>
 {
-    protected override CustomFrameLayout CreatePlatformElement()
+    protected override FrameLayout CreatePlatformElement()
     {
-        return new CustomFrameLayout(MauiContext.Context)
+        return new FrameLayout(MauiContext.Context)
         {
             Id = AView.GenerateViewId()
         };

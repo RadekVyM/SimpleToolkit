@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <shell:SimpleShell
     x:Class="Playground.Containers.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -8,7 +8,7 @@
     xmlns:shell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
     x:Name="thisShell"
     Title="Playground.Containers"
-    Background="White">
+    Background="{AppThemeBinding Default=White, Dark=Black}">
 
     <ShellItem x:Name="shellItem">
         <Tab x:Name="firstTab">
@@ -41,7 +41,7 @@
         Route="BluePage" />
 
     <shell:SimpleShell.RootPageContainer>
-        <Grid RowDefinitions="*, auto">
+        <Grid x:Name="rootContainer" RowDefinitions="*, auto">
             <shell:SimpleNavigationHost />
 
             <ScrollView
@@ -58,7 +58,6 @@
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="BaseShellItem">
                             <Button
-                                Background="Black"
                                 Clicked="ShellItemButtonClicked"
                                 Text="{Binding Title}" />
                         </DataTemplate>
@@ -69,33 +68,39 @@
     </shell:SimpleShell.RootPageContainer>
 
     <shell:SimpleShell.Content>
-        <Grid RowDefinitions="auto, auto, auto, auto, *, auto">
-            <HorizontalStackLayout>
-                <Button Clicked="RecreateItemContainerClicked" Text="Recreate" />
-                <Button Clicked="ClearItemContainerClicked" Text="Clear" />
-            </HorizontalStackLayout>
+        <Grid x:Name="contentContainer" RowDefinitions="auto, auto, auto, auto, auto, *">
+            <VerticalStackLayout>
+                <Label x:Name="contentContainerLabel" FontSize="11" VerticalOptions="Center" />
+                <Label x:Name="rootContainerLabel" FontSize="11" VerticalOptions="Center" />
+            </VerticalStackLayout>
 
             <HorizontalStackLayout Grid.Row="1">
-                <Button Clicked="RecreateFirstTabContainerClicked" Text="Recreate" />
-                <Button Clicked="ClearFirstTabContainerClicked" Text="Clear" />
+                <Button Clicked="RecreateItemContainerClicked" Text="Recreate" />
+                <Button Clicked="ClearItemContainerClicked" Text="Clear" />
+                <Label x:Name="itemContainerLabel" FontSize="11" VerticalOptions="Center" />
             </HorizontalStackLayout>
 
             <HorizontalStackLayout Grid.Row="2">
+                <Button Clicked="RecreateFirstTabContainerClicked" Text="Recreate" />
+                <Button Clicked="ClearFirstTabContainerClicked" Text="Clear" />
+                <Label x:Name="firstTabContainerLabel" FontSize="11" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Grid.Row="3">
                 <Button Clicked="RecreateSecondTabContainerClicked" Text="Recreate" />
                 <Button Clicked="ClearSecondTabContainerClicked" Text="Clear" />
+                <Label x:Name="secondTabContainerLabel" FontSize="11" VerticalOptions="Center" />
             </HorizontalStackLayout>
 
             <Button
                 x:Name="backButton"
-                Grid.Row="3"
-                Margin="20,5"
-                Background="Black"
+                Grid.Row="4"
                 Clicked="BackButtonClicked"
                 HorizontalOptions="Start"
                 Text="Back" />
 
             <Label
-                Grid.Row="3"
+                Grid.Row="4"
                 Margin="20,5"
                 FontAttributes="Bold"
                 FontSize="18"
@@ -103,7 +108,7 @@
                 Text="{Binding CurrentShellContent.Title, Source={x:Reference thisShell}}"
                 VerticalOptions="Center" />
 
-            <shell:SimpleNavigationHost Grid.Row="4" />
+            <shell:SimpleNavigationHost Grid.Row="5" />
         </Grid>
     </shell:SimpleShell.Content>
 </shell:SimpleShell>

@@ -103,6 +103,10 @@ public partial class PlatformSimpleStackNavigationManager
         currentFragment = CreateFragment(platformView);
 
         if (previousFragment is not null)
+            previousFragment.ClearAnimationFinished();
+        currentFragment.AnimationFinished += FragmentAnimationFinished;
+
+        if (previousFragment is not null)
             previousFragment.OnTop = !destinationPageInFront;
         currentFragment.OnTop = destinationPageInFront;
 
@@ -122,6 +126,14 @@ public partial class PlatformSimpleStackNavigationManager
         }
         transaction.Replace(rootContainer.Id, currentFragment);
         transaction.Commit();
+
+        void FragmentAnimationFinished(object sender, EventArgs args)
+        {
+            if (sender is SimpleFragment fragment)
+                fragment.ClearAnimationFinished();
+
+            DisconnectHandlers(oldPageStack, newPageStack);
+        }
     }
 
     private static SimpleFragment CreateFragment(AView view)
