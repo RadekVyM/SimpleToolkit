@@ -29,14 +29,16 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_NOLOGO: true
-  NuGetDirectory: ${{ github.workspace }}/nuget
+  NuGetDirectory: .\nuget
+  CoreNuGetDirectory: .\nuget\Core
+  SimpleShellNuGetDirectory: .\nuget\SimpleShell
 
 defaults:
   run:
     shell: pwsh
 
 jobs:
-  create_nuget:
+  publish:
     runs-on: windows-2022
     steps:
       - name: Checkout
@@ -50,11 +52,11 @@ jobs:
 
       - name: Pack SimpleToolkit.Core
         if: ${{ inputs.pack_core || inputs.push_core }}
-        run: dotnet pack ./src/SimpleToolkit.Core/SimpleToolkit.Core.csproj --configuration Release --output ${{ env.NuGetDirectory }}
+        run: dotnet pack .\src\SimpleToolkit.Core\SimpleToolkit.Core.csproj --configuration Release --output ${{ env.CoreNuGetDirectory }}
 
       - name: Pack SimpleToolkit.SimpleShell
         if: ${{ inputs.pack_simpleshell || inputs.push_simpleshell }}
-        run: dotnet pack ./src/SimpleToolkit.SimpleShell/SimpleToolkit.SimpleShell.csproj --configuration Release --output ${{ env.NuGetDirectory }}
+        run: dotnet pack .\src\SimpleToolkit.SimpleShell\SimpleToolkit.SimpleShell.csproj --configuration Release --output ${{ env.SimpleShellNuGetDirectory }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
@@ -62,12 +64,12 @@ jobs:
           name: nuget
           if-no-files-found: error
           retention-days: 90
-          path: ${{ env.NuGetDirectory }}/*.nupkg
+          path: ${{ env.NuGetDirectory }}\**\*.nupkg
 
       - name: Push SimpleToolkit.Core
         if: ${{ inputs.pack_core && inputs.push_core }}
-        run: dotnet nuget push ${{ env.NuGetDirectory }}/SimpleToolkit.Core.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push "${{ env.CoreNuGetDirectory }}\*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
 
       - name: Push SimpleToolkit.SimpleShell
         if: ${{ inputs.pack_simpleshell && inputs.push_simpleshell }}
-        run: dotnet nuget push ${{ env.NuGetDirectory }}/SimpleToolkit.SimpleShell.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push "${{ env.SimpleShellNuGetDirectory }}\*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
