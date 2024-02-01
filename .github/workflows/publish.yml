@@ -30,8 +30,8 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_NOLOGO: true
   NuGetDirectory: ${{ github.workspace }}/nuget
-  CoreNuGetDirectory: ${{ env.NuGetDirectory }}/Core
-  SimpleShellNuGetDirectory: ${{ env.NuGetDirectory }}/SimpleShell
+  CoreNuGetDirectory: ${{ github.workspace }}/nuget/Core
+  SimpleShellNuGetDirectory: ${{ github.workspace }}/nuget/SimpleShell
 
 defaults:
   run:
