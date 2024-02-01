@@ -31,10 +31,7 @@ public partial class SimpleNavigationHostHandler : ViewHandler<ISimpleNavigation
 
     protected override UIView CreatePlatformView()
     {
-        return new SimpleContentView
-        {
-            View = VirtualView
-        };
+        return new SimpleContentView();
     }
 
     public virtual void SetContent(UIView view)

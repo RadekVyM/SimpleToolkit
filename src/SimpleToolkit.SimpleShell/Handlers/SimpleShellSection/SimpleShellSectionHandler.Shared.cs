@@ -1,6 +1,6 @@
 ﻿using SimpleToolkit.SimpleShell.NavigationManager;
 #if ANDROID
-using PageContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
+using PageContainer = Android.Widget.FrameLayout;
 #elif IOS || MACCATALYST
 using SimpleToolkit.SimpleShell.Platform;
 using PageContainer = UIKit.UIView;

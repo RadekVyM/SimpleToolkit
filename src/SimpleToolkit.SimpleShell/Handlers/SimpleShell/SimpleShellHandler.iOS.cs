@@ -12,10 +12,7 @@ public partial class SimpleShellHandler : ViewHandler<ISimpleShell, UIView>
     {
         ViewController = new SimpleShellController
         {
-            View = new SimpleContentView
-            {
-                View = VirtualView
-            }
+            View = new SimpleContentView()
         };
 
         return ViewController.View;

@@ -27,4 +27,18 @@ public partial class PurplePage : ContentPage
 
 	private string RectToShortString(Rect rect) =>
 		$"X={Math.Round(rect.X, 2)} Y={Math.Round(rect.Y, 2)} Width={Math.Round(rect.Width, 2)} Height={Math.Round(rect.Height, 2)}";
+
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+		translateContentView.AbortAnimation("Animation");
+
+        var to = translateContentView.TranslationX == 50 ? -50 : 50;
+
+        var animation = new Animation((v) =>
+		{
+			translateContentView.TranslationX = to * v;
+        });
+
+		animation.Commit(translateContentView, "Animation");
+    }
 }

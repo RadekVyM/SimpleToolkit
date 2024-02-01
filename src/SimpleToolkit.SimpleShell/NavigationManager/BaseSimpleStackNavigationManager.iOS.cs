@@ -2,6 +2,7 @@
 
 using Microsoft.Maui.Platform;
 using PlatformView = UIKit.UIView;
+using PlatformContainer = UIKit.UIView;
 using NavFrame = UIKit.UIView;
 using Microsoft.Maui.Handlers;
 using SimpleToolkit.SimpleShell.Platform;
@@ -44,7 +45,12 @@ public abstract partial class BaseSimpleStackNavigationManager
             didMovePageHandler.ViewController.DidMoveToParentViewController(contentController);
     }
 
-    protected virtual void RemovePlatformPageFromContainer(IView oldPage, IView oldShellItemContainer, IView oldShellSectionContainer, bool isCurrentPageRoot, bool isPreviousPageRoot)
+    protected virtual void RemovePlatformPageFromContainer(
+        IView oldPage,
+        IView oldShellItemContainer,
+        IView oldShellSectionContainer,
+        bool isCurrentPageRoot,
+        bool isPreviousPageRoot)
     {
         var oldPageView = GetPlatformView(oldPage);
 
@@ -59,14 +65,14 @@ public abstract partial class BaseSimpleStackNavigationManager
 
         oldPageView?.RemoveFromSuperview();
 
-        if (oldShellSectionContainer is not null && currentShellSectionContainer != oldShellSectionContainer)
-            RemoveShellGroupContainer(oldShellSectionContainer);
+        if (oldShellSectionContainer is not null && (currentShellSectionContainer != oldShellSectionContainer || currentShellItemContainer != oldShellItemContainer))
+            RemoveContainer(oldShellSectionContainer);
 
         if (oldShellItemContainer is not null && currentShellItemContainer != oldShellItemContainer)
-            RemoveShellGroupContainer(oldShellItemContainer);
+            RemoveContainer(oldShellItemContainer);
 
         if (!isCurrentPageRoot && isPreviousPageRoot && this.rootPageContainer is not null)
-            RemoveRootPageContainer(this.rootPageContainer);
+            RemoveContainer(this.rootPageContainer);
     }
 
     protected void AddPlatformRootPage(bool onTop, PlatformView newPageView)
@@ -104,67 +110,35 @@ public abstract partial class BaseSimpleStackNavigationManager
         parentNavHost.BringSubviewToFront(onTop ? child : parentNavHost.Subviews.FirstOrDefault());
     }
 
-    protected virtual void ReplaceRootPageContainer(IView rootPageContainer, bool isCurrentPageRoot)
+    private static partial void AddChild(PlatformContainer parent, PlatformView child)
     {
-        var oldContainer = this.rootPageContainer;
-        var newContainer = GetPlatformView(rootPageContainer);
-        IList<PlatformView> oldChildren = new List<PlatformView>();
-
-        if (oldContainer is not null)
-            oldChildren = RemoveRootPageContainer(oldContainer);
-
-        // Old container is being replaced or added
-        if (newContainer is not null && isCurrentPageRoot)
-        {
-            // New container is being added
-            if (oldContainer is null && navigationFrame.Subviews.Any())
-            {
-                foreach (var child in navigationFrame.Subviews)
-                    oldChildren.Add(child);
-                navigationFrame.ClearSubviews();
-            }
-
-            navigationFrame.AddSubview(newContainer);
-
-            if (GetPageContainerNavHost(rootPageContainer) is PlatformView newNavHost)
-            {
-                foreach (var child in oldChildren)
-                    newNavHost.AddSubview(child);
-            }
-        }
-
-        // Old container is being removed
-        if (oldContainer is not null && newContainer is null && isCurrentPageRoot)
-        {
-            foreach (var child in oldChildren)
-                navigationFrame.AddSubview(child);
-        }
+        parent.AddSubview(child);
     }
 
-    protected private IList<PlatformView> RemoveRootPageContainer(IView oldRootContainer)
+    private static partial void ClearChildren(PlatformContainer parent, List<PlatformView> oldChildren)
     {
-        var oldContainer = GetPlatformView(oldRootContainer);
+        if (!parent.Subviews.Any())
+            return;
+
+        foreach (var child in parent.Subviews)
+            oldChildren.Add(child);
+        parent.ClearSubviews();
+    }
+
+    protected private partial List<PlatformView> RemoveContainer(IView oldContainer, PlatformContainer parent = null)
+    {
+        var oldPlatformContainer = GetPlatformView(oldContainer);
         var oldChildren = new List<PlatformView>();
 
-        if (GetPageContainerNavHost(oldRootContainer) is PlatformView oldNavHost)
+        if (GetPageContainerNavHost(oldContainer) is PlatformView oldNavHost)
         {
             oldChildren = oldNavHost.Subviews.ToList();
             oldNavHost.ClearSubviews();
         }
 
-        oldContainer.RemoveFromSuperview();
+        oldPlatformContainer.RemoveFromSuperview();
 
         return oldChildren;
-    }
-
-    protected private void RemoveShellGroupContainer(IView oldShellGroupContainer)
-    {
-        var oldContainer = GetPlatformView(oldShellGroupContainer);
-
-        if (GetPageContainerNavHost(oldShellGroupContainer) is PlatformView oldNavHost)
-            oldNavHost.ClearSubviews();
-
-        oldContainer.RemoveFromSuperview();
     }
 }
 

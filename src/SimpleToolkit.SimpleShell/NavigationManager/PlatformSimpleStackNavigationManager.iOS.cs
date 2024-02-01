@@ -28,8 +28,8 @@ public partial class PlatformSimpleStackNavigationManager
         var newItemContainer = GetPlatformView(currentShellItemContainer);
         var oldItemContainer = GetPlatformView(previousShellItemContainer);
 
-        var to = GetFirstDifferent(newItemContainer, newSectionContainer, newPageView, oldItemContainer, oldSectionContainer);
-        var from = GetFirstDifferent(oldItemContainer, oldSectionContainer, oldPageView, newItemContainer, newSectionContainer);
+        var to = BaseSimpleStackNavigationManager.GetFirstDifferent(newItemContainer, newSectionContainer, newPageView, oldItemContainer, oldSectionContainer);
+        var from = BaseSimpleStackNavigationManager.GetFirstDifferent(oldItemContainer, oldSectionContainer, oldPageView, newItemContainer, newSectionContainer);
 
         AddPlatformPageToContainer(currentPage, shell, GetValue(transition, args, transition?.DestinationPageInFrontOnSwitching, false), isCurrentPageRoot: isCurrentPageRoot);
 
@@ -71,7 +71,8 @@ public partial class PlatformSimpleStackNavigationManager
             newControllers,
             GetTransitionPairs(newPageStack, newControllers, pageTransition, args),
             animated);
-        DisconnectHandlers(oldPageStack.Skip(1).Except(newPageStack));
+
+        DisconnectHandlers(oldPageStack, newPageStack);
     }
 
     private void SwitchPlatformPages(
@@ -114,15 +115,6 @@ public partial class PlatformSimpleStackNavigationManager
                     transition?.SwitchingAnimationFinished(args())?.Invoke(from, to);
                 });
             });
-        }
-    }
-
-    protected static void DisconnectHandlers(IEnumerable<IView> pageStack)
-    {
-        foreach (var page in pageStack)
-        {
-            var handler = page.Handler;
-            handler?.DisconnectHandler();
         }
     }
 

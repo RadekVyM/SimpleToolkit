@@ -1,0 +1,73 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
+name: publish
+on:
+  workflow_dispatch:
+    inputs:
+      pack_core:
+        description: "Pack SimpleToolkit.Core"
+        required: true
+        type: boolean
+        default: true
+      pack_simpleshell:
+        description: "Pack SimpleToolkit.SimpleShell"
+        required: true
+        type: boolean
+        default: true
+      push_core:
+        description: "Push SimpleToolkit.Core"
+        required: false
+        type: boolean
+        default: false
+      push_simpleshell:
+        description: "Push SimpleToolkit.SimpleShell"
+        required: false
+        type: boolean
+        default: false
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_NOLOGO: true
+  NuGetDirectory: ${{ github.workspace }}/nuget
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  create_nuget:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+
+      - name: Install MAUI Workload
+        run: dotnet workload install maui --ignore-failed-sources
+
+      - name: Pack SimpleToolkit.Core
+        if: ${{ inputs.pack_core || inputs.push_core }}
+        run: dotnet pack ./src/SimpleToolkit.Core/SimpleToolkit.Core.csproj --configuration Release --output ${{ env.NuGetDirectory }}
+
+      - name: Pack SimpleToolkit.SimpleShell
+        if: ${{ inputs.pack_simpleshell || inputs.push_simpleshell }}
+        run: dotnet pack ./src/SimpleToolkit.SimpleShell/SimpleToolkit.SimpleShell.csproj --configuration Release --output ${{ env.NuGetDirectory }}
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: nuget
+          if-no-files-found: error
+          retention-days: 90
+          path: ${{ env.NuGetDirectory }}/*.nupkg
+
+      - name: Push SimpleToolkit.Core
+        if: ${{ inputs.pack_core && inputs.push_core }}
+        run: dotnet nuget push ${{ env.NuGetDirectory }}/SimpleToolkit.Core.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+
+      - name: Push SimpleToolkit.SimpleShell
+        if: ${{ inputs.pack_simpleshell && inputs.push_simpleshell }}
+        run: dotnet nuget push ${{ env.NuGetDirectory }}/SimpleToolkit.SimpleShell.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json

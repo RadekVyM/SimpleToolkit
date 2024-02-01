@@ -1,6 +1,6 @@
 ﻿using Microsoft.Maui.Platform;
 #if ANDROID
-using SectionContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
+using SectionContainer = Android.Widget.FrameLayout;
 #elif IOS || MACCATALYST
 using SectionContainer = UIKit.UIView;
 #elif WINDOWS
@@ -19,7 +19,8 @@ public partial class SimpleShellItemHandler : IAppearanceObserver
         new PropertyMapper<ShellItem, SimpleShellItemHandler>(ElementMapper)
         {
             [nameof(ShellItem.CurrentItem)] = MapCurrentItem,
-            [Shell.TabBarIsVisibleProperty.PropertyName] = MapTabBarIsVisible
+            [Shell.TabBarIsVisibleProperty.PropertyName] = MapTabBarIsVisible,
+            [SimpleShell.ShellGroupContainerProperty.PropertyName] = MapShellGroupContainer
         };
 
     public static CommandMapper<ShellItem, SimpleShellItemHandler> CommandMapper =
@@ -74,9 +75,6 @@ public partial class SimpleShellItemHandler : IAppearanceObserver
 
         currentShellSectionHandler?.SetRootPageContainer(rootPageContainer);
 
-        //UpdateSearchHandler();
-        //MapMenuItems();
-
         if (currentShellSection is not null)
             currentShellSection.PropertyChanged += OnCurrentShellSectionPropertyChanged;
     }
@@ -101,5 +99,10 @@ public partial class SimpleShellItemHandler : IAppearanceObserver
     public static void MapCurrentItem(SimpleShellItemHandler handler, ShellItem item)
     {
         handler.UpdateCurrentItem();
+    }
+
+    public static void MapShellGroupContainer(SimpleShellItemHandler handler, ShellItem item)
+    {
+        handler.currentShellSectionHandler?.RefreshGroupContainers();
     }
 }

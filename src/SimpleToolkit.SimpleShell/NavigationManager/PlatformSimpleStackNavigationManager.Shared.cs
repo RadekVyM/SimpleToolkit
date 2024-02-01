@@ -1,8 +1,8 @@
 ﻿using SimpleToolkit.SimpleShell.Transitions;
 using SimpleToolkit.SimpleShell.Handlers;
 #if ANDROID
-using NavFrame = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
-using RootContainer = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
+using NavFrame = Android.Widget.FrameLayout;
+using RootContainer = Android.Widget.FrameLayout;
 using PlatformView = Android.Views.View;
 #elif __IOS__ || MACCATALYST
 using UIKit;

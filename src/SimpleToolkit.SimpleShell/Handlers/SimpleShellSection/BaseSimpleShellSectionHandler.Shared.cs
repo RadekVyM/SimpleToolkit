@@ -23,6 +23,7 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
         new PropertyMapper<ShellSection, BaseSimpleShellSectionHandler<PlatformT>>(ElementMapper)
         {
             [nameof(ShellSection.CurrentItem)] = MapCurrentItem,
+            [SimpleShell.ShellGroupContainerProperty.PropertyName] = MapShellGroupContainer
         };
 
     public static CommandMapper<ShellSection, BaseSimpleShellSectionHandler<PlatformT>> CommandMapper =
@@ -82,6 +83,18 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
     {
         rootPageContainer = view;
         navigationManager?.UpdateRootPageContainer(view);
+    }
+
+    public virtual void RefreshGroupContainers()
+    {
+        if (!navigationManager.AlreadyNavigated)
+            return;
+
+        var shell = VirtualView.FindParentOfType<SimpleShell>();
+        var shellSectionContainer = GetShellGroupContainer(VirtualView);
+        var shellItemContainer = GetShellItemContainer(VirtualView);
+
+        navigationManager?.UpdateGroupContainers(shell, shellSectionContainer, shellItemContainer);
     }
 
     public virtual void OnAppearanceChanged(ShellAppearance appearance)
@@ -147,6 +160,11 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
         handler.SyncNavigationStack(false, null);
     }
 
+    public static void MapShellGroupContainer(BaseSimpleShellSectionHandler<PlatformT> handler, ShellSection item)
+    {
+        handler.RefreshGroupContainers();
+    }
+
     private static IView GetShellItemContainer(ShellSection shellSection)
     {
         if (shellSection.Parent is ShellItem shellItem)
@@ -164,7 +182,7 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
             var template = SimpleShell.GetShellGroupContainerTemplate(group);
 
             if (template is not null)
-                container = template.CreateContent() as IView ?? throw new InvalidOperationException("ShellSectionContainer has to implement the IView interface");
+                container = template.CreateContent() as IView ?? throw new InvalidOperationException("ShellGroupContainer has to implement the IView interface");
 
             SimpleShell.SetShellGroupContainer(group, container);
         }

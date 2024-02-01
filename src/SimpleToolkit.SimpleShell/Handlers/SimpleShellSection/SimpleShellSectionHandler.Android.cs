@@ -1,17 +1,17 @@
 ﻿#if ANDROID
 
-using Microsoft.Maui.Controls.Platform.Compatibility;
+using Android.Widget;
 using AView = Android.Views.View;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 
 public partial class SimpleShellSectionHandler
 {
-    protected override CustomFrameLayout CreatePlatformElement()
+    protected override FrameLayout CreatePlatformElement()
     {
         CreateNavigationManager();
 
-        return new CustomFrameLayout(MauiContext.Context)
+        return new FrameLayout(MauiContext.Context)
         {
             Id = AView.GenerateViewId()
         };

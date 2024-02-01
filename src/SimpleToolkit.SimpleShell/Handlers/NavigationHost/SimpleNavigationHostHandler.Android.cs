@@ -1,12 +1,13 @@
 ﻿#if ANDROID
 
+using Android.Widget;
 using Microsoft.Maui.Controls.Platform.Compatibility;
 using Microsoft.Maui.Handlers;
 using AView = Android.Views.View;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 
-public partial class SimpleNavigationHostHandler : ViewHandler<ISimpleNavigationHost, CustomFrameLayout>
+public partial class SimpleNavigationHostHandler : ViewHandler<ISimpleNavigationHost, FrameLayout>
 {
     public static IPropertyMapper<ISimpleNavigationHost, SimpleNavigationHostHandler> Mapper = new PropertyMapper<ISimpleNavigationHost, SimpleNavigationHostHandler>(ViewHandler.ViewMapper)
     {
@@ -28,9 +29,9 @@ public partial class SimpleNavigationHostHandler : ViewHandler<ISimpleNavigation
     }
 
 
-    protected override CustomFrameLayout CreatePlatformView()
+    protected override FrameLayout CreatePlatformView()
     {
-        return new CustomFrameLayout(MauiContext.Context);
+        return new FrameLayout(MauiContext.Context);
     }
 
     public virtual void SetContent(AView view)

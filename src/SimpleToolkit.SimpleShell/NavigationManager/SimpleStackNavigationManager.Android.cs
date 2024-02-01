@@ -2,7 +2,7 @@
 
 using Android.Views;
 using PlatformView = Android.Views.View;
-using NavFrame = Microsoft.Maui.Controls.Platform.Compatibility.CustomFrameLayout;
+using NavFrame = Android.Widget.FrameLayout;
 using SimpleToolkit.SimpleShell.Extensions;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager;

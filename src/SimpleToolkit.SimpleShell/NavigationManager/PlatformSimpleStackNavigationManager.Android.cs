@@ -86,9 +86,13 @@ public partial class PlatformSimpleStackNavigationManager
             (!isRootNavigation && newPageStack[newPageStack.Count - 1] != NavigationStack[NavigationStack.Count - 1]);
         var oldPageStack = NavigationStack;
         NavigationStack = newPageStack;
+        var pagesToDisconnect = GetPagesToDisconnect(oldPageStack, newPageStack);
 
         if (!switchFragments)
+        {
+            DisconnectHandlers(pagesToDisconnect);
             return;
+        }
 
         var previousFragment = currentFragment;
         var shouldPop = ShouldPop(newPageStack, oldPageStack);
@@ -101,6 +105,10 @@ public partial class PlatformSimpleStackNavigationManager
             navigationFrame :
             GetPlatformView(newPageStack[newPageStack.Count - 1]);
         currentFragment = CreateFragment(platformView);
+
+        if (previousFragment is not null)
+            previousFragment.ClearAnimationFinished();
+        currentFragment.AnimationFinished += FragmentAnimationFinished;
 
         if (previousFragment is not null)
             previousFragment.OnTop = !destinationPageInFront;
@@ -122,6 +130,14 @@ public partial class PlatformSimpleStackNavigationManager
         }
         transaction.Replace(rootContainer.Id, currentFragment);
         transaction.Commit();
+
+        void FragmentAnimationFinished(object sender, EventArgs args)
+        {
+            if (sender is SimpleFragment fragment)
+                fragment.ClearAnimationFinished();
+
+            DisconnectHandlers(pagesToDisconnect);
+        }
     }
 
     private static SimpleFragment CreateFragment(AView view)
