@@ -16,10 +16,10 @@ The library consists of three NuGet packages:
 
   [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.Controls.svg?label=SimpleToolkit.SimpleShell.Controls)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell.Controls/)
 
-I have split the content of this library into three NuGet packages because there may be people who want to use only the `SimpleShell` control, for example, and do not want to use other controls.
+I have split the content of this library into multiple NuGet packages because there may be people who want to use only the `SimpleShell` control, for example, and do not want to use other controls.
 
 > [!CAUTION]
-> Long-term support is not guaranteed. Use at your own risk.
+> Long-term support is not guaranteed. However, this repository is released under the MIT license, so you can always fork the repository and build the packages yourself.
 
 ## [Samples](./docs/Samples.md)
 

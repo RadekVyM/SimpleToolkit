@@ -8,7 +8,6 @@ using PlatformView = Android.Views.View;
 using PlatformContainer = Android.Views.ViewGroup;
 using PlatformChild = Android.Views.View;
 #elif __IOS__ || MACCATALYST
-using UIKit;
 using NavFrame = UIKit.UIView;
 using PlatformView = UIKit.UIView;
 using PlatformContainer = UIKit.UIView;
@@ -324,7 +323,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
     private void ReplaceContainer(IView oldContainer, IView newContainer, PlatformContainer parent, bool isCurrentPageRoot)
     {
         var newPlatformContainer = GetPlatformView(newContainer);
-        List<PlatformChild> oldChildren = new List<PlatformChild>();
+        List<PlatformChild> oldChildren = [];
 
         if (oldContainer is not null)
             oldChildren.AddRange(RemoveContainer(oldContainer, parent));

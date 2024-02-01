@@ -314,10 +314,10 @@ Output:
     </tr>
     <tr>
         <td align="center">
-            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/ae980939-b701-4a53-b789-7d26a4265ea2"/>
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/ae980939-b701-4a53-b789-7d26a4265ea2">
         </td>
         <td align="center">
-            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/5b9befb7-db1a-4500-a9ca-b86ab5b829e3"/>
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/5b9befb7-db1a-4500-a9ca-b86ab5b829e3">
         </td>
     </tr>
     <tr>
@@ -330,10 +330,10 @@ Output:
     </tr>
     <tr>
         <td align="center">
-            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/4d104c10-ec97-4851-ae82-d756c5cdde2b"/>
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/4d104c10-ec97-4851-ae82-d756c5cdde2b">
         </td>
         <td align="center">
-            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/eee4439a-5918-4fcc-aef3-4b8476c2392d"/>
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/eee4439a-5918-4fcc-aef3-4b8476c2392d">
         </td>
     </tr>
 </table>
@@ -415,10 +415,10 @@ Tab bar is not visible on the detail page:
     </tr>
     <tr>
         <td align="center">
-            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/b37e1561-be40-4aef-a255-060cfbfc9572"/>
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/b37e1561-be40-4aef-a255-060cfbfc9572">
         </td>
         <td align="center">
-            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/84cf922e-f698-4f96-b06c-561df5c61e1c"/>
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/84cf922e-f698-4f96-b06c-561df5c61e1c">
         </td>
     </tr>
     <tr>
@@ -431,10 +431,10 @@ Tab bar is not visible on the detail page:
     </tr>
     <tr>
         <td align="center">
-            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/f90f09bb-ce7c-4002-9e21-9bd7d7afb962"/>
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/f90f09bb-ce7c-4002-9e21-9bd7d7afb962">
         </td>
         <td align="center">
-            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/04ac5e38-af50-4066-95ec-f2fd0d30c672"/>
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/04ac5e38-af50-4066-95ec-f2fd0d30c672">
         </td>
     </tr>
 </table>
@@ -443,7 +443,7 @@ Tab bar is not visible on the detail page:
 
 You can also specify a container view for each `ShellItem` or `ShellSection` via the `SimpleShell.ShellGroupContainerTemplate` attached property. The container view is defined using `DataTemplate` which allows the container to be created on demand in response to navigation. The created view is cached in the `SimpleShell.ShellGroupContainer` attached property.
 
-A view defined in the `SimpleShell.ShellGroupContainerTemplate` property has to contain a `SimpleNavigationHost` element somewhere in its view hieararchy. This element will host the root pages.
+A view defined in the `SimpleShell.ShellGroupContainerTemplate` property has to contain a `SimpleNavigationHost` element somewhere in its view hierarchy. This element will host the root pages.
 
 Let's change the main tab bar from the above sample to display `ShellSection`s instead of all the root pages:
 
@@ -541,10 +541,10 @@ The yellow and green pages are grouped under one tab:
     </tr>
     <tr>
         <td align="center">
-            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/6d49a71b-dc7d-4a8a-9030-ba3a48a59568"/>
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/6d49a71b-dc7d-4a8a-9030-ba3a48a59568">
         </td>
         <td align="center">
-            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/2e7e471a-1f23-4e9e-9e29-2a88bb231f40"/>
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/2e7e471a-1f23-4e9e-9e29-2a88bb231f40">
         </td>
     </tr>
     <tr>
@@ -557,13 +557,19 @@ The yellow and green pages are grouped under one tab:
     </tr>
     <tr>
         <td align="center">
-            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/40478570-d732-4d72-a153-23f8457b07e7"/>
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/40478570-d732-4d72-a153-23f8457b07e7">
         </td>
         <td align="center">
-            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/fd321f04-6c51-4110-993b-ae22ae2ca26b"/>
+            <video src="https://github.com/RadekVyM/SimpleToolkit/assets/65116078/fd321f04-6c51-4110-993b-ae22ae2ca26b">
         </td>
     </tr>
 </table>
+
+## Disconnecting page handlers
+
+`SimpleShell` automatically calls the `DisconnectHandler()` method on all [handlers](https://learn.microsoft.com/dotnet/maui/user-interface/handlers) of pages that are being removed from a navigation stack. For example, when you pop a page from a navigation stack, the `DisconnectHandler()` method is called on its handler.
+
+This behavior can be disabled on a per-page basis with the `SimpleShell.ShouldAutoDisconnectPageHandler` attached property. Just set this property on the page to `false` if you do not want its handler to be automatically disconnected.
 
 ## Transitions
 
@@ -579,7 +585,7 @@ See [documentation](Transitions.md) for more information.
 
 ## Implementation details
 
-The `SimpleShell` class inherits from the .NET MAUI `Shell` class, but all the handlers are implemented from the ground up. These handlers are inspired by the WinUI version of `Shell` handlers.
+The `SimpleShell` class inherits from the .NET MAUI `Shell` class, but all the [handlers](https://learn.microsoft.com/dotnet/maui/user-interface/handlers) are implemented from the ground up. These handlers are inspired by the WinUI version of `Shell` handlers.
 
 ## Why not use `SimpleShell` and use .NET MAUI `Shell` instead
 

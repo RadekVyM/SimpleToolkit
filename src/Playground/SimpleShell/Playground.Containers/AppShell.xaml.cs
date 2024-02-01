@@ -72,8 +72,8 @@ public partial class AppShell : SimpleShell
 
     private void UpdateStats()
     {
-        contentContainerLabel.Text = GetContainerStats(contentContainer);
-        rootContainerLabel.Text = GetContainerStats(rootContainer);
+        contentContainerLabel.Text = $"Content: {GetContainerStats(contentContainer)}";
+        rootContainerLabel.Text = $"Root: {GetContainerStats(rootContainer)}";
         itemContainerLabel.Text = GetShellItemStats(shellItem);
         firstTabContainerLabel.Text = GetShellItemStats(firstTab);
         secondTabContainerLabel.Text = GetShellItemStats(secondTab);
