@@ -28,6 +28,7 @@ public class IconHandler : ViewHandler<Icon, UIImageView>, IImageHandler
 
     Microsoft.Maui.IImage IImageHandler.VirtualView => VirtualView;
 
+
     public IconHandler() : base(Mapper)
     {
     }

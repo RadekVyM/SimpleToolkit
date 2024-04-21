@@ -17,17 +17,16 @@
                     Background="Transparent"
                     Clicked="BackButtonClicked"
                     CornerRadius="5"
-                    HeightRequest="{OnPlatform Default=24,
-                                               WinUI=12}"
+                    HeightRequest="24"
                     HorizontalOptions="Center"
                     IsVisible="{Binding Source={x:Reference scaffold}, Path=IsBackButtonVisible}"
                     Source="{FontImageSource Glyph='&#xf053;',
                                              FontFamily=FontAwesome,
+                                             Size='20',
                                              Color={AppThemeBinding Default=Black,
                                                                     Dark=White}}"
                     VerticalOptions="Center"
-                    WidthRequest="{OnPlatform Default=24,
-                                              WinUI=12}" />
+                    WidthRequest="24" />
 
                 <Label
                     x:Name="titleContent"

@@ -5,20 +5,38 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:Playground.Original.Views.Pages"
     xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
-    
     Title="Icons">
 
     <ContentPage.Resources>
         <Style TargetType="simpleCore:Icon">
-            <Setter Property="WidthRequest" Value="40"/>
-            <Setter Property="HeightRequest" Value="40"/>
+            <Setter Property="WidthRequest" Value="40" />
+            <Setter Property="HeightRequest" Value="40" />
         </Style>
     </ContentPage.Resources>
-    
-    <HorizontalStackLayout
-        HorizontalOptions="Center" VerticalOptions="Center">
-        <simpleCore:Icon Source="star.png"/>
-        <simpleCore:Icon Source="star.png" TintColor="Gray"/>
-        <simpleCore:Icon Source="star.png" TintColor="Orange"/>
-    </HorizontalStackLayout>
+
+    <VerticalStackLayout Spacing="20">
+        <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+            <simpleCore:Icon Background="Orange" Source="star.png" />
+            <simpleCore:Icon Source="star.png" TintColor="Gray" />
+            <simpleCore:Icon Source="star.png" TintColor="Orange" />
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+            <simpleCore:Icon Background="Orange">
+                <simpleCore:Icon.Source>
+                    <FontImageSource FontFamily="FontAwesomeSolid" Glyph="&#xf86d;" />
+                </simpleCore:Icon.Source>
+            </simpleCore:Icon>
+            <simpleCore:Icon Background="Orange" TintColor="Gray">
+                <simpleCore:Icon.Source>
+                    <FontImageSource FontFamily="FontAwesomeSolid" Glyph="&#xf53f;" />
+                </simpleCore:Icon.Source>
+            </simpleCore:Icon>
+            <simpleCore:Icon Background="Gray" TintColor="Orange">
+                <simpleCore:Icon.Source>
+                    <FontImageSource FontFamily="FontAwesomeSolid" Glyph="&#x2b;" />
+                </simpleCore:Icon.Source>
+            </simpleCore:Icon>
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
 </ContentPage>
