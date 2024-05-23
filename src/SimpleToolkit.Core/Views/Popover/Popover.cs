@@ -13,6 +13,9 @@ public class Popover : Element, IPopover
     public static readonly BindableProperty ContentProperty =
         BindableProperty.Create(nameof(Content), typeof(View), typeof(Popover), propertyChanged: OnContentChanged);
 
+    public static readonly BindableProperty HorizontalAlignmentProperty =
+        BindableProperty.Create(nameof(HorizontalAlignment), typeof(HorizontalAlignment), typeof(Popover), defaultValue: HorizontalAlignment.Center);
+
     public static readonly BindableProperty AttachedPopoverProperty =
         BindableProperty.CreateAttached("AttachedPopover", typeof(Popover), typeof(View), null);
 
@@ -20,6 +23,12 @@ public class Popover : Element, IPopover
     {
         get => (View)GetValue(ContentProperty);
         set => SetValue(ContentProperty, value);
+    }
+
+    public virtual HorizontalAlignment HorizontalAlignment
+    {
+        get => (HorizontalAlignment)GetValue(HorizontalAlignmentProperty);
+        set => SetValue(HorizontalAlignmentProperty, value);
     }
 
     /// <summary>

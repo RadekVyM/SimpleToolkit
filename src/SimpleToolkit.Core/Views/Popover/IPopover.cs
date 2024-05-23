@@ -10,6 +10,10 @@ public interface IPopover : IElement
     /// </summary>
     View Content { get; set; }
     /// <summary>
+    /// Horizontal alignment of the popover to its anchor.
+    /// </summary>
+    HorizontalAlignment HorizontalAlignment { get; set; }
+    /// <summary>
     /// Shows the popover anchored to the view.
     /// </summary>
     /// <param name="parentView">The view to which the popover is anchored.</param>

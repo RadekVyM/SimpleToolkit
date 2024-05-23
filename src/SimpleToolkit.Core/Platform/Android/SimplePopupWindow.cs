@@ -2,10 +2,10 @@
 
 using Android.Content;
 using Android.Graphics.Drawables;
+using Android.Views;
 using Android.Widget;
 using Microsoft.Maui.Platform;
 using AView = Android.Views.View;
-using Math = System.Math;
 
 namespace SimpleToolkit.Core.Platform;
 
@@ -23,6 +23,8 @@ public class SimplePopupWindow : PopupWindow
         OutsideTouchable = true;
         Focusable = true;
         Elevation = 0;
+        Width = WindowManagerLayoutParams.WrapContent;
+        Height = WindowManagerLayoutParams.WrapContent;
 
         SetBackgroundDrawable(new ColorDrawable(Colors.Transparent.ToPlatform()));
     }
@@ -46,38 +48,30 @@ public class SimplePopupWindow : PopupWindow
             return;
         }
 
-        var measure = (VirtualView.Content as IView).Measure(double.PositiveInfinity, double.PositiveInfinity);
-        var density = DeviceDisplay.Current.MainDisplayInfo.Density;
-        var width = (int)Math.Round(measure.Width * density);
-        var height = (int)Math.Round(measure.Height * density);
+        var platformAnchor = anchor?.ToPlatform(mauiContext) ?? GetDefaultAnchor();
+        var xOffset = GetXOffset(platformAnchor);
 
-        //var content = VirtualView.Content.ToPlatform(mauiContext);
-        //content.Measure(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
+        ShowAsDropDown(platformAnchor, xOffset, 0, GravityFlags.Center);
+    }
 
-        //content.Post(() =>
-        //{
-        //    VirtualView.Content.Layout(new Rect(0, 0, width, height));
-        //});
+    private int GetXOffset(AView platformAnchor)
+    {
+        if (VirtualView.HorizontalAlignment is HorizontalAlignment.Left)
+            return 0;
+        
+        ContentView?.Measure((int)MeasureSpecMode.Unspecified, (int)MeasureSpecMode.Unspecified);
+        var offset = -((ContentView?.MeasuredWidth ?? 0) - platformAnchor.Width);
 
-        // Height and Width have to be set to not show the PopupWindow outside of screen bounds
-        if (width != 0 || height != 0)
-        {
-            Width = width;
-            Height = height;
-            VirtualView.Content.Layout(new Rect(0, 0, width, height));
-        }
+        if (VirtualView.HorizontalAlignment is HorizontalAlignment.Right)
+            return offset;
 
-        if (anchor is not null)
-        {
-            var platformAnchor = anchor.ToPlatform(mauiContext);
-            ShowAsDropDown(platformAnchor);
-        }
-        else
-        {
-            ArgumentNullException.ThrowIfNull(VirtualView.Parent);
-            var platformAnchor = VirtualView.Parent.ToPlatform(mauiContext);
-            ShowAsDropDown(platformAnchor);
-        }
+        return offset / 2;
+    }
+
+    private AView GetDefaultAnchor()
+    {
+        ArgumentNullException.ThrowIfNull(VirtualView.Parent);
+        return VirtualView.Parent.ToPlatform(mauiContext);
     }
 
     public void Hide()
@@ -90,12 +84,12 @@ public class SimplePopupWindow : PopupWindow
         VirtualView = null;
     }
 
-    public void SetContent(IPopover popup)
+    public void SetContent(IPopover popover)
     {
-        if (popup.Content is null)
+        if (popover.Content is null)
             return;
 
-        var content = popup.Content.ToPlatform(mauiContext);
+        var content = popover.Content.ToPlatform(mauiContext);
         ContentView = content;
     }
 

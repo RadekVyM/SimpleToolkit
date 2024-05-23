@@ -1,13 +1,14 @@
 ﻿#if WINDOWS
 
 using Microsoft.Maui.Platform;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using SimpleToolkit.Core.Handlers;
 using WindowsThickness = Microsoft.UI.Xaml.Thickness;
+using WGrid = Microsoft.UI.Xaml.Controls.Grid;
 using XamlStyle = Microsoft.UI.Xaml.Style;
-
-// Partially based on the .NET MAUI Community Toolkit Popup control - https://github.com/CommunityToolkit/Maui
+using HorizontalAlignment = Microsoft.Maui.Graphics.HorizontalAlignment;
 
 namespace SimpleToolkit.Core.Platform;
 
@@ -15,8 +16,7 @@ public class SimpleFlyout : Flyout
 {
     private readonly IMauiContext mauiContext;
 
-    internal SimpleWrapperPanel PanelContent => Content as SimpleWrapperPanel;
-    internal XamlStyle FlyoutStyle { get; private set; } = new(typeof(FlyoutPresenter));
+    internal WGrid PanelContent => Content as WGrid;
     public IPopover VirtualView { get; private set; }
     
     
@@ -33,7 +33,7 @@ public class SimpleFlyout : Flyout
 
     public void SetUpPlatformView()
     {
-        CreateControl();
+        SetContent();
         ConfigureControl();
     }
 
@@ -42,9 +42,7 @@ public class SimpleFlyout : Flyout
         if (VirtualView is null)
             return;
 
-        FlyoutStyle = new XamlStyle(typeof(FlyoutPresenter));
-        SetFlyoutStyle();
-        SetLayout();
+        LightDismissOverlayMode = LightDismissOverlayMode.Off;
         ApplyStyles();
     }
 
@@ -53,56 +51,66 @@ public class SimpleFlyout : Flyout
         if (VirtualView is null)
             return;
 
-        if (anchor is not null)
-        {
-            var frameworkElement = anchor.ToPlatform(mauiContext);
+        var platformAnchor = anchor?.ToPlatform(mauiContext) ?? GetDefaultAnchor();
 
-            SetAttachedFlyout(frameworkElement, this);
-            ShowAttachedFlyout(frameworkElement);
-        }
-        else
-        {
-            ArgumentNullException.ThrowIfNull(VirtualView.Parent);
-            var frameworkElement = VirtualView.Parent.ToPlatform(mauiContext);
-            frameworkElement.ContextFlyout = this;
-            SetAttachedFlyout(frameworkElement, this);
-            ShowAttachedFlyout(frameworkElement);
-        }
+        SetPlacement(VirtualView.HorizontalAlignment);
+        SetAttachedFlyout(platformAnchor, this);
+        ShowAttachedFlyout(platformAnchor);
     }
 
     public void CleanUp()
     {
         Hide();
 
-        PanelContent?.CleanUp();
+        PanelContent?.Children.Clear();
         VirtualView = null;
         Content = null;
     }
 
-    private void CreateControl()
+    private FrameworkElement GetDefaultAnchor()
+    {
+        ArgumentNullException.ThrowIfNull(VirtualView.Parent);
+        var frameworkElement = VirtualView.Parent.ToPlatform(mauiContext);
+        frameworkElement.ContextFlyout = this;
+
+        return frameworkElement;
+    }
+
+    private void SetPlacement(HorizontalAlignment horizontalAlignment)
+    {
+        Placement = horizontalAlignment switch
+        {
+            HorizontalAlignment.Left => FlyoutPlacementMode.BottomEdgeAlignedLeft,
+            HorizontalAlignment.Right => FlyoutPlacementMode.BottomEdgeAlignedRight,
+            _ => FlyoutPlacementMode.Bottom
+        };
+    }
+
+    private void SetContent()
     {
         if (PanelContent is null && VirtualView?.Content is not null && VirtualView.Handler is PopoverHandler handler)
-            Content = new SimpleWrapperPanel(handler.VirtualView.Content, handler.MauiContext);
+        {
+            var content = handler.VirtualView.Content.ToPlatform(handler.MauiContext);
+            var grid = new WGrid();
+            grid.Children.Add(content);
+            Content = grid;
+        }
     }
 
-    private void SetLayout()
+    private XamlStyle CreateFlyoutStyle()
     {
-        LightDismissOverlayMode = LightDismissOverlayMode.Off;
+        var flyoutStyle = new XamlStyle(typeof(FlyoutPresenter));
 
-        if (VirtualView is not null)
-            Placement = FlyoutPlacementMode.Bottom;
-    }
+        flyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.BackgroundProperty, Colors.Transparent.ToWindowsColor()));
+        flyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.IsDefaultShadowEnabledProperty, false));
+        flyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.PaddingProperty, 0));
+        flyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.BorderThicknessProperty, new WindowsThickness(0)));
+        flyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.BorderBrushProperty, Colors.Transparent.ToWindowsColor()));
 
-    private void SetFlyoutStyle()
-    {
-        FlyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.BackgroundProperty, Colors.Transparent.ToWindowsColor()));
-        FlyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.IsDefaultShadowEnabledProperty, false));
-        FlyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.PaddingProperty, 0));
-        FlyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.BorderThicknessProperty, new WindowsThickness(0)));
-        FlyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.BorderBrushProperty, Colors.Transparent.ToWindowsColor()));
+        flyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.MinHeightProperty, 0));
+        flyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.MinWidthProperty, 0));
 
-        FlyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.MinHeightProperty, 0));
-        FlyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.MinWidthProperty, 0));
+        return flyoutStyle;
     }
 
     private void ApplyStyles()
@@ -110,7 +118,7 @@ public class SimpleFlyout : Flyout
         if (PanelContent is null)
             return;
 
-        FlyoutPresenterStyle = FlyoutStyle;
+        FlyoutPresenterStyle = CreateFlyoutStyle();
     }
 }
 
