@@ -12,11 +12,21 @@
         HorizontalOptions="Fill"
         Spacing="30"
         VerticalOptions="Center">
-        <controls:PopoverTest HorizontalOptions="Start" PopoverHorizontalAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}" />
-        <controls:PopoverTest HorizontalOptions="Center" PopoverHorizontalAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}" />
-        <controls:PopoverTest HorizontalOptions="End" PopoverHorizontalAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}" />
+        <controls:PopoverTest
+            HorizontalOptions="Start"
+            PopoverHorizontalAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
+            UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}" />
+        <controls:PopoverTest
+            HorizontalOptions="Center"
+            PopoverHorizontalAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
+            UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}" />
+        <controls:PopoverTest
+            HorizontalOptions="End"
+            PopoverHorizontalAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
+            UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}" />
 
         <Picker x:Name="popoverAlignmentPicker" />
+        <Switch x:Name="useDefaultStylingSwitch" />
 
         <Button
             Background="Orange"
@@ -26,7 +36,7 @@
             VerticalOptions="Center">
 
             <simpleCore:Popover.AttachedPopover>
-                <simpleCore:Popover>
+                <simpleCore:Popover x:Name="popover">
                     <Border
                         Background="DarkOrange">
                         <Border.StrokeShape>

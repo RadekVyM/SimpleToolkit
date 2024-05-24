@@ -6,7 +6,6 @@ using Microsoft.Maui.Platform;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using UIKit;
-using ContentView = Microsoft.Maui.Controls.ContentView;
 
 // Partially based on the .NET MAUI Community Toolkit Popup control (Thanks!):
 // https://github.com/CommunityToolkit/Maui
@@ -16,7 +15,7 @@ namespace SimpleToolkit.Core.Platform;
 public class PopoverViewController(IMauiContext mauiContext) : UIViewController
 {
     private readonly IMauiContext mauiContext = mauiContext ?? throw new ArgumentNullException(nameof(mauiContext));
-    private ContentView contentWrapper = null;
+    private Grid contentWrapper = null;
     private WeakReference<IPopover> virtualViewReference;
 
     internal UIViewController ViewController { get; private set; }
@@ -28,6 +27,13 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         private set => virtualViewReference = value is null ? null : new(value);
     }
 
+    public virtual UIPopoverArrowDirection PermittedArrowDirections 
+    {
+        get => ((UIPopoverPresentationController)PresentationController).PermittedArrowDirections;
+        set => ((UIPopoverPresentationController)PresentationController).PermittedArrowDirections = value;
+    }
+
+
     public override void ViewWillAppear(bool animated)
     {
         base.ViewWillAppear(animated);
@@ -35,9 +41,12 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         if (View.Superview is null)
             return;
 
-        // Removes the default corner radius of the popover
-		View.Superview.Layer.CornerRadius = 0f;
-		View.Superview.Layer.MasksToBounds = false;
+        if (!VirtualView.UseDefaultStyling)
+        {
+            // Removes the default corner radius of the popover
+            View.Superview.Layer.CornerRadius = 0f;
+            View.Superview.Layer.MasksToBounds = false;
+        }
     }
 
     public override void ViewDidLayoutSubviews()
@@ -47,14 +56,17 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         if (VirtualView?.Content is null)
             return;
 
-        if (PresentationController is not null)
+        if (!VirtualView.UseDefaultStyling && PresentationController is not null)
             RemoveShadow(PresentationController.ContainerView);
 
         var measure = (contentWrapper as IView).Measure(double.PositiveInfinity, double.PositiveInfinity);
         PreferredContentSize = new CGSize(measure.Width, measure.Height);
 
         foreach (var subview in View.Subviews)
+        {
             subview.SizeToFit();
+            subview.Frame = new CGRect(GetContentOffset(VirtualView.UseDefaultStyling), subview.Frame.Size);
+        }
     }
 
     [MemberNotNull(nameof(VirtualView), nameof(ViewController))]
@@ -70,6 +82,21 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         ViewController ??= rootViewController;
     }
 
+    [MemberNotNull(nameof(ViewController))]
+    public void Show(in IPopover virtualView, in IElement anchor)
+    {
+        if (IsBeingPresented || IsBeingDismissed)
+            return;
+
+        SetUpPresentationController(virtualView);
+        UpdateContent(virtualView, View);
+
+        _ = ViewController ?? throw new InvalidOperationException($"{nameof(ViewController)} cannot be null");
+        PresentInViewController(ViewController);
+
+        SetAnchor(virtualView, anchor);
+    }
+
     public void CleanUp()
     {
         if (VirtualView is null)
@@ -81,28 +108,6 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
 
         if (PresentationController is UIPopoverPresentationController presentationController)
             presentationController.Delegate = null;
-    }
-
-    [MemberNotNull(nameof(ViewController))]
-    public void InitializeView(in IPopover virtualView, in IElement anchor)
-    {
-        SetUpPresentationController();
-        UpdateContent(virtualView, View);
-
-        _ = ViewController ?? throw new InvalidOperationException($"{nameof(ViewController)} cannot be null");
-        PresentInViewController(ViewController);
-
-        SetLayout(virtualView, anchor);
-    }
-
-    public void SetLayout(IPopover popover, IElement anchor)
-    {
-        if (View is null)
-            return;
-
-        var view = anchor.ToPlatform(popover.Handler?.MauiContext ?? throw new NullReferenceException());
-        PopoverPresentationController.SourceView = view;
-        PopoverPresentationController.SourceRect = view.Bounds;
     }
 
     public void UpdateContent() => UpdateContent(VirtualView, View);
@@ -117,16 +122,18 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
 
     private void UpdateContentWrapper(IPopover virtualView)
     {
-        if (contentWrapper is not null)
-            contentWrapper.Content = null;
+        contentWrapper?.Children.Clear();
 
-        // This ContentView wrapper ensures that everything is sized correctly
-        contentWrapper = new ContentView
+        // This Grid wrapper ensures that everything is sized correctly
+        contentWrapper = new Grid
         {
             HorizontalOptions = LayoutOptions.Start,
             VerticalOptions = LayoutOptions.Start,
-            Content = virtualView.Content
+            RowDefinitions = new RowDefinitionCollection(new RowDefinition(GridLength.Auto)),
+            ColumnDefinitions = new ColumnDefinitionCollection(new ColumnDefinition(GridLength.Auto)),
         };
+
+        contentWrapper.Add(virtualView.Content);
     }
 
     private void AddContentToView(UIView containerView)
@@ -138,21 +145,50 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
             containerView.AddSubview(wrapperView);
     }
 
-    private void SetUpPresentationController()
+    private void SetAnchor(IPopover popover, IElement anchor)
+    {
+        if (View is null)
+            return;
+
+        var anchorView = anchor.ToPlatform(popover.Handler?.MauiContext ?? throw new NullReferenceException());
+        PopoverPresentationController.SourceView = anchorView;
+        PopoverPresentationController.SourceRect = anchorView.Bounds;
+    }
+
+    private void SetUpPresentationController(IPopover virtualView)
     {
         var presentationController = (UIPopoverPresentationController)PresentationController;
 
-        presentationController.SourceView = ViewController?.View ?? throw new InvalidOperationException($"{nameof(ViewController.View)} cannot be null");
         presentationController.Delegate = new PopoverDelegate();
-        presentationController.BackgroundColor = Colors.Transparent.ToPlatform();
-        presentationController.PopoverBackgroundViewType = typeof(PopoverBackgroundView);
-        presentationController.PermittedArrowDirections = UIPopoverArrowDirection.Up; // Because of this the popover is bellow the anchor
+        presentationController.PermittedArrowDirections = (UIPopoverArrowDirection)virtualView.PermittedArrowDirections;
+        
+        if (!virtualView.UseDefaultStyling)
+        {
+            presentationController.BackgroundColor = Colors.Transparent.ToPlatform();
+            presentationController.PopoverBackgroundViewType = typeof(PopoverBackgroundView);
+        }
     }
 
     private void PresentInViewController(UIViewController viewController)
     {
-        if (!IsBeingPresented && !IsBeingDismissed)
-            viewController.PresentViewController(this, true, null);
+        viewController.PresentViewController(this, true, null);
+    }
+
+    private CGPoint GetContentOffset(bool useDefaultStyling)
+    {
+        if (!useDefaultStyling)
+            return new CGPoint(0, 0);
+
+        const float arrowSize = 13;
+        var presentationController = (UIPopoverPresentationController)PresentationController;
+        var arrowDirection = presentationController.ArrowDirection;
+
+        return arrowDirection switch
+        {
+            UIPopoverArrowDirection.Up => new CGPoint(0, arrowSize),
+            UIPopoverArrowDirection.Left => new CGPoint(arrowSize, 0),
+            _ => new CGPoint(0, 0)
+        };
     }
 
     // Inspired by (Thanks!):

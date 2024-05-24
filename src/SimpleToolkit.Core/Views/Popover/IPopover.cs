@@ -11,8 +11,18 @@ public interface IPopover : IElement
     View Content { get; set; }
     /// <summary>
     /// Horizontal alignment of the popover to its anchor.
+    /// This property is only for Android and Windows.
     /// </summary>
     HorizontalAlignment HorizontalAlignment { get; set; }
+    /// <summary>
+    /// Permitted arrow directions of an iOS popover.
+    /// This property is only for iOS.
+    /// </summary>
+    PopoverArrowDirection PermittedArrowDirections { get; set; }
+    /// <summary>
+    /// Whether the default platform-specific styling of the popover should be used.
+    /// </summary>
+    bool UseDefaultStyling { get; set; }
     /// <summary>
     /// Shows the popover anchored to the view.
     /// </summary>

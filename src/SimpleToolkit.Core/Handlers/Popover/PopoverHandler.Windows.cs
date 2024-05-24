@@ -27,7 +27,6 @@ public partial class PopoverHandler : ElementHandler<IPopover, SimpleFlyout>
 
     public static void MapContent(PopoverHandler handler, IPopover popover)
     {
-        handler.PlatformView.ConfigureControl();
     }
 
     public static void MapShow(PopoverHandler handler, IPopover popover, object parentView)

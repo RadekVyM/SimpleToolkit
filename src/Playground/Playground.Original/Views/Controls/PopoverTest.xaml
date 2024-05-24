@@ -12,7 +12,7 @@
         <simpleCore:Popover x:Name="popover" HorizontalAlignment="{Binding Source={x:Reference thisButton}, Path=PopoverHorizontalAlignment}">
             <Grid
                 x:Name="resizablePopoverContent"
-                Background="LightGray"
+                Background="White"
                 HeightRequest="80"
                 WidthRequest="100">
                 <Grid.Resources>

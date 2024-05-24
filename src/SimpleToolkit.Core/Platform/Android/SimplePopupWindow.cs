@@ -23,7 +23,6 @@ public class SimplePopupWindow : PopupWindow
 
         OutsideTouchable = true;
         Focusable = true;
-        Elevation = 0;
 
         SetBackgroundDrawable(new ColorDrawable(Colors.Transparent.ToPlatform()));
     }

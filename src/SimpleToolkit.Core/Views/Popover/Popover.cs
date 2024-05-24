@@ -16,6 +16,12 @@ public class Popover : Element, IPopover
     public static readonly BindableProperty HorizontalAlignmentProperty =
         BindableProperty.Create(nameof(HorizontalAlignment), typeof(HorizontalAlignment), typeof(Popover), defaultValue: HorizontalAlignment.Center);
 
+    public static readonly BindableProperty UseDefaultStylingProperty =
+        BindableProperty.Create(nameof(UseDefaultStyling), typeof(bool), typeof(Popover), defaultValue: false);
+
+    public static readonly BindableProperty PermittedArrowDirectionsProperty =
+        BindableProperty.Create(nameof(PermittedArrowDirections), typeof(PopoverArrowDirection), typeof(Popover), defaultValue: PopoverArrowDirection.Any);
+
     public static readonly BindableProperty AttachedPopoverProperty =
         BindableProperty.CreateAttached("AttachedPopover", typeof(Popover), typeof(View), null);
 
@@ -29,6 +35,18 @@ public class Popover : Element, IPopover
     {
         get => (HorizontalAlignment)GetValue(HorizontalAlignmentProperty);
         set => SetValue(HorizontalAlignmentProperty, value);
+    }
+
+    public virtual bool UseDefaultStyling
+    {
+        get => (bool)GetValue(UseDefaultStylingProperty);
+        set => SetValue(UseDefaultStylingProperty, value);
+    }
+
+    public virtual PopoverArrowDirection PermittedArrowDirections
+    {
+        get => (PopoverArrowDirection)GetValue(PermittedArrowDirectionsProperty);
+        set => SetValue(PermittedArrowDirectionsProperty, value);
     }
 
     /// <summary>
@@ -74,7 +92,7 @@ public class Popover : Element, IPopover
 
 #if WINDOWS
         if (Handler?.PlatformView is SimpleToolkit.Core.Platform.SimpleFlyout platformFlyout)
-            platformFlyout.SetUpPlatformView();
+            platformFlyout.UpdateContent();
 #endif
     }
 

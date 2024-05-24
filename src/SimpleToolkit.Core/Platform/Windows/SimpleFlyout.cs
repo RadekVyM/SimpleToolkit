@@ -23,6 +23,8 @@ public class SimpleFlyout : Flyout
     public SimpleFlyout(IMauiContext mauiContext)
     {
         this.mauiContext = mauiContext ?? throw new ArgumentNullException(nameof(mauiContext));
+
+        LightDismissOverlayMode = LightDismissOverlayMode.Off;
     }
 
 
@@ -31,25 +33,25 @@ public class SimpleFlyout : Flyout
         VirtualView = element ?? throw new ArgumentNullException(nameof(element));
     }
 
-    public void SetUpPlatformView()
+    public void UpdateContent()
     {
-        SetContent();
-        ConfigureControl();
-    }
+        if (PanelContent is null && VirtualView?.Content is not null && VirtualView.Handler is PopoverHandler handler)
+        {
+            PanelContent?.Children.Clear();
 
-    public void ConfigureControl()
-    {
-        if (VirtualView is null)
-            return;
-
-        LightDismissOverlayMode = LightDismissOverlayMode.Off;
-        ApplyStyles();
+            var content = handler.VirtualView.Content.ToPlatform(handler.MauiContext);
+            var grid = new WGrid();
+            grid.Children.Add(content);
+            Content = grid;
+        }
     }
 
     public void Show(IElement anchor)
     {
         if (VirtualView is null)
             return;
+
+        ApplyStyles();
 
         var platformAnchor = anchor?.ToPlatform(mauiContext) ?? GetDefaultAnchor();
 
@@ -84,17 +86,6 @@ public class SimpleFlyout : Flyout
             HorizontalAlignment.Right => FlyoutPlacementMode.BottomEdgeAlignedRight,
             _ => FlyoutPlacementMode.Bottom
         };
-    }
-
-    private void SetContent()
-    {
-        if (PanelContent is null && VirtualView?.Content is not null && VirtualView.Handler is PopoverHandler handler)
-        {
-            var content = handler.VirtualView.Content.ToPlatform(handler.MauiContext);
-            var grid = new WGrid();
-            grid.Children.Add(content);
-            Content = grid;
-        }
     }
 
     private XamlStyle CreateFlyoutStyle()
