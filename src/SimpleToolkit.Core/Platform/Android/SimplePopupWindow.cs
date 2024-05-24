@@ -12,6 +12,7 @@ namespace SimpleToolkit.Core.Platform;
 public class SimplePopupWindow : PopupWindow
 {
     private readonly IMauiContext mauiContext;
+    private IElement anchor;
 
     public IPopover VirtualView { get; private set; }
 
@@ -23,8 +24,6 @@ public class SimplePopupWindow : PopupWindow
         OutsideTouchable = true;
         Focusable = true;
         Elevation = 0;
-        Width = WindowManagerLayoutParams.WrapContent;
-        Height = WindowManagerLayoutParams.WrapContent;
 
         SetBackgroundDrawable(new ColorDrawable(Colors.Transparent.ToPlatform()));
     }
@@ -44,23 +43,88 @@ public class SimplePopupWindow : PopupWindow
     public void Show(IElement anchor)
     {
         if (VirtualView is null)
-        {
             return;
-        }
 
-        var platformAnchor = anchor?.ToPlatform(mauiContext) ?? GetDefaultAnchor();
-        var xOffset = GetXOffset(platformAnchor);
+        this.anchor = anchor;
+
+        var (width, height, xOffset, platformAnchor) = GetWindowSpecs(anchor);
+
+        // Height and Width have to be set to not show the PopupWindow outside of screen bounds
+        if (width != 0 || height != 0)
+        {
+            Width = width;
+            Height = height;
+        }
 
         ShowAsDropDown(platformAnchor, xOffset, 0, GravityFlags.Center);
     }
 
-    private int GetXOffset(AView platformAnchor)
+    public void Hide()
+    {
+        ClearLayoutChangeListener(VirtualView);
+        anchor = null;
+        Dismiss();
+    }
+
+    public void CleanUp()
+    {
+        ClearLayoutChangeListener(VirtualView);
+        anchor = null;
+        VirtualView = null;
+    }
+
+    public void SetContent(IPopover popover)
+    {
+        if (popover.Content is null)
+            return;
+
+        var content = popover.Content.ToPlatform(mauiContext);
+
+        ClearLayoutChangeListener(popover);
+        content.LayoutChange += OnLayoutChange;
+
+        ContentView = content;
+    }
+
+    private void ClearLayoutChangeListener(IPopover popover)
+    {
+        if (popover is null)
+            return;
+
+        var content = popover.Content.ToPlatform(mauiContext);
+        content.LayoutChange -= OnLayoutChange;
+    }
+
+    private void OnLayoutChange(object sender, AView.LayoutChangeEventArgs e)
+    {
+        if (anchor is null)
+            return;
+
+        var (width, height, xOffset, platformAnchor) = GetWindowSpecs(anchor);
+
+        // If the popover size changes while open, dimensions have to be updated manually
+        if (width != Width || height != Height)
+            Update(platformAnchor, xOffset, 0, width, height);
+    }
+
+    private (int width, int height, int xOffset, AView platformAnchor) GetWindowSpecs(IElement anchor)
+    {
+        var platformAnchor = anchor?.ToPlatform(mauiContext) ?? GetDefaultAnchor();
+        var measure = (VirtualView.Content as IView).Measure(double.PositiveInfinity, double.PositiveInfinity);
+        var density = DeviceDisplay.Current.MainDisplayInfo.Density;
+        var width = (int)Math.Round(measure.Width * density);
+        var height = (int)Math.Round(measure.Height * density);
+        var xOffset = GetXOffset(platformAnchor, width);
+
+        return (width, height, xOffset, platformAnchor);
+    }
+
+    private int GetXOffset(AView platformAnchor, int windowWidth)
     {
         if (VirtualView.HorizontalAlignment is HorizontalAlignment.Left)
             return 0;
         
-        ContentView?.Measure((int)MeasureSpecMode.Unspecified, (int)MeasureSpecMode.Unspecified);
-        var offset = -((ContentView?.MeasuredWidth ?? 0) - platformAnchor.Width);
+        var offset = platformAnchor.Width - windowWidth;
 
         if (VirtualView.HorizontalAlignment is HorizontalAlignment.Right)
             return offset;
@@ -74,31 +138,10 @@ public class SimplePopupWindow : PopupWindow
         return VirtualView.Parent.ToPlatform(mauiContext);
     }
 
-    public void Hide()
-    {
-        Dismiss();
-    }
-
-    public void CleanUp()
-    {
-        VirtualView = null;
-    }
-
-    public void SetContent(IPopover popover)
-    {
-        if (popover.Content is null)
-            return;
-
-        var content = popover.Content.ToPlatform(mauiContext);
-        ContentView = content;
-    }
-
     protected override void Dispose(bool disposing)
     {
         if (disposing)
-        {
-            VirtualView = null;
-        }
+            CleanUp();
 
         base.Dispose(disposing);
     }
