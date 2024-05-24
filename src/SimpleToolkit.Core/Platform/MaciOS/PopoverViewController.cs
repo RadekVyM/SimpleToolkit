@@ -42,13 +42,8 @@ public class PopoverViewController : UIViewController
         if (View.Superview is null)
             return;
 
-        View.Superview.ClipsToBounds = false;
-        View.Superview.Layer.CornerRadius = 0f;
-        View.Superview.Layer.BackgroundColor = Colors.Transparent.ToCGColor();
-        View.Superview.Layer.ShadowColor = null;
-        View.Superview.Layer.ShadowOpacity = 0f;
-        View.Layer.ShadowColor = null;
-        View.Layer.ShadowOpacity = 0f;
+		View.Superview.Layer.CornerRadius = 0.0f;
+		View.Superview.Layer.MasksToBounds = false;
     }
 
     public override void ViewDidLayoutSubviews()
@@ -57,6 +52,9 @@ public class PopoverViewController : UIViewController
 
         if (VirtualView?.Content is null)
             return;
+
+        if (PresentationController is not null)
+            RemoveShadow(PresentationController.ContainerView);
 
         var measure = (virtualContentWrapper as IView).Measure(double.PositiveInfinity, double.PositiveInfinity);
         PreferredContentSize = new CGSize(measure.Width, measure.Height);
@@ -153,20 +151,29 @@ public class PopoverViewController : UIViewController
 
     private void SetPresentationController()
     {
-        var popOverDelegate = new PopoverDelegate();
-        var presentationController = ((UIPopoverPresentationController)PresentationController);
+        var popoverDelegate = new PopoverDelegate();
+        var presentationController = (UIPopoverPresentationController)PresentationController;
 
         presentationController.SourceView = ViewController?.View ?? throw new InvalidOperationException($"{nameof(ViewController.View)} cannot be null");
-        presentationController.Delegate = popOverDelegate;
-        presentationController.PermittedArrowDirections = 0; // Because of this the popover is above the anchor
+        presentationController.Delegate = popoverDelegate;
         presentationController.BackgroundColor = Colors.Transparent.ToPlatform();
         presentationController.PopoverBackgroundViewType = typeof(PopoverBackgroundView);
+        presentationController.PermittedArrowDirections = UIPopoverArrowDirection.Up; // Because of this the popover is above the anchor
     }
 
     private void AddToCurrentPageViewController(UIViewController viewController)
     {
         viewController.PresentViewController(this, true, null);
     }
+
+    private static void RemoveShadow(UIView containerView)
+	{
+		if (containerView.Class.Name is "_UICutoutShadowView")
+			containerView.RemoveFromSuperview();
+
+		foreach (var view in containerView.Subviews)
+			RemoveShadow(view);
+	}
 
     private class PopoverDelegate : UIPopoverPresentationControllerDelegate
     {
@@ -175,70 +182,27 @@ public class PopoverViewController : UIViewController
     }
 
     // Helps to remove default styling of the popover container
+    // https://github.com/CommunityToolkit/Maui/blob/main/src/CommunityToolkit.Maui.Core/Views/Popup/PopupExtensions.macios.cs#L221
     private class PopoverBackgroundView : UIPopoverBackgroundView
     {
-        [Export("arrowHeight")]
-        static new NFloat GetArrowHeight()
+        public PopoverBackgroundView(IntPtr handle) : base(handle)
         {
-            return 0f;
+            BackgroundColor = Colors.Transparent.ToPlatform();
+            Alpha = 0.0f;
         }
-
-        [Export("arrowBase")]
-        static new NFloat GetArrowBase()
-        {
-            return 0f;
-        }
-
-        [Export("contentViewInsets")]
-        static new UIEdgeInsets GetContentViewInsets()
-        {
-            return UIEdgeInsets.Zero;
-        }
-
-        [Export("wantsDefaultContentAppearance")]
-        static new bool WantsDefaultContentAppearance
-        {
-            get => false;
-        }
-
-        public override UIPopoverArrowDirection ArrowDirection { get; set; }
 
         public override NFloat ArrowOffset { get; set; }
 
+        public override UIPopoverArrowDirection ArrowDirection { get; set; }
 
-        public PopoverBackgroundView(IntPtr handle) : base(handle)
-        {
-            ArrowOffset = 0f;
-            ArrowDirection = 0;
-            BackgroundColor = UIColor.Clear;
+        [Export("arrowHeight")]
+        static new float GetArrowHeight() => 0f;
 
-            Layer.ShadowColor = Colors.Transparent.ToCGColor();
-            Layer.ShadowOpacity = 0f;
-            Layer.CornerRadius = 0f;
-            Layer.BackgroundColor = Colors.Transparent.ToCGColor();
-            Layer.MasksToBounds = false;
-        }
+        [Export("arrowBase")]
+        static new float GetArrowBase() => 0f;
 
-        public override void DrawLayer(CALayer layer, CGContext context)
-        {
-            layer.ShadowColor = Colors.Transparent.ToCGColor();
-            layer.ShadowOpacity = 0f;
-            layer.BackgroundColor = Colors.Transparent.ToCGColor();
-            layer.CornerRadius = 0f;
-            layer.MasksToBounds = false;
-
-            base.DrawLayer(layer, context);
-        }
-
-        public override void Draw(CGRect rect)
-        {
-            base.Draw(rect);
-        }
-
-        public override void LayoutSubviews()
-        {
-            base.LayoutSubviews();
-        }
+        [Export("contentViewInsets")]
+        static new UIEdgeInsets GetContentViewInsets() => UIEdgeInsets.Zero;
     }
 }
 

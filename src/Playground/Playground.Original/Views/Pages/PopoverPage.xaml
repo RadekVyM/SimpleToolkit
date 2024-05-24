@@ -27,7 +27,8 @@
 
             <simpleCore:Popover.AttachedPopover>
                 <simpleCore:Popover>
-                    <Border>
+                    <Border
+                        Background="DarkOrange">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="6" />
                         </Border.StrokeShape>
