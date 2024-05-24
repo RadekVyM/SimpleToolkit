@@ -24,4 +24,13 @@ public static class PopoverExtensions
         var popover = Popover.GetAttachedPopover(parentView);
         popover.Hide();
     }
+
+#if IOS || MACCATALYST
+    public static UIKit.UIPopoverArrowDirection ToUIPopoverArrowDirection(this PopoverArrowDirection popoverArrowDirection)
+    {
+        if (popoverArrowDirection is PopoverArrowDirection.Unknown)
+            return UIKit.UIPopoverArrowDirection.Unknown;
+        return (UIKit.UIPopoverArrowDirection)popoverArrowDirection;
+    }
+#endif
 }

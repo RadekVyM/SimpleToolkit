@@ -8,8 +8,6 @@ public partial class PopoverPage : ContentPage
     {
         InitializeComponent();
 
-        popover.PermittedArrowDirections = PopoverArrowDirection.Up;
-
         popoverAlignmentPicker.ItemsSource = new List<HorizontalAlignment>()
         {
             HorizontalAlignment.Center, HorizontalAlignment.Right, HorizontalAlignment.Left

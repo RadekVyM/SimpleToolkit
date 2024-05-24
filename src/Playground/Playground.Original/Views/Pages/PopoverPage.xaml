@@ -36,9 +36,8 @@
             VerticalOptions="Center">
 
             <simpleCore:Popover.AttachedPopover>
-                <simpleCore:Popover x:Name="popover">
-                    <Border
-                        Background="DarkOrange">
+                <simpleCore:Popover x:Name="popover" PermittedArrowDirections="Up">
+                    <Border Background="DarkOrange">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="6" />
                         </Border.StrokeShape>

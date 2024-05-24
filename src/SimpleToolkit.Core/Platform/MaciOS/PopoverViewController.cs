@@ -160,7 +160,7 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         var presentationController = (UIPopoverPresentationController)PresentationController;
 
         presentationController.Delegate = new PopoverDelegate();
-        presentationController.PermittedArrowDirections = (UIPopoverArrowDirection)virtualView.PermittedArrowDirections;
+        presentationController.PermittedArrowDirections = virtualView.PermittedArrowDirections.ToUIPopoverArrowDirection();
         
         if (!virtualView.UseDefaultStyling)
         {

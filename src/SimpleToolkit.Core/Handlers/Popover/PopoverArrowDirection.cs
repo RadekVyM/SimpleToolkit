@@ -4,12 +4,12 @@
 /// Arrow directions of a popover.
 /// </summary>
 [Flags]
-public enum PopoverArrowDirection : ulong
+public enum PopoverArrowDirection
 {
+    Unknown = 0,
     Up = 1,
     Down = 2,
     Left = 4,
     Right = 8,
-    Any = 15,
-    Unknown = ulong.MaxValue
+    Any = 15
 }

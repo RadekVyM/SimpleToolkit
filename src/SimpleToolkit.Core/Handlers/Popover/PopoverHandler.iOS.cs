@@ -34,7 +34,7 @@ public partial class PopoverHandler : ElementHandler<IPopover, PopoverViewContro
 
     public static void MapPermittedArrowDirections(PopoverHandler handler, IPopover popover)
     {
-        handler.PlatformView.PermittedArrowDirections = (UIPopoverArrowDirection)popover.PermittedArrowDirections;
+        handler.PlatformView.PermittedArrowDirections = popover.PermittedArrowDirections.ToUIPopoverArrowDirection();
     }
 
     public static void MapShow(PopoverHandler handler, IPopover popover, object parentView)
