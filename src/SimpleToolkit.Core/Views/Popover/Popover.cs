@@ -1,7 +1,5 @@
 ﻿using Microsoft.Maui.Platform;
 
-// TODO: Popover placement - this should be possible on Android and Windows
-
 namespace SimpleToolkit.Core;
 
 /// <summary>
@@ -13,8 +11,8 @@ public class Popover : Element, IPopover
     public static readonly BindableProperty ContentProperty =
         BindableProperty.Create(nameof(Content), typeof(View), typeof(Popover), propertyChanged: OnContentChanged);
 
-    public static readonly BindableProperty HorizontalAlignmentProperty =
-        BindableProperty.Create(nameof(HorizontalAlignment), typeof(HorizontalAlignment), typeof(Popover), defaultValue: HorizontalAlignment.Center);
+    public static readonly BindableProperty AlignmentProperty =
+        BindableProperty.Create(nameof(Alignment), typeof(PopoverAlignment), typeof(Popover), defaultValue: PopoverAlignment.Center);
 
     public static readonly BindableProperty UseDefaultStylingProperty =
         BindableProperty.Create(nameof(UseDefaultStyling), typeof(bool), typeof(Popover), defaultValue: false);
@@ -31,10 +29,10 @@ public class Popover : Element, IPopover
         set => SetValue(ContentProperty, value);
     }
 
-    public virtual HorizontalAlignment HorizontalAlignment
+    public virtual PopoverAlignment Alignment
     {
-        get => (HorizontalAlignment)GetValue(HorizontalAlignmentProperty);
-        set => SetValue(HorizontalAlignmentProperty, value);
+        get => (PopoverAlignment)GetValue(AlignmentProperty);
+        set => SetValue(AlignmentProperty, value);
     }
 
     public virtual bool UseDefaultStyling

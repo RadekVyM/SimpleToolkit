@@ -2,7 +2,6 @@
 
 using Microsoft.Maui.Handlers;
 using SimpleToolkit.Core.Platform;
-using UIKit;
 
 // Partially based on the .NET MAUI Community Toolkit Popup control - https://github.com/CommunityToolkit/Maui
 

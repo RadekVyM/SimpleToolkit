@@ -13,6 +13,7 @@ public class SimplePopupWindow : PopupWindow
 {
     private readonly IMauiContext mauiContext;
     private IElement anchor;
+    private AView platformContent;
 
     public IPopover VirtualView { get; private set; }
 
@@ -60,15 +61,15 @@ public class SimplePopupWindow : PopupWindow
 
     public void Hide()
     {
-        ClearLayoutChangeListener(VirtualView);
         anchor = null;
         Dismiss();
     }
 
     public void CleanUp()
     {
-        ClearLayoutChangeListener(VirtualView);
+        ClearLayoutChangeListener();
         anchor = null;
+        platformContent = null;
         VirtualView = null;
     }
 
@@ -77,21 +78,18 @@ public class SimplePopupWindow : PopupWindow
         if (popover.Content is null)
             return;
 
-        var content = popover.Content.ToPlatform(mauiContext);
+        ClearLayoutChangeListener();
 
-        ClearLayoutChangeListener(popover);
-        content.LayoutChange += OnLayoutChange;
+        platformContent = popover.Content.ToPlatform(mauiContext);
+        platformContent.LayoutChange += OnLayoutChange;
 
-        ContentView = content;
+        ContentView = platformContent;
     }
 
-    private void ClearLayoutChangeListener(IPopover popover)
+    private void ClearLayoutChangeListener()
     {
-        if (popover is null)
-            return;
-
-        var content = popover.Content.ToPlatform(mauiContext);
-        content.LayoutChange -= OnLayoutChange;
+        if (platformContent is not null)
+            platformContent.LayoutChange -= OnLayoutChange;
     }
 
     private void OnLayoutChange(object sender, AView.LayoutChangeEventArgs e)
@@ -120,12 +118,12 @@ public class SimplePopupWindow : PopupWindow
 
     private int GetXOffset(AView platformAnchor, int windowWidth)
     {
-        if (VirtualView.HorizontalAlignment is HorizontalAlignment.Left)
+        if (VirtualView.Alignment is PopoverAlignment.Start)
             return 0;
         
         var offset = platformAnchor.Width - windowWidth;
 
-        if (VirtualView.HorizontalAlignment is HorizontalAlignment.Right)
+        if (VirtualView.Alignment is PopoverAlignment.End)
             return offset;
 
         return offset / 2;

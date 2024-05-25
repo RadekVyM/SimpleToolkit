@@ -65,6 +65,7 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         foreach (var subview in View.Subviews)
         {
             subview.SizeToFit();
+            // Make sure that the content is properly offset when arrow is displayed
             subview.Frame = new CGRect(GetContentOffset(VirtualView.UseDefaultStyling), subview.Frame.Size);
         }
     }
@@ -92,9 +93,9 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         UpdateContent(virtualView, View);
 
         _ = ViewController ?? throw new InvalidOperationException($"{nameof(ViewController)} cannot be null");
-        PresentInViewController(ViewController);
 
         SetAnchor(virtualView, anchor);
+        PresentInViewController(ViewController);
     }
 
     public void CleanUp()

@@ -14,15 +14,15 @@
         VerticalOptions="Center">
         <controls:PopoverTest
             HorizontalOptions="Start"
-            PopoverHorizontalAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
+            PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
             UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}" />
         <controls:PopoverTest
             HorizontalOptions="Center"
-            PopoverHorizontalAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
+            PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
             UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}" />
         <controls:PopoverTest
             HorizontalOptions="End"
-            PopoverHorizontalAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
+            PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
             UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}" />
 
         <Picker x:Name="popoverAlignmentPicker" />

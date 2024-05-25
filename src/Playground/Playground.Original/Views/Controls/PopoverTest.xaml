@@ -9,7 +9,7 @@
     Text="Show Popover">
 
     <simpleCore:Popover.AttachedPopover>
-        <simpleCore:Popover x:Name="popover" HorizontalAlignment="{Binding Source={x:Reference thisButton}, Path=PopoverHorizontalAlignment}">
+        <simpleCore:Popover x:Name="popover" Alignment="{Binding Source={x:Reference thisButton}, Path=PopoverAlignment}">
             <Grid
                 x:Name="resizablePopoverContent"
                 Background="#f2f2f2"

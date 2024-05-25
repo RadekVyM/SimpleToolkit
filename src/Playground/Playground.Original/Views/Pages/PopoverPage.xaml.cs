@@ -8,11 +8,11 @@ public partial class PopoverPage : ContentPage
     {
         InitializeComponent();
 
-        popoverAlignmentPicker.ItemsSource = new List<HorizontalAlignment>()
+        popoverAlignmentPicker.ItemsSource = new List<PopoverAlignment>()
         {
-            HorizontalAlignment.Center, HorizontalAlignment.Right, HorizontalAlignment.Left
+            PopoverAlignment.Center, PopoverAlignment.Start, PopoverAlignment.End
         };
-        popoverAlignmentPicker.SelectedItem = HorizontalAlignment.Center;
+        popoverAlignmentPicker.SelectedItem = PopoverAlignment.Center;
     }
 
     private void ButtonClicked(object sender, EventArgs e)

@@ -4,11 +4,11 @@ namespace Playground.Original.Views.Controls;
 
 public partial class PopoverTest : Button
 {
-    public static readonly BindableProperty PopoverHorizontalAlignmentProperty =
-        BindableProperty.Create(nameof(PopoverHorizontalAlignment), typeof(HorizontalAlignment), typeof(PopoverTest), propertyChanged: static (sender, oldValue, newValue) =>
+    public static readonly BindableProperty PopoverAlignmentProperty =
+        BindableProperty.Create(nameof(PopoverAlignment), typeof(PopoverAlignment), typeof(PopoverTest), propertyChanged: static (sender, oldValue, newValue) =>
         {
             var button = sender as PopoverTest;
-            button.popover.HorizontalAlignment = (HorizontalAlignment)newValue;
+            button.popover.Alignment = (PopoverAlignment)newValue;
         });
 
     public static readonly BindableProperty UseDefaultStylingProperty =
@@ -18,10 +18,10 @@ public partial class PopoverTest : Button
             button.popover.UseDefaultStyling = (bool)newValue;
         });
 
-    public virtual HorizontalAlignment PopoverHorizontalAlignment
+    public virtual PopoverAlignment PopoverAlignment
     {
-        get => (HorizontalAlignment)GetValue(PopoverHorizontalAlignmentProperty);
-        set => SetValue(PopoverHorizontalAlignmentProperty, value);
+        get => (PopoverAlignment)GetValue(PopoverAlignmentProperty);
+        set => SetValue(PopoverAlignmentProperty, value);
     }
 
     public virtual bool UseDefaultStyling

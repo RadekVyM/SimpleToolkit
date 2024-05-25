@@ -8,7 +8,6 @@ using SimpleToolkit.Core.Handlers;
 using WindowsThickness = Microsoft.UI.Xaml.Thickness;
 using WGrid = Microsoft.UI.Xaml.Controls.Grid;
 using XamlStyle = Microsoft.UI.Xaml.Style;
-using HorizontalAlignment = Microsoft.Maui.Graphics.HorizontalAlignment;
 
 namespace SimpleToolkit.Core.Platform;
 
@@ -55,7 +54,7 @@ public class SimpleFlyout : Flyout
 
         var platformAnchor = anchor?.ToPlatform(mauiContext) ?? GetDefaultAnchor();
 
-        SetPlacement(VirtualView.HorizontalAlignment);
+        SetPlacement(VirtualView.Alignment);
         SetAttachedFlyout(platformAnchor, this);
         ShowAttachedFlyout(platformAnchor);
     }
@@ -78,12 +77,12 @@ public class SimpleFlyout : Flyout
         return frameworkElement;
     }
 
-    private void SetPlacement(HorizontalAlignment horizontalAlignment)
+    private void SetPlacement(PopoverAlignment alignment)
     {
-        Placement = horizontalAlignment switch
+        Placement = alignment switch
         {
-            HorizontalAlignment.Left => FlyoutPlacementMode.BottomEdgeAlignedLeft,
-            HorizontalAlignment.Right => FlyoutPlacementMode.BottomEdgeAlignedRight,
+            PopoverAlignment.Start => FlyoutPlacementMode.BottomEdgeAlignedLeft,
+            PopoverAlignment.End => FlyoutPlacementMode.BottomEdgeAlignedRight,
             _ => FlyoutPlacementMode.Bottom
         };
     }
