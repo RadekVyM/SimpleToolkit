@@ -2,19 +2,17 @@
 
 using Android.Views;
 using Android.Views.Accessibility;
-using Microsoft.Maui.Handlers;
-using Microsoft.Maui.Platform;
 using static Android.Views.View;
+using PlatformView = Microsoft.Maui.Platform.ContentViewGroup;
 
 namespace SimpleToolkit.Core.Handlers;
 
-public partial class ContentButtonHandler : ContentViewHandler
+public partial class ContentButtonHandler
 {
     private Rect viewTapRect;
     private bool alreadyReleased;
-    private IContentButton virtualView => VirtualView as IContentButton;
 
-    protected override ContentViewGroup CreatePlatformView()
+    protected override PlatformView CreatePlatformView()
     {
         var platformView = base.CreatePlatformView();
 
@@ -24,35 +22,35 @@ public partial class ContentButtonHandler : ContentViewHandler
         return platformView;
     }
 
-    protected override void ConnectHandler(ContentViewGroup platformView)
+    protected override void ConnectHandler(PlatformView platformView)
     {
-        platformView.Touch += PlatformViewTouch;
-        platformView.Click += PlatformViewClick;
+        platformView.Touch += OnPlatformViewTouch;
+        platformView.Click += OnPlatformViewClick;
 
         base.ConnectHandler(platformView);
     }
 
-    protected override void DisconnectHandler(ContentViewGroup platformView)
+    protected override void DisconnectHandler(PlatformView platformView)
     {
-        platformView.Touch -= PlatformViewTouch;
-        platformView.Click -= PlatformViewClick;
+        platformView.Touch -= OnPlatformViewTouch;
+        platformView.Click -= OnPlatformViewClick;
 
         base.DisconnectHandler(platformView);
     }
 
-    private void PlatformViewClick(object sender, EventArgs e)
+    private void OnPlatformViewClick(object sender, EventArgs e)
     {
         if (sender is not Android.Views.View view)
             return;
 
         var position = new Point(view.Width / 2f, view.Height / 2f);
 
-        virtualView.OnPressed(position);
-        virtualView.OnReleased(position);
-        virtualView.OnClicked();
+        VirtualView.OnPressed(position);
+        VirtualView.OnReleased(position);
+        VirtualView.OnClicked();
     }
 
-    private void PlatformViewTouch(object sender, Android.Views.View.TouchEventArgs e)
+    private void OnPlatformViewTouch(object sender, Android.Views.View.TouchEventArgs e)
     {
         if (sender is not Android.Views.View view)
             return;
@@ -65,33 +63,33 @@ public partial class ContentButtonHandler : ContentViewHandler
             case MotionEventActions.Down:
                 viewTapRect = new Rect(view.Left, view.Top, view.Right, view.Bottom);
                 alreadyReleased = false;
-                virtualView.OnPressed(position);
+                VirtualView.OnPressed(position);
                 break;
             case MotionEventActions.Up:
                 if (IsTouchInViewTapRect())
                 {
                     if (!alreadyReleased)
-                        virtualView.OnReleased(position);
-                    virtualView.OnClicked();
+                        VirtualView.OnReleased(position);
+                    VirtualView.OnClicked();
                     alreadyReleased = true;
                 }
                 else
                 {
                     if (!alreadyReleased)
-                        virtualView.OnReleased(position);
+                        VirtualView.OnReleased(position);
                     alreadyReleased = true;
                 }
                 break;
             case MotionEventActions.Cancel:
                 if (!alreadyReleased)
-                    virtualView.OnReleased(position);
+                    VirtualView.OnReleased(position);
                 alreadyReleased = true;
                 break;
             case MotionEventActions.Move:
                 if (!IsTouchInViewTapRect())
                 {
                     if (!alreadyReleased)
-                        virtualView.OnReleased(position);
+                        VirtualView.OnReleased(position);
                     alreadyReleased = true;
                 }
                 break;
@@ -102,7 +100,7 @@ public partial class ContentButtonHandler : ContentViewHandler
             return viewTapRect.Contains(view.Left + e.Event.GetX(), view.Top + e.Event.GetY());
         }
     }
-    
+
     private class ButtonAccessibilityDelegate : AccessibilityDelegate
     {
         public override void OnInitializeAccessibilityNodeInfo(Android.Views.View host, AccessibilityNodeInfo info)
