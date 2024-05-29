@@ -3,6 +3,7 @@
 using CoreGraphics;
 using Foundation;
 using Microsoft.Maui.Platform;
+using SceneKit;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using UIKit;
@@ -46,6 +47,8 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
             // Removes the default corner radius of the popover
             View.Superview.Layer.CornerRadius = 0f;
             View.Superview.Layer.MasksToBounds = false;
+
+            AnimateIn();
         }
     }
 
@@ -173,6 +176,34 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
     private void PresentInViewController(UIViewController viewController)
     {
         viewController.PresentViewController(this, true, null);
+    }
+
+    private void AnimateIn()
+    {
+        var arrowDirection = ((UIPopoverPresentationController)PresentationController).ArrowDirection;
+        var x = arrowDirection switch
+        {
+            UIPopoverArrowDirection.Left => 0,
+            UIPopoverArrowDirection.Right => 1,
+            _ => 0.5f
+        };
+        var y = arrowDirection switch
+        {
+            UIPopoverArrowDirection.Up => 0,
+            UIPopoverArrowDirection.Down => 1,
+            _ => 0.5f
+        };
+        var oldAnchorPoint = View.Layer.AnchorPoint;
+        
+        View.Layer.AnchorPoint = new CGPoint(x, y);
+        View.Transform = CGAffineTransform.MakeScale(0.3f, 0.3f);
+        View.Alpha = 0;
+
+        UIView.Animate(0.2, 0, UIViewAnimationOptions.CurveEaseOut, () =>
+        {
+            View.Transform = CGAffineTransform.MakeIdentity();
+            View.Alpha = 1;
+        }, null);
     }
 
     private CGPoint GetContentOffset(bool useDefaultStyling)

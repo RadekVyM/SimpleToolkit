@@ -8,56 +8,58 @@
     xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
     Title="Popovers">
 
-    <VerticalStackLayout
-        HorizontalOptions="Fill"
-        Spacing="30"
-        VerticalOptions="Center">
-        <controls:PopoverTest
-            HorizontalOptions="Start"
-            PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
-            UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}" />
-        <controls:PopoverTest
-            HorizontalOptions="Center"
-            PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
-            UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}" />
-        <controls:PopoverTest
-            HorizontalOptions="End"
-            PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
-            UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}" />
-
-        <Picker x:Name="popoverAlignmentPicker" />
-        <Switch x:Name="useDefaultStylingSwitch" />
-
-        <Button
-            Background="Orange"
-            Clicked="ButtonClicked"
-            HorizontalOptions="Center"
-            Text="Show popover"
+    <ScrollView>
+        <VerticalStackLayout
+            HorizontalOptions="Fill"
+            Spacing="30"
             VerticalOptions="Center">
+            <controls:PopoverTest
+                HorizontalOptions="Start"
+                PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
+                UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}" />
+            <controls:PopoverTest
+                HorizontalOptions="Center"
+                PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
+                UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}" />
+            <controls:PopoverTest
+                HorizontalOptions="End"
+                PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
+                UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}" />
 
-            <simpleCore:Popover.AttachedPopover>
-                <simpleCore:Popover x:Name="popover" PermittedArrowDirections="Up">
-                    <Border Background="DarkOrange">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="6" />
-                        </Border.StrokeShape>
+            <Picker x:Name="popoverAlignmentPicker" />
+            <Switch x:Name="useDefaultStylingSwitch" />
 
-                        <VerticalStackLayout Padding="12,10" Spacing="10">
-                            <simpleCore:Icon
-                                HeightRequest="25"
-                                Source="star.png"
-                                TintColor="White"
-                                VerticalOptions="Center"
-                                WidthRequest="25" />
-                            <Label
-                                FontAttributes="Bold"
-                                Text="Star this repo"
-                                TextColor="White"
-                                VerticalOptions="Center" />
-                        </VerticalStackLayout>
-                    </Border>
-                </simpleCore:Popover>
-            </simpleCore:Popover.AttachedPopover>
-        </Button>
-    </VerticalStackLayout>
+            <Button
+                Background="Orange"
+                Clicked="ButtonClicked"
+                HorizontalOptions="Center"
+                Text="Show popover"
+                VerticalOptions="Center">
+
+                <simpleCore:Popover.AttachedPopover>
+                    <simpleCore:Popover x:Name="popover" PermittedArrowDirections="Up">
+                        <Border Background="DarkOrange">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="6" />
+                            </Border.StrokeShape>
+
+                            <VerticalStackLayout Padding="12,10" Spacing="10">
+                                <simpleCore:Icon
+                                    HeightRequest="25"
+                                    Source="star.png"
+                                    TintColor="White"
+                                    VerticalOptions="Center"
+                                    WidthRequest="25" />
+                                <Label
+                                    FontAttributes="Bold"
+                                    Text="Star this repo"
+                                    TextColor="White"
+                                    VerticalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </simpleCore:Popover>
+                </simpleCore:Popover.AttachedPopover>
+            </Button>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
