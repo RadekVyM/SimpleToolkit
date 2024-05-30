@@ -297,16 +297,31 @@
             Route="ContentButtonPage" />
     </Tab>
 
-    <Tab
+    <ShellContent
         Title="Popovers"
         controls:SimpleShellIcon.SelectedIcon="bird_filled.png"
-        Icon="bird_empty.png">
+        ContentTemplate="{DataTemplate pages:PopoverPage}"
+        Icon="bird_empty.png"
+        Route="PopoverPage" />
+
+    <Tab
+        Title="Waterfall"
+        controls:SimpleShellIcon.SelectedIcon="flame_filled.png"
+        shell:SimpleShell.ShellGroupContainerTemplate="{StaticResource TabViewShellSectionContainer}"
+        Icon="flame_empty.png"
+        Route="WaterfallTab">
         <ShellContent
-            Title="Popovers"
-            controls:SimpleShellIcon.SelectedIcon="bird_filled.png"
-            ContentTemplate="{DataTemplate pages:PopoverPage}"
-            Icon="bird_empty.png"
-            Route="PopoverPage" />
+            Title="Waterfall"
+            controls:SimpleShellIcon.SelectedIcon="flame_filled.png"
+            ContentTemplate="{DataTemplate pages:WaterfallPage}"
+            Icon="flame_empty.png"
+            Route="WaterfallPage" />
+        <ShellContent
+            Title="Images"
+            controls:SimpleShellIcon.SelectedIcon="case_filled.png"
+            ContentTemplate="{DataTemplate pages:ImagesPage}"
+            Icon="case_empty.png"
+            Route="ImagesPage" />
     </Tab>
 
     <Tab
@@ -327,12 +342,6 @@
             ContentTemplate="{DataTemplate pages:GreenPage}"
             Icon="bird_empty.png"
             Route="GreenPage" />
-        <ShellContent
-            Title="Images"
-            controls:SimpleShellIcon.SelectedIcon="case_filled.png"
-            ContentTemplate="{DataTemplate pages:ImagesPage}"
-            Icon="case_empty.png"
-            Route="ImagesPage" />
     </Tab>
 
     <Tab
