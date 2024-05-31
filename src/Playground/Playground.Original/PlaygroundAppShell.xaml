@@ -305,26 +305,6 @@
         Route="PopoverPage" />
 
     <Tab
-        Title="Waterfall"
-        controls:SimpleShellIcon.SelectedIcon="flame_filled.png"
-        shell:SimpleShell.ShellGroupContainerTemplate="{StaticResource TabViewShellSectionContainer}"
-        Icon="flame_empty.png"
-        Route="WaterfallTab">
-        <ShellContent
-            Title="Waterfall"
-            controls:SimpleShellIcon.SelectedIcon="flame_filled.png"
-            ContentTemplate="{DataTemplate pages:WaterfallPage}"
-            Icon="flame_empty.png"
-            Route="WaterfallPage" />
-        <ShellContent
-            Title="Images"
-            controls:SimpleShellIcon.SelectedIcon="case_filled.png"
-            ContentTemplate="{DataTemplate pages:ImagesPage}"
-            Icon="case_empty.png"
-            Route="ImagesPage" />
-    </Tab>
-
-    <Tab
         Title="Flame tab"
         controls:SimpleShellIcon.SelectedIcon="flame_filled.png"
         shell:SimpleShell.ShellGroupContainerTemplate="{StaticResource TabViewShellSectionContainer}"
