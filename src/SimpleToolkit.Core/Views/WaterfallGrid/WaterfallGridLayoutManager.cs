@@ -57,13 +57,14 @@ public class WaterfallGridLayoutManager(WaterfallGrid layout) : LayoutManager(la
     public override Size Measure(double widthConstraint, double heightConstraint)
     {
         var padding = layout.Padding;
-        WaterfallColumn[] columns = CalculateColumns(widthConstraint - padding.HorizontalThickness, (child, width, height) => child.Measure(width, height));
+        var columns = CalculateColumns(widthConstraint - padding.HorizontalThickness, (child, width, height) => child.Measure(width, height));
 
         var explicitWidth = layout.WidthRequest >= 0 ? layout.WidthRequest : Dimension.Unset;
         var explicitHeight = layout.HeightRequest >= 0 ? layout.HeightRequest : Dimension.Unset;
+        var measuredHeight = columns.MaxBy((c) => c.SecondarySize).SecondarySize + padding.VerticalThickness;
 
         var finalWidth = ResolveConstraints(widthConstraint, explicitWidth, widthConstraint, layout.MinimumWidthRequest, layout.MaximumWidthRequest);
-        var finalHeight = ResolveConstraints(heightConstraint, explicitHeight, columns.MaxBy((c) => c.SecondarySize).SecondarySize + padding.VerticalThickness, layout.MinimumHeightRequest, layout.MaximumHeightRequest);
+        var finalHeight = ResolveConstraints(heightConstraint, explicitHeight, measuredHeight, layout.MinimumHeightRequest, layout.MaximumHeightRequest);
 
         return new Size(finalWidth, finalHeight);
     }

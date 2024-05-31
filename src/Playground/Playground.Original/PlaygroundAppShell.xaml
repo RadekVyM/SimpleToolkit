@@ -73,7 +73,7 @@
         </DataTemplate>
 
         <DataTemplate x:Key="TabViewShellSectionContainer" x:DataType="Tab">
-            <Grid BackgroundColor="Black" RowDefinitions="auto, *">
+            <Grid RowDefinitions="auto, *">
                 <HorizontalStackLayout BindableLayout.ItemsSource="{Binding Items}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="BaseShellItem">

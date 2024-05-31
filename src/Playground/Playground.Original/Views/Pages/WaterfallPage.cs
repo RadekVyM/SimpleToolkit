@@ -29,6 +29,7 @@ public class WaterfallPage : ContentPage
             RowSpacing = 4,
             ColumnSpacing = 8,
             AlignContent = LayoutOptions.Start,
+            VerticalOptions = LayoutOptions.Start,
             Children = 
             {
                 Cell(0, 60, LayoutOptions.Start),

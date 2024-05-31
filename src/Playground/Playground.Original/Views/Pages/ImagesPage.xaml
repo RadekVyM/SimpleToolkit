@@ -3,7 +3,9 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
+    xmlns:pages="clr-namespace:Playground.Original.Views.Pages"
     x:Class="Playground.Original.Views.Pages.ImagesPage"
+    x:Name="page"
     Title="ImagesPage">
 
     <ScrollView>
@@ -12,23 +14,14 @@
             Background="LightBlue"
             Padding="20, 10"
             AlignContent="Start"
-            Span="3" RowSpacing="4" ColumnSpacing="8">
-            <simpleCore:WaterfallGrid.Resources>
-                <Style TargetType="Label">
-                    <Setter Property="Padding" Value="5"/>
-                </Style>
-            </simpleCore:WaterfallGrid.Resources>
-
-            <Grid HorizontalOptions="Start" HeightRequest="60" Background="Green"><Label Text="0"/></Grid>
-            <Grid HeightRequest="100" Background="Green"><Label Text="1"/></Grid>
-            <Grid HeightRequest="30" Background="Green"><Label Text="2"/></Grid>
-            <Grid HorizontalOptions="Center" HeightRequest="80" Background="Green"><Label Text="3"/></Grid>
-            <Grid HeightRequest="40" Background="Green"><Label Text="4"/></Grid>
-            <Grid HorizontalOptions="End" HeightRequest="50" Background="Green"><Label Text="5"/></Grid>
-            <Grid HeightRequest="60" Background="Green"><Label Text="6"/></Grid>
-            <Grid HeightRequest="40" Background="Green"><Label Text="7"/></Grid>
-            <Grid HeightRequest="30" Background="Green"><Label Text="8"/></Grid>
-            <Grid HeightRequest="70" Background="Green"><Label Text="9"/></Grid>
+            VerticalOptions="Start"
+            Span="2" RowSpacing="8" ColumnSpacing="8"
+            BindableLayout.ItemsSource="{Binding Source={x:Reference page}, Path='Images'}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate x:DataType="pages:ImageModel">
+                    <Image Source="{Binding Url}" Aspect="AspectFill"/>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
         </simpleCore:WaterfallGrid>
     </ScrollView>
 </ContentPage>
