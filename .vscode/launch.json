@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "Sample.Core",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/src/Samples/Sample.Core/Sample.Core.csproj",
+            "launchConfigurationId": "vscode-maui"
+        },
+        {
+            "name": "C#: Playground.Original",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/src/Playground/Playground.Original/Playground.Original.csproj",
+            "launchConfigurationId": "vscode-maui"
+        }
+    ]
+}

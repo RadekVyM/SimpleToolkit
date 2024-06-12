@@ -1,6 +1,6 @@
 # ContentButton
 
-In order to use this control, you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
+`ContentButton` is just a button that can hold whatever content you want. In order to use this control, you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
 
 ```csharp
 builder.UseSimpleToolkit();
@@ -12,29 +12,30 @@ builder.UseSimpleToolkit();
 xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
 ```
 
-`ContentButton` is just a button that can hold whatever content you want:
+## Example
+
+Let's define a `ContentButton` with an `Icon` and `Label`:
 
 ```xml
-<simpleCore:ContentButton Clicked="StarButtonClicked">
-    <Border Background="Orange">
-        <Border.StrokeShape>
-            <RoundRectangle CornerRadius="6"/>
-        </Border.StrokeShape>
-        <HorizontalStackLayout Padding="12,10" Spacing="10">
-            <simpleCore:Icon
-                Source="star.png" TintColor="White"
-                VerticalOptions="Center"
-                HeightRequest="18" WidthRequest="18"/>
-            <Label
-                Text="Star this repo" TextColor="White"
-                FontAttributes="Bold"
-                VerticalOptions="Center"/>
-        </HorizontalStackLayout>
-    </Border>
+<simpleCore:ContentButton
+    Clicked="StarButtonClicked"
+    Background="Orange"
+    HorizontalOptions="Center"
+    StrokeShape="{RoundRectangle CornerRadius=6}">
+    <HorizontalStackLayout Padding="12,10" Spacing="10">
+        <simpleCore:Icon
+            Source="star.png" TintColor="White"
+            VerticalOptions="Center"
+            HeightRequest="18" WidthRequest="18"/>
+        <Label
+            Text="Star this repo" TextColor="White"
+            FontAttributes="Bold"
+            VerticalOptions="Center"/>
+    </HorizontalStackLayout>
 </simpleCore:ContentButton>
 ```
 
-Output:
+The button border can be modified the same way as the `Border` control. Output:
 
 <p align="center">
     <img src="../images/star_button.png" data-canonical-src="../images/star_button.png" />
@@ -45,7 +46,11 @@ Output:
 `ContentButton` provides the same visual states as .NET MAUI `Button` does:
 
 ```xml
-<simpleCore:ContentButton Clicked="StarButtonClicked">
+<simpleCore:ContentButton
+    Clicked="StarButtonClicked"
+    Background="Orange"
+    HorizontalOptions="Center"
+    StrokeShape="{RoundRectangle CornerRadius=6}">
     <VisualStateManager.VisualStateGroups>
         <VisualStateGroupList>
             <VisualStateGroup>
@@ -53,7 +58,6 @@ Output:
                 <VisualState x:Name="Pressed">
                     <VisualState.Setters>
                         <Setter
-                            TargetName="border" 
                             Property="Background" 
                             Value="OrangeRed"/>
                     </VisualState.Setters>
@@ -61,7 +65,6 @@ Output:
                 <VisualState x:Name="PointerOver">
                     <VisualState.Setters>
                         <Setter
-                            TargetName="border" 
                             Property="Background" 
                             Value="DarkOrange"/>
                     </VisualState.Setters>
@@ -69,21 +72,16 @@ Output:
             </VisualStateGroup>
         </VisualStateGroupList>
     </VisualStateManager.VisualStateGroups>
-    <Border x:Name="border" Background="Orange">
-        <Border.StrokeShape>
-            <RoundRectangle CornerRadius="6"/>
-        </Border.StrokeShape>
-        <HorizontalStackLayout Padding="12,10" Spacing="10">
-            <simpleCore:Icon
-                Source="star.png" TintColor="White"
-                VerticalOptions="Center"
-                HeightRequest="18" WidthRequest="18"/>
-            <Label
-                Text="Star this repo" TextColor="White"
-                FontAttributes="Bold"
-                VerticalOptions="Center"/>
-        </HorizontalStackLayout>
-    </Border>
+    <HorizontalStackLayout Padding="12,10" Spacing="10">
+        <simpleCore:Icon
+            Source="star.png" TintColor="White"
+            VerticalOptions="Center"
+            HeightRequest="18" WidthRequest="18"/>
+        <Label
+            Text="Star this repo" TextColor="White"
+            FontAttributes="Bold"
+            VerticalOptions="Center"/>
+    </HorizontalStackLayout>
 </simpleCore:ContentButton>
 ```
 
@@ -95,7 +93,7 @@ Output:
 
 ## Implementation details
 
-The `ContentButton` class is inherited from the .NET MAUI `ContentView` control. `ContentButton` has these events and properties in addition to `ContentView`s events and properties:
+Since version 5.0.0, the `ContentButton` class is inherited from the .NET MAUI `Border` control. `ContentButton` has these events and properties in addition to `Border`s events and properties:
 
 - `Clicked` - an event that fires when the button is clicked
 - `Pressed` - an event that fires when the button is pressed

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
+    x:Class="Sample.Core.Views.Pages.ContentButtonPage"
+    Title="ContentButton">
+
+    <ScrollView>
+        <VerticalStackLayout
+            VerticalOptions="Center"
+            Padding="20"
+            Spacing="80">
+            <simpleCore:ContentButton
+                Clicked="StarButtonClicked"
+                Background="Orange"
+                HorizontalOptions="Center"
+                StrokeShape="{RoundRectangle CornerRadius=6}">
+                <HorizontalStackLayout Padding="12,10" Spacing="10">
+                    <simpleCore:Icon
+                        Source="star.png" TintColor="White"
+                        VerticalOptions="Center"
+                        HeightRequest="18" WidthRequest="18"/>
+                    <Label
+                        Text="Star this repo" TextColor="White"
+                        FontAttributes="Bold"
+                        VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </simpleCore:ContentButton>
+
+            <simpleCore:ContentButton
+                Clicked="StarButtonClicked"
+                Background="Orange"
+                HorizontalOptions="Center"
+                StrokeShape="{RoundRectangle CornerRadius=6}">
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroupList>
+                        <VisualStateGroup>
+                            <VisualState x:Name="Normal"/>
+                            <VisualState x:Name="Pressed">
+                                <VisualState.Setters>
+                                    <Setter
+                                        Property="Background" 
+                                        Value="OrangeRed"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="PointerOver">
+                                <VisualState.Setters>
+                                    <Setter
+                                        Property="Background" 
+                                        Value="DarkOrange"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </VisualStateManager.VisualStateGroups>
+                <HorizontalStackLayout Padding="12,10" Spacing="10">
+                    <simpleCore:Icon
+                        Source="star.png" TintColor="White"
+                        VerticalOptions="Center"
+                        HeightRequest="18" WidthRequest="18"/>
+                    <Label
+                        Text="Star this repo" TextColor="White"
+                        FontAttributes="Bold"
+                        VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </simpleCore:ContentButton>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
