@@ -1,7 +1,5 @@
 ﻿using Microsoft.Maui.Platform;
 
-// TODO: Popover placement - this should be possible on Android and Windows
-
 namespace SimpleToolkit.Core;
 
 /// <summary>
@@ -13,6 +11,15 @@ public class Popover : Element, IPopover
     public static readonly BindableProperty ContentProperty =
         BindableProperty.Create(nameof(Content), typeof(View), typeof(Popover), propertyChanged: OnContentChanged);
 
+    public static readonly BindableProperty AlignmentProperty =
+        BindableProperty.Create(nameof(Alignment), typeof(PopoverAlignment), typeof(Popover), defaultValue: PopoverAlignment.Center);
+
+    public static readonly BindableProperty UseDefaultStylingProperty =
+        BindableProperty.Create(nameof(UseDefaultStyling), typeof(bool), typeof(Popover), defaultValue: false);
+
+    public static readonly BindableProperty PermittedArrowDirectionsProperty =
+        BindableProperty.Create(nameof(PermittedArrowDirections), typeof(PopoverArrowDirection), typeof(Popover), defaultValue: PopoverArrowDirection.Any);
+
     public static readonly BindableProperty AttachedPopoverProperty =
         BindableProperty.CreateAttached("AttachedPopover", typeof(Popover), typeof(View), null);
 
@@ -20,6 +27,24 @@ public class Popover : Element, IPopover
     {
         get => (View)GetValue(ContentProperty);
         set => SetValue(ContentProperty, value);
+    }
+
+    public virtual PopoverAlignment Alignment
+    {
+        get => (PopoverAlignment)GetValue(AlignmentProperty);
+        set => SetValue(AlignmentProperty, value);
+    }
+
+    public virtual bool UseDefaultStyling
+    {
+        get => (bool)GetValue(UseDefaultStylingProperty);
+        set => SetValue(UseDefaultStylingProperty, value);
+    }
+
+    public virtual PopoverArrowDirection PermittedArrowDirections
+    {
+        get => (PopoverArrowDirection)GetValue(PermittedArrowDirectionsProperty);
+        set => SetValue(PermittedArrowDirectionsProperty, value);
     }
 
     /// <summary>
@@ -65,7 +90,7 @@ public class Popover : Element, IPopover
 
 #if WINDOWS
         if (Handler?.PlatformView is SimpleToolkit.Core.Platform.SimpleFlyout platformFlyout)
-            platformFlyout.SetUpPlatformView();
+            platformFlyout.UpdateContent();
 #endif
     }
 

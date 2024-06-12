@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="Sample.SimpleShellSharpnadoTabs.Views.Controls.TopBarScaffold"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="scaffold">
+
+    <ContentView.Content>
+        <Grid CompressedLayout.IsHeadless="True" RowDefinitions="auto, *">
+            <Grid
+                x:Name="topBar"
+                Padding="0,5"
+                ColumnDefinitions="50, *, 50"
+                MinimumHeightRequest="60">
+                <ImageButton
+                    Aspect="AspectFit"
+                    Background="Transparent"
+                    Clicked="BackButtonClicked"
+                    CornerRadius="5"
+                    HeightRequest="24"
+                    HorizontalOptions="Center"
+                    IsVisible="{Binding Source={x:Reference scaffold}, Path=IsBackButtonVisible}"
+                    Source="{FontImageSource Glyph='&#xf053;',
+                                             FontFamily=FontAwesome,
+                                             Size='20',
+                                             Color={AppThemeBinding Default=Black,
+                                                                    Dark=White}}"
+                    VerticalOptions="Center"
+                    WidthRequest="24" />
+
+                <Label
+                    x:Name="titleContent"
+                    Grid.Column="1"
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center" />
+            </Grid>
+
+            <ContentView
+                x:Name="pageContent"
+                Grid.Row="1"
+                CompressedLayout.IsHeadless="True"
+                Content="{Binding Source={x:Reference scaffold}, Path=PageContent}" />
+        </Grid>
+    </ContentView.Content>
+</ContentView>

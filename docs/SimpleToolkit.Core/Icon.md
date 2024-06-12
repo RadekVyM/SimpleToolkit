@@ -1,6 +1,6 @@
 # Icon
 
-In order to use this control, you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
+Thanks to the `Icon` control, you are able to display a tinted image. In order to use this control, you need to call the `UseSimpleToolkit()` extension method in your `MauiProgram.cs` file:
 
 ```csharp
 builder.UseSimpleToolkit();
@@ -12,7 +12,9 @@ builder.UseSimpleToolkit();
 xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
 ```
 
-Thanks to the `Icon` control, you are able to display a tinted image:
+## Example
+
+If no tint color is defined, black color is used:
 
 ```xml
 <simpleCore:Icon Source="star.png"/>
@@ -28,7 +30,7 @@ Output:
 
 ## Implementation details
 
-The `Icon` class is inherited from the .NET MAUI `Image` class, but behind the scenes it is implemented in the same way as .NET MAUI `Image` **only** on Android and iOS. WinUI implementation is based on `BitmapIcon` and `FontIcon` controls. Because of that, the control supports only these image sources on Windows:
+The `Icon` class is inherited from the .NET MAUI `Image` class, but behind the scenes it is implemented in the same way as .NET MAUI `Image` **only** on Android and iOS. WinUI implementation is based on `IconSourceElement`. Because of that, the control supports only these image sources on Windows:
 
 - `FileImageSource`
 - `UriImageSource`

@@ -6,7 +6,7 @@ namespace SimpleToolkit.Core;
 /// Button that can hold whatever content you want.
 /// </summary>
 [ContentProperty(nameof(Content))]
-public class ContentButton : ContentView, IContentButton
+public class ContentButton : Border, IContentButton
 {
     private const string PressedState = "Pressed";
 
@@ -51,9 +51,7 @@ public class ContentButton : ContentView, IContentButton
         Clicked?.Invoke(this, EventArgs.Empty);
 
         if (Command?.CanExecute(CommandParameter) == true)
-        {
             Command?.Execute(CommandParameter);
-        }
     }
 
     public virtual void OnPressed(Point pressPosition)

@@ -1,18 +1,16 @@
 ﻿#if IOS || MACCATALYST
 
-using Microsoft.Maui.Handlers;
 using SimpleToolkit.Core.Platform;
 using UIKit;
-using PlatformContentView = Microsoft.Maui.Platform.ContentView;
+using PlatformView = Microsoft.Maui.Platform.ContentView;
 
 namespace SimpleToolkit.Core.Handlers;
 
-public partial class ContentButtonHandler : ContentViewHandler
+public partial class ContentButtonHandler
 {
     private bool alreadyReleased = true;
-    private IContentButton virtualView => VirtualView as IContentButton;
 
-    protected override PlatformContentView CreatePlatformView()
+    protected override PlatformView CreatePlatformView()
     {
         _ = VirtualView ?? throw new InvalidOperationException($"{nameof(VirtualView)} must be set to create a {nameof(ButtonContentView)}");
         _ = MauiContext ?? throw new InvalidOperationException($"{nameof(MauiContext)} cannot be null");
@@ -27,7 +25,7 @@ public partial class ContentButtonHandler : ContentViewHandler
         return buttonPlatformView;
     }
 
-    protected override void ConnectHandler(PlatformContentView platformView)
+    protected override void ConnectHandler(PlatformView platformView)
     {
         base.ConnectHandler(platformView);
 
@@ -40,7 +38,7 @@ public partial class ContentButtonHandler : ContentViewHandler
         buttonContentView.CancelledTouching += OnEndedTouching;
     }
 
-    protected override void DisconnectHandler(PlatformContentView platformView)
+    protected override void DisconnectHandler(PlatformView platformView)
     {
         base.DisconnectHandler(platformView);
 
@@ -57,15 +55,13 @@ public partial class ContentButtonHandler : ContentViewHandler
     {
         alreadyReleased = false;
 
-        virtualView.OnPressed(e.InteractionPosition);
+        VirtualView.OnPressed(e.InteractionPosition);
     }
 
     private void OnEndedTouching(object sender, ContentButtonEventArgs e)
     {
         if (!alreadyReleased)
-        {
-            virtualView.OnReleased(e.InteractionPosition);
-        }
+            VirtualView.OnReleased(e.InteractionPosition);
 
         alreadyReleased = true;
     }
@@ -74,7 +70,7 @@ public partial class ContentButtonHandler : ContentViewHandler
     {
         if (!alreadyReleased && sender is ButtonContentView button && !button.Bounds.Contains(e.InteractionPosition.X, e.InteractionPosition.Y))
         {
-            virtualView.OnReleased(e.InteractionPosition);
+            VirtualView.OnReleased(e.InteractionPosition);
             alreadyReleased = true;
         }
     }
@@ -86,13 +82,13 @@ public partial class ContentButtonHandler : ContentViewHandler
         switch (g.State)
         {
             case UIGestureRecognizerState.Ended:
-                virtualView.OnPressed(new Point(location.X, location.Y));
-                virtualView.OnReleased(new Point(location.X, location.Y));
-                virtualView.OnClicked();
+                VirtualView.OnPressed(new Point(location.X, location.Y));
+                VirtualView.OnReleased(new Point(location.X, location.Y));
+                VirtualView.OnClicked();
                 break;
             case UIGestureRecognizerState.Failed:
-                virtualView.OnPressed(new Point(location.X, location.Y));
-                virtualView.OnReleased(new Point(location.X, location.Y));
+                VirtualView.OnPressed(new Point(location.X, location.Y));
+                VirtualView.OnReleased(new Point(location.X, location.Y));
                 break;
         }
     }

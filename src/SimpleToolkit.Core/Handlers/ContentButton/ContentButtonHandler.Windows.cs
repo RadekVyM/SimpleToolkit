@@ -1,7 +1,6 @@
 ﻿#if WINDOWS
 
-using Microsoft.Maui.Handlers;
-using Microsoft.Maui.Platform;
+using PlatformView = Microsoft.Maui.Platform.ContentPanel;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml;
 using Windows.System;
@@ -9,7 +8,7 @@ using SimpleToolkit.Core.Platform;
 
 namespace SimpleToolkit.Core.Handlers;
 
-public partial class ContentButtonHandler : ViewHandler<IContentButton, ContentPanel>
+public partial class ContentButtonHandler
 {
     private bool alreadyReleased = true;
     private PointerEventHandler pointerPressedHandler;
@@ -17,30 +16,8 @@ public partial class ContentButtonHandler : ViewHandler<IContentButton, ContentP
     private PointerEventHandler pointerExitedHandler;
     private KeyEventHandler keyDownHandler;
 
-    public static IPropertyMapper<IContentButton, ContentButtonHandler> Mapper = new PropertyMapper<IContentButton, ContentButtonHandler>(ViewMapper)
-    {
-        [nameof(IContentButton.Content)] = MapContent,
-    };
 
-    public static CommandMapper<IContentButton, ContentButtonHandler> CommandMapper = new(ViewCommandMapper)
-    {
-    };
-
-
-    public ContentButtonHandler() : base(Mapper, CommandMapper)
-    {
-    }
-
-    public ContentButtonHandler(IPropertyMapper mapper = null) : base(mapper ?? Mapper)
-    {
-    }
-
-    protected ContentButtonHandler(IPropertyMapper mapper, CommandMapper commandMapper = null) : base(mapper, commandMapper ?? CommandMapper)
-    {
-    }
-
-
-    protected override ContentPanel CreatePlatformView()
+    protected override PlatformView CreatePlatformView()
     {
         _ = VirtualView ?? throw new InvalidOperationException($"{nameof(VirtualView)} must be set to create a SimpleContentPanel");
 
@@ -65,7 +42,7 @@ public partial class ContentButtonHandler : ViewHandler<IContentButton, ContentP
         PlatformView.CrossPlatformLayout = VirtualView;
     }
 
-    protected override void ConnectHandler(ContentPanel platformView)
+    protected override void ConnectHandler(PlatformView platformView)
     {
         pointerPressedHandler = new PointerEventHandler(OnPointerPressed);
         pointerReleasedHandler = new PointerEventHandler(OnPointerReleased);
@@ -84,7 +61,7 @@ public partial class ContentButtonHandler : ViewHandler<IContentButton, ContentP
         base.ConnectHandler(platformView);
     }
 
-    protected override void DisconnectHandler(ContentPanel platformView)
+    protected override void DisconnectHandler(PlatformView platformView)
     {
         platformView.RemoveHandler(UIElement.PointerPressedEvent, pointerPressedHandler);
         platformView.RemoveHandler(UIElement.PointerReleasedEvent, pointerReleasedHandler);
@@ -143,23 +120,6 @@ public partial class ContentButtonHandler : ViewHandler<IContentButton, ContentP
     {
         var position = e.GetCurrentPoint(PlatformView).Position;
         return new Point(position.X, position.Y);
-    }
-
-    private static void UpdateContent(ContentButtonHandler handler)
-    {
-        _ = handler.PlatformView ?? throw new InvalidOperationException($"{nameof(PlatformView)} should have been set by base class.");
-        _ = handler.VirtualView ?? throw new InvalidOperationException($"{nameof(VirtualView)} should have been set by base class.");
-        _ = handler.MauiContext ?? throw new InvalidOperationException($"{nameof(MauiContext)} should have been set by base class.");
-
-        handler.PlatformView.Children.Clear();
-
-        if (handler.VirtualView.PresentedContent is IView view)
-            handler.PlatformView.Children.Add(view.ToPlatform(handler.MauiContext));
-    }
-
-    public static void MapContent(ContentButtonHandler handler, IContentView contentView)
-    {
-        UpdateContent(handler);
     }
 }
 

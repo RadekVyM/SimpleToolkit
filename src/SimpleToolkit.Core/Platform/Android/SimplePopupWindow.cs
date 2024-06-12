@@ -2,16 +2,18 @@
 
 using Android.Content;
 using Android.Graphics.Drawables;
+using Android.Views;
 using Android.Widget;
 using Microsoft.Maui.Platform;
 using AView = Android.Views.View;
-using Math = System.Math;
 
 namespace SimpleToolkit.Core.Platform;
 
 public class SimplePopupWindow : PopupWindow
 {
     private readonly IMauiContext mauiContext;
+    private IElement anchor;
+    private AView platformContent;
 
     public IPopover VirtualView { get; private set; }
 
@@ -22,7 +24,6 @@ public class SimplePopupWindow : PopupWindow
 
         OutsideTouchable = true;
         Focusable = true;
-        Elevation = 0;
 
         SetBackgroundDrawable(new ColorDrawable(Colors.Transparent.ToPlatform()));
     }
@@ -42,69 +43,102 @@ public class SimplePopupWindow : PopupWindow
     public void Show(IElement anchor)
     {
         if (VirtualView is null)
-        {
             return;
-        }
 
-        var measure = (VirtualView.Content as IView).Measure(double.PositiveInfinity, double.PositiveInfinity);
-        var density = DeviceDisplay.Current.MainDisplayInfo.Density;
-        var width = (int)Math.Round(measure.Width * density);
-        var height = (int)Math.Round(measure.Height * density);
+        this.anchor = anchor;
 
-        //var content = VirtualView.Content.ToPlatform(mauiContext);
-        //content.Measure(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
-
-        //content.Post(() =>
-        //{
-        //    VirtualView.Content.Layout(new Rect(0, 0, width, height));
-        //});
+        var (width, height, xOffset, platformAnchor) = GetWindowSpecs(anchor);
 
         // Height and Width have to be set to not show the PopupWindow outside of screen bounds
         if (width != 0 || height != 0)
         {
             Width = width;
             Height = height;
-            VirtualView.Content.Layout(new Rect(0, 0, width, height));
         }
 
-        if (anchor is not null)
-        {
-            var platformAnchor = anchor.ToPlatform(mauiContext);
-            ShowAsDropDown(platformAnchor);
-        }
-        else
-        {
-            ArgumentNullException.ThrowIfNull(VirtualView.Parent);
-            var platformAnchor = VirtualView.Parent.ToPlatform(mauiContext);
-            ShowAsDropDown(platformAnchor);
-        }
+        ShowAsDropDown(platformAnchor, xOffset, 0, GravityFlags.Center);
     }
 
     public void Hide()
     {
+        anchor = null;
         Dismiss();
     }
 
     public void CleanUp()
     {
+        ClearLayoutChangeListener();
+        anchor = null;
+        platformContent = null;
         VirtualView = null;
     }
 
-    public void SetContent(IPopover popup)
+    public void SetContent(IPopover popover)
     {
-        if (popup.Content is null)
+        if (popover.Content is null)
             return;
 
-        var content = popup.Content.ToPlatform(mauiContext);
-        ContentView = content;
+        ClearLayoutChangeListener();
+
+        platformContent = popover.Content.ToPlatform(mauiContext);
+        platformContent.LayoutChange += OnLayoutChange;
+
+        ContentView = platformContent;
+    }
+
+    private void ClearLayoutChangeListener()
+    {
+        if (platformContent is not null)
+            platformContent.LayoutChange -= OnLayoutChange;
+    }
+
+    private void OnLayoutChange(object sender, AView.LayoutChangeEventArgs e)
+    {
+        if (anchor is null)
+            return;
+
+        var (width, height, xOffset, platformAnchor) = GetWindowSpecs(anchor);
+
+        // If the popover size changes while open, dimensions have to be updated manually
+        if (width != Width || height != Height)
+            Update(platformAnchor, xOffset, 0, width, height);
+    }
+
+    private (int width, int height, int xOffset, AView platformAnchor) GetWindowSpecs(IElement anchor)
+    {
+        var platformAnchor = anchor?.ToPlatform(mauiContext) ?? GetDefaultAnchor();
+        var measure = (VirtualView.Content as IView).Measure(double.PositiveInfinity, double.PositiveInfinity);
+        var density = DeviceDisplay.Current.MainDisplayInfo.Density;
+        var width = (int)Math.Round(measure.Width * density);
+        var height = (int)Math.Round(measure.Height * density);
+        var xOffset = GetXOffset(platformAnchor, width);
+
+        return (width, height, xOffset, platformAnchor);
+    }
+
+    private int GetXOffset(AView platformAnchor, int windowWidth)
+    {
+        if (VirtualView.Alignment is PopoverAlignment.Start)
+            return 0;
+        
+        var offset = platformAnchor.Width - windowWidth;
+
+        if (VirtualView.Alignment is PopoverAlignment.End)
+            return offset;
+
+        return offset / 2;
+    }
+
+    private AView GetDefaultAnchor()
+    {
+        ArgumentNullException.ThrowIfNull(VirtualView.Parent);
+        return VirtualView.Parent.ToPlatform(mauiContext);
     }
 
     protected override void Dispose(bool disposing)
     {
         if (disposing)
-        {
-            VirtualView = null;
-        }
+            CleanUp();
 
         base.Dispose(disposing);
     }

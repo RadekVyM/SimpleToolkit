@@ -1,4 +1,6 @@
-﻿namespace SimpleToolkit.Core;
+﻿using System.ComponentModel;
+
+namespace SimpleToolkit.Core;
 
 /// <summary>
 /// Control displaying a tinted image.
@@ -13,4 +15,16 @@ public class Icon : Image, IIcon
         get => (Color)GetValue(TintColorProperty);
         set => SetValue(TintColorProperty, value);
     }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new Aspect Aspect { get => base.Aspect; set => base.Aspect = value; }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new bool IsAnimationPlaying { get => base.IsAnimationPlaying; set => base.IsAnimationPlaying = value; }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new bool IsLoading { get => base.IsLoading; }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new bool IsOpaque { get => base.IsOpaque; set => base.IsOpaque = value; }
 }

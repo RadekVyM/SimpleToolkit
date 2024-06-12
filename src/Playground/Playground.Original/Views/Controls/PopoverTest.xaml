@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Button
+    x:Class="Playground.Original.Views.Controls.PopoverTest"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
+    x:Name="thisButton"
+    Clicked="ButtonClicked"
+    Text="Show Popover">
+
+    <simpleCore:Popover.AttachedPopover>
+        <simpleCore:Popover x:Name="popover" Alignment="{Binding Source={x:Reference thisButton}, Path=PopoverAlignment}">
+            <Grid
+                x:Name="resizablePopoverContent"
+                Background="#f2f2f2"
+                HeightRequest="80"
+                WidthRequest="100">
+                <Grid.Resources>
+                    <Style TargetType="Rectangle">
+                        <Setter Property="Background" Value="Black" />
+                        <Setter Property="WidthRequest" Value="10" />
+                        <Setter Property="HeightRequest" Value="10" />
+                    </Style>
+                </Grid.Resources>
+                <Rectangle HorizontalOptions="Start" VerticalOptions="Start" />
+                <Rectangle HorizontalOptions="End" VerticalOptions="Start" />
+                <Rectangle HorizontalOptions="Start" VerticalOptions="End" />
+                <Rectangle HorizontalOptions="End" VerticalOptions="End" />
+
+                <Button
+                    Background="Transparent"
+                    BorderColor="Transparent"
+                    BorderWidth="0"
+                    Clicked="Button_Clicked_1"
+                    HorizontalOptions="Center"
+                    Text="Resize"
+                    TextColor="Black"
+                    VerticalOptions="Center" />
+            </Grid>
+        </simpleCore:Popover>
+    </simpleCore:Popover.AttachedPopover>
+</Button>

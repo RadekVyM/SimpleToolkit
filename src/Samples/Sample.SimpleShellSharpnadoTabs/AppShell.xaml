@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<simpleShell:SimpleShell
+    x:Class="Sample.SimpleShellSharpnadoTabs.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Sample.SimpleShellSharpnadoTabs.Views.Controls"
+    xmlns:converters="clr-namespace:Sample.SimpleShellSharpnadoTabs.Converter"
+    xmlns:local="clr-namespace:Sample.SimpleShellSharpnadoTabs"
+    xmlns:pages="clr-namespace:Sample.SimpleShellSharpnadoTabs.Views.Pages"
+    xmlns:simpleShell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
+    xmlns:tabs="http://sharpnado.com"
+    x:Name="thisShell"
+    Title="Sample.SimpleShellTopBar"
+    Background="{AppThemeBinding Default=White,
+                                 Dark=Black}"
+    Shell.FlyoutBehavior="Disabled">
+
+    <simpleShell:SimpleShell.Resources>
+        <converters:TabIconConverter x:Key="TabIconConverter" />
+    </simpleShell:SimpleShell.Resources>
+
+    <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate pages:HomePage}"
+        Icon="{FontImageSource Glyph='&#xf015;',
+                               FontFamily=FontAwesome}"
+        Route="HomePage" />
+
+    <ShellContent
+        Title="Camera"
+        ContentTemplate="{DataTemplate pages:CameraPage}"
+        Icon="{FontImageSource Glyph='&#xf030;',
+                               FontFamily=FontAwesome}"
+        Route="CameraPage" />
+
+    <ShellContent
+        Title="Images"
+        ContentTemplate="{DataTemplate pages:ImagesPage}"
+        Icon="{FontImageSource Glyph='&#xf03e;',
+                               FontFamily=FontAwesome}"
+        Route="ImagesPage" />
+
+    <ShellContent
+        Title="Account"
+        ContentTemplate="{DataTemplate pages:AccountPage}"
+        Icon="{FontImageSource Glyph='&#xf007;',
+                               FontFamily=FontAwesome}"
+        Route="AccountPage" />
+
+
+    <simpleShell:SimpleShell.RootPageContainer>
+        <Grid CompressedLayout.IsHeadless="True">
+            <controls:TopBarScaffold
+                x:Name="scaffold"
+                Title="{Binding CurrentShellContent.Title, Source={x:Reference thisShell}}"
+                IsBackButtonVisible="False">
+                <simpleShell:SimpleNavigationHost />
+            </controls:TopBarScaffold>
+
+            <tabs:TabHostView
+                x:Name="tabHostView"
+                ItemsSource="{Binding ShellSections, Source={x:Reference thisShell}}"
+                SelectedIndex="0"
+                SelectedTabIndexChanged="SelectedTabIndexChanged"
+                TabType="Fixed">
+                <tabs:TabHostView.ItemTemplate>
+                    <DataTemplate x:DataType="BaseShellItem">
+                        <tabs:MaterialUnderlinedTabItem
+                            x:Name="tabItem"
+                            FontFamily="OpenSansSemibold"
+                            HeightRequest="80"
+                            IconOptions="TopIcon"
+                            IconSize="22"
+                            IconTextSpacing="8"
+                            Label="{Binding Title}"
+                            LabelSize="12"
+                            SelectedTabColor="{AppThemeBinding Default=Black,
+                                                               Dark=White}"
+                            UnderlineHeight="0"
+                            UnselectedLabelColor="Gray">
+                            <tabs:MaterialUnderlinedTabItem.IconImageSource>
+                                <MultiBinding Converter="{StaticResource TabIconConverter}">
+                                    <Binding Path="Icon" />
+                                    <Binding Path="UnselectedLabelColor" Source="{x:Reference tabItem}" />
+                                    <Binding Path="SelectedTabColor" Source="{x:Reference tabItem}" />
+                                    <Binding Path="IsSelected" Source="{x:Reference tabItem}" />
+                                </MultiBinding>
+                            </tabs:MaterialUnderlinedTabItem.IconImageSource>
+                        </tabs:MaterialUnderlinedTabItem>
+                    </DataTemplate>
+                </tabs:TabHostView.ItemTemplate>
+            </tabs:TabHostView>
+
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroupList>
+                    <VisualStateGroup>
+                        <VisualState x:Name="Vertical">
+                            <VisualState.StateTriggers>
+                                <AdaptiveTrigger MinWindowWidth="0" />
+                            </VisualState.StateTriggers>
+                            <VisualState.Setters>
+                                <Setter Property="RowDefinitions" Value="*, auto" />
+                                <Setter Property="ColumnDefinitions" Value="*" />
+                                <Setter TargetName="scaffold" Property="Grid.Row" Value="0" />
+                                <Setter TargetName="scaffold" Property="Grid.Column" Value="0" />
+                                <Setter TargetName="tabHostView" Property="Grid.Row" Value="1" />
+                                <Setter TargetName="tabHostView" Property="Grid.Column" Value="0" />
+                                <Setter TargetName="tabHostView" Property="HorizontalOptions" Value="Fill" />
+                                <Setter TargetName="tabHostView" Property="VerticalOptions" Value="Center" />
+                                <Setter TargetName="tabHostView" Property="tabs:TabHostView.Orientation" Value="Horizontal" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Horizontal">
+                            <VisualState.StateTriggers>
+                                <AdaptiveTrigger MinWindowWidth="800" />
+                            </VisualState.StateTriggers>
+                            <VisualState.Setters>
+                                <Setter Property="RowDefinitions" Value="*" />
+                                <Setter Property="ColumnDefinitions" Value="auto, *" />
+                                <Setter TargetName="scaffold" Property="Grid.Row" Value="0" />
+                                <Setter TargetName="scaffold" Property="Grid.Column" Value="1" />
+                                <Setter TargetName="tabHostView" Property="Grid.Row" Value="0" />
+                                <Setter TargetName="tabHostView" Property="Grid.Column" Value="0" />
+                                <Setter TargetName="tabHostView" Property="HorizontalOptions" Value="Center" />
+                                <Setter TargetName="tabHostView" Property="VerticalOptions" Value="Center" />
+                                <Setter TargetName="tabHostView" Property="WidthRequest" Value="80" />
+                                <Setter TargetName="tabHostView" Property="tabs:TabHostView.Orientation" Value="Vertical" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </VisualStateManager.VisualStateGroups>
+        </Grid>
+    </simpleShell:SimpleShell.RootPageContainer>
+
+    <simpleShell:SimpleShell.Content>
+        <ContentView x:Name="contentView" CompressedLayout.IsHeadless="True">
+            <simpleShell:SimpleNavigationHost />
+        </ContentView>
+    </simpleShell:SimpleShell.Content>
+
+</simpleShell:SimpleShell>

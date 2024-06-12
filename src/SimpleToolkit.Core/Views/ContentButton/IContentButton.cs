@@ -5,7 +5,7 @@ namespace SimpleToolkit.Core;
 /// <summary>
 /// Button that can hold whatever content you want.
 /// </summary>
-public interface IContentButton : IContentView
+public interface IContentButton : IBorderView
 {
     /// <summary>
     /// Gets or sets the command to invoke when the button is clicked. This is a bindable property.

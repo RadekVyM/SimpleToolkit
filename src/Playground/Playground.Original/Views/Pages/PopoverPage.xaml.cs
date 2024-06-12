@@ -1,19 +1,23 @@
 ﻿using SimpleToolkit.Core;
 
-namespace Playground.Original.Views.Pages
-{
-    public partial class PopoverPage : ContentPage
-    {
-        public PopoverPage()
-        {
-            InitializeComponent();
-        }
+namespace Playground.Original.Views.Pages;
 
-        private void ButtonClicked(object sender, EventArgs e)
+public partial class PopoverPage : ContentPage
+{
+    public PopoverPage()
+    {
+        InitializeComponent();
+
+        popoverAlignmentPicker.ItemsSource = new List<PopoverAlignment>()
         {
-            var button = sender as View;
-            
-            button.ShowAttachedPopover();
-        }
+            PopoverAlignment.Center, PopoverAlignment.Start, PopoverAlignment.End
+        };
+        popoverAlignmentPicker.SelectedItem = PopoverAlignment.Center;
+    }
+
+    private void ButtonClicked(object sender, EventArgs e)
+    {
+        var button = sender as View;
+        button.ShowAttachedPopover();
     }
 }

@@ -3,16 +3,13 @@
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using Microsoft.UI.Xaml.Controls;
-using WBitmapIcon = Microsoft.UI.Xaml.Controls.BitmapIcon;
 using WBorder = Microsoft.UI.Xaml.Controls.Border;
 
 namespace SimpleToolkit.Core.Handlers;
 
 public class IconHandler : ViewHandler<Icon, WBorder>, IElementHandler
 {
-    private WBitmapIcon bitmapIcon;
-    private FontIcon fontIcon;
-    private double fontSize;
+    private IconSourceElement iconElement;
 
     public static IPropertyMapper<Icon, IconHandler> Mapper = new PropertyMapper<Icon, IconHandler>(ViewHandler.ViewMapper)
     {
@@ -23,10 +20,6 @@ public class IconHandler : ViewHandler<Icon, WBorder>, IElementHandler
     public static CommandMapper<Icon, IconHandler> CommandMapper = new(ViewHandler.ViewCommandMapper)
     {
     };
-
-    public override bool NeedsContainer =>
-        VirtualView?.Background != null ||
-        base.NeedsContainer;
 
 
     public IconHandler() : base(Mapper)
@@ -40,85 +33,78 @@ public class IconHandler : ViewHandler<Icon, WBorder>, IElementHandler
 
     protected override WBorder CreatePlatformView()
     {
-        fontIcon = new FontIcon
+        iconElement = new IconSourceElement
         {
-            HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center,
-            VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center
+            HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch,
+            VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Stretch,
         };
-        bitmapIcon = new WBitmapIcon
-        {
-            HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center,
-            VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center,
-        };
-
-        var container = new WBorder();
-
-        return container;
+        return new WBorder { Child = iconElement };
     }
 
     protected override void ConnectHandler(WBorder platformView)
     {
-        fontIcon.SizeChanged += FontIconSizeChanged;
+        iconElement.SizeChanged += FontIconSizeChanged;
         base.ConnectHandler(platformView);
     }
 
     protected override void DisconnectHandler(WBorder platformView)
     {
-        fontIcon.SizeChanged -= FontIconSizeChanged;
+        iconElement.SizeChanged -= FontIconSizeChanged;
         base.DisconnectHandler(platformView);
     }
 
     private void FontIconSizeChanged(object sender, Microsoft.UI.Xaml.SizeChangedEventArgs e)
     {
-        // Fit glyph to the View
-        if (VirtualView.Height is not -1 && VirtualView.Width is not -1)
+        var iconElement = sender as IconSourceElement;
+
+        if (iconElement.ActualHeight < 0 || iconElement.ActualWidth < 0)
         {
-            fontIcon.FontSize = Math.Min(fontSize, Math.Min(VirtualView.Height, VirtualView.Width));
+            return;
+        }
+
+        // Fit glyph to the View
+        if (VirtualView.Source?.ToIconSource(this.MauiContext) is FontIconSource fontIconSource)
+        {
+            const double fontSizeScale = 0.86;
+
+            UpdateIconSourceDefaults(this, this.VirtualView, fontIconSource);
+            fontIconSource.FontSize = Math.Min(iconElement.ActualHeight, iconElement.ActualWidth) * fontSizeScale;
+            iconElement.IconSource = fontIconSource;
+        }
+    }
+
+    private static void UpdateIconSourceDefaults(IconHandler handler, Icon icon, IconSource iconSource)
+    {
+        if (iconSource is BitmapIconSource bitmapIconSource)
+        {
+            bitmapIconSource.ShowAsMonochrome = true;
+        }
+
+        if (iconSource is FontIconSource fontIconSource)
+        {
+            if (handler.iconElement.IconSource is FontIconSource oldFontIconSource)
+            {
+                fontIconSource.FontSize = oldFontIconSource.FontSize;
+            }
+
+            fontIconSource.IsTextScaleFactorEnabled = false;
+            fontIconSource.Foreground = icon.TintColor?.ToPlatform();
         }
     }
 
     public static void MapSource(IconHandler handler, Icon icon)
     {
-        MapSourceAsync(handler, icon).FireAndForget(handler);
-    }
+        var iconSource = icon.Source?.ToIconSource(handler.MauiContext);
+        UpdateIconSourceDefaults(handler, icon, iconSource);
 
-    public static Task MapSourceAsync(IconHandler handler, Icon icon)
-    {
-        var iconSource = icon.Source.ToIconSource(handler.MauiContext);
-
-        if (iconSource is BitmapIconSource bitmapIconSource)
-        {
-            handler.bitmapIcon.UriSource = bitmapIconSource.UriSource;
-            handler.PlatformView.Child = handler.bitmapIcon;
-        }
-        else if (iconSource is FontIconSource fontIconSource)
-        {
-            handler.fontIcon.FontFamily = fontIconSource.FontFamily;
-            handler.fontSize = fontIconSource.FontSize;
-            if (icon.Height is not -1 && icon.Width is not -1)
-                handler.fontIcon.FontSize = Math.Min(fontIconSource.FontSize, Math.Min(icon.Height, icon.Width));
-            else
-                handler.fontIcon.FontSize = fontIconSource.FontSize;
-            handler.fontIcon.FontStyle = fontIconSource.FontStyle;
-            handler.fontIcon.FontWeight = fontIconSource.FontWeight;
-            handler.fontIcon.Glyph = fontIconSource.Glyph;
-            handler.fontIcon.IsTextScaleFactorEnabled = fontIconSource.IsTextScaleFactorEnabled;
-            handler.fontIcon.MirroredWhenRightToLeft = fontIconSource.MirroredWhenRightToLeft;
-            handler.PlatformView.Child = handler.fontIcon;
-        }
-        
-        return Task.CompletedTask;
+        handler.iconElement.IconSource = iconSource;
     }
 
     public static void MapTintColor(IconHandler handler, Icon icon)
     {
-        if (icon.TintColor is not null)
-        {
-            var color = icon.TintColor.ToPlatform();
+        UpdateIconSourceDefaults(handler, icon, handler.iconElement.IconSource);
 
-            handler.bitmapIcon.Foreground = color;
-            handler.fontIcon.Foreground = color;
-        }
+        handler.iconElement.Foreground = icon.TintColor?.ToPlatform();
     }
 }
 

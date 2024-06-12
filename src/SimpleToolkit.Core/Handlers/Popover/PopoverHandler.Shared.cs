@@ -5,6 +5,9 @@ public partial class PopoverHandler
     public static IPropertyMapper<IPopover, PopoverHandler> Mapper = new PropertyMapper<IPopover, PopoverHandler>(ElementMapper)
     {
         [nameof(IPopover.Content)] = MapContent,
+#if IOS || MACCATALYST
+        [nameof(IPopover.PermittedArrowDirections)] = MapPermittedArrowDirections,
+#endif
     };
 
     public static CommandMapper<IPopover, PopoverHandler> CommandMapper = new(ElementCommandMapper)

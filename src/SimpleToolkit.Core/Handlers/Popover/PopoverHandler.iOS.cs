@@ -31,12 +31,17 @@ public partial class PopoverHandler : ElementHandler<IPopover, PopoverViewContro
         handler.PlatformView.UpdateContent();
     }
 
+    public static void MapPermittedArrowDirections(PopoverHandler handler, IPopover popover)
+    {
+        handler.PlatformView.PermittedArrowDirections = popover.PermittedArrowDirections.ToUIPopoverArrowDirection();
+    }
+
     public static void MapShow(PopoverHandler handler, IPopover popover, object parentView)
     {
         if (parentView is not IElement anchor)
             return;
 
-        handler.PlatformView?.InitializeView(popover, anchor);
+        handler.PlatformView?.Show(popover, anchor);
     }
 
     public static async void MapHide(PopoverHandler handler, IPopover popover, object arg3)
