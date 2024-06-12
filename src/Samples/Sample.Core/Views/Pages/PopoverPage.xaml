@@ -17,9 +17,7 @@
                 Text="Show popover"
                 Background="Orange">
                 <simpleCore:Popover.AttachedPopover>
-                    <simpleCore:Popover
-                        UseDefaultStyling="False"
-                        PermittedArrowDirections="Up">
+                    <simpleCore:Popover>
                         <Border
                             Background="DarkOrange">
                             <Border.StrokeShape>

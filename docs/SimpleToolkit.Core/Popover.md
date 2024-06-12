@@ -98,7 +98,7 @@ Output:
                 <img src="../images/macos_popover.webp" width="480"/>
             </td>
             <td>
-                <img src="../images/windows_popover.gif" width="480"/>
+                <img src="../images/windows_popover.webp" width="480"/>
             </td>
         </tr>
     </table>
@@ -160,7 +160,7 @@ Using the `UseDefaultStyling` boolean property, we can define whether the defaul
                 <img src="../images/macos_popover.webp" width="480"/>
             </td>
             <td>
-                <img src="../images/windows_popover.gif" width="480"/>
+                <img src="../images/windows_popover_default.webp" width="480"/>
             </td>
         </tr>
     </table>
