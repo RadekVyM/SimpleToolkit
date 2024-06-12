@@ -8,6 +8,7 @@
     xmlns:local="clr-namespace:Playground.Original"
     xmlns:pages="clr-namespace:Playground.Original.Views.Pages"
     xmlns:shell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
+    xmlns:behaviors="clr-namespace:Playground.Original.Behaviors"
     x:Name="thisShell"
     Background="White">
     <shell:SimpleShell.Resources>
@@ -129,6 +130,10 @@
                 Padding="12"
                 ColumnDefinitions="auto, *, auto, auto, auto"
                 ColumnSpacing="10">
+
+                <Grid.Behaviors>
+                    <behaviors:TestBehavior x:Name="testBehavior"/>
+                </Grid.Behaviors>
 
                 <core:ContentButton
                     x:Name="backButton"

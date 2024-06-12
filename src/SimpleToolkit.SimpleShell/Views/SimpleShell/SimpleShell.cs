@@ -25,7 +25,7 @@ public partial class SimpleShell : Shell, ISimpleShell
     private bool defaultShellPropertyValuesSet;
 
     public static readonly BindableProperty ContentProperty =
-        BindableProperty.Create(nameof(Content), typeof(IView), typeof(SimpleShell), defaultValue: new SimpleNavigationHost(), propertyChanged: OnContentChanged);
+        BindableProperty.Create(nameof(Content), typeof(IView), typeof(SimpleShell), defaultValueCreator: static (bindable) => new SimpleNavigationHost(), propertyChanged: OnContentChanged);
     public static readonly BindableProperty RootPageContainerProperty =
         BindableProperty.Create(nameof(RootPageContainer), typeof(IView), typeof(SimpleShell), propertyChanged: OnRootPageContainerChanged);
     public static readonly BindableProperty CurrentPageProperty =

@@ -1,6 +1,5 @@
 ﻿#if ANDROID || IOS || MACCATALYST || WINDOWS
 
-using Microsoft.Maui;
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using SimpleToolkit.SimpleShell.Extensions;

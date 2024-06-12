@@ -1,21 +1,25 @@
-﻿namespace Playground.Original
+﻿namespace Playground.Original;
+
+internal enum AppShellType
 {
-    internal enum AppShellType
+    Normal, Playground
+}
+
+public partial class App : Application
+{
+    public App()
     {
-        Normal, Playground
+        InitializeComponent();
+
+        RefreshShell();
     }
 
-    public partial class App : Application
+    public void RefreshShell()
     {
-        public App()
+        MainPage = MauiProgram.UsedAppShell switch
         {
-            InitializeComponent();
-
-            MainPage = MauiProgram.UsedAppShell switch
-            {
-                AppShellType.Normal => new NormalAppShell(),
-                _ => new PlaygroundAppShell()
-            };
-        }
+            AppShellType.Normal => new NormalAppShell(),
+            _ => new PlaygroundAppShell()
+        };
     }
 }
