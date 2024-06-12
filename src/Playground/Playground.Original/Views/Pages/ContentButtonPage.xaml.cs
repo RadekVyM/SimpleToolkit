@@ -36,9 +36,19 @@ namespace Playground.Original.Views.Pages
             (contentButton.Command as Command).ChangeCanExecute();
         }
 
+        private void RefreshShellClicked(object sender, EventArgs e)
+        {
+            (App.Current as App)?.RefreshShell();
+        }
+
         private void StarButtonClicked(object sender, EventArgs e)
         {
             Shell.Current.GoToAsync(nameof(ImagePage));
+        }
+
+        private void SignInClicked(object sender, EventArgs e)
+        {
+            testBehavior.Test();
         }
 
         private void VariableButtonClicked(object sender, EventArgs e)

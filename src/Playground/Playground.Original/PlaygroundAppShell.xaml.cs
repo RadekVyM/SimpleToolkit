@@ -169,6 +169,7 @@ namespace Playground.Original
 
         private void ShowPopoverButtonClicked(object sender, EventArgs e)
         {
+            testBehavior.Test();
             var button = sender as View;
             button.ShowAttachedPopover();
         }

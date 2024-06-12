@@ -1,5 +1,4 @@
 ﻿using SimpleToolkit.Core;
-using CommunityToolkit.Maui;
 using SimpleToolkit.SimpleShell;
 #if IOS || MACCATALYST
 using CommunityToolkit.Maui.Views;
@@ -16,7 +15,6 @@ namespace Playground.Original
             var builder = MauiApp.CreateBuilder();
 
             builder.UseMauiApp<App>()
-                .UseMauiCommunityToolkitMediaElement()
                 .UseSimpleToolkit()
                 .ConfigureFonts(fonts =>
                 {
@@ -25,14 +23,6 @@ namespace Playground.Original
                     fonts.AddFont("Font-Awesome-Solid.otf", "FontAwesomeSolid");
                 });
 
-#if IOS || MACCATALYST
-
-            builder.ConfigureMauiHandlers(handlers =>
-            {
-                handlers.AddHandler<MediaElement, CustomMediaElementHandler>();
-            });
-
-#endif
             if (UsedAppShell == AppShellType.Playground)
                 builder.DisplayContentBehindBars();
 

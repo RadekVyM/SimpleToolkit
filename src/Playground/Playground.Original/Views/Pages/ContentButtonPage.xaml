@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:Playground.Original.Views.Pages"
     xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
+    xmlns:behaviors="clr-namespace:Playground.Original.Behaviors"
     Title="Content Buttons">
 
     <ContentPage.Resources>
@@ -22,7 +23,19 @@
             Spacing="20"
             VerticalOptions="Center">
 
+            <VerticalStackLayout.Behaviors>
+                <behaviors:TestBehavior x:Name="testBehavior"/>
+            </VerticalStackLayout.Behaviors>
+
+            <Button
+                Background="Black"
+                Clicked="RefreshShellClicked"
+                CornerRadius="20"
+                HorizontalOptions="Center"
+                Text="🐚 Recreate Shell" />
+
             <simpleCore:ContentButton
+                Clicked="SignInClicked"
                 HorizontalOptions="Center"
                 Stroke="Transparent"
                 StrokeThickness="0">
