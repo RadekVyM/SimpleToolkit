@@ -1,8 +1,5 @@
 ﻿using SimpleToolkit.Core;
 using SimpleToolkit.SimpleShell;
-#if IOS || MACCATALYST
-using CommunityToolkit.Maui.Views;
-#endif
 
 namespace Playground.Original
 {
