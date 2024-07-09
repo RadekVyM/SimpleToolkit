@@ -12,10 +12,17 @@ public partial class PopoverTest : Button
         });
 
     public static readonly BindableProperty UseDefaultStylingProperty =
-        BindableProperty.Create(nameof(UseDefaultStyling), typeof(bool), typeof(PopoverTest), propertyChanged: static (sender, oldValue, newValue) =>
+        BindableProperty.Create(nameof(UseDefaultStyling), typeof(bool), typeof(PopoverTest), defaultValue: true, propertyChanged: static (sender, oldValue, newValue) =>
         {
             var button = sender as PopoverTest;
             button.popover.UseDefaultStyling = (bool)newValue;
+        });
+
+    public static readonly BindableProperty IsAnimatedProperty =
+        BindableProperty.Create(nameof(IsAnimated), typeof(bool), typeof(PopoverTest), defaultValue: true, propertyChanged: static (sender, oldValue, newValue) =>
+        {
+            var button = sender as PopoverTest;
+            button.popover.IsAnimated = (bool)newValue;
         });
 
     public virtual PopoverAlignment PopoverAlignment
@@ -29,6 +36,13 @@ public partial class PopoverTest : Button
         get => (bool)GetValue(UseDefaultStylingProperty);
         set => SetValue(UseDefaultStylingProperty, value);
     }
+
+    public virtual bool IsAnimated
+    {
+        get => (bool)GetValue(IsAnimatedProperty);
+        set => SetValue(IsAnimatedProperty, value);
+    }
+
 
     public PopoverTest()
 	{

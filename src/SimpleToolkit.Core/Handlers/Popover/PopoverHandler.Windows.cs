@@ -28,6 +28,10 @@ public partial class PopoverHandler : ElementHandler<IPopover, SimpleFlyout>
         handler.PlatformView.UpdateContent();
     }
 
+    public static void MapIsAnimated(PopoverHandler handler, IPopover popover)
+    {
+    }
+
     public static void MapShow(PopoverHandler handler, IPopover popover, object parentView)
     {
         if (parentView is not IElement anchor)

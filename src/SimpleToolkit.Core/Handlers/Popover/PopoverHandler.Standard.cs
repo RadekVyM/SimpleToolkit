@@ -10,6 +10,10 @@ public partial class PopoverHandler : Microsoft.Maui.Handlers.ElementHandler<IPo
     {
     }
 
+    public static void MapIsAnimated(PopoverHandler handler, IPopover popover)
+    {
+    }
+
     public static void MapHide(PopoverHandler handler, IPopover popover, object arg3)
     {
     }

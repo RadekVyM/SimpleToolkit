@@ -16,18 +16,22 @@
             <controls:PopoverTest
                 HorizontalOptions="Start"
                 PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
-                UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}" />
+                UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}"
+                IsAnimated="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}" />
             <controls:PopoverTest
                 HorizontalOptions="Center"
                 PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
-                UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}" />
+                UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}"
+                IsAnimated="{Binding Source={x:Reference isAnimatedSwitch}, Path=IsToggled}" />
             <controls:PopoverTest
                 HorizontalOptions="End"
                 PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
-                UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}" />
+                UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}"
+                IsAnimated="{Binding Source={x:Reference isAnimatedSwitch}, Path=IsToggled}" />
 
             <Picker x:Name="popoverAlignmentPicker" />
-            <Switch x:Name="useDefaultStylingSwitch" />
+            <Switch x:Name="useDefaultStylingSwitch" IsToggled="True" />
+            <Switch x:Name="isAnimatedSwitch" IsToggled="True" />
 
             <Button
                 Background="Orange"

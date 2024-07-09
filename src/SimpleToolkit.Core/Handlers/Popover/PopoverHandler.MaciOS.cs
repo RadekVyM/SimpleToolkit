@@ -29,6 +29,10 @@ public partial class PopoverHandler : ElementHandler<IPopover, PopoverViewContro
         handler.PlatformView.UpdateContent();
     }
 
+    public static void MapIsAnimated(PopoverHandler handler, IPopover popover)
+    {
+    }
+
     public static void MapPermittedArrowDirections(PopoverHandler handler, IPopover popover)
     {
         handler.PlatformView.PermittedArrowDirections = popover.PermittedArrowDirections.ToUIPopoverArrowDirection();
