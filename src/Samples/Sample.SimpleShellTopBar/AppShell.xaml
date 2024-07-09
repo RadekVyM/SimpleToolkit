@@ -7,6 +7,7 @@
     xmlns:simpleShell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
     xmlns:pages="clr-namespace:Sample.SimpleShellTopBar.Views.Pages"
     xmlns:controls="clr-namespace:Sample.SimpleShellTopBar.Views.Controls"
+    xmlns:converters="clr-namespace:Sample.SimpleShellTopBar.Converters"
     Shell.FlyoutBehavior="Disabled"
     Title="Sample.SimpleShellTopBar"
     
@@ -14,15 +15,20 @@
     
     Background="{AppThemeBinding Default=White, Dark=Black}">
 
-    <ShellContent
+    <simpleShell:SimpleShell.Resources>
+        <converters:NullToFalseConverter x:Key="NullToFalseConverter" />
+    </simpleShell:SimpleShell.Resources>
+
+    <controls:BadgeShellContent
         Title="First"
         ContentTemplate="{DataTemplate pages:FirstRootPage}"
         Route="FirstRootPage" />
 
-    <ShellContent
+    <controls:BadgeShellContent
         Title="Second"
         ContentTemplate="{DataTemplate pages:SecondRootPage}"
-        Route="SecondRootPage" />
+        Route="SecondRootPage"
+        BadgeText="2" />
 
             
     <simpleShell:SimpleShell.RootPageContainer>
@@ -42,10 +48,28 @@
                 BindableLayout.ItemsSource="{Binding ShellContents, Source={x:Reference thisShell}}">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate
-                        x:DataType="BaseShellItem">
-                        <Button
-                            Clicked="ShellItemButtonClicked"
-                            Text="{Binding Title}"/>
+                        x:DataType="controls:BadgeShellContent">
+                        <Grid>
+                            <Button
+                                Clicked="ShellItemButtonClicked"
+                                Text="{Binding Title}"/>
+                            <Border
+                                IsVisible="{Binding BadgeText, Converter={StaticResource NullToFalseConverter}}"
+                                InputTransparent="True"
+                                HorizontalOptions="End"
+                                VerticalOptions="Start"
+                                TranslationX="8"
+                                TranslationY="-8"
+                                Background="{AppThemeBinding Default=Black, Dark=White}"
+                                StrokeThickness="0"
+                                StrokeShape="{RoundRectangle CornerRadius=12}"
+                                Padding="8, 2">
+                                <Label
+                                    Text="{Binding BadgeText}"
+                                    TextColor="{AppThemeBinding Default=White, Dark=Black}"
+                                    FontSize="13" />
+                            </Border>
+                        </Grid>
                     </DataTemplate>
                 </BindableLayout.ItemTemplate>
             </HorizontalStackLayout>

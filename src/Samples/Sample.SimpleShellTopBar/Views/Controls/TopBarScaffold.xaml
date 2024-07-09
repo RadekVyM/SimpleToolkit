@@ -2,6 +2,7 @@
 <ContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
     x:Class="Sample.SimpleShellTopBar.Views.Controls.TopBarScaffold"
     
     x:Name="scaffold">
@@ -15,12 +16,18 @@
                 ColumnDefinitions="50, *, 50"
                 Padding="0, 5"
                 MinimumHeightRequest="60">
-                <Button
+                <simpleCore:ContentButton
                     IsVisible="{Binding Source={x:Reference scaffold}, Path=IsBackButtonVisible}"
-                    Text="◀"
                     VerticalOptions="Center" HorizontalOptions="Center"
                     HeightRequest="30" WidthRequest="30"
-                    Clicked="BackButtonClicked"/>
+                    StrokeThickness="0"
+                    Clicked="BackButtonClicked">
+                    <simpleCore:Icon
+                        Source="arrow_left.png"
+                        TintColor="{AppThemeBinding Default=Black, Dark=White}"
+                        VerticalOptions="Center" HorizontalOptions="Center"
+                        HeightRequest="20" WidthRequest="20" />
+                </simpleCore:ContentButton>
 
                 <ContentView
                     x:Name="titleContent"
