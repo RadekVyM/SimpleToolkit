@@ -1,6 +1,4 @@
-﻿#if IOS || MACCATALYST
-
-using CoreGraphics;
+﻿using CoreGraphics;
 using Foundation;
 using UIKit;
 using PlatformContentView = Microsoft.Maui.Platform.ContentView;
@@ -58,5 +56,3 @@ public class ButtonContentView : PlatformContentView
         return new Point(location.X, location.Y);
     }
 }
-
-#endif

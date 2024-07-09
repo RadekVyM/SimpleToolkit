@@ -1,6 +1,4 @@
-﻿#if ANDROID
-
-using Android.Widget;
+﻿using Android.Widget;
 using AView = Android.Views.View;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
@@ -17,5 +15,3 @@ public partial class SimpleShellSectionHandler
         };
     }
 }
-
-#endif

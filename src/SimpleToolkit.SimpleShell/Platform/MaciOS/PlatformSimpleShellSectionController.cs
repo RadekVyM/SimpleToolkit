@@ -1,6 +1,4 @@
-﻿#if IOS || MACCATALYST
-
-using Foundation;
+﻿using Foundation;
 using ObjCRuntime;
 using UIKit;
 
@@ -234,5 +232,3 @@ public class PlatformSimpleShellSectionController : UINavigationController
         }
     }
 }
-
-#endif

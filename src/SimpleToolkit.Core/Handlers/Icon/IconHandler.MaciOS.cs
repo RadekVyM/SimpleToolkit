@@ -1,6 +1,4 @@
-﻿#if IOS || MACCATALYST
-
-using Microsoft.Maui.Handlers;
+﻿using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using UIKit;
 
@@ -97,5 +95,3 @@ public class IconHandler : ViewHandler<Icon, UIImageView>, IImageHandler
         }
     }
 }
-
-#endif

@@ -1,6 +1,4 @@
-﻿#if ANDROID
-
-using AView = Android.Views.View;
+﻿using AView = Android.Views.View;
 using Android.Views;
 
 namespace SimpleToolkit.SimpleShell.Extensions;
@@ -31,5 +29,3 @@ internal static class PlatformViewExtensions
         return false;
     }
 }
-
-#endif

@@ -1,7 +1,4 @@
-﻿#if ANDROID
-
-using Android.Widget;
-using Microsoft.Maui.Controls.Platform.Compatibility;
+﻿using Android.Widget;
 using AView = Android.Views.View;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
@@ -20,5 +17,3 @@ public partial class PlatformSimpleShellSectionHandler
         return root;
     }
 }
-
-#endif

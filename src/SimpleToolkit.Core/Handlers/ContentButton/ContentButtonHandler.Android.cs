@@ -1,6 +1,4 @@
-﻿#if ANDROID
-
-using Android.Views;
+﻿using Android.Views;
 using Android.Views.Accessibility;
 using static Android.Views.View;
 using PlatformView = Microsoft.Maui.Platform.ContentViewGroup;
@@ -115,5 +113,3 @@ public partial class ContentButtonHandler
         }
     }
 }
-
-#endif

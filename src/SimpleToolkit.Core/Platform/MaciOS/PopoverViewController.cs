@@ -1,9 +1,6 @@
-﻿#if IOS || MACCATALYST
-
-using CoreGraphics;
+﻿using CoreGraphics;
 using Foundation;
 using Microsoft.Maui.Platform;
-using SceneKit;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using UIKit;
@@ -268,5 +265,3 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         static new UIEdgeInsets GetContentViewInsets() => UIEdgeInsets.Zero;
     }
 }
-
-#endif

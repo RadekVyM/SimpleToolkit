@@ -1,10 +1,7 @@
-﻿#if ANDROID
-
-using Android.Graphics;
+﻿using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Widget;
 using AndroidX.AppCompat.Widget;
-using Microsoft.Maui.Graphics.Platform;
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using Color = Microsoft.Maui.Graphics.Color;
@@ -108,5 +105,3 @@ public partial class IconHandler : ViewHandler<Icon, ImageView>
         }
     }
 }
-
-#endif

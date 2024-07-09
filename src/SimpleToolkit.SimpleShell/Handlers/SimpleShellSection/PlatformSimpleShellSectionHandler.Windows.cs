@@ -1,6 +1,4 @@
-﻿#if WINDOWS
-
-using WGrid = Microsoft.UI.Xaml.Controls.Grid;
+﻿using WGrid = Microsoft.UI.Xaml.Controls.Grid;
 using WFrame = Microsoft.UI.Xaml.Controls.Frame;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
@@ -19,5 +17,3 @@ public partial class PlatformSimpleShellSectionHandler
         return root;
     }
 }
-
-#endif

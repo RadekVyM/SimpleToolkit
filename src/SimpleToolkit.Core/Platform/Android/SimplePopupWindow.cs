@@ -1,6 +1,4 @@
-﻿#if ANDROID
-
-using Android.Content;
+﻿using Android.Content;
 using Android.Graphics.Drawables;
 using Android.Views;
 using Android.Widget;
@@ -143,5 +141,3 @@ public class SimplePopupWindow : PopupWindow
         base.Dispose(disposing);
     }
 }
-
-#endif

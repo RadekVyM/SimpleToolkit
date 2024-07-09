@@ -1,6 +1,4 @@
-﻿#if IOS || MACCATALYST
-
-using UIKit;
+﻿using UIKit;
 
 namespace SimpleToolkit.SimpleShell.Platform;
 
@@ -13,5 +11,3 @@ public class SimpleContentView : UIView
         base.AddSubview(view);
     }
 }
-
-#endif

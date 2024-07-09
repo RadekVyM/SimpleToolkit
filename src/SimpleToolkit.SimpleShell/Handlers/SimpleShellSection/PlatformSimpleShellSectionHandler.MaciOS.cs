@@ -1,6 +1,4 @@
-﻿#if IOS || MACCATALYST
-
-using SimpleToolkit.SimpleShell.Extensions;
+﻿using SimpleToolkit.SimpleShell.Extensions;
 using SimpleToolkit.SimpleShell.Platform;
 using UIKit;
 
@@ -30,5 +28,3 @@ public partial class PlatformSimpleShellSectionHandler
         return navigationController.View;
     }
 }
-
-#endif

@@ -1,6 +1,4 @@
-﻿#if WINDOWS
-
-using Microsoft.UI.Xaml;
+﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media.Animation;
 using Microsoft.UI.Xaml.Navigation;
 using ContentPresenter = Microsoft.UI.Xaml.Controls.ContentPresenter;
@@ -180,5 +178,3 @@ public partial class PlatformSimpleStackNavigationManager
 
     private record NavigationParameter(FrameworkElement PlatformView, IList<IView> pagesToDisconnect);
 }
-
-#endif
