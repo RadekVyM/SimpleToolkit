@@ -31,6 +31,7 @@ public partial class PopoverHandler : ElementHandler<IPopover, PopoverViewContro
 
     public static void MapIsAnimated(PopoverHandler handler, IPopover popover)
     {
+        handler.PlatformView.IsAnimated = popover.IsAnimated;
     }
 
     public static void MapPermittedArrowDirections(PopoverHandler handler, IPopover popover)
@@ -38,19 +39,23 @@ public partial class PopoverHandler : ElementHandler<IPopover, PopoverViewContro
         handler.PlatformView.PermittedArrowDirections = popover.PermittedArrowDirections.ToUIPopoverArrowDirection();
     }
 
-    public static void MapShow(PopoverHandler handler, IPopover popover, object parentView)
+    public static async void MapShow(PopoverHandler handler, IPopover popover, object parentView)
     {
         if (parentView is not IElement anchor)
             return;
 
-        handler.PlatformView?.Show(popover, anchor);
+        try { await handler.PlatformView?.Show(popover, anchor); }
+        catch { throw; }
     }
 
     public static async void MapHide(PopoverHandler handler, IPopover popover, object arg3)
     {
         var vc = handler.PlatformView.ViewController;
         if (vc is not null)
-            await vc.DismissViewControllerAsync(true);
+        {
+            try { await vc.DismissViewControllerAsync(true); }
+            catch { throw; }
+        }
         //handler.PlatformView.CleanUp();
     }
 }

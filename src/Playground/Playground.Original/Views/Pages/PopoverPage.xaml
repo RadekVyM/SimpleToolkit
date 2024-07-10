@@ -17,7 +17,7 @@
                 HorizontalOptions="Start"
                 PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
                 UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}"
-                IsAnimated="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}" />
+                IsAnimated="{Binding Source={x:Reference isAnimatedSwitch}, Path=IsToggled}" />
             <controls:PopoverTest
                 HorizontalOptions="Center"
                 PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
