@@ -1,6 +1,4 @@
-﻿#if WINDOWS
-
-using Microsoft.Maui.Handlers;
+﻿using Microsoft.Maui.Handlers;
 using WFrameworkElement = Microsoft.UI.Xaml.FrameworkElement;
 using WBorder = Microsoft.UI.Xaml.Controls.Border;
 
@@ -19,5 +17,3 @@ public partial class SimpleShellHandler : ViewHandler<ISimpleShell, WBorder>
         return (navigationHost?.Handler as SimpleNavigationHostHandler)?.PlatformView?.Children.FirstOrDefault() as WFrameworkElement;
     }
 }
-
-#endif

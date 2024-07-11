@@ -1,6 +1,4 @@
-﻿#if WINDOWS
-
-using Microsoft.Maui.Handlers;
+﻿using Microsoft.Maui.Handlers;
 using SimpleToolkit.Core.Platform;
 
 // Partially based on the .NET MAUI Community Toolkit Popup control - https://github.com/CommunityToolkit/Maui
@@ -30,6 +28,11 @@ public partial class PopoverHandler : ElementHandler<IPopover, SimpleFlyout>
         handler.PlatformView.UpdateContent();
     }
 
+    public static void MapIsAnimated(PopoverHandler handler, IPopover popover)
+    {
+        handler.PlatformView.AreOpenCloseAnimationsEnabled = popover.IsAnimated;
+    }
+
     public static void MapShow(PopoverHandler handler, IPopover popover, object parentView)
     {
         if (parentView is not IElement anchor)
@@ -43,5 +46,3 @@ public partial class PopoverHandler : ElementHandler<IPopover, SimpleFlyout>
         handler.PlatformView.Hide();
     }
 }
-
-#endif

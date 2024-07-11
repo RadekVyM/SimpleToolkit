@@ -1,6 +1,4 @@
-﻿#if WINDOWS
-
-using Microsoft.Maui.Handlers;
+﻿using Microsoft.Maui.Handlers;
 using WGrid = Microsoft.UI.Xaml.Controls.Grid;
 using WFrameworkElement = Microsoft.UI.Xaml.FrameworkElement;
 
@@ -40,5 +38,3 @@ public partial class SimpleNavigationHostHandler : ViewHandler<ISimpleNavigation
             PlatformView.Children.Add(element);
     }
 }
-
-#endif

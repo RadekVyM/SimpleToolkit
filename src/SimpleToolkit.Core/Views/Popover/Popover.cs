@@ -11,6 +11,9 @@ public class Popover : Element, IPopover
     public static readonly BindableProperty ContentProperty =
         BindableProperty.Create(nameof(Content), typeof(View), typeof(Popover), propertyChanged: OnContentChanged);
 
+    public static readonly BindableProperty IsAnimatedProperty =
+        BindableProperty.Create(nameof(IsAnimated), typeof(bool), typeof(Popover), defaultValue: true);
+
     public static readonly BindableProperty AlignmentProperty =
         BindableProperty.Create(nameof(Alignment), typeof(PopoverAlignment), typeof(Popover), defaultValue: PopoverAlignment.Center);
 
@@ -27,6 +30,12 @@ public class Popover : Element, IPopover
     {
         get => (View)GetValue(ContentProperty);
         set => SetValue(ContentProperty, value);
+    }
+
+    public virtual bool IsAnimated
+    {
+        get => (bool)GetValue(IsAnimatedProperty);
+        set => SetValue(IsAnimatedProperty, value);
     }
 
     public virtual PopoverAlignment Alignment

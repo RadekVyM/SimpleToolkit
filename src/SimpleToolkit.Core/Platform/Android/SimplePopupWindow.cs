@@ -1,6 +1,4 @@
-﻿#if ANDROID
-
-using Android.Content;
+﻿using Android.Content;
 using Android.Graphics.Drawables;
 using Android.Views;
 using Android.Widget;
@@ -14,9 +12,18 @@ public class SimplePopupWindow : PopupWindow
     private readonly IMauiContext mauiContext;
     private IElement anchor;
     private AView platformContent;
+    private bool isAnimated;
 
     public IPopover VirtualView { get; private set; }
-
+    public bool IsAnimated
+    {
+        get => isAnimated;
+        set
+        {
+            isAnimated = value;
+            AnimationStyle = value ? -1 : 0;
+        }
+    }
 
     public SimplePopupWindow(Context context, IMauiContext mauiContext) : base(context)
     {
@@ -143,5 +150,3 @@ public class SimplePopupWindow : PopupWindow
         base.Dispose(disposing);
     }
 }
-
-#endif

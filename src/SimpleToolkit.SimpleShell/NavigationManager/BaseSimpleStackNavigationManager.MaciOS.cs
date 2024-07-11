@@ -1,6 +1,4 @@
-﻿#if IOS || MACCATALYST
-
-using Microsoft.Maui.Platform;
+﻿using Microsoft.Maui.Platform;
 using PlatformView = UIKit.UIView;
 using PlatformContainer = UIKit.UIView;
 using NavFrame = UIKit.UIView;
@@ -141,5 +139,3 @@ public abstract partial class BaseSimpleStackNavigationManager
         return oldChildren;
     }
 }
-
-#endif

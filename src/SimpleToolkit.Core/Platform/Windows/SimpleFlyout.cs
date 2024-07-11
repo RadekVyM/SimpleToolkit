@@ -1,6 +1,4 @@
-﻿#if WINDOWS
-
-using Microsoft.Maui.Platform;
+﻿using Microsoft.Maui.Platform;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -51,6 +49,7 @@ public class SimpleFlyout : Flyout
             return;
 
         ApplyStyles();
+        AreOpenCloseAnimationsEnabled = VirtualView.IsAnimated;
 
         var platformAnchor = anchor?.ToPlatform(mauiContext) ?? GetDefaultAnchor();
 
@@ -118,5 +117,3 @@ public class SimpleFlyout : Flyout
         FlyoutPresenterStyle = CreateFlyoutStyle();
     }
 }
-
-#endif

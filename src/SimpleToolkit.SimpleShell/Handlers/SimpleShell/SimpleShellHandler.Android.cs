@@ -1,6 +1,4 @@
-﻿#if ANDROID
-
-using Android.Views;
+﻿using Android.Views;
 using AndroidX.DrawerLayout.Widget;
 using Microsoft.Maui.Handlers;
 using AView = Android.Views.View;
@@ -27,5 +25,3 @@ public partial class SimpleShellHandler : ViewHandler<ISimpleShell, ViewGroup>
         return (navigationHost?.Handler as SimpleNavigationHostHandler)?.PlatformView?.GetChildAt(0);
     }
 }
-
-#endif

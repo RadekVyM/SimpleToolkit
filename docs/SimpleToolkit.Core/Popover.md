@@ -127,6 +127,7 @@ button.HideAttachedPopover();
 ```
 
 ### `UseDefaultStyling`
+
 Using the `UseDefaultStyling` boolean property, we can define whether the default platform-specific styling of the popover should be used. The default value is `false`. If we set the property to `true`, following results will be achieved:
 
 <p align="center">
@@ -190,3 +191,7 @@ We can, for example, allow the arrow to point only upward or downward:
 ```csharp
 popover.PermittedArrowDirections = PopoverArrowDirection.Up | PopoverArrowDirection.Down;
 ```
+
+### `IsAnimated`
+
+Show and hide animations of a popover can be disabled using the `IsAnimated` boolean property. If we set the property to `true`, animations are enabled, otherwise disabled.

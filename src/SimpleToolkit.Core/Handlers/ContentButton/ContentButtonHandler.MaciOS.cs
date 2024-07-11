@@ -1,6 +1,4 @@
-﻿#if IOS || MACCATALYST
-
-using SimpleToolkit.Core.Platform;
+﻿using SimpleToolkit.Core.Platform;
 using UIKit;
 using PlatformView = Microsoft.Maui.Platform.ContentView;
 
@@ -93,5 +91,3 @@ public partial class ContentButtonHandler
         }
     }
 }
-
-#endif

@@ -1,6 +1,4 @@
-﻿#if WINDOWS
-
-using NavFrame = Microsoft.UI.Xaml.Controls.Grid;
+﻿using NavFrame = Microsoft.UI.Xaml.Controls.Grid;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager;
 
@@ -8,5 +6,3 @@ public partial class SimpleStackNavigationManager
 {
 
 }
-
-#endif

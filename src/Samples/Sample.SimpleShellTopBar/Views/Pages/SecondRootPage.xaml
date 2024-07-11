@@ -5,10 +5,18 @@
     x:Class="Sample.SimpleShellTopBar.Views.Pages.SecondRootPage"
     Title="SecondRootPage">
 
-    <Grid>
+    <VerticalStackLayout
+        VerticalOptions="Center"
+        HorizontalOptions="Center"
+        Spacing="20">
         <Label 
             Text="Second root page"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-    </Grid>
+
+        <Button
+            Text="Change badge"
+            HorizontalOptions="Center"
+            Clicked="ButtonClicked"/>
+    </VerticalStackLayout>
 </ContentPage>

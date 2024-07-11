@@ -1,6 +1,4 @@
-﻿#if ANDROID
-
-using Android.Widget;
+﻿using Android.Widget;
 using Microsoft.Maui.Handlers;
 using AView = Android.Views.View;
 
@@ -26,5 +24,3 @@ public partial class SimpleShellItemHandler : ElementHandler<ShellItem, FrameLay
         }
     }
 }
-
-#endif

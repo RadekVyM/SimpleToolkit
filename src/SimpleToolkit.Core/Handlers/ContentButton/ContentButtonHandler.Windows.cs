@@ -1,6 +1,4 @@
-﻿#if WINDOWS
-
-using PlatformView = Microsoft.Maui.Platform.ContentPanel;
+﻿using PlatformView = Microsoft.Maui.Platform.ContentPanel;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml;
 using Windows.System;
@@ -122,5 +120,3 @@ public partial class ContentButtonHandler
         return new Point(position.X, position.Y);
     }
 }
-
-#endif

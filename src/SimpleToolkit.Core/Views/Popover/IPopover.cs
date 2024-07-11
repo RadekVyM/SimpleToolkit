@@ -10,6 +10,10 @@ public interface IPopover : IElement
     /// </summary>
     View Content { get; set; }
     /// <summary>
+    /// Whether the default platform-specific animations should be used.
+    /// </summary>
+    bool IsAnimated { get; set; }
+    /// <summary>
     /// Alignment of the popover to its anchor.
     /// This property is only for Android and Windows.
     /// </summary>

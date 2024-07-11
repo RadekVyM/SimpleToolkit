@@ -1,11 +1,7 @@
-﻿#if IOS || MACCATALYST
-
-using UIKit;
+﻿using UIKit;
 
 namespace SimpleToolkit.SimpleShell.Platform;
 
 public class SimpleShellController : UIViewController
 {
 }
-
-#endif

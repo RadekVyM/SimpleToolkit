@@ -29,6 +29,13 @@
 
             <Button
                 Background="Black"
+                Clicked="RefreshSimpleShellClicked"
+                CornerRadius="20"
+                HorizontalOptions="Center"
+                Text="🐚 Recreate SimpleShell" />
+
+            <Button
+                Background="Black"
                 Clicked="RefreshShellClicked"
                 CornerRadius="20"
                 HorizontalOptions="Center"

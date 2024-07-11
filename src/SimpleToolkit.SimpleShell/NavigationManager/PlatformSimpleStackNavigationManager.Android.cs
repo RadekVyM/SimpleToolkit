@@ -1,6 +1,4 @@
-﻿#if ANDROID
-
-using Android.Views.Animations;
+﻿using Android.Views.Animations;
 using Microsoft.Maui.Platform;
 using SimpleToolkit.SimpleShell.Platform;
 using SimpleToolkit.SimpleShell.Transitions;
@@ -179,5 +177,3 @@ public partial class PlatformSimpleStackNavigationManager
             itemVg.ClearDisappearingChildren();
     }
 }
-
-#endif

@@ -38,7 +38,12 @@ namespace Playground.Original.Views.Pages
 
         private void RefreshShellClicked(object sender, EventArgs e)
         {
-            (App.Current as App)?.RefreshShell();
+            (App.Current as App)?.RefreshShell(AppShellType.Normal);
+        }
+
+        private void RefreshSimpleShellClicked(object sender, EventArgs e)
+        {
+            (App.Current as App)?.RefreshShell(AppShellType.Playground);
         }
 
         private void StarButtonClicked(object sender, EventArgs e)

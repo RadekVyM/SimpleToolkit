@@ -1,6 +1,4 @@
-﻿#if IOS || MACCATALYST
-
-using SimpleToolkit.SimpleShell.Extensions;
+﻿using SimpleToolkit.SimpleShell.Extensions;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 
@@ -19,5 +17,3 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> where Pla
         viewController.DidMoveToParentViewController(shellController);
     }
 }
-
-#endif

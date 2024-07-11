@@ -1,6 +1,4 @@
-﻿#if IOS || MACCATALYST
-
-using CoreGraphics;
+﻿using CoreGraphics;
 using Foundation;
 using UIKit;
 
@@ -71,5 +69,3 @@ public class SimpleShellSectionController : UINavigationController, IUIGestureRe
         return ShouldRecognizePopGesture;
     }
 }
-
-#endif

@@ -1,6 +1,4 @@
-﻿#if WINDOWS
-
-using Microsoft.Maui.Handlers;
+﻿using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using Microsoft.UI.Xaml.Controls;
 using WBorder = Microsoft.UI.Xaml.Controls.Border;
@@ -107,5 +105,3 @@ public class IconHandler : ViewHandler<Icon, WBorder>, IElementHandler
         handler.iconElement.Foreground = icon.TintColor?.ToPlatform();
     }
 }
-
-#endif

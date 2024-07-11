@@ -1,6 +1,4 @@
-﻿#if ANDROID
-
-using Android.Widget;
+﻿using Android.Widget;
 using Microsoft.Maui.Controls.Platform.Compatibility;
 using Microsoft.Maui.Handlers;
 using AView = Android.Views.View;
@@ -41,5 +39,3 @@ public partial class SimpleNavigationHostHandler : ViewHandler<ISimpleNavigation
             PlatformView.AddView(view);
     }
 }
-
-#endif

@@ -1,6 +1,4 @@
-﻿#if WINDOWS
-
-using PlatformView = Microsoft.UI.Xaml.FrameworkElement;
+﻿using PlatformView = Microsoft.UI.Xaml.FrameworkElement;
 using PlatformPanel = Microsoft.UI.Xaml.Controls.Panel;
 using Microsoft.UI.Xaml;
 
@@ -133,5 +131,3 @@ public abstract partial class BaseSimpleStackNavigationManager
         return oldChildren;
     }
 }
-
-#endif

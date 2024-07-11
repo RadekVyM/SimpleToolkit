@@ -2,7 +2,7 @@
 
 SimpleToolkit is a .NET MAUI library of helpers and simple, easily customizable controls.
 
-The library consists of three NuGet packages:
+The library consists of these NuGet packages:
 
 - [SimpleToolkit.Core](#simpletoolkitcore) - set of simple .NET MAUI controls and helpers
 
@@ -11,10 +11,6 @@ The library consists of three NuGet packages:
 - [SimpleToolkit.SimpleShell](#simpletoolkitsimpleshell) - simplified implementation of .NET MAUI `Shell`
 
   [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.svg?label=SimpleToolkit.SimpleShell)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell/)
-
-- [SimpleToolkit.SimpleShell.Controls](#simpletoolkitsimpleshellcontrols) - collection of ready-to-use, navigation-related controls
-
-  [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.Controls.svg?label=SimpleToolkit.SimpleShell.Controls)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell.Controls/)
 
 I have split the content of this library into multiple NuGet packages because there may be people who want to use only the `SimpleShell` control, for example, and do not want to use other controls.
 
@@ -34,28 +30,34 @@ Here are some of my samples that were built using this library:
     <a href="https://github.com/RadekVyM/MarvelousMAUI"><em>Marvelous .NET MAUI</em></a>
 </p>
 <p align="center">
-    <img src="https://raw.githubusercontent.com/RadekVyM/Gadgets-Store-App/main/samples/android_gadgets_store_app.gif" width="230" />
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <img src="https://raw.githubusercontent.com/RadekVyM/Gadgets-Store-App/main/samples/ios_gadgets_store_app.gif" width="239" />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <img src="https://raw.githubusercontent.com/RadekVyM/Bet-App/main/Images/ios_betapp.webp" width="236" />
 </p>
 <p align="center">
     <a href="https://github.com/RadekVyM/Gadgets-Store-App"><em>Gadget Store App</em></a>
+    &nbsp;|&nbsp;
+    <a href="https://github.com/RadekVyM/Bet-App"><em>Bet App</em></a>
 </p>
 <p align="center">
-    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-1/main/Images/navbaranimation%20gif%20720.gif" width="230" />
+    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-1/main/Images/android_navbaranimation1.webp" width="230" />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-1/main/Images/iphone_navbaranimation_1.png" width="245" />
+    <img src="https://raw.githubusercontent.com/RadekVyM/Navbar-Animation-2/main/images/iphone_navbaranimation_2.webp" width="236" />
 </p>
 <p align="center">
     <a href="https://github.com/RadekVyM/Navbar-Animation-1"><em>Navbar Animation #1</em></a>
+    &nbsp;|&nbsp;
+    <a href="https://github.com/RadekVyM/Navbar-Animation-2"><em>Navbar Animation #2</em></a>
 </p>
 <p align="center">
     <img src="https://raw.githubusercontent.com/RadekVyM/HamburgerMenuApp/main/images/android.gif" width="230" />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="https://raw.githubusercontent.com/RadekVyM/HamburgerMenuApp/main/images/ios.gif" width="239" />
+    <img src="https://raw.githubusercontent.com/RadekVyM/Waste-App/main/Images/ios_wasteapp.webp" width="236" />
 </p>
 <p align="center">
     <a href="https://github.com/RadekVyM/HamburgerMenuApp"><em>Hamburger Menu App</em></a>
+    &nbsp;|&nbsp;
+    <a href="https://github.com/RadekVyM/Waste-App"><em>Waste App</em></a>
 </p>
 
 > [!TIP]
@@ -63,7 +65,7 @@ Here are some of my samples that were built using this library:
 
 ## Supported platforms
 
-This library supports all these platforms:
+This library is built for the following platforms:
 
 - Android
 - iOS/Mac Catalyst
@@ -120,40 +122,3 @@ builder.UseSimpleShell();
 - Maybe I have implemented something wrong that has a negative impact on the performance, stability, accessibility, or something like that.
 
 See [documentation](./docs/SimpleToolkit.SimpleShell) for more information.
-
-## SimpleToolkit.SimpleShell.Controls
-
-[![SimpleToolkit.SimpleShell.Controls](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.Controls.svg?label=SimpleToolkit.SimpleShell.Controls)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell.Controls/)
-[![Documentation](https://img.shields.io/badge/-Documentation%20-forestgreen)](./docs/SimpleToolkit.SimpleShell.Controls)
-
-_SimpleToolkit.SimpleShell.Controls_ is a collection of ready-to-use, navigation-related controls (not only) for `SimpleShell`.
-
-The package currently supports only two controls:
-
-- `ListPopover` - popover containing a list of selectable text items
-- `TabBar`
-
-All controls can be styled using different design languages. These are currently supported:
-
-- Material 3
-- Cupertino
-- Fluent (WinUI 3)
-
-<p align="center">
-    <img width="350" src="./docs/images/listpopovers.png">
-</p>
-
-<p align="center">
-    <img width="350" src="./docs/images/tabbars.png">
-</p>
-
-<p align="center">
-    <a href="https://giphy.com/gifs/wiesemann1893-transparent-logo-wiesemann-dWa2rUaiahx1FB3jor">
-        <img width="250" src="https://media1.giphy.com/media/dWa2rUaiahx1FB3jor/giphy.gif?cid=790b7611041afeb62e8c51c2423440574e3473ff3a4cdd49&rid=giphy.gif&ct=g">
-    </a>
-</p>
-
-> [!CAUTION]
-> I am still not decided if I want to continue and how to develop the `SimpleToolkit.SimpleShell.Controls` package. **The package API is likely to change in the future.** For this reason, this package is still in preview and has poor documentation.
-
-See [documentation](./docs/SimpleToolkit.SimpleShell.Controls) for more information.

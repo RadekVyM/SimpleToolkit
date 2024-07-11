@@ -1,6 +1,4 @@
-﻿#if IOS || MACCATALYST
-
-using Microsoft.Maui.Handlers;
+﻿using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using SimpleToolkit.SimpleShell.Platform;
 using UIKit;
@@ -23,5 +21,3 @@ public partial class SimpleShellItemHandler : ElementHandler<ShellItem, UIView>
         }
     }
 }
-
-#endif

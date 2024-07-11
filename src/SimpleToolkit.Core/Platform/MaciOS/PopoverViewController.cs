@@ -1,9 +1,6 @@
-﻿#if IOS || MACCATALYST
-
-using CoreGraphics;
+﻿using CoreGraphics;
 using Foundation;
 using Microsoft.Maui.Platform;
-using SceneKit;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using UIKit;
@@ -17,6 +14,7 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
 {
     private readonly IMauiContext mauiContext = mauiContext ?? throw new ArgumentNullException(nameof(mauiContext));
     private Grid contentWrapper = null;
+    private bool isAnimated = true;
     private WeakReference<IPopover> virtualViewReference;
 
     internal UIViewController ViewController { get; private set; }
@@ -34,6 +32,17 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         set => ((UIPopoverPresentationController)PresentationController).PermittedArrowDirections = value;
     }
 
+    public virtual bool IsAnimated 
+    {
+        get => isAnimated;
+        set
+        {
+            isAnimated = value;
+            if (PresentationController.Delegate is PopoverDelegate popoverDelegate)
+                popoverDelegate.IsAnimated = value;
+        }
+    }
+
 
     public override void ViewWillAppear(bool animated)
     {
@@ -48,7 +57,8 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
             View.Superview.Layer.CornerRadius = 0f;
             View.Superview.Layer.MasksToBounds = false;
 
-            AnimateIn();
+            if (IsAnimated)
+                AnimateIn();
         }
     }
 
@@ -87,7 +97,7 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
     }
 
     [MemberNotNull(nameof(ViewController))]
-    public void Show(in IPopover virtualView, in IElement anchor)
+    public async Task Show(IPopover virtualView, IElement anchor)
     {
         if (IsBeingPresented || IsBeingDismissed)
             return;
@@ -98,7 +108,12 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         _ = ViewController ?? throw new InvalidOperationException($"{nameof(ViewController)} cannot be null");
 
         SetAnchor(virtualView, anchor);
-        PresentInViewController(ViewController);
+        await PresentInViewController(ViewController);
+    }
+
+    public async Task Hide()
+    {
+        await ViewController.DismissViewControllerAsync(IsAnimated);
     }
 
     public void CleanUp()
@@ -190,8 +205,11 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
     private void SetUpPresentationController(IPopover virtualView)
     {
         var presentationController = (UIPopoverPresentationController)PresentationController;
-
-        presentationController.Delegate = new PopoverDelegate();
+        
+        presentationController.Delegate = new PopoverDelegate
+        {
+            IsAnimated = IsAnimated
+        };
         presentationController.PermittedArrowDirections = virtualView.PermittedArrowDirections.ToUIPopoverArrowDirection();
         
         if (!virtualView.UseDefaultStyling)
@@ -201,9 +219,9 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         }
     }
 
-    private void PresentInViewController(UIViewController viewController)
+    private async Task PresentInViewController(UIViewController viewController)
     {
-        viewController.PresentViewController(this, true, null);
+        await viewController.PresentViewControllerAsync(this, IsAnimated);
     }
 
     private CGPoint GetContentOffset(bool useDefaultStyling)
@@ -236,6 +254,14 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
 
     private class PopoverDelegate : UIPopoverPresentationControllerDelegate
     {
+        public bool IsAnimated { get; set; } = true;
+
+        public override bool ShouldDismiss(UIPresentationController presentationController)
+        {
+            presentationController.PresentingViewController.DismissViewController(IsAnimated, null);
+            return true;
+        }
+
         public override UIModalPresentationStyle GetAdaptivePresentationStyle(UIPresentationController forPresentationController) =>
             UIModalPresentationStyle.None;
 
@@ -268,5 +294,3 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         static new UIEdgeInsets GetContentViewInsets() => UIEdgeInsets.Zero;
     }
 }
-
-#endif

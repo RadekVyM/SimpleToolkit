@@ -1,6 +1,4 @@
-﻿#if ANDROID
-
-using Android.Animation;
+﻿using Android.Animation;
 using Android.OS;
 using Android.Views;
 using Android.Views.Animations;
@@ -198,5 +196,3 @@ public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener, Ani
             ViewCompat.SetTranslationZ(View, previousZIndex);
     }
 }
-
-#endif

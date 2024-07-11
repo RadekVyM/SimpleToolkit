@@ -78,6 +78,10 @@
                                                                Dark=White}"
                             UnderlineHeight="0"
                             UnselectedLabelColor="Gray">
+                            <!--
+                                TODO: This multi binding and TabIconConverter is needed only because tinting images do not work on Windows.
+                                On Android and iOS, just IconImageSource="{Binding Icon}" can be used
+                            -->
                             <tabs:MaterialUnderlinedTabItem.IconImageSource>
                                 <MultiBinding Converter="{StaticResource TabIconConverter}">
                                     <Binding Path="Icon" />

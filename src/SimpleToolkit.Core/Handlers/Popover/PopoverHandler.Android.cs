@@ -1,6 +1,4 @@
-﻿#if ANDROID
-
-using Microsoft.Maui.Handlers;
+﻿using Microsoft.Maui.Handlers;
 using SimpleToolkit.Core.Platform;
 
 namespace SimpleToolkit.Core.Handlers;
@@ -28,6 +26,11 @@ public partial class PopoverHandler : ElementHandler<IPopover, SimplePopupWindow
         handler.PlatformView.SetContent(popover);
     }
 
+    public static void MapIsAnimated(PopoverHandler handler, IPopover popover)
+    {
+        handler.PlatformView.IsAnimated = popover.IsAnimated;
+    }
+
     public static void MapShow(PopoverHandler handler, IPopover popover, object parentView)
     {
         if (parentView is not IElement anchor)
@@ -41,5 +44,3 @@ public partial class PopoverHandler : ElementHandler<IPopover, SimplePopupWindow
         handler.PlatformView.Hide();
     }
 }
-
-#endif

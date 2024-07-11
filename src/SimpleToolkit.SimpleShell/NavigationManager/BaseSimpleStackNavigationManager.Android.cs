@@ -1,6 +1,4 @@
-﻿#if ANDROID
-
-using Android.Views;
+﻿using Android.Views;
 using PlatformView = Android.Views.View;
 using PlatformContainer = Android.Views.ViewGroup;
 using SimpleToolkit.SimpleShell.Extensions;
@@ -127,5 +125,3 @@ public abstract partial class BaseSimpleStackNavigationManager
         return oldChildren;
     }
 }
-
-#endif
