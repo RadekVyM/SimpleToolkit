@@ -30,6 +30,7 @@ public partial class PopoverHandler : ElementHandler<IPopover, SimpleFlyout>
 
     public static void MapIsAnimated(PopoverHandler handler, IPopover popover)
     {
+        handler.PlatformView.AreOpenCloseAnimationsEnabled = popover.IsAnimated;
     }
 
     public static void MapShow(PopoverHandler handler, IPopover popover, object parentView)

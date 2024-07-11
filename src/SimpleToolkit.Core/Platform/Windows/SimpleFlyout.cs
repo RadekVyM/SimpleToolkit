@@ -49,6 +49,7 @@ public class SimpleFlyout : Flyout
             return;
 
         ApplyStyles();
+        AreOpenCloseAnimationsEnabled = VirtualView.IsAnimated;
 
         var platformAnchor = anchor?.ToPlatform(mauiContext) ?? GetDefaultAnchor();
 
