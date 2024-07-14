@@ -56,10 +56,15 @@ public partial class PopoverTest : Button
         button.ShowAttachedPopover();
     }
 
-    private void Button_Clicked_1(object sender, EventArgs e)
+    private void ResizeButtonClicked(object sender, EventArgs e)
     {
         var isNormal = resizablePopoverContent.WidthRequest == 100;
         resizablePopoverContent.WidthRequest = isNormal ? 150 : 100;
         resizablePopoverContent.HeightRequest = isNormal ? 120 : 80;
+    }
+
+    private void HideButtonClicked(object sender, EventArgs e)
+    {
+        popover.Hide();
     }
 }

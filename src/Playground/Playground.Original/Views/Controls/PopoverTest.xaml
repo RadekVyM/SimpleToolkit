@@ -27,15 +27,26 @@
                 <Rectangle HorizontalOptions="Start" VerticalOptions="End" />
                 <Rectangle HorizontalOptions="End" VerticalOptions="End" />
 
-                <Button
-                    Background="Transparent"
-                    BorderColor="Transparent"
-                    BorderWidth="0"
-                    Clicked="Button_Clicked_1"
+                <VerticalStackLayout
                     HorizontalOptions="Center"
-                    Text="Resize"
-                    TextColor="Black"
-                    VerticalOptions="Center" />
+                    VerticalOptions="Center">
+                    <Button
+                        Background="Transparent"
+                        BorderColor="Transparent"
+                        BorderWidth="0"
+                        Clicked="ResizeButtonClicked"
+                        HorizontalOptions="Center"
+                        Text="Resize"
+                        TextColor="Black" />
+                    <Button
+                        Background="Transparent"
+                        BorderColor="Transparent"
+                        BorderWidth="0"
+                        Clicked="HideButtonClicked"
+                        HorizontalOptions="Center"
+                        Text="Hide"
+                        TextColor="Black" />
+                </VerticalStackLayout>
             </Grid>
         </simpleCore:Popover>
     </simpleCore:Popover.AttachedPopover>
