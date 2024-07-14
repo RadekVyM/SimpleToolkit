@@ -50,12 +50,8 @@ public partial class PopoverHandler : ElementHandler<IPopover, PopoverViewContro
 
     public static async void MapHide(PopoverHandler handler, IPopover popover, object arg3)
     {
-        var vc = handler.PlatformView.ViewController;
-        if (vc is not null)
-        {
-            try { await vc.DismissViewControllerAsync(true); }
-            catch { throw; }
-        }
+        try { await handler.PlatformView.Hide(); }
+        catch { throw; }
         //handler.PlatformView.CleanUp();
     }
 }

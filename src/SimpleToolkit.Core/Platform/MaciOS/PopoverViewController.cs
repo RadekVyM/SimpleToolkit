@@ -149,10 +149,10 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         var oldAnchorPoint = View.Layer.AnchorPoint;
         
         View.Layer.AnchorPoint = new CGPoint(x, y);
-        View.Transform = CGAffineTransform.MakeScale(0.3f, 0.3f);
+        View.Transform = CGAffineTransform.MakeScale(0.4f, 0.4f);
         View.Alpha = 0;
 
-        UIView.Animate(0.2, 0, UIViewAnimationOptions.CurveEaseOut, () =>
+        UIView.Animate(0.18, 0, UIViewAnimationOptions.CurveEaseInOut, () =>
         {
             View.Transform = CGAffineTransform.MakeIdentity();
             View.Alpha = 1;
