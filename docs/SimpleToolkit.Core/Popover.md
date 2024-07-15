@@ -194,4 +194,4 @@ popover.PermittedArrowDirections = PopoverArrowDirection.Up | PopoverArrowDirect
 
 ### `IsAnimated`
 
-Show and hide animations of a popover can be disabled using the `IsAnimated` boolean property. If we set the property to `true`, animations are enabled, otherwise disabled.
+Show and hide animations of a popover are animated by default but can be disabled via `IsAnimated`. Note that on Android, changing `IsAnimated` while the popover is open has no effect.
