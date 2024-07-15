@@ -30,8 +30,20 @@
                 IsAnimated="{Binding Source={x:Reference isAnimatedSwitch}, Path=IsToggled}" />
 
             <Picker x:Name="popoverAlignmentPicker" />
-            <Switch x:Name="useDefaultStylingSwitch" IsToggled="True" />
-            <Switch x:Name="isAnimatedSwitch" IsToggled="True" />
+            <HorizontalStackLayout
+                Spacing="10">
+                <Switch x:Name="useDefaultStylingSwitch" IsToggled="True" />
+                <Label
+                    Text="Use default styling"
+                    VerticalOptions="Center" />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout
+                Spacing="10">
+                <Switch x:Name="isAnimatedSwitch" IsToggled="True" />
+                <Label
+                    Text="Is animated"
+                    VerticalOptions="Center" />
+            </HorizontalStackLayout>
 
             <Button
                 Background="Orange"

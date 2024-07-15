@@ -53,29 +53,10 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<None Remove="Resources\Fonts\Font-Awesome-Solid.otf" />
-		<None Remove="Resources\Images\arrow_left.svg" />
-		<None Remove="Resources\Images\avatar_empty.png" />
-		<None Remove="Resources\Images\avatar_filled.png" />
-		<None Remove="Resources\Images\bird_empty.png" />
-		<None Remove="Resources\Images\bird_filled.png" />
-		<None Remove="Resources\Images\case_empty.png" />
-		<None Remove="Resources\Images\case_filled.png" />
-		<None Remove="Resources\Images\flame_empty.png" />
-		<None Remove="Resources\Images\flame_filled.png" />
-		<None Remove="Resources\Images\pizza_empty.png" />
-		<None Remove="Resources\Images\pizza_filled.png" />
-		<None Remove="Resources\Images\sandy_beach.jpg" />
-		<None Remove="Resources\Images\settings.png" />
-		<None Remove="Resources\Images\speaker.png" />
-		<None Remove="Resources\Images\star.png" />
-	</ItemGroup>
-
 	<ItemGroup Condition="'$(Configuration)'!='DEBUG'">
-        <PackageReference Include="SimpleToolkit.Core" Version="4.0.0" />
+        <PackageReference Include="SimpleToolkit.Core" Version="5.1.1" />
         <PackageReference Include="SimpleToolkit.SimpleShell.Controls" Version="3.0.0-preview1" />
-        <PackageReference Include="SimpleToolkit.SimpleShell" Version="4.1.0" />
+        <PackageReference Include="SimpleToolkit.SimpleShell" Version="4.1.3" />
 	</ItemGroup>
 		
 	<ItemGroup Condition="'$(Configuration)'=='DEBUG'">
@@ -92,12 +73,6 @@
 		<ProjectReference Include="..\SimpleShell\Playground.Core\Playground.Core.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <MauiXaml Update="Views\Controls\PopoverTest.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	</ItemGroup>
-	
 	<!-- Build Properties must be defined within these property groups to ensure successful publishing
        to the Mac App Store. See: https://aka.ms/maui-publish-app-store#define-build-properties-in-your-project-file -->
 	<PropertyGroup Condition="$(TargetFramework.Contains('-maccatalyst')) and '$(Configuration)' == 'Debug'">
