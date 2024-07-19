@@ -24,7 +24,7 @@
 		<PackageTags>MAUI, Controls, Button, Popover, Icon</PackageTags>
 		<Authors>RadekVyM</Authors>
 		<PackageOutputPath>..\..\packages</PackageOutputPath>
-		<VersionPrefix>5.1.1</VersionPrefix>
+		<VersionPrefix>5.1.2</VersionPrefix>
 		<VersionSuffix></VersionSuffix>
 		<Version>$(VersionPrefix)$(VersionSuffix)</Version>
 		<Description>Collection of simple .NET MAUI controls and helpers that is part of SimpleToolkit library.</Description>

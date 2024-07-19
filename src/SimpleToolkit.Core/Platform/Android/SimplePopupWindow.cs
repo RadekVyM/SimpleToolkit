@@ -22,6 +22,7 @@ public class SimplePopupWindow : PopupWindow
         {
             isAnimated = value;
             AnimationStyle = value ? -1 : 0;
+            Update();
         }
     }
 
