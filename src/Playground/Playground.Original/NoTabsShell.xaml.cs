@@ -24,12 +24,12 @@ public partial class NoTabsShell : SimpleShell
     }
 
 
-    private void AppShellLoaded(object sender, EventArgs e)
+    private void AppShellLoaded(object? sender, EventArgs e)
     {
         Window.SubscribeToSafeAreaChanges(OnSafeAreaChanged);
     }
 
-    private void AppShellUnloaded(object sender, EventArgs e)
+    private void AppShellUnloaded(object? sender, EventArgs e)
     {
         Window.UnsubscribeFromSafeAreaChanges(OnSafeAreaChanged);
     }
@@ -39,17 +39,17 @@ public partial class NoTabsShell : SimpleShell
         rootContainer.Padding = safeAreaPadding;
     }
 
-    private async void ShellItemButtonClicked(object sender, EventArgs e)
+    private async void ShellItemButtonClicked(object? sender, EventArgs e)
     {
-        var button = sender as Button;
-        var shellItem = button.BindingContext as BaseShellItem;
+        if (sender is not Button button || button.BindingContext is not BaseShellItem shellItem)
+            return;
 
         // Navigate to a new tab if it is not the current tab
         if (!CurrentState.Location.OriginalString.Contains(shellItem.Route))
             await GoToAsync($"///{shellItem.Route}", true);
     }
 
-    private async void BackButtonClicked(object sender, EventArgs e)
+    private async void BackButtonClicked(object? sender, EventArgs e)
     {
         await GoToAsync("..");
     }

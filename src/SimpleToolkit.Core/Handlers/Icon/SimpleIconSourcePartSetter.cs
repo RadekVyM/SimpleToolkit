@@ -1,5 +1,4 @@
 ﻿using Microsoft.Maui.Platform;
-using System;
 #if __IOS__ || MACCATALYST
 using PlatformImage = UIKit.UIImage;
 #elif ANDROID
@@ -23,10 +22,10 @@ internal abstract class SimpleIconSourcePartSetter : IImageSourcePartSetter
     public SimpleIconSourcePartSetter(IconHandler handler) =>
         _handler = new(handler);
 
-    public IImageSourcePart ImageSourcePart =>
-        Handler?.VirtualView as IImageSourcePart ?? Handler?.VirtualView as Microsoft.Maui.IImage;
+    public IImageSourcePart? ImageSourcePart =>
+        Handler?.VirtualView as IImageSourcePart ?? Handler?.VirtualView;
 
-    public IconHandler Handler
+    public IconHandler? Handler
     {
         get
         {
@@ -35,7 +34,7 @@ internal abstract class SimpleIconSourcePartSetter : IImageSourcePartSetter
         }
     }
 
-    IElementHandler IImageSourcePartSetter.Handler => Handler;
+    IElementHandler? IImageSourcePartSetter.Handler => Handler;
 
-    public abstract void SetImageSource(PlatformImage platformImage);
+    public abstract void SetImageSource(PlatformImage? platformImage);
 }

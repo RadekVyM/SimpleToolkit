@@ -7,7 +7,9 @@ public partial class PopoverHandler : ElementHandler<IPopover, SimplePopupWindow
 {
     protected override SimplePopupWindow CreatePlatformElement()
     {
-        return new SimplePopupWindow(MauiContext.Context, MauiContext);
+        return new SimplePopupWindow(
+            MauiContext?.Context ?? throw new NullReferenceException("MauiContext should not be null here."),
+            MauiContext);
     }
 
     protected override void ConnectHandler(SimplePopupWindow platformView)

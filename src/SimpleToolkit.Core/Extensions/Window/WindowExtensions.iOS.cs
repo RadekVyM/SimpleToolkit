@@ -52,15 +52,16 @@ public static partial class WindowExtensions
         return builder;
     }
 
-    private static void WindowExtensionsDestroying(object sender, EventArgs e)
+    private static void WindowExtensionsDestroying(object? sender, EventArgs e)
     {
-        var window = sender as Window;
+        if (sender is not Window window)
+            return;
 
         window.Destroying -= WindowExtensionsDestroying;
         DeviceDisplay.Current.MainDisplayInfoChanged -= DeviceDisplayMainDisplayInfoChanged;
     }
 
-    private static void DeviceDisplayMainDisplayInfoChanged(object sender, DisplayInfoChangedEventArgs e)
+    private static void DeviceDisplayMainDisplayInfoChanged(object? sender, DisplayInfoChangedEventArgs e)
     {
         OnSafeAreaMayChanged();
     }
@@ -69,7 +70,7 @@ public static partial class WindowExtensions
     {
         foreach (var key in safeAreas.Keys)
         {
-            var window = Application.Current.Windows.FirstOrDefault(w => w.Id == key);
+            var window = Application.Current?.Windows.FirstOrDefault(w => w.Id == key) ?? throw new NullReferenceException("There should be at least one window.");
 
             InvokeListenersIfChanged(key, GetInsets(window));
         }
@@ -80,7 +81,7 @@ public static partial class WindowExtensions
         if (window is null)
             return new Thickness(0);
 
-        var uiWindow = window.Handler.PlatformView as UIWindow;
+        var uiWindow = window.Handler?.PlatformView as UIWindow ?? throw new NullReferenceException("PlatformView should not be null here.");
         return new Thickness(uiWindow.SafeAreaInsets.Left, uiWindow.SafeAreaInsets.Top, uiWindow.SafeAreaInsets.Right, uiWindow.SafeAreaInsets.Bottom);
     }
 }

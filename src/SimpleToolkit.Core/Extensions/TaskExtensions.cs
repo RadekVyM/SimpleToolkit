@@ -5,7 +5,7 @@ namespace SimpleToolkit.Core;
 internal static class TaskExtensions
 {
 #if !WEBVIEW2_MAUI
-    public static async void FireAndForget(this Task task, Action<Exception> errorCallback = null)
+    public static async void FireAndForget(this Task task, Action<Exception>? errorCallback = null)
     {
         try
         {
@@ -20,7 +20,7 @@ internal static class TaskExtensions
         }
     }
 
-    public static void FireAndForget<T>(this Task task, T viewHandler, [CallerMemberName] string callerName = null)
+    public static void FireAndForget<T>(this Task task, T viewHandler, [CallerMemberName] string? callerName = null)
         where T : IElementHandler
     {
         task.FireAndForget();

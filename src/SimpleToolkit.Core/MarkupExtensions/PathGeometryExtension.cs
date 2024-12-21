@@ -2,14 +2,14 @@
 
 namespace SimpleToolkit.Core.MarkupExtensions;
 
-public class PathGeometryExtension : IMarkupExtension<Geometry>
+public class PathGeometryExtension : IMarkupExtension<Geometry?>
 {
     /// <summary>
     /// String representation of a path.
     /// </summary>
-    public string Path { get; set; }
+    public string Path { get; set; } = "";
 
-    public Geometry ProvideValue(IServiceProvider serviceProvider)
+    public Geometry? ProvideValue(IServiceProvider serviceProvider)
     {
         var pathGeometryConverter = new PathGeometryConverter();
         var path = pathGeometryConverter.ConvertFromInvariantString(Path) as Geometry;

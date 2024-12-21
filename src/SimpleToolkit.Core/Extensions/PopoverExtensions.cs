@@ -12,7 +12,7 @@ public static class PopoverExtensions
     public static void ShowAttachedPopover(this View parentView)
     {
         var popover = Popover.GetAttachedPopover(parentView);
-        popover.Show(parentView);
+        popover?.Show(parentView);
     }
 
     /// <summary>
@@ -22,7 +22,7 @@ public static class PopoverExtensions
     public static void HideAttachedPopover(this View parentView)
     {
         var popover = Popover.GetAttachedPopover(parentView);
-        popover.Hide();
+        popover?.Hide();
     }
 
 #if IOS || MACCATALYST

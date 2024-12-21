@@ -7,10 +7,10 @@ namespace SimpleToolkit.Core.Platform;
 
 public class ButtonContentView : PlatformContentView
 {
-    public event EventHandler<ContentButtonEventArgs> BeganTouching;
-    public event EventHandler<ContentButtonEventArgs> EndedTouching;
-    public event EventHandler<ContentButtonEventArgs> CancelledTouching;
-    public event EventHandler<ContentButtonEventArgs> MovedTouching;
+    public event EventHandler<ContentButtonEventArgs>? BeganTouching;
+    public event EventHandler<ContentButtonEventArgs>? EndedTouching;
+    public event EventHandler<ContentButtonEventArgs>? CancelledTouching;
+    public event EventHandler<ContentButtonEventArgs>? MovedTouching;
 
     public override void SetNeedsLayout()
     {
@@ -18,25 +18,25 @@ public class ButtonContentView : PlatformContentView
         Superview?.SetNeedsLayout();
     }
 
-    public override void TouchesBegan(NSSet touches, UIEvent evt)
+    public override void TouchesBegan(NSSet touches, UIEvent? evt)
     {
         base.TouchesBegan(touches, evt);
         BeganTouching?.Invoke(this, GetContentButtonEventArgs(touches));
     }
 
-    public override void TouchesEnded(NSSet touches, UIEvent evt)
+    public override void TouchesEnded(NSSet touches, UIEvent? evt)
     {
         base.TouchesEnded(touches, evt);
         EndedTouching?.Invoke(this, GetContentButtonEventArgs(touches));
     }
 
-    public override void TouchesCancelled(NSSet touches, UIEvent evt)
+    public override void TouchesCancelled(NSSet touches, UIEvent? evt)
     {
         base.TouchesCancelled(touches, evt);
         CancelledTouching?.Invoke(this, GetContentButtonEventArgs(touches));
     }
 
-    public override void TouchesMoved(NSSet touches, UIEvent evt)
+    public override void TouchesMoved(NSSet touches, UIEvent? evt)
     {
         base.TouchesMoved(touches, evt);
         MovedTouching?.Invoke(this, GetContentButtonEventArgs(touches));

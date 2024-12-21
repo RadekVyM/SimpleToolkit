@@ -9,7 +9,7 @@ namespace Playground.Original.Views.Pages
         private const string WideText = "a wide content that should change the size of the button";
         private const string ShortText = "a short text";
 
-        bool commandParameter => (bool)contentButton.CommandParameter;
+        bool commandParameter => contentButton.CommandParameter is true;
 
 
         public ContentButtonPage()
@@ -33,20 +33,21 @@ namespace Playground.Original.Views.Pages
         private void UpdateCommandParameter(bool value)
         {
             contentButton.CommandParameter = value;
-            (contentButton.Command as Command).ChangeCanExecute();
+            if (contentButton.Command is Command command)
+                command.ChangeCanExecute();
         }
 
-        private void StarButtonClicked(object sender, EventArgs e)
+        private void StarButtonClicked(object? sender, EventArgs e)
         {
             Shell.Current.GoToAsync(nameof(ImagePage));
         }
 
-        private void SignInClicked(object sender, EventArgs e)
+        private void SignInClicked(object? sender, EventArgs e)
         {
             testBehavior.Test();
         }
 
-        private void VariableButtonClicked(object sender, EventArgs e)
+        private void VariableButtonClicked(object? sender, EventArgs e)
         {
             variableContentLabel.Text = variableContentLabel.Text == ShortText ? WideText : ShortText;
         }
@@ -61,7 +62,7 @@ namespace Playground.Original.Views.Pages
             UpdateCommandParameter(!commandParameter);
         }
 
-        private void ContentButtonPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void ContentButtonPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == VisualElement.IsEnabledProperty.PropertyName)
                 isEnabledButton.Text = contentButton.IsEnabled ? "Enabled" : "Disabled";

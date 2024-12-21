@@ -49,14 +49,14 @@ public partial class ContentButtonHandler
         buttonContentView.CancelledTouching -= OnEndedTouching;
     }
 
-    private void OnBeganTouching(object sender, ContentButtonEventArgs e)
+    private void OnBeganTouching(object? sender, ContentButtonEventArgs e)
     {
         alreadyReleased = false;
 
         VirtualView.OnPressed(e.InteractionPosition);
     }
 
-    private void OnEndedTouching(object sender, ContentButtonEventArgs e)
+    private void OnEndedTouching(object? sender, ContentButtonEventArgs e)
     {
         if (!alreadyReleased)
             VirtualView.OnReleased(e.InteractionPosition);
@@ -64,7 +64,7 @@ public partial class ContentButtonHandler
         alreadyReleased = true;
     }
 
-    private void OnMovedTouching(object sender, ContentButtonEventArgs e)
+    private void OnMovedTouching(object? sender, ContentButtonEventArgs e)
     {
         if (!alreadyReleased && sender is ButtonContentView button && !button.Bounds.Contains(e.InteractionPosition.X, e.InteractionPosition.Y))
         {

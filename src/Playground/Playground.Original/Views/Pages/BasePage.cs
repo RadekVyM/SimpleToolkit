@@ -5,8 +5,8 @@ public class BasePage : ContentPage
 	public BasePage(
 		string title,
 		Color color,
-        IEnumerable<PageButton> buttons = null,
-        IEnumerable<IView> views = null)
+        IEnumerable<PageButton>? buttons = null,
+        IEnumerable<IView>? views = null)
 	{
 		Title = title;
 		Background = color;
@@ -63,12 +63,12 @@ public class BasePage : ContentPage
         Unloaded += PageUnloaded;
     }
 
-    private void PageLoaded(object sender, EventArgs e)
+    private void PageLoaded(object? sender, EventArgs e)
     {
         System.Diagnostics.Debug.WriteLine($"{Title} Loaded");
     }
 
-    private void PageUnloaded(object sender, EventArgs e)
+    private void PageUnloaded(object? sender, EventArgs e)
     {
         System.Diagnostics.Debug.WriteLine($"{Title} Unloaded");
     }

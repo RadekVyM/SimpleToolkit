@@ -41,7 +41,7 @@
                 Grid.Row="1"
                 Margin="20,5"
                 HorizontalOptions="Center" Spacing="10"
-                BindableLayout.ItemsSource="{Binding ShellContents, Source={x:Reference thisShell}}">
+                BindableLayout.ItemsSource="{Binding ShellContents, Source={x:Reference thisShell}, x:DataType={x:Type local:NoTabsShell}}">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate
                         x:DataType="BaseShellItem">

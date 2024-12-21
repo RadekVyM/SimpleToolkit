@@ -11,7 +11,7 @@ public partial class ImageDetailPage : ContentPage, IQueryAttributable
 {
     private Rect imageBounds;
     private Rect transitionImageBounds;
-    private Func<double, double> setOriginImageOpacity;
+    private Func<double, double>? setOriginImageOpacity;
 
     public Rect InitialImageTransitionRect { get; private set; }
 
@@ -61,7 +61,7 @@ public partial class ImageDetailPage : ContentPage, IQueryAttributable
             duration: static args => 600u,
             easing: static args => Easing.CubicOut)
             .CombinedWith(
-                transition: SimpleShell.Current.GetTransition() as SimpleShellTransition,
+                transition: (SimpleShellTransition)SimpleShell.Current.GetTransition()!,
                 when: static args => args.TransitionType != SimpleShellTransitionType.Pushing));
     }
 

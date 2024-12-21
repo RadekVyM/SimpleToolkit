@@ -9,7 +9,7 @@ public partial class PopoverHandler : ElementHandler<IPopover, PopoverViewContro
 {
     protected override PopoverViewController CreatePlatformElement()
     {
-        return new PopoverViewController(MauiContext);
+        return new PopoverViewController(MauiContext ?? throw new NullReferenceException("MauiContext should not be null here."));
     }
 
     protected override void ConnectHandler(PopoverViewController platformView)
@@ -39,16 +39,20 @@ public partial class PopoverHandler : ElementHandler<IPopover, PopoverViewContro
         handler.PlatformView.PermittedArrowDirections = popover.PermittedArrowDirections.ToUIPopoverArrowDirection();
     }
 
-    public static async void MapShow(PopoverHandler handler, IPopover popover, object parentView)
+    public static async void MapShow(PopoverHandler handler, IPopover popover, object? parentView)
     {
         if (parentView is not IElement anchor)
             return;
 
-        try { await handler.PlatformView?.Show(popover, anchor); }
+        try
+        {
+            if (handler.PlatformView is {} platformView)
+                await platformView.Show(popover, anchor);
+        }
         catch { throw; }
     }
 
-    public static async void MapHide(PopoverHandler handler, IPopover popover, object arg3)
+    public static async void MapHide(PopoverHandler handler, IPopover popover, object? arg3)
     {
         try { await handler.PlatformView.Hide(); }
         catch { throw; }

@@ -51,7 +51,7 @@
                 <HorizontalStackLayout
                     x:Name="tabBar"
                     Margin="20,5"
-                    BindableLayout.ItemsSource="{Binding ShellContents, Source={x:Reference thisShell}}"
+                    BindableLayout.ItemsSource="{Binding ShellContents, Source={x:Reference thisShell}, x:DataType={x:Type local:ContainersShell}}"
                     HorizontalOptions="Center"
                     MinimumHeightRequest="40"
                     Spacing="10">
@@ -105,7 +105,7 @@
                 FontAttributes="Bold"
                 FontSize="18"
                 HorizontalOptions="Center"
-                Text="{Binding CurrentShellContent.Title, Source={x:Reference thisShell}}"
+                Text="{Binding CurrentShellContent.Title, Source={x:Reference thisShell}, x:DataType={x:Type local:ContainersShell}}"
                 VerticalOptions="Center" />
 
             <shell:SimpleNavigationHost Grid.Row="5" />
