@@ -32,7 +32,7 @@ public partial class SimpleNavigationHostHandler : ViewHandler<ISimpleNavigation
         return new SimpleContentView();
     }
 
-    public virtual void SetContent(UIView view)
+    public virtual void SetContent(UIView? view)
     {
         PlatformView.ClearSubviews();
         if (view is not null)

@@ -13,33 +13,27 @@ namespace SimpleToolkit.SimpleShell.Platform;
 
 // Based on: https://github.com/dotnet/maui/blob/main/src/Controls/src/Core/Compatibility/Handlers/Shell/Android/ShellContentFragment.cs
 
-public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener, Animator.IAnimatorListener
+public class SimpleFragment(AView view) : Fragment, AndroidAnimation.IAnimationListener, Animator.IAnimatorListener
 {
-    private FrameLayout root;
-    private AView view;
+    private FrameLayout? root;
+    private AView? view = view;
     private bool disposed;
     private bool isAnimating = false;
     private float previousZIndex = 0f;
 
     public bool OnTop { get; set; }
-    public event EventHandler AnimationFinished;
+    public event EventHandler? AnimationFinished;
 
 
-    public SimpleFragment(AView view)
-    {
-        this.view = view;
-    }
-
-
-    void AndroidAnimation.IAnimationListener.OnAnimationStart(AndroidAnimation animation)
+    void AndroidAnimation.IAnimationListener.OnAnimationStart(AndroidAnimation? animation)
     {
     }
 
-    void AndroidAnimation.IAnimationListener.OnAnimationRepeat(AndroidAnimation animation)
+    void AndroidAnimation.IAnimationListener.OnAnimationRepeat(AndroidAnimation? animation)
     {
     }
 
-    async void AndroidAnimation.IAnimationListener.OnAnimationEnd(AndroidAnimation animation)
+    async void AndroidAnimation.IAnimationListener.OnAnimationEnd(AndroidAnimation? animation)
     {
         await OnAnimationEnd();
     }
@@ -73,7 +67,7 @@ public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener, Ani
             AnimationFinished?.Invoke(this, EventArgs.Empty);
     }
 
-    public override Animator OnCreateAnimator(int transit, bool enter, int nextAnim)
+    public override Animator? OnCreateAnimator(int transit, bool enter, int nextAnim)
     {
         var result = base.OnCreateAnimator(transit, enter, nextAnim);
 
@@ -87,11 +81,11 @@ public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener, Ani
         }
 
         if (enter)
-            View.SetLayerType(LayerType.Hardware, null);
+            View?.SetLayerType(LayerType.Hardware, null);
 
         result.AddListener(this);
 
-        if (OnTop)
+        if (OnTop && View is not null)
         {
             previousZIndex = ViewCompat.GetTranslationZ(View);
             ViewCompat.SetTranslationZ(View, 1000f);
@@ -100,7 +94,7 @@ public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener, Ani
         return result;
     }
 
-    public override AndroidAnimation OnCreateAnimation(int transit, bool enter, int nextAnim)
+    public override AndroidAnimation? OnCreateAnimation(int transit, bool enter, int nextAnim)
     {
         var result = base.OnCreateAnimation(transit, enter, nextAnim);
         isAnimating = true;
@@ -125,7 +119,7 @@ public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener, Ani
         // the view exiting is animating a button press of some sort. This means lots of GPU
         // transactions to update the texture.
         if (enter)
-            View.SetLayerType(LayerType.Hardware, null);
+            View?.SetLayerType(LayerType.Hardware, null);
 
         // This is very strange what we are about to do. For whatever reason if you take this animation
         // and wrap it into an animation set it will have a 1 frame glitch at the start where the
@@ -133,10 +127,10 @@ public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener, Ani
         // set and hook up to the first item. This means any animation we use depends on the first item
         // finishing at the end of the animation.
 
-        if (result is AnimationSet set)
-            set.Animations[0].SetAnimationListener(this);
+        if (result is AnimationSet set && set.Animations is {} animations)
+            animations[0].SetAnimationListener(this);
 
-        if (OnTop)
+        if (OnTop && View is not null)
         {
             previousZIndex = ViewCompat.GetTranslationZ(View);
             ViewCompat.SetTranslationZ(View, 1000f);
@@ -145,10 +139,10 @@ public class SimpleFragment : Fragment, AndroidAnimation.IAnimationListener, Ani
         return result;
     }
 
-    public override AView OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public override AView OnCreateView(LayoutInflater inflater, ViewGroup? container, Bundle? savedInstanceState)
     {
         // The view needs to be placed in a container for translations pivots to work
-        var frame = new FrameLayout(Context);
+        var frame = new FrameLayout(Context ?? throw new NullReferenceException("Context should not be null here."));
         frame.AddView(view);
 
         return frame;

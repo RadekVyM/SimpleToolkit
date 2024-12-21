@@ -12,7 +12,7 @@ public interface ISimpleShell : IView, IElement, ITransform, IShellController, I
     /// <summary>
     /// View that wraps root pages.
     /// </summary>
-    IView RootPageContainer { get; set; }
+    IView? RootPageContainer { get; set; }
     /// <summary>
     /// The currently selected <see cref="Page"/>.
     /// </summary>

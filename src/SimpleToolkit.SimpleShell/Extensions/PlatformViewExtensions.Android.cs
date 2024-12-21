@@ -8,10 +8,13 @@ internal static class PlatformViewExtensions
     public static IList<AView> GetChildViews(this ViewGroup layout)
     {
         var count = layout.ChildCount;
-        IList<AView> children = new List<AView>();
+        var children = new List<AView>();
 
         for (int i = 0; i < count; i++)
-            children.Add(layout.GetChildAt(i));
+        {
+            if (layout.GetChildAt(i) is {} child)
+                children.Add(child);
+        }
 
         return children;
     }

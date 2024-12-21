@@ -8,11 +8,11 @@ public partial class PlatformSimpleStackNavigationManager
 {
     protected Task NavigateWithPlatformTransitionToPageInContainer(
         SimpleShell shell,
-        IView previousShellItemContainer,
-        IView previousShellSectionContainer,
-        IView previousPage,
+        IView? previousShellItemContainer,
+        IView? previousShellSectionContainer,
+        IView? previousPage,
         bool isPreviousPageRoot,
-        Func<IView, PlatformSimpleShellTransition> pageTransition,
+        Func<IView, PlatformSimpleShellTransition?> pageTransition,
         Func<SimpleShellTransitionArgs> args,
         bool animated = true)
     {
@@ -21,8 +21,8 @@ public partial class PlatformSimpleStackNavigationManager
 
     protected void HandleNewStack(
         IReadOnlyList<IView> newPageStack,
-        Func<IView, PlatformSimpleShellTransition> pageTransition,
-        Func<SimpleShellTransitionArgs> args,
+        Func<IView, PlatformSimpleShellTransition?> pageTransition,
+        Func<SimpleShellTransitionArgs>? args,
         bool animated = true)
     {
         NavigationStack = newPageStack;

@@ -16,7 +16,7 @@ public partial class SimpleShellHandler : ViewHandler<ISimpleShell, UIView>
         return ViewController.View;
     }
 
-    protected virtual UIView GetNavigationHostContent()
+    protected virtual UIView? GetNavigationHostContent()
     {
         return (navigationHost?.Handler as SimpleNavigationHostHandler)?.PlatformView?.Subviews.FirstOrDefault();
     }

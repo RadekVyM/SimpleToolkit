@@ -26,39 +26,35 @@ using PlatformChild = System.Object;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager;
 
-public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNavigationManager
+public abstract partial class BaseSimpleStackNavigationManager(
+    IMauiContext mauiContext,
+    bool alwaysAddRootPageContainerBackWhenReplaced
+) : ISimpleStackNavigationManager
 {
     protected const string TransitionAnimationKey = nameof(SimpleShellTransition);
 
-    private readonly bool alwaysAddRootPageContainerBackWhenReplaced;
-    protected IMauiContext mauiContext;
-    protected NavFrame navigationFrame;
-    protected IView currentPage;
-    protected IView rootPageContainer;
-    protected IView currentShellSectionContainer;
-    protected IView currentShellItemContainer;
+    private readonly bool alwaysAddRootPageContainerBackWhenReplaced = alwaysAddRootPageContainerBackWhenReplaced;
+    protected IMauiContext mauiContext = mauiContext;
+    protected NavFrame? navigationFrame;
+    protected IView currentPage = null!;
+    protected IView? rootPageContainer;
+    protected IView? currentShellSectionContainer;
+    protected IView? currentShellItemContainer;
     protected bool isCurrentPageRoot = true;
 
-    public IStackNavigation StackNavigation { get; protected set; }
-    public IReadOnlyList<IView> NavigationStack { get; protected set; } = new List<IView>();
+    public IStackNavigation? StackNavigation { get; protected set; } = null;
+    public IReadOnlyList<IView> NavigationStack { get; protected set; } = [];
 
     public bool AlreadyNavigated { get; private protected set; } = false;
 
 
-    public BaseSimpleStackNavigationManager(IMauiContext mauiContext, bool alwaysAddRootPageContainerBackWhenReplaced)
-    {
-        this.mauiContext = mauiContext;
-        this.alwaysAddRootPageContainerBackWhenReplaced = alwaysAddRootPageContainerBackWhenReplaced;
-    }
-
-
     #region Navigation
 
-    public virtual void NavigateTo(ArgsNavigationRequest args, SimpleShell shell, IView shellSectionContainer, IView shellItemContainer)
+    public virtual void NavigateTo(ArgsNavigationRequest args, SimpleShell shell, IView? shellSectionContainer, IView? shellItemContainer)
     {
         AlreadyNavigated = true;
 
-        IReadOnlyList<IView> newPageStack = new List<IView>(args.NavigationStack);
+        IReadOnlyList<IView> newPageStack = [.. args.NavigationStack];
         var previousNavigationStack = NavigationStack;
         var previousNavigationStackCount = previousNavigationStack.Count;
         bool initialNavigation = NavigationStack.Count == 0;
@@ -88,7 +84,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
 
         var transitionType = SimpleShellTransitionType.Popping;
 
-        if (previousNavigationStack.Count == newPageStack.Count || previousNavigationStack?.FirstOrDefault() != newPageStack?.FirstOrDefault())
+        if (previousNavigationStack.Count == newPageStack.Count || previousNavigationStack.FirstOrDefault() != newPageStack.FirstOrDefault())
             transitionType = SimpleShellTransitionType.Switching;
         else if (previousNavigationStack.Count < newPageStack.Count)
             transitionType = SimpleShellTransitionType.Pushing;
@@ -104,11 +100,10 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
         SimpleShellTransitionType transitionType,
         PresentationMode presentationMode,
         SimpleShell shell,
-        IView previousShellItemContainer,
-        IView previousShellSectionContainer,
-        IView previousPage,
-        bool isPreviousPageRoot,
-        IList<IView> pagesToDisconnect = null)
+        IView? previousShellItemContainer,
+        IView? previousShellSectionContainer,
+        IView? previousPage,
+        bool isPreviousPageRoot)
     {
         var pageTransition = currentPage is VisualElement visualCurrentPage ? SimpleShell.GetTransition(visualCurrentPage) : null;
         pageTransition ??= SimpleShell.GetTransition(shell);
@@ -143,9 +138,6 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
                     transition.Finished?.Invoke(CreateArgs(v));
 
                     FireNavigationFinished();
-
-                    if (pagesToDisconnect is not null && pagesToDisconnect.Count > 0)
-                        DisconnectHandlers(pagesToDisconnect);
                 });
 
             SimpleShellTransitionArgs CreateArgs(double progress)
@@ -168,17 +160,14 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
         {
             SwitchPagesInContainer(shell, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot);
             FireNavigationFinished();
-
-            if (pagesToDisconnect is not null && pagesToDisconnect.Count > 0)
-                DisconnectHandlers(pagesToDisconnect);
         }
     }
 
     protected private void SwitchPagesInContainer(
         SimpleShell shell,
-        IView previousShellItemContainer,
-        IView previousShellSectionContainer,
-        IView previousPage,
+        IView? previousShellItemContainer,
+        IView? previousShellSectionContainer,
+        IView? previousPage,
         bool isPreviousPageRoot)
     {
         RemovePlatformPageFromContainer(previousPage, previousShellItemContainer, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
@@ -191,16 +180,16 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
         ArgsNavigationRequest args,
         SimpleShell shell,
         IReadOnlyList<IView> newPageStack,
-        IView previousShellItemContainer,
-        IView previousShellSectionContainer,
-        IView previousPage,
+        IView? previousShellItemContainer,
+        IView? previousShellSectionContainer,
+        IView? previousPage,
         bool isPreviousPageRoot);
 
     protected abstract void OnBackStackChanged(IReadOnlyList<IView> newPageStack, SimpleShell shell);
 
     #endregion
 
-    public virtual void UpdateRootPageContainer(IView rootPageContainer)
+    public virtual void UpdateRootPageContainer(IView? rootPageContainer)
     {
         if (NavigationStack is null)
         {
@@ -215,7 +204,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
         }
     }
 
-    public void UpdateGroupContainers(SimpleShell shell, IView shellSectionContainer, IView shellItemContainer)
+    public void UpdateGroupContainers(SimpleShell shell, IView? shellSectionContainer, IView? shellItemContainer)
     {
         if (currentPage is null || !isCurrentPageRoot || (shellSectionContainer == currentShellSectionContainer && shellItemContainer == currentShellItemContainer))
             return;
@@ -245,7 +234,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
         StackNavigation?.NavigationFinished(NavigationStack);
     }
 
-    protected static T GetFirstDifferent<T>(T item, T section, T page, T differentItem, T differentSection) where T : class
+    protected static T? GetFirstDifferent<T>(T? item, T? section, T? page, T? differentItem, T? differentSection) where T : class
     {
         return item == differentItem ?
             (section == differentSection ?
@@ -254,48 +243,9 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
                 item ?? section ?? page;
     }
 
-    protected private static IList<IView> GetPagesToDisconnect(IEnumerable<IView> oldPageStack, IEnumerable<IView> newPageStack)
-    {
-        return oldPageStack.Skip(1).Except(newPageStack).ToList();
-    }
-
-    protected static void DisconnectHandlers(IEnumerable<IView> oldPageStack, IEnumerable<IView> newPageStack)
-    {
-        var pageStack = GetPagesToDisconnect(oldPageStack, newPageStack);
-        DisconnectHandlers(pageStack);
-    }
-
-    protected static void DisconnectHandlers(IEnumerable<IView> pageStack)
-    {
-        foreach (var page in pageStack)
-        {
-            if (page is not BindableObject bindablePage || !SimpleShell.GetShouldAutoDisconnectPageHandler(bindablePage))
-                return;
-
-            // Wait until the page is unloaded
-            if (page is VisualElement v && v.IsLoaded)
-                v.Unloaded += OnPageUnloaded;
-            else
-                DisconnectHandler(page);
-        }
-
-        static void OnPageUnloaded(object sender, EventArgs e)
-        {
-            var page = sender as VisualElement;
-            page.Unloaded -= OnPageUnloaded;
-            DisconnectHandler(page);
-        }
-
-        static void DisconnectHandler(IView page)
-        {
-            var handler = page.Handler;
-            handler?.DisconnectHandler();
-        }
-    }
-
     #region Platform views manipulation
 
-    protected virtual PlatformView GetPlatformView(IView view)
+    protected virtual PlatformView? GetPlatformView(IView? view)
     {
 #if IOS || MACCATALYST
         // The ToPlatform() method does not return the actual view of a page controller
@@ -310,17 +260,18 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
         return view?.ToPlatform(mauiContext);
     }
 
-    protected virtual object GetPageContainerNavHost(IView pageContainer)
+    protected virtual object? GetPageContainerNavHost(IView pageContainer)
     {
         return pageContainer?.FindSimpleNavigationHost()?.Handler?.PlatformView;
     }
 
-    protected virtual void ReplaceRootPageContainer(IView newRootPageContainer, bool isCurrentPageRoot)
+    protected virtual void ReplaceRootPageContainer(IView? newRootPageContainer, bool isCurrentPageRoot)
     {
+        _ = navigationFrame ?? throw new NullReferenceException("navigationFrame should not be null here.");
         ReplaceContainer(this.rootPageContainer, newRootPageContainer, navigationFrame, isCurrentPageRoot);
     }
 
-    private void ReplaceContainer(IView oldContainer, IView newContainer, PlatformContainer parent, bool isCurrentPageRoot)
+    private void ReplaceContainer(IView? oldContainer, IView? newContainer, PlatformContainer parent, bool isCurrentPageRoot)
     {
         var newPlatformContainer = GetPlatformView(newContainer);
         List<PlatformChild> oldChildren = [];
@@ -337,7 +288,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
 
             AddChild(parent, newPlatformContainer);
 
-            if (GetPageContainerNavHost(newContainer) is PlatformContainer newNavHost)
+            if (newContainer is not null && GetPageContainerNavHost(newContainer) is PlatformContainer newNavHost)
             {
                 foreach (var child in oldChildren)
                     AddChild(newNavHost, child);
@@ -352,7 +303,7 @@ public abstract partial class BaseSimpleStackNavigationManager : ISimpleStackNav
         }
     }
 
-    protected private partial List<PlatformChild> RemoveContainer(IView oldContainer, PlatformContainer parent = null);
+    protected private partial List<PlatformChild> RemoveContainer(IView oldContainer, PlatformContainer? parent = null);
 
     private static partial void AddChild(PlatformContainer parent, PlatformChild child);
 

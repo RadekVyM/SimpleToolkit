@@ -12,23 +12,23 @@ public partial class PlatformSimpleStackNavigationManager
 {
     protected Task NavigateWithPlatformTransitionToPageInContainer(
         SimpleShell shell,
-        IView previousShellItemContainer,
-        IView previousShellSectionContainer,
-        IView previousPage,
+        IView? previousShellItemContainer,
+        IView? previousShellSectionContainer,
+        IView? previousPage,
         bool isPreviousPageRoot,
-        Func<IView, PlatformSimpleShellTransition> pageTransition,
+        Func<IView, PlatformSimpleShellTransition?> pageTransition,
         Func<SimpleShellTransitionArgs> args,
         bool animated = true)
     {
         var transition = pageTransition(currentPage);
-        var newPageView = GetPlatformView(currentPage);
+        var newPageView = GetPlatformView(currentPage) ?? throw new NullReferenceException("PlatformView cannot be null here.");
         var oldPageView = GetPlatformView(previousPage);
         var newSectionContainer = GetPlatformView(currentShellSectionContainer);
         var oldSectionContainer = GetPlatformView(previousShellSectionContainer);
         var newItemContainer = GetPlatformView(currentShellItemContainer);
         var oldItemContainer = GetPlatformView(previousShellItemContainer);
 
-        var to = BaseSimpleStackNavigationManager.GetFirstDifferent(newItemContainer, newSectionContainer, newPageView, oldItemContainer, oldSectionContainer);
+        var to = BaseSimpleStackNavigationManager.GetFirstDifferent(newItemContainer, newSectionContainer, newPageView, oldItemContainer, oldSectionContainer)!;
         var from = BaseSimpleStackNavigationManager.GetFirstDifferent(oldItemContainer, oldSectionContainer, oldPageView, newItemContainer, newSectionContainer);
 
         AddPlatformPageToContainer(currentPage, shell, GetValue(transition, args, transition?.DestinationPageInFrontOnSwitching, false), isCurrentPageRoot: isCurrentPageRoot);
@@ -46,14 +46,19 @@ public partial class PlatformSimpleStackNavigationManager
 
     protected async void HandleNewStack(
         IReadOnlyList<IView> newPageStack,
-        Func<IView, PlatformSimpleShellTransition> pageTransition,
-        Func<SimpleShellTransitionArgs> args,
+        Func<IView, PlatformSimpleShellTransition?> pageTransition,
+        Func<SimpleShellTransitionArgs>? args,
         bool animated = true)
     {
+        _ = rootContainer ?? throw new NullReferenceException("rootContainer cannot be null here.");
+        _ = navigationFrame ?? throw new NullReferenceException("navigationFrame cannot be null here.");
+
         var oldPageStack = NavigationStack;
         NavigationStack = newPageStack;
-        var controller = rootContainer.NextResponder as PlatformSimpleShellSectionController;
-        var root = navigationFrame.NextResponder as UIViewController;
+        var controller = rootContainer.NextResponder as PlatformSimpleShellSectionController ??
+            throw new Exception("Unexpected type of UIViewController");
+        var rootController = navigationFrame.NextResponder as UIViewController ??
+            throw new Exception("Unexpected type of UIViewController");
 
         var newControllers = newPageStack
             .Skip(1)
@@ -62,28 +67,26 @@ public partial class PlatformSimpleStackNavigationManager
                 if (p.ToHandler(mauiContext) is not PageHandler pageHandler)
                     throw new InvalidOperationException("Handler of a page which you are navigating to is not inherited from PageHandler");
 
-                return pageHandler.ViewController;
+                return pageHandler.ViewController ?? throw new NullReferenceException("Page ViewController should not be null here.");
             })
-            .Prepend(root)
+            .Prepend(rootController)
             .ToArray();
 
         await controller.HandleNewStack(
             newControllers,
             GetTransitionPairs(newPageStack, newControllers, pageTransition, args),
             animated);
-
-        DisconnectHandlers(oldPageStack, newPageStack);
     }
 
     private void SwitchPlatformPages(
         UIView from,
         UIView to,
-        IView previousShellItemContainer,
-        IView previousShellSectionContainer,
-        IView previousPage,
+        IView? previousShellItemContainer,
+        IView? previousShellSectionContainer,
+        IView? previousPage,
         bool isPreviousPageRoot,
         Func<SimpleShellTransitionArgs> args,
-        PlatformSimpleShellTransition transition)
+        PlatformSimpleShellTransition? transition)
     {
         if (transition is null || transition?.SwitchingAnimation is null)
         {
@@ -99,7 +102,8 @@ public partial class PlatformSimpleStackNavigationManager
         }
         else
         {
-            transition?.SwitchingAnimationStarting(args())?.Invoke(from, to);
+            if (transition?.SwitchingAnimationStarting is {} animation)
+                animation(args())?.Invoke(from, to);
 
             UIView.AnimateNotify(GetValue(transition, args, transition?.SwitchingAnimationDuration, 0.2d), () =>
             {
@@ -112,7 +116,8 @@ public partial class PlatformSimpleStackNavigationManager
                     if (previousPage != currentPage)
                         RemovePlatformPageFromContainer(previousPage, previousShellItemContainer, previousShellSectionContainer, isCurrentPageRoot, isPreviousPageRoot);
 
-                    transition?.SwitchingAnimationFinished(args())?.Invoke(from, to);
+                    if (transition?.SwitchingAnimationFinished is {} animation)
+                        animation(args())?.Invoke(from, to);
                 });
             });
         }
@@ -121,8 +126,8 @@ public partial class PlatformSimpleStackNavigationManager
     private static IDictionary<UIViewController, PlatformSimpleShellControllerTransitionPair> GetTransitionPairs(
         IReadOnlyList<IView> newPageStack,
         UIViewController[] newControllers,
-        Func<IView, PlatformSimpleShellTransition> pageTransition,
-        Func<SimpleShellTransitionArgs> args)
+        Func<IView, PlatformSimpleShellTransition?> pageTransition,
+        Func<SimpleShellTransitionArgs>? args)
     {
         var dictionary = new Dictionary<UIViewController, PlatformSimpleShellControllerTransitionPair>();
         var lastIndex = newControllers.Length - 1;

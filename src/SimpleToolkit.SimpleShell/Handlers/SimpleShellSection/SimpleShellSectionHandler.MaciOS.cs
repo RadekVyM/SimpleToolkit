@@ -8,8 +8,8 @@ namespace SimpleToolkit.SimpleShell.Handlers;
 
 public partial class SimpleShellSectionHandler
 {
-    public UIViewController ContentController { get; protected set; }
-    public UIViewController ViewController { get; protected set; }
+    public UIViewController ContentController { get; protected set; } = null!;
+    public UIViewController ViewController { get; protected set; } = null!;
 
     protected override UIView CreatePlatformElement()
     {
@@ -27,10 +27,10 @@ public partial class SimpleShellSectionHandler
         ViewController = navigationController;
         AddToParentController(navigationController);
 
-        return navigationController.View;
+        return navigationController.View ?? throw new NullReferenceException("UIViewController's View should not be null here.");
     }
 
-    private void NavigationControllerPopGestureRecognized(object sender, EventArgs e)
+    private void NavigationControllerPopGestureRecognized(object? sender, EventArgs e)
     {
         var shell = VirtualView.FindParentOfType<SimpleShell>();
 

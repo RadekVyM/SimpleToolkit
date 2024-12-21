@@ -43,7 +43,7 @@ public partial class SimpleShell : Shell, ISimpleShell
     public static readonly BindableProperty TabBarsProperty =
         BindableProperty.Create(nameof(TabBars), typeof(IReadOnlyList<TabBar>), typeof(SimpleShell), defaultBindingMode: BindingMode.OneWay);
 
-    public static new SimpleShell Current => Shell.Current as SimpleShell;
+    public static new SimpleShell Current => (SimpleShell)Shell.Current;
 
     public static bool UsesPlatformTransitions { get; internal set; }
 
@@ -53,9 +53,9 @@ public partial class SimpleShell : Shell, ISimpleShell
         set => SetValue(ContentProperty, value);
     }
 
-    public virtual IView RootPageContainer
+    public virtual IView? RootPageContainer
     {
-        get => (IView)GetValue(RootPageContainerProperty);
+        get => GetValue(RootPageContainerProperty) as IView;
         set => SetValue(RootPageContainerProperty, value);
     }
 
@@ -202,13 +202,13 @@ public partial class SimpleShell : Shell, ISimpleShell
         return list;
     }
 
-    private void SimpleShellNavigated(object sender, ShellNavigatedEventArgs e)
+    private void SimpleShellNavigated(object? sender, ShellNavigatedEventArgs e)
     {
         SetDefaultShellPropertyValues();
 
         CurrentPage = base.CurrentPage;
-        CurrentShellSection = CurrentItem?.CurrentItem;
-        CurrentShellContent = CurrentItem?.CurrentItem?.CurrentItem;
+        CurrentShellSection = CurrentItem.CurrentItem;
+        CurrentShellContent = CurrentItem.CurrentItem.CurrentItem;
         // If BackButtonBehavior is not set on CurrentPage, set BackButtonBehavior of the Shell
         if (!CurrentPage.IsSet(Shell.BackButtonBehaviorProperty))
         {
@@ -222,7 +222,7 @@ public partial class SimpleShell : Shell, ISimpleShell
         UpdateVisualStates();
     }
 
-    private void SimpleShellDescendantChanged(object sender, ElementEventArgs e)
+    private void SimpleShellDescendantChanged(object? sender, ElementEventArgs e)
     {
         // Update collections if the logical structure of the shell changes
         if (e.Element is BaseShellItem)
@@ -231,7 +231,7 @@ public partial class SimpleShell : Shell, ISimpleShell
         }
     }
 
-    private void SimpleShellLoaded(object sender, EventArgs e)
+    private void SimpleShellLoaded(object? sender, EventArgs e)
     {
         SetDefaultShellPropertyValues();
         UpdateVisualStates();
@@ -285,7 +285,7 @@ public partial class SimpleShell : Shell, ISimpleShell
         }
     }
 
-    private void UpdateLogicalChildren(Element oldView, Element newView)
+    private void UpdateLogicalChildren(Element? oldView, Element? newView)
     {
         if (oldView is not null)
         {

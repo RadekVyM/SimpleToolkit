@@ -14,7 +14,7 @@ namespace SimpleToolkit.SimpleShell.Handlers;
 
 public partial class PlatformSimpleShellSectionHandler : BaseSimpleShellSectionHandler<PageContainer>
 {
-    private new PlatformSimpleStackNavigationManager navigationManager => base.navigationManager as PlatformSimpleStackNavigationManager;
+    private new PlatformSimpleStackNavigationManager? navigationManager => base.navigationManager as PlatformSimpleStackNavigationManager;
 
 
     public PlatformSimpleShellSectionHandler(IPropertyMapper mapper, CommandMapper commandMapper)
@@ -29,12 +29,12 @@ public partial class PlatformSimpleShellSectionHandler : BaseSimpleShellSectionH
 
     protected override void ConnectNavigationManager(IStackNavigation stackNavigation)
     {
-        navigationManager.Connect(stackNavigation, PlatformView, RootContentContainer);
+        navigationManager?.Connect(stackNavigation, PlatformView, RootContentContainer);
     }
 
     protected override void DisconnectNavigationManager(IStackNavigation stackNavigation)
     {
-        navigationManager.Disconnect(navigationManager.StackNavigation, PlatformView, RootContentContainer);
+        navigationManager?.Disconnect(navigationManager.StackNavigation, PlatformView, RootContentContainer);
     }
 
     protected override void ConnectHandler(PageContainer platformView)
@@ -50,8 +50,8 @@ public partial class PlatformSimpleShellSectionHandler : BaseSimpleShellSectionH
 
 #if IOS || MACCATALYST
         var controller = platformView.NextResponder as UIKit.UIViewController;
-        controller.RemoveFromParentViewController();
-        controller.DidMoveToParentViewController(null);
+        controller?.RemoveFromParentViewController();
+        controller?.DidMoveToParentViewController(null);
 #endif
 
         base.DisconnectHandler(platformView);

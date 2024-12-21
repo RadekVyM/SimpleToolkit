@@ -14,10 +14,11 @@ public partial class SimpleShellItemHandler : ElementHandler<ShellItem, UIView>
 
     private void UpdatePlatformViewContent()
     {
-        if (currentShellSectionHandler.PlatformView != PlatformView.Subviews.FirstOrDefault())
+        if (currentShellSectionHandler?.PlatformView != PlatformView.Subviews.FirstOrDefault())
         {
             PlatformView.ClearSubviews();
-            PlatformView.AddSubview(currentShellSectionHandler.PlatformView);
+            if (currentShellSectionHandler?.PlatformView is {} platformView)
+                PlatformView.AddSubview(platformView);
         }
     }
 }

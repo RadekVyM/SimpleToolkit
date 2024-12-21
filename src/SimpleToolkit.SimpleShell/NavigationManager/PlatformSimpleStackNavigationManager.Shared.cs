@@ -21,13 +21,10 @@ using PlatformView = System.Object;
 
 namespace SimpleToolkit.SimpleShell.NavigationManager;
 
-public partial class PlatformSimpleStackNavigationManager : BaseSimpleStackNavigationManager, ISimpleStackNavigationManager
+public partial class PlatformSimpleStackNavigationManager(IMauiContext mauiContext) :
+    BaseSimpleStackNavigationManager(mauiContext, true), ISimpleStackNavigationManager
 {
-    protected RootContainer rootContainer;
-
-
-    public PlatformSimpleStackNavigationManager(IMauiContext mauiContext) : base(mauiContext, true) { }
-
+    protected RootContainer? rootContainer;
 
     public virtual void Connect(IStackNavigation navigationView, RootContainer rootContainer, NavFrame navigationFrame)
     {
@@ -40,7 +37,7 @@ public partial class PlatformSimpleStackNavigationManager : BaseSimpleStackNavig
 #endif
     }
 
-    public virtual void Disconnect(IStackNavigation navigationView, RootContainer rootContainer, NavFrame navigationFrame)
+    public virtual void Disconnect(IStackNavigation? navigationView, RootContainer rootContainer, NavFrame navigationFrame)
     {
 #if WINDOWS
         rootContainer.Navigated -= OnNavigated;
@@ -57,13 +54,13 @@ public partial class PlatformSimpleStackNavigationManager : BaseSimpleStackNavig
         ArgsNavigationRequest args,
         SimpleShell shell,
         IReadOnlyList<IView> newPageStack,
-        IView previousShellItemContainer,
-        IView previousShellSectionContainer,
-        IView previousPage,
+        IView? previousShellItemContainer,
+        IView? previousShellSectionContainer,
+        IView? previousPage,
         bool isPreviousPageRoot)
     {
         var oldRootPage = NavigationStack.FirstOrDefault();
-        var newRootPage = newPageStack.FirstOrDefault();
+        var newRootPage = newPageStack.FirstOrDefault() ?? throw new NullReferenceException("New page stack cannot be empty.");
         var animated = presentationMode == PresentationMode.Animated;
 
         if (transitionType == SimpleShellTransitionType.Switching && isCurrentPageRoot)
@@ -96,7 +93,7 @@ public partial class PlatformSimpleStackNavigationManager : BaseSimpleStackNavig
         FireNavigationFinished();
 
 
-        PlatformSimpleShellTransition GetTransition(IView page)
+        PlatformSimpleShellTransition? GetTransition(IView page)
         {
             return PlatformSimpleStackNavigationManager.GetTransition(page, shell);
         }
@@ -104,8 +101,8 @@ public partial class PlatformSimpleStackNavigationManager : BaseSimpleStackNavig
         SimpleShellTransitionArgs CreateArgs()
         {
             return new SimpleShellTransitionArgs(
-                originPage: previousPage as VisualElement,
-                destinationPage: currentPage as VisualElement,
+                originPage: (VisualElement)previousPage!,
+                destinationPage: (VisualElement)currentPage,
                 originShellSectionContainer: previousShellSectionContainer as VisualElement,
                 destinationShellSectionContainer: currentShellSectionContainer as VisualElement,
                 originShellItemContainer: previousShellItemContainer as VisualElement,
@@ -121,7 +118,7 @@ public partial class PlatformSimpleStackNavigationManager : BaseSimpleStackNavig
     protected override void OnBackStackChanged(IReadOnlyList<IView> newPageStack, SimpleShell shell)
     {
         var oldRootPage = NavigationStack.FirstOrDefault();
-        var newRootPage = newPageStack.FirstOrDefault();
+        var newRootPage = newPageStack.FirstOrDefault() ?? throw new Exception("New PageStack cannot be empty.");
 
         HandleNewStack(newPageStack, GetTransition, null, false);
 
@@ -134,13 +131,13 @@ public partial class PlatformSimpleStackNavigationManager : BaseSimpleStackNavig
 
         FireNavigationFinished();
 
-        PlatformSimpleShellTransition GetTransition(IView page)
+        PlatformSimpleShellTransition? GetTransition(IView page)
         {
             return PlatformSimpleStackNavigationManager.GetTransition(page, shell);
         }
     }
 
-    private static PlatformSimpleShellTransition GetTransition(IView page, SimpleShell shell)
+    private static PlatformSimpleShellTransition? GetTransition(IView page, SimpleShell shell)
     {
         var pageTransition = page is VisualElement visualCurrentPage ? SimpleShell.GetTransition(visualCurrentPage) : null;
         pageTransition ??= SimpleShell.GetTransition(shell);
@@ -148,15 +145,15 @@ public partial class PlatformSimpleStackNavigationManager : BaseSimpleStackNavig
     }
 
     private static T GetValue<T>(
-        PlatformSimpleShellTransition transition,
-        Func<SimpleShellTransitionArgs> args,
-        Func<SimpleShellTransitionArgs, T> value,
+        PlatformSimpleShellTransition? transition,
+        Func<SimpleShellTransitionArgs>? args,
+        Func<SimpleShellTransitionArgs, T>? value,
         T defaultValue)
     {
-        if (transition is null || value is null)
+        if (transition is null || value is null || args is null)
             return defaultValue;
 
-        return value(args?.Invoke());
+        return value(args());
     }
 
     private static T GetValue<T>(

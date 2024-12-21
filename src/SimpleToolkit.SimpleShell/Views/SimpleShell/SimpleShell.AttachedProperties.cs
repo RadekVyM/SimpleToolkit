@@ -17,13 +17,13 @@ public partial class SimpleShell
     public static readonly BindableProperty ShellGroupContainerProperty =
         BindableProperty.CreateAttached("ShellGroupContainer", typeof(IView), typeof(ShellGroupItem), null, propertyChanged: OnShellGroupContainerChanged);
 
-    public static ISimpleShellTransition GetTransition(BindableObject item)
+    public static ISimpleShellTransition? GetTransition(BindableObject item)
     {
         _ = item ?? throw new ArgumentNullException(nameof(item));
-        return (ISimpleShellTransition)item.GetValue(TransitionProperty);
+        return item.GetValue(TransitionProperty) as ISimpleShellTransition;
     }
 
-    public static void SetTransition(BindableObject item, ISimpleShellTransition value)
+    public static void SetTransition(BindableObject item, ISimpleShellTransition? value)
     {
         _ = item ?? throw new ArgumentNullException(nameof(item));
         item.SetValue(TransitionProperty, value);
@@ -41,36 +41,34 @@ public partial class SimpleShell
         item.SetValue(ShouldAutoDisconnectPageHandlerProperty, value);
     }
 
-    public static DataTemplate GetShellGroupContainerTemplate(BindableObject item)
+    public static DataTemplate? GetShellGroupContainerTemplate(BindableObject item)
     {
         _ = item ?? throw new ArgumentNullException(nameof(item));
-        return (DataTemplate)item.GetValue(ShellGroupContainerTemplateProperty);
+        return item.GetValue(ShellGroupContainerTemplateProperty) as DataTemplate;
     }
 
-    public static void SetShellGroupContainerTemplate(BindableObject item, DataTemplate value)
+    public static void SetShellGroupContainerTemplate(BindableObject item, DataTemplate? value)
     {
         _ = item ?? throw new ArgumentNullException(nameof(item));
         item.SetValue(ShellGroupContainerTemplateProperty, value);
     }
 
-    public static IView GetShellGroupContainer(BindableObject item)
+    public static IView? GetShellGroupContainer(BindableObject item)
     {
         _ = item ?? throw new ArgumentNullException(nameof(item));
-        return (IView)item.GetValue(ShellGroupContainerProperty);
+        return item.GetValue(ShellGroupContainerProperty) as IView;
     }
 
-    public static void SetShellGroupContainer(BindableObject item, IView value)
+    public static void SetShellGroupContainer(BindableObject item, IView? value)
     {
         _ = item ?? throw new ArgumentNullException(nameof(item));
         item.SetValue(ShellGroupContainerProperty, value);
     }
 
 
-    private static void OnShellGroupContainerTemplateChanged(BindableObject bindable, object oldValue, object newValue)
+    private static void OnShellGroupContainerTemplateChanged(BindableObject bindable, object? oldValue, object? newValue)
     {
-        var group = bindable as ShellGroupItem;
-
-        if (group.IsSet(ShellGroupContainerProperty))
+        if (bindable is ShellGroupItem group && group.IsSet(ShellGroupContainerProperty))
         {
             var oldContainer = GetShellGroupContainer(group);
 
@@ -82,14 +80,12 @@ public partial class SimpleShell
         }
     }
 
-    private static void OnShellGroupContainerChanged(BindableObject bindable, object oldValue, object newValue)
+    private static void OnShellGroupContainerChanged(BindableObject bindable, object? oldValue, object? newValue)
     {
-        var group = bindable as ShellGroupItem;
-        var oldView = oldValue as Element;
-        var newView = newValue as Element;
-
-        var simpleShell = group.FindParentOfType<SimpleShell>();
-
-        simpleShell?.UpdateLogicalChildren(oldView, newView);
+        if (bindable is ShellGroupItem group && oldValue is Element oldView && newValue is Element newView)
+        {
+            var simpleShell = group.FindParentOfType<SimpleShell>();
+            simpleShell?.UpdateLogicalChildren(oldView, newView);
+        }
     }
 }

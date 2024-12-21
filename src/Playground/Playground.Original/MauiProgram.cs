@@ -27,10 +27,13 @@ public static class MauiProgram
         builder.SetDefaultStatusBarAppearance(color: Colors.Transparent, lightElements: false);
         builder.SetDefaultNavigationBarAppearance(color: Colors.Transparent, lightElements: false);
 #endif
+
+#pragma warning disable CS8793 // The given expression always matches the provided pattern.
         if (UsedAppShell is not AppShellType.Normal)
         {
             builder.UseSimpleShell(true);
         }
+#pragma warning restore CS8793 // The given expression always matches the provided pattern.
 
         return builder.Build();
     }

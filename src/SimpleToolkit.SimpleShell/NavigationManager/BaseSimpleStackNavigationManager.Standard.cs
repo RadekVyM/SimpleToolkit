@@ -18,16 +18,16 @@ public abstract partial class BaseSimpleStackNavigationManager
     }
 
 
-    protected private partial List<System.Object> RemoveContainer(IView oldContainer, System.Object parent = null)
+    protected private partial List<object> RemoveContainer(IView oldContainer, object? parent = null)
     {
         throw new NotSupportedException();
     }
 
-    private static partial void AddChild(System.Object parent, System.Object child)
+    private static partial void AddChild(object parent, object child)
     {
     }
 
-    private static partial void ClearChildren(System.Object parent, List<System.Object> oldChildren)
+    private static partial void ClearChildren(object parent, List<object> oldChildren)
     {
     }
 }

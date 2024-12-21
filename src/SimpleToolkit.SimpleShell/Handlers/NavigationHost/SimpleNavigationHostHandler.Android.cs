@@ -29,10 +29,10 @@ public partial class SimpleNavigationHostHandler : ViewHandler<ISimpleNavigation
 
     protected override FrameLayout CreatePlatformView()
     {
-        return new FrameLayout(MauiContext.Context);
+        return new FrameLayout(MauiContext?.Context ?? throw new NullReferenceException("MauiContext should not be null here."));
     }
 
-    public virtual void SetContent(AView view)
+    public virtual void SetContent(AView? view)
     {
         PlatformView.RemoveAllViews();
         if (view is not null)

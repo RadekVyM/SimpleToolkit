@@ -109,7 +109,7 @@ public abstract partial class BaseSimpleStackNavigationManager
         parent.Children.Clear();
     }
 
-    protected private partial List<UIElement> RemoveContainer(IView oldContainer, PlatformPanel parent = null)
+    protected private partial List<UIElement> RemoveContainer(IView oldContainer, PlatformPanel? parent = null)
     {
         var oldPlatformContainer = GetPlatformView(oldContainer);
         var oldChildren = new List<UIElement>();

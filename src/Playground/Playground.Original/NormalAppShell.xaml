@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Shell x:Class="Playground.Original.NormalAppShell"
-       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       xmlns:pages="clr-namespace:Playground.Original.Views.Pages"
-       xmlns:local="clr-namespace:Playground.Original">
+<Shell
+    x:Class="Playground.Original.NormalAppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:Playground.Original.Views.Pages"
+    xmlns:local="clr-namespace:Playground.Original">
     
     <Shell.TitleView>
         <Label Text="Hello title"/>
@@ -13,10 +14,10 @@
         <!--<Tab Title="Flame tab" Route="FirstTab"
          Icon="flame_empty.png">-->
         <ShellContent
-            Title="Content Button"
+            Title="Gray"
             Icon="bird_empty.png"
-            ContentTemplate="{DataTemplate pages:ContentButtonPage}"
-            Route="ContentButtonPage" />
+            ContentTemplate="{DataTemplate pages:GrayPage}"
+            Route="GrayPage" />
         <ShellContent
             Title="Yellow"
             Icon="flame_empty.png"

@@ -8,7 +8,7 @@ public static class AppHostBuilderExtensions
     /// Configures the SimpleToolkit.SimpleShell package.
     /// </summary>
     /// <param name="builder">Instance of <see cref="MauiAppBuilder"/>.</param>
-    /// <param name="usePlatformTransitions">Indicates whether to use platform specific page transitions or not. The default option is <see cref="true"/>.</param>
+    /// <param name="usePlatformTransitions">Indicates whether to use platform specific page transitions or not. The default option is true.</param>
     /// <returns>Instance of <see cref="MauiAppBuilder"/>.</returns>
     public static MauiAppBuilder UseSimpleShell(this MauiAppBuilder builder, bool usePlatformTransitions = true)
     {

@@ -51,6 +51,7 @@ namespace Playground.Original
             Routing.RegisterRoute(nameof(ImageDetailPage), typeof(ImageDetailPage));
 
             Loaded += PlaygroundAppShellLoaded;
+            Unloaded += PlaygroundAppShellUnloaded;
 
             this.SetTransition(
                 callback: static args =>
@@ -111,7 +112,12 @@ namespace Playground.Original
 
         private void PlaygroundAppShellLoaded(object sender, EventArgs e)
         {
-            this.Window.SubscribeToSafeAreaChanges(OnSafeAreaChanged);
+            Window.SubscribeToSafeAreaChanges(OnSafeAreaChanged);
+        }
+
+        private void PlaygroundAppShellUnloaded(object sender, EventArgs e)
+        {
+            Window.UnsubscribeFromSafeAreaChanges(OnSafeAreaChanged);
         }
 
         private void OnSafeAreaChanged(Thickness safeAreaPadding)

@@ -8,7 +8,7 @@ public class SimpleShellSectionController : UINavigationController, IUIGestureRe
 {
     private CGPoint startingPoint = default;
 
-    public event EventHandler PopGestureRecognized;
+    public event EventHandler? PopGestureRecognized;
 
     public bool ShouldRecognizePopGesture { get; set; } = true;
 
@@ -28,10 +28,10 @@ public class SimpleShellSectionController : UINavigationController, IUIGestureRe
     {
         base.ViewWillLayoutSubviews();
 
-        foreach (var subview in View.Subviews)
+        foreach (var subview in View?.Subviews ?? [])
         {
             // Only resize a subview when it does not match the size of the parent
-            if (subview.Bounds.Width != View.Bounds.Width || subview.Bounds.Height != View.Bounds.Height)
+            if (View is not null && (subview.Bounds.Width != View.Bounds.Width || subview.Bounds.Height != View.Bounds.Height))
             {
                 subview.Frame = new CoreGraphics.CGRect(subview.Frame.X, subview.Frame.Y, View.Bounds.Width, View.Bounds.Height);
             }
@@ -45,7 +45,7 @@ public class SimpleShellSectionController : UINavigationController, IUIGestureRe
         InteractivePopGestureRecognizer.Delegate = this;
         InteractivePopGestureRecognizer.AddTarget((r) =>
         {
-            if (r is not UIScreenEdgePanGestureRecognizer recognizer)
+            if (r is not UIScreenEdgePanGestureRecognizer recognizer || ViewControllers is null)
                 return;
 
             switch (recognizer.State)

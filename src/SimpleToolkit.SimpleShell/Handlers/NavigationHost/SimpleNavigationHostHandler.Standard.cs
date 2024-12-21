@@ -4,14 +4,14 @@ using Microsoft.Maui.Handlers;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 
-public partial class SimpleNavigationHostHandler : ElementHandler<ISimpleNavigationHost, System.Object>
+public partial class SimpleNavigationHostHandler : ElementHandler<ISimpleNavigationHost, object>
 {
     public SimpleNavigationHostHandler(IPropertyMapper mapper, CommandMapper commandMapper)
         : base(mapper, commandMapper)
     {
     }
 
-    protected override System.Object CreatePlatformElement()
+    protected override object CreatePlatformElement()
     {
         throw new NotImplementedException();
     }

@@ -2,7 +2,7 @@
 
 public enum AppShellType
 {
-    Normal, Playground
+    Normal, Playground, Containers, NoTabs, ShellItems
 }
 
 public partial class App : Application
@@ -22,9 +22,12 @@ public partial class App : Application
         return new Window(GetShellPage(MauiProgram.UsedAppShell));
     }
 
-    private Page GetShellPage(AppShellType type) => type switch
+    private static Page GetShellPage(AppShellType type) => type switch
     {
         AppShellType.Normal => new NormalAppShell(),
+        AppShellType.Containers => new ContainersShell(),
+        AppShellType.NoTabs => new NoTabsShell(),
+        AppShellType.ShellItems => new ShellItemsShell(),
         _ => new PlaygroundAppShell()
     };
 }

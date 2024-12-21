@@ -6,16 +6,14 @@ namespace SimpleToolkit.SimpleShell.Platform;
 
 // Based on https://github.com/dotnet/maui/blob/main/src/Controls/src/Core/Compatibility/Handlers/Shell/iOS/ShellSectionRenderer.cs
 
-public record PlatformSimpleShellControllerTransitionPair(IUIViewControllerAnimatedTransitioning PushingTransition, IUIViewControllerAnimatedTransitioning PoppingTransition);
+public record PlatformSimpleShellControllerTransitionPair(IUIViewControllerAnimatedTransitioning? PushingTransition, IUIViewControllerAnimatedTransitioning? PoppingTransition);
 
 public class PlatformSimpleShellSectionController : UINavigationController
 {
-    private SimpleShell shell;
-    private TaskCompletionSource<bool> popCompletionTask;
-    private Dictionary<UIViewController, TaskCompletionSource<bool>> completionTasks =
-        new Dictionary<UIViewController, TaskCompletionSource<bool>>();
-    private Dictionary<UIViewController, PlatformSimpleShellControllerTransitionPair> transitions =
-        new Dictionary<UIViewController, PlatformSimpleShellControllerTransitionPair>();
+    private SimpleShell? shell;
+    private TaskCompletionSource<bool>? popCompletionTask;
+    private readonly Dictionary<UIViewController, TaskCompletionSource<bool>> completionTasks = [];
+    private Dictionary<UIViewController, PlatformSimpleShellControllerTransitionPair> transitions = [];
     private bool disposed;
 
 
@@ -32,6 +30,8 @@ public class PlatformSimpleShellSectionController : UINavigationController
 
     public async Task HandleNewStack(UIViewController[] stack, IDictionary<UIViewController, PlatformSimpleShellControllerTransitionPair> newTransitions, bool animated)
     {
+        _ = ViewControllers ?? throw new NullReferenceException("ViewControllers should not be null here.");
+
         var lastInStack = stack[stack.Length - 1];
 
         UpdateTransitions(newTransitions);
@@ -42,7 +42,7 @@ public class PlatformSimpleShellSectionController : UINavigationController
             return;
         }
 
-        UIViewController lastSame = null;
+        UIViewController? lastSame = null;
 
         for (int i = 0; i < stack.Length; i++)
         {
@@ -109,7 +109,7 @@ public class PlatformSimpleShellSectionController : UINavigationController
 
     private void ReplaceViewControllers(int from, UIViewController[] viewControllers)
     {
-        var newViewControllers = ViewControllers;
+        var newViewControllers = ViewControllers ?? throw new NullReferenceException("ViewControllers should not be null here.");
         newViewControllers = newViewControllers
             .Take(from)
             .Concat(viewControllers)
@@ -119,7 +119,7 @@ public class PlatformSimpleShellSectionController : UINavigationController
 
     private void UpdateTransitions(IDictionary<UIViewController, PlatformSimpleShellControllerTransitionPair> newTransitions)
     {
-        transitions = new Dictionary<UIViewController, PlatformSimpleShellControllerTransitionPair>(newTransitions);
+        transitions = new(newTransitions);
     }
 
     private async void SendPoppedOnCompletion(Task<bool> popTask)
@@ -128,36 +128,33 @@ public class PlatformSimpleShellSectionController : UINavigationController
             throw new ArgumentNullException(nameof(popTask));
 
         // TODO: Is this the right solution?
-        if (await popTask)
-            await shell?.GoToAsync("..");
+        if (await popTask && shell is not null)
+            await shell.GoToAsync("..");
     }
 
     private bool ShouldPop()
     {
-        var shellItem = shell.CurrentItem;
+        var shellItem = shell?.CurrentItem;
         var shellSection = shellItem?.CurrentItem;
         var shellContent = shellSection?.CurrentItem;
         var stack = shellSection?.Stack.ToList();
 
         stack?.RemoveAt(stack.Count - 1);
 
-        return ((IShellController)shell).ProposeNavigation(ShellNavigationSource.Pop, shellItem, shellSection, shellContent, stack, true);
+        return (shell as IShellController)?.ProposeNavigation(ShellNavigationSource.Pop, shellItem, shellSection, shellContent, stack, true) ?? false;
     }
 
 
-    class GestureDelegate : UIGestureRecognizerDelegate
+    class GestureDelegate(UINavigationController navigationController, Func<bool> shouldPop) : UIGestureRecognizerDelegate
     {
-        readonly UINavigationController navigationController;
-        readonly Func<bool> shouldPop;
+        readonly UINavigationController navigationController = navigationController;
+        readonly Func<bool> shouldPop = shouldPop;
 
-        public GestureDelegate(UINavigationController navigationController, Func<bool> shouldPop)
-        {
-            this.navigationController = navigationController;
-            this.shouldPop = shouldPop;
-        }
 
         public override bool ShouldBegin(UIGestureRecognizer recognizer)
         {
+            _ = navigationController.ViewControllers ?? throw new NullReferenceException("ViewControllers should not be null here.");
+
             if (navigationController.ViewControllers.Length == 1)
                 return false;
 
@@ -165,21 +162,17 @@ public class PlatformSimpleShellSectionController : UINavigationController
         }
     }
 
-    class ControllerDelegate : UINavigationControllerDelegate
+    class ControllerDelegate(PlatformSimpleShellSectionController controller) : UINavigationControllerDelegate
     {
-        readonly PlatformSimpleShellSectionController self;
+        readonly PlatformSimpleShellSectionController self = controller;
 
-        public ControllerDelegate(PlatformSimpleShellSectionController controller)
-        {
-            self = controller;
-        }
 
         // This is currently working around a Mono Interpreter bug
         // if you remove this code please verify that hot restart still works
         // https://github.com/xamarin/Xamarin.Forms/issues/10519
         [Export("navigationController:animationControllerForOperation:fromViewController:toViewController:")]
         [Foundation.Preserve(Conditional = true)]
-        public new IUIViewControllerAnimatedTransitioning GetAnimationControllerForOperation(UINavigationController navigationController, UINavigationControllerOperation operation, UIViewController fromViewController, UIViewController toViewController)
+        public new IUIViewControllerAnimatedTransitioning? GetAnimationControllerForOperation(UINavigationController navigationController, UINavigationControllerOperation operation, UIViewController fromViewController, UIViewController toViewController)
         {
             var transitions = self.transitions;
 

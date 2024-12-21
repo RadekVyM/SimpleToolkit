@@ -28,9 +28,8 @@ public static partial class WindowExtensions
     {
         WindowHandler.Mapper.AppendToMapping("DisplayContentBehindBars", (handler, window) =>
         {
-            var activity = handler.PlatformView as AppCompatActivity;
-
-            WindowCompat.SetDecorFitsSystemWindows(activity.Window, false);
+            if (handler.PlatformView is AppCompatActivity activity && activity.Window is {} activityWindow)
+                WindowCompat.SetDecorFitsSystemWindows(activityWindow, false);
 
             window.SetStatusBarAppearance();
         });
@@ -42,10 +41,14 @@ public static partial class WindowExtensions
             if (window is not Element elmentWindow)
                 return;
 
-            // If I use just activity.Window.DecorView, set colors of the bars are overridden.
-            ViewCompat.SetOnApplyWindowInsetsListener(
-                (activity.Window.DecorView as ViewGroup).GetChildAt(0), 
-                new SimpleOnApplyWindowInsetsListener(elmentWindow.Id, InvokeListenersIfChanged));
+            if (activity?.Window?.DecorView is ViewGroup decorView && decorView.GetChildAt(0) is {} decorViewChild)
+            {
+                // If I use just activity.Window.DecorView, set colors of the bars are overridden.
+                ViewCompat.SetOnApplyWindowInsetsListener(
+                    decorViewChild, 
+                    new SimpleOnApplyWindowInsetsListener(elmentWindow.Id, InvokeListenersIfChanged));
+            }
+
         });
 
         return builder;
@@ -58,9 +61,10 @@ public static partial class WindowExtensions
     /// <param name="color">New background color of the status bar.</param>
     /// <param name="lightElements">Whether text and icons should be light or dark.</param>
     /// <returns>The builder.</returns>
-    public static MauiAppBuilder SetDefaultStatusBarAppearance(this MauiAppBuilder builder, Color color = null, bool lightElements = true)
+    public static MauiAppBuilder SetDefaultStatusBarAppearance(this MauiAppBuilder builder, Color? color = null, bool lightElements = true)
     {
-        defaultStatusBarColor = color;
+        if (color is not null)
+            defaultStatusBarColor = color;
         defaultStatusBarLightElements = lightElements;
 
         WindowHandler.Mapper.AppendToMapping("DefaultStatusBarAppearance", (handler, window) =>
@@ -78,9 +82,10 @@ public static partial class WindowExtensions
     /// <param name="color">New background color of the navigation bar.</param>
     /// <param name="lightElements">Whether text and icons should be light or dark.</param>
     /// <returns>The builder.</returns>
-    public static MauiAppBuilder SetDefaultNavigationBarAppearance(this MauiAppBuilder builder, Color color = null, bool lightElements = true)
+    public static MauiAppBuilder SetDefaultNavigationBarAppearance(this MauiAppBuilder builder, Color? color = null, bool lightElements = true)
     {
-        defaultNavigationBarColor = color;
+        if (color is not null)
+            defaultNavigationBarColor = color;
         defaultNavigationBarLightElements = lightElements;
 
         WindowHandler.Mapper.AppendToMapping("DefaultNavigationBarAppearance", (handler, window) =>
@@ -97,28 +102,31 @@ public static partial class WindowExtensions
     /// <param name="window">The window.</param>
     /// <param name="color">New background color of the status bar.</param>
     /// <param name="lightElements">Whether text and icons should be light or dark.</param>
-    public static void SetStatusBarAppearance(this IWindow window, Color color = null, bool? lightElements = null)
+    public static void SetStatusBarAppearance(this IWindow window, Color? color = null, bool? lightElements = null)
     {
-        var activity = window.Handler.PlatformView as AppCompatActivity;
+        if (window.Handler?.PlatformView is not AppCompatActivity activity || activity.Window is not {} activityWindow)
+            return;
 
-        var windowInsetController = WindowCompat.GetInsetsController(activity.Window, activity.Window.DecorView);
+        var windowInsetController = WindowCompat.GetInsetsController(activityWindow, activityWindow.DecorView);
         if (windowInsetController is not null)
         {
             windowInsetController.AppearanceLightStatusBars = !(lightElements ?? defaultStatusBarLightElements);
         }
         else if (Build.VERSION.SdkInt < BuildVersionCodes.R)
         {
-            int uiOptions = (int)activity.Window.DecorView.SystemUiVisibility;
+#if !ANDROID30_0_OR_GREATER
+            int uiOptions = (int)activityWindow.DecorView.SystemUiFlags;
 
             if (!(lightElements ?? defaultStatusBarLightElements))
                 uiOptions |= (int)SystemUiFlags.LightStatusBar;
             else
                 uiOptions &= ~(int)SystemUiFlags.LightStatusBar;
 
-            activity.Window.DecorView.SystemUiVisibility = (StatusBarVisibility)uiOptions;
+            activityWindow.DecorView.SystemUiFlags = (SystemUiFlags)uiOptions;
+#endif
         }
 
-        activity.Window.SetStatusBarColor((color ?? defaultStatusBarColor).ToPlatform());
+        activityWindow.SetStatusBarColor((color ?? defaultStatusBarColor).ToPlatform());
     }
 
     /// <summary>
@@ -127,48 +135,52 @@ public static partial class WindowExtensions
     /// <param name="window">The window.</param>
     /// <param name="color">New background color of the navigation bar.</param>
     /// <param name="lightElements">Whether text and icons should be light or dark.</param>
-    public static void SetNavigationBarAppearance(this IWindow window, Color color = null, bool? lightElements = null)
+    public static void SetNavigationBarAppearance(this IWindow window, Color? color = null, bool? lightElements = null)
     {
-        var activity = window.Handler.PlatformView as AppCompatActivity;
+        if (window.Handler?.PlatformView is not AppCompatActivity activity || activity.Window is not {} activityWindow)
+            return;
 
-        var windowInsetController = ViewCompat.GetWindowInsetsController(activity.Window.DecorView);
+        var windowInsetController = WindowCompat.GetInsetsController(activityWindow, activityWindow.DecorView);
         if (windowInsetController is not null)
         {
             windowInsetController.AppearanceLightNavigationBars = !(lightElements ?? defaultNavigationBarLightElements);
         }
         else if (Build.VERSION.SdkInt < BuildVersionCodes.R)
         {
-            int uiOptions = (int)activity.Window.DecorView.SystemUiVisibility;
+#if !ANDROID30_0_OR_GREATER
+            int uiOptions = (int)activityWindow.DecorView.SystemUiFlags;
 
             if (!(lightElements ?? defaultNavigationBarLightElements))
                 uiOptions |= (int)SystemUiFlags.LightNavigationBar;
             else
                 uiOptions &= ~(int)SystemUiFlags.LightNavigationBar;
 
-            activity.Window.DecorView.SystemUiVisibility = (StatusBarVisibility)uiOptions;
+            activityWindow.DecorView.SystemUiFlags = (SystemUiFlags)uiOptions;
+#endif
         }
 
-        activity.Window.SetNavigationBarColor((color ?? defaultNavigationBarColor).ToPlatform());
+        activityWindow.SetNavigationBarColor((color ?? defaultNavigationBarColor).ToPlatform());
     }
 }
 
-internal class SimpleOnApplyWindowInsetsListener : Java.Lang.Object, IOnApplyWindowInsetsListener
+internal class SimpleOnApplyWindowInsetsListener(Guid windowId, Action<Guid, Thickness> action) :
+    Java.Lang.Object, IOnApplyWindowInsetsListener
 {
-    private readonly Guid windowId;
-    private readonly Action<Guid, Thickness> action;
-
-    public SimpleOnApplyWindowInsetsListener(Guid windowId, Action<Guid, Thickness> action)
-    {
-        this.windowId = windowId;
-        this.action = action;
-    }
+    private readonly Guid windowId = windowId;
+    private readonly Action<Guid, Thickness> action = action;
 
     public WindowInsetsCompat OnApplyWindowInsets(AView v, WindowInsetsCompat insets)
     {
         var barsInsets = insets.GetInsets(WindowInsetsCompat.Type.SystemBars());
         var density = DeviceDisplay.MainDisplayInfo.Density;
 
-        action?.Invoke(windowId, new Thickness(barsInsets.Left / density, barsInsets.Top / density, barsInsets.Right / density, barsInsets.Bottom / density));
+        action?.Invoke(
+            windowId,
+            new Thickness(
+                barsInsets.Left / density,
+                barsInsets.Top / density,
+                barsInsets.Right / density,
+                barsInsets.Bottom / density));
 
         return ViewCompat.OnApplyWindowInsets(v, insets.Inset(barsInsets));
     }
