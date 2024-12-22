@@ -15,9 +15,9 @@ namespace SimpleToolkit.Core;
 public static partial class WindowExtensions
 {
     private static Color defaultStatusBarColor = Colors.Transparent;
-    private static Color defaultNavigationBarColor = Colors.Black;
+    private static Color defaultNavigationBarColor = Colors.Transparent;
     private static bool defaultStatusBarLightElements = false;
-    private static bool defaultNavigationBarLightElements = true;
+    private static bool defaultNavigationBarLightElements = false;
 
     /// <summary>
     /// Forces application content to be displayed behind system bars (status and navigation bars) on Android and iOS.
@@ -126,7 +126,9 @@ public static partial class WindowExtensions
 #endif
         }
 
+#if !ANDROID35_0_OR_GREATER
         activityWindow.SetStatusBarColor((color ?? defaultStatusBarColor).ToPlatform());
+#endif
     }
 
     /// <summary>
@@ -159,7 +161,9 @@ public static partial class WindowExtensions
 #endif
         }
 
+#if !ANDROID35_0_OR_GREATER
         activityWindow.SetNavigationBarColor((color ?? defaultNavigationBarColor).ToPlatform());
+#endif
     }
 }
 

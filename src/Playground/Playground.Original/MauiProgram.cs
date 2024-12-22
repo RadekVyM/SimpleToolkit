@@ -23,9 +23,9 @@ public static class MauiProgram
         if (UsedAppShell == AppShellType.Playground)
             builder.DisplayContentBehindBars();
 
-#if ANDROID
-        builder.SetDefaultStatusBarAppearance(color: Colors.Transparent, lightElements: false);
-        builder.SetDefaultNavigationBarAppearance(color: Colors.Transparent, lightElements: false);
+#if ANDROID && !ANDROID35_0_OR_GREATER
+        builder.SetDefaultStatusBarAppearance(color: Colors.Black, lightElements: true);
+        builder.SetDefaultNavigationBarAppearance(color: Colors.Black, lightElements: true);
 #endif
 
 #pragma warning disable CS8793 // The given expression always matches the provided pattern.

@@ -102,6 +102,18 @@ public class BasePage : ContentPage
         System.Diagnostics.Debug.WriteLine($"{Title} OnNavigatedTo");
         base.OnNavigatedTo(args);
     }
+
+    protected override void OnHandlerChanged()
+    {
+        System.Diagnostics.Debug.WriteLine($"{Title} OnHandlerChanged (handler is {(Handler is null ? "null" : "not null")})");
+        base.OnHandlerChanged();
+    }
+
+    protected override void OnHandlerChanging(HandlerChangingEventArgs args)
+    {
+        System.Diagnostics.Debug.WriteLine($"{Title} OnHandlerChanging (handler is {(Handler is null ? "null" : "not null")})");
+        base.OnHandlerChanging(args);
+    }
 }
 
 public record PageButton(string Title, Action Action);

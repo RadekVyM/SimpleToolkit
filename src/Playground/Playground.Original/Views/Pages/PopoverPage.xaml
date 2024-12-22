@@ -15,19 +15,19 @@
             VerticalOptions="Center">
             <controls:PopoverTest
                 HorizontalOptions="Start"
-                PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
-                UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}"
-                IsAnimated="{Binding Source={x:Reference isAnimatedSwitch}, Path=IsToggled}" />
+                PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem, x:DataType=Picker}"
+                UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled, x:DataType=Switch}"
+                IsAnimated="{Binding Source={x:Reference isAnimatedSwitch}, Path=IsToggled, x:DataType=Switch}" />
             <controls:PopoverTest
                 HorizontalOptions="Center"
-                PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
-                UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}"
-                IsAnimated="{Binding Source={x:Reference isAnimatedSwitch}, Path=IsToggled}" />
+                PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem, x:DataType=Picker}"
+                UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled, x:DataType=Switch}"
+                IsAnimated="{Binding Source={x:Reference isAnimatedSwitch}, Path=IsToggled, x:DataType=Switch}" />
             <controls:PopoverTest
                 HorizontalOptions="End"
-                PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem}"
-                UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled}"
-                IsAnimated="{Binding Source={x:Reference isAnimatedSwitch}, Path=IsToggled}" />
+                PopoverAlignment="{Binding Source={x:Reference popoverAlignmentPicker}, Path=SelectedItem, x:DataType=Picker}"
+                UseDefaultStyling="{Binding Source={x:Reference useDefaultStylingSwitch}, Path=IsToggled, x:DataType=Switch}"
+                IsAnimated="{Binding Source={x:Reference isAnimatedSwitch}, Path=IsToggled, x:DataType=Switch}" />
 
             <Picker x:Name="popoverAlignmentPicker" />
             <HorizontalStackLayout

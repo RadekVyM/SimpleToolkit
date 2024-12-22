@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
+    xmlns:controls="clr-namespace:Sample.SimpleShellTopBar.Views.Controls"
     x:Class="Sample.SimpleShellTopBar.Views.Controls.TopBarScaffold"
     
     x:Name="scaffold">
@@ -17,7 +18,7 @@
                 Padding="0, 5"
                 MinimumHeightRequest="60">
                 <simpleCore:ContentButton
-                    IsVisible="{Binding Source={x:Reference scaffold}, Path=IsBackButtonVisible}"
+                    IsVisible="{Binding Source={x:Reference scaffold}, Path=IsBackButtonVisible, x:DataType={x:Type controls:TopBarScaffold}}"
                     VerticalOptions="Center" HorizontalOptions="Center"
                     HeightRequest="30" WidthRequest="30"
                     StrokeThickness="0"
@@ -37,7 +38,7 @@
 
             <ContentView
                 x:Name="pageContent"
-                Content="{Binding Source={x:Reference scaffold}, Path=PageContent}"
+                Content="{Binding Source={x:Reference scaffold}, Path=PageContent, x:DataType={x:Type controls:TopBarScaffold}}"
                 Grid.Row="1"
                 CompressedLayout.IsHeadless="True"/>
         </Grid>

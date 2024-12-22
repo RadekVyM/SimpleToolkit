@@ -1,4 +1,5 @@
-﻿using SimpleToolkit.SimpleShell.Extensions;
+﻿using System.ComponentModel;
+using SimpleToolkit.SimpleShell.Extensions;
 using SimpleToolkit.SimpleShell.Transitions;
 
 namespace SimpleToolkit.SimpleShell;
@@ -8,6 +9,8 @@ public partial class SimpleShell
     public static readonly BindableProperty TransitionProperty =
         BindableProperty.CreateAttached("Transition", typeof(ISimpleShellTransition), typeof(Page), null);
 
+    [Obsolete("This API is deprecated and has no effect. The default HandlerProperties.DisconnectPolicy mechanism is used instead.")]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static readonly BindableProperty ShouldAutoDisconnectPageHandlerProperty =
         BindableProperty.CreateAttached("ShouldAutoDisconnectPageHandler", typeof(bool), typeof(Page), true);
 
@@ -29,12 +32,16 @@ public partial class SimpleShell
         item.SetValue(TransitionProperty, value);
     }
 
+    [Obsolete("This API is deprecated and has no effect. The default HandlerProperties.DisconnectPolicy mechanism is used instead.")]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static bool GetShouldAutoDisconnectPageHandler(BindableObject item)
     {
         _ = item ?? throw new ArgumentNullException(nameof(item));
         return (bool)item.GetValue(ShouldAutoDisconnectPageHandlerProperty);
     }
 
+    [Obsolete("This API is deprecated and has no effect. The default HandlerProperties.DisconnectPolicy mechanism is used instead.")]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static void SetShouldAutoDisconnectPageHandler(BindableObject item, bool value)
     {
         _ = item ?? throw new ArgumentNullException(nameof(item));

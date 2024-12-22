@@ -3,13 +3,14 @@
     x:Class="Playground.Original.Views.Controls.PopoverTest"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Playground.Original.Views.Controls"
     xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
     x:Name="thisButton"
     Clicked="ButtonClicked"
     Text="Show Popover">
 
     <simpleCore:Popover.AttachedPopover>
-        <simpleCore:Popover x:Name="popover" Alignment="{Binding Source={x:Reference thisButton}, Path=PopoverAlignment}">
+        <simpleCore:Popover x:Name="popover" Alignment="{Binding Source={x:Reference thisButton}, Path=PopoverAlignment, x:DataType={x:Type controls:PopoverTest}}">
             <Grid
                 x:Name="resizablePopoverContent"
                 Background="#f2f2f2"

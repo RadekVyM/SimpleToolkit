@@ -9,6 +9,7 @@
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<IsAotCompatible>true</IsAotCompatible>
 
 		<PublishReadyToRun>false</PublishReadyToRun>
 		

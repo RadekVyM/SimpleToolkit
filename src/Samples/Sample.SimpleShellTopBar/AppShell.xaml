@@ -36,7 +36,7 @@
             RowDefinitions="*, auto">
             <controls:TopBarScaffold
                 IsBackButtonVisible="False"
-                Title="{Binding CurrentShellContent.Title, Source={x:Reference thisShell}}">
+                Title="{Binding CurrentShellContent.Title, Source={x:Reference thisShell}, x:DataType={x:Type simpleShell:SimpleShell}}">
                 <simpleShell:SimpleNavigationHost/>
             </controls:TopBarScaffold>
 
@@ -45,7 +45,7 @@
                 Grid.Row="1"
                 Margin="20,5"
                 HorizontalOptions="Center" Spacing="10"
-                BindableLayout.ItemsSource="{Binding ShellContents, Source={x:Reference thisShell}}">
+                BindableLayout.ItemsSource="{Binding ShellContents, Source={x:Reference thisShell}, x:DataType={x:Type simpleShell:SimpleShell}}">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate
                         x:DataType="controls:BadgeShellContent">
@@ -76,4 +76,11 @@
         </Grid>
     </simpleShell:SimpleShell.RootPageContainer>
     
+    <simpleShell:SimpleShell.Content>
+        <Grid
+            x:Name="rootContainer">
+            <simpleShell:SimpleNavigationHost />
+        </Grid>
+    </simpleShell:SimpleShell.Content>
+
 </simpleShell:SimpleShell>

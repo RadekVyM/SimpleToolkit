@@ -14,11 +14,11 @@ public partial class PopoverHandler : Microsoft.Maui.Handlers.ElementHandler<IPo
     {
     }
 
-    public static void MapHide(PopoverHandler handler, IPopover popover, object arg3)
+    public static void MapHide(PopoverHandler handler, IPopover popover, object? arg3)
     {
     }
 
-    public static void MapShow(PopoverHandler handler, IPopover popover, object parentView)
+    public static void MapShow(PopoverHandler handler, IPopover popover, object? parentView)
     {
     }
 }

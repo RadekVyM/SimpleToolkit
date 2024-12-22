@@ -20,9 +20,9 @@ public abstract partial class BaseSimpleStackNavigationManager
     }
 
     protected virtual void RemovePlatformPageFromContainer(
-        IView oldPage,
-        IView oldShellItemContainer,
-        IView oldShellSectionContainer,
+        IView? oldPage,
+        IView? oldShellItemContainer,
+        IView? oldShellSectionContainer,
         bool isCurrentPageRoot,
         bool isPreviousPageRoot)
     {
@@ -109,7 +109,7 @@ public abstract partial class BaseSimpleStackNavigationManager
         parent.Children.Clear();
     }
 
-    protected private partial List<UIElement> RemoveContainer(IView oldContainer, PlatformPanel? parent = null)
+    protected private partial List<UIElement> RemoveContainer(IView oldContainer, PlatformPanel? parent)
     {
         var oldPlatformContainer = GetPlatformView(oldContainer);
         var oldChildren = new List<UIElement>();

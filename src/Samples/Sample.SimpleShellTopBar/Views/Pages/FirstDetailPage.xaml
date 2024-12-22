@@ -9,7 +9,7 @@
     x:Name="thisPage">
 
     <controls:TopBarScaffold
-        Title="{Binding Title, Source={x:Reference thisPage}}">
+        Title="{Binding Title, Source={x:Reference thisPage}, x:DataType=ContentPage}">
 
         <VerticalStackLayout
             VerticalOptions="Center"

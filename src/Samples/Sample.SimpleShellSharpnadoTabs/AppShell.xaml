@@ -52,14 +52,14 @@
         <Grid CompressedLayout.IsHeadless="True">
             <controls:TopBarScaffold
                 x:Name="scaffold"
-                Title="{Binding CurrentShellContent.Title, Source={x:Reference thisShell}}"
+                Title="{Binding CurrentShellContent.Title, Source={x:Reference thisShell}, x:DataType={x:Type simpleShell:SimpleShell}}"
                 IsBackButtonVisible="False">
                 <simpleShell:SimpleNavigationHost />
             </controls:TopBarScaffold>
 
             <tabs:TabHostView
                 x:Name="tabHostView"
-                ItemsSource="{Binding ShellSections, Source={x:Reference thisShell}}"
+                ItemsSource="{Binding ShellSections, Source={x:Reference thisShell}, x:DataType={x:Type simpleShell:SimpleShell}}"
                 SelectedIndex="0"
                 SelectedTabIndexChanged="SelectedTabIndexChanged"
                 TabType="Fixed">
@@ -85,9 +85,9 @@
                             <tabs:MaterialUnderlinedTabItem.IconImageSource>
                                 <MultiBinding Converter="{StaticResource TabIconConverter}">
                                     <Binding Path="Icon" />
-                                    <Binding Path="UnselectedLabelColor" Source="{x:Reference tabItem}" />
-                                    <Binding Path="SelectedTabColor" Source="{x:Reference tabItem}" />
-                                    <Binding Path="IsSelected" Source="{x:Reference tabItem}" />
+                                    <Binding Path="UnselectedLabelColor" Source="{x:Reference tabItem}" x:DataType="{x:Type tabs:MaterialUnderlinedTabItem}" />
+                                    <Binding Path="SelectedTabColor" Source="{x:Reference tabItem}" x:DataType="{x:Type tabs:MaterialUnderlinedTabItem}" />
+                                    <Binding Path="IsSelected" Source="{x:Reference tabItem}" x:DataType="{x:Type tabs:MaterialUnderlinedTabItem}" />
                                 </MultiBinding>
                             </tabs:MaterialUnderlinedTabItem.IconImageSource>
                         </tabs:MaterialUnderlinedTabItem>

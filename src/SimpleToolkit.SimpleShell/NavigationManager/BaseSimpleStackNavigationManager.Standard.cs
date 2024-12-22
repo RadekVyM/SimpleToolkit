@@ -9,16 +9,16 @@ public abstract partial class BaseSimpleStackNavigationManager
     }
 
     protected virtual void RemovePlatformPageFromContainer(
-        IView oldPage,
-        IView oldShellItemContainer,
-        IView oldShellSectionContainer,
+        IView? oldPage,
+        IView? oldShellItemContainer,
+        IView? oldShellSectionContainer,
         bool isCurrentPageRoot,
         bool isPreviousPageRoot)
     {
     }
 
 
-    protected private partial List<object> RemoveContainer(IView oldContainer, object? parent = null)
+    protected private partial List<object> RemoveContainer(IView oldContainer, object? parent)
     {
         throw new NotSupportedException();
     }

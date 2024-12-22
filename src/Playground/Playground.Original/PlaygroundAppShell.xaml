@@ -10,7 +10,7 @@
     xmlns:shell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
     xmlns:behaviors="clr-namespace:Playground.Original.Behaviors"
     x:Name="thisShell"
-    Background="White">
+    Background="{AppThemeBinding Default=White, Dark=Black}">
     <shell:SimpleShell.Resources>
         <Style x:Key="MaterialTabbar" TargetType="controls:TabBar">
             <Setter Property="IconColor" Value="#1d192b" />
