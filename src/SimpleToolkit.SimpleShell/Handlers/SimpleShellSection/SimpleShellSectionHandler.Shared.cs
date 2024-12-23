@@ -14,7 +14,7 @@ namespace SimpleToolkit.SimpleShell.Handlers;
 
 public partial class SimpleShellSectionHandler : BaseSimpleShellSectionHandler<PageContainer>
 {
-    private new SimpleStackNavigationManager navigationManager => base.navigationManager as SimpleStackNavigationManager;
+    private new SimpleStackNavigationManager? navigationManager => base.navigationManager as SimpleStackNavigationManager;
 
 
     public SimpleShellSectionHandler(IPropertyMapper mapper, CommandMapper commandMapper)
@@ -29,12 +29,12 @@ public partial class SimpleShellSectionHandler : BaseSimpleShellSectionHandler<P
 
     protected override void ConnectNavigationManager(IStackNavigation stackNavigation)
     {
-        navigationManager.Connect(stackNavigation, GetPageContainer(PlatformView));
+        navigationManager?.Connect(stackNavigation, GetPageContainer(PlatformView));
     }
 
     protected override void DisconnectNavigationManager(IStackNavigation stackNavigation)
     {
-        navigationManager.Disconnect(navigationManager.StackNavigation, PlatformView);
+        navigationManager?.Disconnect(navigationManager.StackNavigation, PlatformView);
     }
 
     protected override void ConnectHandler(PageContainer platformView)
@@ -50,9 +50,12 @@ public partial class SimpleShellSectionHandler : BaseSimpleShellSectionHandler<P
 
 #if IOS || MACCATALYST
         var controller = platformView.NextResponder as SimpleShellSectionController;
-        controller.PopGestureRecognized -= NavigationControllerPopGestureRecognized;
-        controller.RemoveFromParentViewController();
-        controller.DidMoveToParentViewController(null);
+
+        if (controller is not null)
+            controller.PopGestureRecognized -= NavigationControllerPopGestureRecognized;
+        
+        controller?.RemoveFromParentViewController();
+        controller?.DidMoveToParentViewController(null);
 #endif
 
         base.DisconnectHandler(platformView);
@@ -65,7 +68,8 @@ public partial class SimpleShellSectionHandler : BaseSimpleShellSectionHandler<P
     {
 #if IOS || MACCATALYST
         var controller = platformView.NextResponder as SimpleShellSectionController;
-        var contentController = controller.ViewControllers.FirstOrDefault() as SimpleShellSectionContentController;
+        var viewControllers = controller?.ViewControllers ?? throw new NullReferenceException("ViewControllers should not be null here.");
+        var contentController = viewControllers.FirstOrDefault() as SimpleShellSectionContentController;
 
         return contentController?.View ?? platformView;
 #else

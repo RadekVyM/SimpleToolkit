@@ -12,7 +12,7 @@ public partial class SimpleShellHandler : ViewHandler<ISimpleShell, ViewGroup>
         // Shell platform view has to be a DrawerLayout because of a change in .NET 7:
         // When the app's root view implements IFlyoutView, this platform view has to be a DrawerLayout
         // See the Connect() method in src/Core/src/Platform/Android/Navigation/NavigationRootManager.cs
-        var container = new DrawerLayout(MauiContext.Context)
+        var container = new DrawerLayout(MauiContext?.Context ?? throw new NullReferenceException("MauiContext should not be null here."))
         {
             Id = AView.GenerateViewId()
         };
@@ -20,7 +20,7 @@ public partial class SimpleShellHandler : ViewHandler<ISimpleShell, ViewGroup>
         return container;
     }
 
-    protected virtual AView GetNavigationHostContent()
+    protected virtual AView? GetNavigationHostContent()
     {
         return (navigationHost?.Handler as SimpleNavigationHostHandler)?.PlatformView?.GetChildAt(0);
     }

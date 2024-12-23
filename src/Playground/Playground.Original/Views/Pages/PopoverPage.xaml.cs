@@ -15,9 +15,11 @@ public partial class PopoverPage : ContentPage
         popoverAlignmentPicker.SelectedItem = PopoverAlignment.Center;
     }
 
-    private void ButtonClicked(object sender, EventArgs e)
+    private void ButtonClicked(object? sender, EventArgs e)
     {
-        var button = sender as View;
+        if (sender is not View button)
+            return;
+
         button.ShowAttachedPopover();
     }
 }

@@ -20,7 +20,7 @@ public partial class IconHandler : ViewHandler<Icon, ImageView>
     {
     };
 
-    ImageSourcePartLoader imageSourcePartLoader;
+    ImageSourcePartLoader? imageSourcePartLoader;
     public ImageSourcePartLoader SourceLoader =>
         imageSourcePartLoader ??= new ImageSourcePartLoader(new SourceSetter(this));
 
@@ -96,7 +96,7 @@ public partial class IconHandler : ViewHandler<Icon, ImageView>
 
     class SourceSetter(IconHandler handler) : SimpleIconSourcePartSetter(handler)
     {
-        public override void SetImageSource(Drawable platformImage)
+        public override void SetImageSource(Drawable? platformImage)
         {
             if (Handler is null || Handler?.PlatformView is not ImageView image)
                 return;

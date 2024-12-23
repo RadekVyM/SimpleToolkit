@@ -1,4 +1,5 @@
-﻿using SimpleToolkit.SimpleShell.Extensions;
+﻿using System.ComponentModel;
+using SimpleToolkit.SimpleShell.Extensions;
 using SimpleToolkit.SimpleShell.Transitions;
 
 namespace SimpleToolkit.SimpleShell;
@@ -8,6 +9,8 @@ public partial class SimpleShell
     public static readonly BindableProperty TransitionProperty =
         BindableProperty.CreateAttached("Transition", typeof(ISimpleShellTransition), typeof(Page), null);
 
+    [Obsolete("This API is deprecated and has no effect. The default HandlerProperties.DisconnectPolicy mechanism is used instead.")]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static readonly BindableProperty ShouldAutoDisconnectPageHandlerProperty =
         BindableProperty.CreateAttached("ShouldAutoDisconnectPageHandler", typeof(bool), typeof(Page), true);
 
@@ -17,60 +20,62 @@ public partial class SimpleShell
     public static readonly BindableProperty ShellGroupContainerProperty =
         BindableProperty.CreateAttached("ShellGroupContainer", typeof(IView), typeof(ShellGroupItem), null, propertyChanged: OnShellGroupContainerChanged);
 
-    public static ISimpleShellTransition GetTransition(BindableObject item)
+    public static ISimpleShellTransition? GetTransition(BindableObject item)
     {
         _ = item ?? throw new ArgumentNullException(nameof(item));
-        return (ISimpleShellTransition)item.GetValue(TransitionProperty);
+        return item.GetValue(TransitionProperty) as ISimpleShellTransition;
     }
 
-    public static void SetTransition(BindableObject item, ISimpleShellTransition value)
+    public static void SetTransition(BindableObject item, ISimpleShellTransition? value)
     {
         _ = item ?? throw new ArgumentNullException(nameof(item));
         item.SetValue(TransitionProperty, value);
     }
 
+    [Obsolete("This API is deprecated and has no effect. The default HandlerProperties.DisconnectPolicy mechanism is used instead.")]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static bool GetShouldAutoDisconnectPageHandler(BindableObject item)
     {
         _ = item ?? throw new ArgumentNullException(nameof(item));
         return (bool)item.GetValue(ShouldAutoDisconnectPageHandlerProperty);
     }
 
+    [Obsolete("This API is deprecated and has no effect. The default HandlerProperties.DisconnectPolicy mechanism is used instead.")]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static void SetShouldAutoDisconnectPageHandler(BindableObject item, bool value)
     {
         _ = item ?? throw new ArgumentNullException(nameof(item));
         item.SetValue(ShouldAutoDisconnectPageHandlerProperty, value);
     }
 
-    public static DataTemplate GetShellGroupContainerTemplate(BindableObject item)
+    public static DataTemplate? GetShellGroupContainerTemplate(BindableObject item)
     {
         _ = item ?? throw new ArgumentNullException(nameof(item));
-        return (DataTemplate)item.GetValue(ShellGroupContainerTemplateProperty);
+        return item.GetValue(ShellGroupContainerTemplateProperty) as DataTemplate;
     }
 
-    public static void SetShellGroupContainerTemplate(BindableObject item, DataTemplate value)
+    public static void SetShellGroupContainerTemplate(BindableObject item, DataTemplate? value)
     {
         _ = item ?? throw new ArgumentNullException(nameof(item));
         item.SetValue(ShellGroupContainerTemplateProperty, value);
     }
 
-    public static IView GetShellGroupContainer(BindableObject item)
+    public static IView? GetShellGroupContainer(BindableObject item)
     {
         _ = item ?? throw new ArgumentNullException(nameof(item));
-        return (IView)item.GetValue(ShellGroupContainerProperty);
+        return item.GetValue(ShellGroupContainerProperty) as IView;
     }
 
-    public static void SetShellGroupContainer(BindableObject item, IView value)
+    public static void SetShellGroupContainer(BindableObject item, IView? value)
     {
         _ = item ?? throw new ArgumentNullException(nameof(item));
         item.SetValue(ShellGroupContainerProperty, value);
     }
 
 
-    private static void OnShellGroupContainerTemplateChanged(BindableObject bindable, object oldValue, object newValue)
+    private static void OnShellGroupContainerTemplateChanged(BindableObject bindable, object? oldValue, object? newValue)
     {
-        var group = bindable as ShellGroupItem;
-
-        if (group.IsSet(ShellGroupContainerProperty))
+        if (bindable is ShellGroupItem group && group.IsSet(ShellGroupContainerProperty))
         {
             var oldContainer = GetShellGroupContainer(group);
 
@@ -82,14 +87,12 @@ public partial class SimpleShell
         }
     }
 
-    private static void OnShellGroupContainerChanged(BindableObject bindable, object oldValue, object newValue)
+    private static void OnShellGroupContainerChanged(BindableObject bindable, object? oldValue, object? newValue)
     {
-        var group = bindable as ShellGroupItem;
-        var oldView = oldValue as Element;
-        var newView = newValue as Element;
-
-        var simpleShell = group.FindParentOfType<SimpleShell>();
-
-        simpleShell?.UpdateLogicalChildren(oldView, newView);
+        if (bindable is ShellGroupItem group && oldValue is Element oldView && newValue is Element newView)
+        {
+            var simpleShell = group.FindParentOfType<SimpleShell>();
+            simpleShell?.UpdateLogicalChildren(oldView, newView);
+        }
     }
 }

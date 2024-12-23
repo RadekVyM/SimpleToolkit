@@ -2,7 +2,7 @@
 
 public class TestBehavior : Behavior<View>
 {
-    View attachedBindable;
+    private View? attachedBindable;
 
     public void Test()
     {

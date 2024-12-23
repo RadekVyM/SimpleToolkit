@@ -8,7 +8,7 @@ public partial class SimpleShellItemHandler : ElementHandler<ShellItem, FrameLay
 {
     protected override FrameLayout CreatePlatformElement()
     {
-        return new FrameLayout(MauiContext.Context)
+        return new FrameLayout(MauiContext?.Context ?? throw new NullReferenceException("MauiContext cannot be null here."))
         {
             Id = AView.GenerateViewId()
         };
@@ -16,11 +16,11 @@ public partial class SimpleShellItemHandler : ElementHandler<ShellItem, FrameLay
 
     private void UpdatePlatformViewContent()
     {
-        if (currentShellSectionHandler.PlatformView != PlatformView.GetChildAt(0))
+        if (currentShellSectionHandler?.PlatformView != PlatformView.GetChildAt(0))
         {
             PlatformView.RemoveAllViews();
-            if (currentShellSectionHandler.PlatformView is not null)
-                PlatformView.AddView(currentShellSectionHandler.PlatformView);
+            if (currentShellSectionHandler?.PlatformView is {} platformView)
+                PlatformView.AddView(platformView);
         }
     }
 }

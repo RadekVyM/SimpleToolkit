@@ -50,7 +50,8 @@ namespace Playground.Original
             Routing.RegisterRoute(nameof(FirstGreenDetailPage), typeof(FirstGreenDetailPage));
             Routing.RegisterRoute(nameof(ImageDetailPage), typeof(ImageDetailPage));
 
-            Loaded += PlaygroundAppShellLoaded;
+            Loaded += AppShellLoaded;
+            Unloaded += AppShellUnloaded;
 
             this.SetTransition(
                 callback: static args =>
@@ -109,9 +110,14 @@ namespace Playground.Original
             return base.OnBackButtonPressed();
         }
 
-        private void PlaygroundAppShellLoaded(object sender, EventArgs e)
+        private void AppShellLoaded(object? sender, EventArgs e)
         {
-            this.Window.SubscribeToSafeAreaChanges(OnSafeAreaChanged);
+            Window.SubscribeToSafeAreaChanges(OnSafeAreaChanged);
+        }
+
+        private void AppShellUnloaded(object? sender, EventArgs e)
+        {
+            Window.UnsubscribeFromSafeAreaChanges(OnSafeAreaChanged);
         }
 
         private void OnSafeAreaChanged(Thickness safeAreaPadding)
@@ -120,29 +126,29 @@ namespace Playground.Original
             floatingButtons.Padding = new Thickness(safeAreaPadding.Left, 0, safeAreaPadding.Right, 0);
         }
 
-        private async void ShellItemButtonClicked(object sender, EventArgs e)
+        private async void ShellItemButtonClicked(object? sender, EventArgs e)
         {
-            var button = sender as Button;
-            var shellItem = button.BindingContext as BaseShellItem;
+            if (sender is not Button button || button.BindingContext is not BaseShellItem shellItem)
+                return;
 
             if (!CurrentState.Location.OriginalString.Contains(shellItem.Route))
                 await this.GoToAsync($"///{shellItem.Route}");
         }
 
-        private async void TabBarItemSelected(object sender, TabItemSelectedEventArgs e)
+        private async void TabBarItemSelected(object? sender, TabItemSelectedEventArgs e)
         {
             if (!CurrentState.Location.OriginalString.Contains(e.ShellItem.Route))
                 await this.GoToAsync($"///{e.ShellItem.Route}");
         }
 
-        private async void BackButtonClicked(object sender, EventArgs e)
+        private async void BackButtonClicked(object? sender, EventArgs e)
         {
             await this.GoToAsync("..");
         }
 
         private bool orangeAdded = false;
 
-        private void AddButtonClicked(object sender, EventArgs e)
+        private void AddButtonClicked(object? sender, EventArgs e)
         {
             if (!orangeAdded)
             {
@@ -167,14 +173,16 @@ namespace Playground.Original
             orangeAdded = true;
         }
 
-        private void ShowPopoverButtonClicked(object sender, EventArgs e)
+        private void ShowPopoverButtonClicked(object? sender, EventArgs e)
         {
             testBehavior.Test();
-            var button = sender as View;
+            if (sender is not View button)
+                return;
+
             button.ShowAttachedPopover();
         }
 
-        private void DesignLanguagesListPopoverItemSelected(object sender, ListPopoverItemSelectedEventArgs e)
+        private void DesignLanguagesListPopoverItemSelected(object? sender, ListPopoverItemSelectedEventArgs e)
         {
             if (e.Item is DesignLanguageItem designLanguageItem)
             {
@@ -183,17 +191,17 @@ namespace Playground.Original
             }
         }
 
-        private void SwapButtonClicked(object sender, EventArgs e)
+        private void SwapButtonClicked(object? sender, EventArgs e)
         {
             Content = new SimpleNavigationHost();
         }
 
-        private void ButtonClicked(object sender, EventArgs e)
+        private void ButtonClicked(object? sender, EventArgs e)
         {
             this.RootPageContainer = null;
         }
 
-        private void SwapSectionButtonClicked(object sender, EventArgs e)
+        private void SwapSectionButtonClicked(object? sender, EventArgs e)
         {
             Resources.TryGetValue("AnotherSimpleShellSectionContainer", out object template);
 

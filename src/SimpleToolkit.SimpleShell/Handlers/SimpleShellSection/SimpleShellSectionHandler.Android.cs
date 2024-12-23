@@ -9,7 +9,7 @@ public partial class SimpleShellSectionHandler
     {
         CreateNavigationManager();
 
-        return new FrameLayout(MauiContext.Context)
+        return new FrameLayout(MauiContext?.Context ?? throw new NullReferenceException("MauiContext should not be null here."))
         {
             Id = AView.GenerateViewId()
         };

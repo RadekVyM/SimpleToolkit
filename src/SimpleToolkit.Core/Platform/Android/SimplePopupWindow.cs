@@ -10,11 +10,11 @@ namespace SimpleToolkit.Core.Platform;
 public class SimplePopupWindow : PopupWindow
 {
     private readonly IMauiContext mauiContext;
-    private IElement anchor;
-    private AView platformContent;
+    private IElement? anchor;
+    private AView? platformContent;
     private bool isAnimated;
 
-    public IPopover VirtualView { get; private set; }
+    public IPopover? VirtualView { get; private set; }
     public bool IsAnimated
     {
         get => isAnimated;
@@ -37,7 +37,7 @@ public class SimplePopupWindow : PopupWindow
     }
 
 
-    public AView SetElement(IPopover element)
+    public AView? SetElement(IPopover element)
     {
         ArgumentNullException.ThrowIfNull(element);
 
@@ -100,7 +100,7 @@ public class SimplePopupWindow : PopupWindow
             platformContent.LayoutChange -= OnLayoutChange;
     }
 
-    private void OnLayoutChange(object sender, AView.LayoutChangeEventArgs e)
+    private void OnLayoutChange(object? sender, AView.LayoutChangeEventArgs e)
     {
         if (anchor is null)
             return;
@@ -115,7 +115,8 @@ public class SimplePopupWindow : PopupWindow
     private (int width, int height, int xOffset, AView platformAnchor) GetWindowSpecs(IElement anchor)
     {
         var platformAnchor = anchor?.ToPlatform(mauiContext) ?? GetDefaultAnchor();
-        var measure = (VirtualView.Content as IView).Measure(double.PositiveInfinity, double.PositiveInfinity);
+        var measure = (VirtualView?.Content as IView)?.Measure(double.PositiveInfinity, double.PositiveInfinity) ??
+            throw new NullReferenceException("There is no View that could be measured.");
         var density = DeviceDisplay.Current.MainDisplayInfo.Density;
         var width = (int)Math.Round(measure.Width * density);
         var height = (int)Math.Round(measure.Height * density);
@@ -126,12 +127,12 @@ public class SimplePopupWindow : PopupWindow
 
     private int GetXOffset(AView platformAnchor, int windowWidth)
     {
-        if (VirtualView.Alignment is PopoverAlignment.Start)
+        if (VirtualView?.Alignment is PopoverAlignment.Start)
             return 0;
         
         var offset = platformAnchor.Width - windowWidth;
 
-        if (VirtualView.Alignment is PopoverAlignment.End)
+        if (VirtualView?.Alignment is PopoverAlignment.End)
             return offset;
 
         return offset / 2;
@@ -139,7 +140,7 @@ public class SimplePopupWindow : PopupWindow
 
     private AView GetDefaultAnchor()
     {
-        ArgumentNullException.ThrowIfNull(VirtualView.Parent);
+        ArgumentNullException.ThrowIfNull(VirtualView?.Parent);
         return VirtualView.Parent.ToPlatform(mauiContext);
     }
 

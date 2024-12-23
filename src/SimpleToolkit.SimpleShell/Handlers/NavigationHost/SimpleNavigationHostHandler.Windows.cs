@@ -31,7 +31,7 @@ public partial class SimpleNavigationHostHandler : ViewHandler<ISimpleNavigation
         return new WGrid();
     }
 
-    public virtual void SetContent(WFrameworkElement element)
+    public virtual void SetContent(WFrameworkElement? element)
     {
         PlatformView.Children.Clear();
         if (element is not null)

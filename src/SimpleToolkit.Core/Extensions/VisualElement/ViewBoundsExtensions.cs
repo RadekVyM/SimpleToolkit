@@ -2,7 +2,7 @@
 
 public static partial class ViewBoundsExtensions
 {
-	public static Rect GetBounds(this VisualElement view, VisualElement relativeTo = null)
+	public static Rect GetBounds(this VisualElement view, VisualElement? relativeTo = null)
 	{
         var viewWindowBounds = view.GetBoundsOnScreen();
         var relativeToBounds = relativeTo?.GetBoundsOnScreen() ?? new Rect();

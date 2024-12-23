@@ -36,7 +36,7 @@ public partial class ContentButtonHandler
         base.DisconnectHandler(platformView);
     }
 
-    private void OnPlatformViewClick(object sender, EventArgs e)
+    private void OnPlatformViewClick(object? sender, EventArgs e)
     {
         if (sender is not Android.Views.View view)
             return;
@@ -48,15 +48,15 @@ public partial class ContentButtonHandler
         VirtualView.OnClicked();
     }
 
-    private void OnPlatformViewTouch(object sender, Android.Views.View.TouchEventArgs e)
+    private void OnPlatformViewTouch(object? sender, Android.Views.View.TouchEventArgs e)
     {
-        if (sender is not Android.Views.View view)
+        if (sender is not Android.Views.View view || e.Event is not {} touchEvent)
             return;
 
         var density = DeviceDisplay.Current.MainDisplayInfo.Density;
-        var position = new Point(e.Event.GetX() / density, e.Event.GetY() / density);
+        var position = new Point(touchEvent.GetX() / density, touchEvent.GetY() / density);
 
-        switch (e.Event.Action)
+        switch (touchEvent.Action)
         {
             case MotionEventActions.Down:
                 viewTapRect = new Rect(view.Left, view.Top, view.Right, view.Bottom);
@@ -95,7 +95,7 @@ public partial class ContentButtonHandler
 
         bool IsTouchInViewTapRect()
         {
-            return viewTapRect.Contains(view.Left + e.Event.GetX(), view.Top + e.Event.GetY());
+            return viewTapRect.Contains(view.Left + touchEvent.GetX(), view.Top + touchEvent.GetY());
         }
     }
 

@@ -13,14 +13,14 @@ namespace SimpleToolkit.Core.Platform;
 public class PopoverViewController(IMauiContext mauiContext) : UIViewController
 {
     private readonly IMauiContext mauiContext = mauiContext ?? throw new ArgumentNullException(nameof(mauiContext));
-    private Grid contentWrapper = null;
+    private Grid? contentWrapper = null;
     private bool isAnimated = true;
-    private WeakReference<IPopover> virtualViewReference;
+    private WeakReference<IPopover>? virtualViewReference;
 
-    internal UIViewController ViewController { get; private set; }
+    internal UIViewController? ViewController { get; private set; }
 
     // See https://github.com/dotnet/maui/pull/14108
-    public IPopover VirtualView
+    public IPopover? VirtualView
     {
         get => virtualViewReference is not null && virtualViewReference.TryGetTarget(out var v) ? v : null;
         private set => virtualViewReference = value is null ? null : new(value);
@@ -28,8 +28,12 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
 
     public virtual UIPopoverArrowDirection PermittedArrowDirections 
     {
-        get => ((UIPopoverPresentationController)PresentationController).PermittedArrowDirections;
-        set => ((UIPopoverPresentationController)PresentationController).PermittedArrowDirections = value;
+        get => (PresentationController as UIPopoverPresentationController)?.PermittedArrowDirections ?? UIPopoverArrowDirection.Any;
+        set
+        {
+            if (PresentationController is UIPopoverPresentationController popoverPresentationController)
+                popoverPresentationController.PermittedArrowDirections = value;
+        }
     }
 
     public virtual bool IsAnimated 
@@ -38,7 +42,7 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         set
         {
             isAnimated = value;
-            if (PresentationController.Delegate is PopoverDelegate popoverDelegate)
+            if (PresentationController?.Delegate is PopoverDelegate popoverDelegate)
                 popoverDelegate.IsAnimated = value;
         }
     }
@@ -48,10 +52,10 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
     {
         base.ViewWillAppear(animated);
 
-        if (View.Superview is null)
+        if (View?.Superview is null)
             return;
 
-        if (!VirtualView.UseDefaultStyling)
+        if (VirtualView?.UseDefaultStyling is not true)
         {
             // Removes the default corner radius of the popover
             View.Superview.Layer.CornerRadius = 0f;
@@ -72,10 +76,11 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         if (!VirtualView.UseDefaultStyling && PresentationController is not null)
             RemoveShadow(PresentationController.ContainerView);
 
-        var measure = (contentWrapper as IView).Measure(double.PositiveInfinity, double.PositiveInfinity);
-        PreferredContentSize = new CGSize(measure.Width, measure.Height);
+        var measure = (contentWrapper as IView)?.Measure(double.PositiveInfinity, double.PositiveInfinity);
+        if (measure is {} notNullMeasure)
+            PreferredContentSize = new CGSize(notNullMeasure.Width, notNullMeasure.Height);
 
-        foreach (var subview in View.Subviews)
+        foreach (var subview in View?.Subviews ?? [])
         {
             subview.SizeToFit();
             // Make sure that the content is properly offset when arrow is displayed
@@ -83,7 +88,6 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         }
     }
 
-    [MemberNotNull(nameof(VirtualView), nameof(ViewController))]
     public void SetElement(IPopover element)
     {
         VirtualView = element;
@@ -96,16 +100,15 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         ViewController ??= rootViewController;
     }
 
-    [MemberNotNull(nameof(ViewController))]
     public async Task Show(IPopover virtualView, IElement anchor)
     {
         if (IsBeingPresented || IsBeingDismissed)
             return;
 
         SetUpPresentationController(virtualView);
-        UpdateContent(virtualView, View);
+        UpdateContent(virtualView, View ?? throw new NullReferenceException("UIViewController's View should not be null here."));
 
-        _ = ViewController ?? throw new InvalidOperationException($"{nameof(ViewController)} cannot be null");
+        _ = ViewController ?? throw new NullReferenceException($"{nameof(ViewController)} cannot be null");
 
         SetAnchor(virtualView, anchor);
         await PresentInViewController(ViewController);
@@ -113,6 +116,7 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
 
     public async Task Hide()
     {
+        _ = ViewController ?? throw new NullReferenceException($"{nameof(ViewController)} cannot be null");
         await ViewController.DismissViewControllerAsync(IsAnimated);
     }
 
@@ -123,16 +127,21 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
 
         VirtualView = null;
 
-        View.ClearSubviews();
+        View?.ClearSubviews();
 
         if (PresentationController is UIPopoverPresentationController presentationController)
             presentationController.Delegate = null;
     }
 
-    public void UpdateContent() => UpdateContent(VirtualView, View);
+    public void UpdateContent() => UpdateContent(
+        VirtualView ?? throw new NullReferenceException("VirtualView should not be null here."),
+        View ?? throw new NullReferenceException("UIViewController's View should not be null here."));
 
     protected virtual void AnimateIn()
     {
+        _ = View ?? throw new NullReferenceException("UIViewController's View should not be null here.");
+        _ = PresentationController ?? throw new NullReferenceException("PresentationController should not be null here.");
+
         var arrowDirection = ((UIPopoverPresentationController)PresentationController).ArrowDirection;
         var x = arrowDirection switch
         {
@@ -156,12 +165,12 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         {
             View.Transform = CGAffineTransform.MakeIdentity();
             View.Alpha = 1;
-        }, null);
+        }, null!);
     }
 
     private void UpdateContent(IPopover virtualView, UIView containerView)
     {
-        _ = View ?? throw new InvalidOperationException($"{nameof(View)} cannot be null");
+        _ = View ?? throw new NullReferenceException($"{nameof(View)} cannot be null");
         
         UpdateContentWrapper(virtualView);
         AddContentToView(containerView);
@@ -194,16 +203,17 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
 
     private void SetAnchor(IPopover popover, IElement anchor)
     {
-        if (View is null)
+        if (View is null || PopoverPresentationController is null)
             return;
 
-        var anchorView = anchor.ToPlatform(popover.Handler?.MauiContext ?? throw new NullReferenceException());
+        var anchorView = anchor.ToPlatform(popover.Handler?.MauiContext ?? throw new NullReferenceException("MauiContext should not be null here."));
         PopoverPresentationController.SourceView = anchorView;
         PopoverPresentationController.SourceRect = anchorView.Bounds;
     }
 
     private void SetUpPresentationController(IPopover virtualView)
     {
+        _ = PresentationController ?? throw new NullReferenceException("PresentationController should not be null here.");
         var presentationController = (UIPopoverPresentationController)PresentationController;
         
         presentationController.Delegate = new PopoverDelegate
@@ -229,6 +239,8 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         if (!useDefaultStyling)
             return new CGPoint(0, 0);
 
+        _ = PresentationController ?? throw new NullReferenceException("PresentationController should not be null here.");
+
         const float arrowSize = 13;
         var presentationController = (UIPopoverPresentationController)PresentationController;
         var arrowDirection = presentationController.ArrowDirection;
@@ -248,7 +260,7 @@ public class PopoverViewController(IMauiContext mauiContext) : UIViewController
         if (containerView?.Class?.Name is "_UICutoutShadowView")
             containerView?.RemoveFromSuperview();
 
-        foreach (var view in containerView?.Subviews)
+        foreach (var view in containerView?.Subviews ?? [])
             RemoveShadow(view);
     }
 

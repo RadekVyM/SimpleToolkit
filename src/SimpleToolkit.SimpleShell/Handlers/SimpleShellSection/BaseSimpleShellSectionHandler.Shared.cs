@@ -20,23 +20,23 @@ namespace SimpleToolkit.SimpleShell.Handlers;
 public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : ElementHandler<ShellSection, PlatformT>, IBaseSimpleShellSectionHandler, IAppearanceObserver where PlatformT : class
 {
     public static PropertyMapper<ShellSection, BaseSimpleShellSectionHandler<PlatformT>> Mapper =
-        new PropertyMapper<ShellSection, BaseSimpleShellSectionHandler<PlatformT>>(ElementMapper)
+        new(ElementMapper)
         {
             [nameof(ShellSection.CurrentItem)] = MapCurrentItem,
             [SimpleShell.ShellGroupContainerProperty.PropertyName] = MapShellGroupContainer
         };
 
     public static CommandMapper<ShellSection, BaseSimpleShellSectionHandler<PlatformT>> CommandMapper =
-        new CommandMapper<ShellSection, BaseSimpleShellSectionHandler<PlatformT>>(ElementCommandMapper)
+        new(ElementCommandMapper)
         {
             [nameof(IStackNavigation.RequestNavigation)] = RequestNavigation
         };
 
-    protected IView rootPageContainer;
-    protected ISimpleStackNavigationManager navigationManager;
-    protected ShellSection shellSection;
+    protected IView? rootPageContainer;
+    protected ISimpleStackNavigationManager? navigationManager;
+    protected ShellSection? shellSection;
 
-    PlatformView IBaseSimpleShellSectionHandler.PlatformView => this.PlatformView as PlatformView;
+    PlatformView IBaseSimpleShellSectionHandler.PlatformView => (this.PlatformView as PlatformView)!;
 
 
     public BaseSimpleShellSectionHandler(IPropertyMapper mapper, CommandMapper commandMapper)
@@ -54,7 +54,7 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
         if (shellSection is not null)
         {
             ((IShellSectionController)shellSection).NavigationRequested -= OnNavigationRequested;
-            ((IShellController)shellSection.FindParentOfType<SimpleShell>()).RemoveAppearanceObserver(this);
+            (shellSection.FindParentOfType<SimpleShell>() as IShellController)?.RemoveAppearanceObserver(this);
         }
 
         // If we've already connected to the navigation manager
@@ -75,11 +75,11 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
         if (shellSection is not null)
         {
             ((IShellSectionController)shellSection).NavigationRequested += OnNavigationRequested;
-            ((IShellController)shellSection.FindParentOfType<SimpleShell>()).AddAppearanceObserver(this, shellSection);
+            (shellSection.FindParentOfType<SimpleShell>() as IShellController)?.AddAppearanceObserver(this, shellSection);
         }
     }
 
-    public virtual void SetRootPageContainer(IView view)
+    public virtual void SetRootPageContainer(IView? view)
     {
         rootPageContainer = view;
         navigationManager?.UpdateRootPageContainer(view);
@@ -87,10 +87,10 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
 
     public virtual void RefreshGroupContainers()
     {
-        if (!navigationManager.AlreadyNavigated)
+        if (navigationManager?.AlreadyNavigated is not true)
             return;
 
-        var shell = VirtualView.FindParentOfType<SimpleShell>();
+        var shell = VirtualView.FindParentOfType<SimpleShell>() ?? throw new NullReferenceException("Could not find a Shell instance in the view tree.");
         var shellSectionContainer = GetShellGroupContainer(VirtualView);
         var shellItemContainer = GetShellItemContainer(VirtualView);
 
@@ -105,12 +105,12 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
 
     protected abstract void DisconnectNavigationManager(IStackNavigation stackNavigation);
 
-    protected virtual void OnNavigationRequested(object sender, NavigationRequestedEventArgs e)
+    protected virtual void OnNavigationRequested(object? sender, NavigationRequestedEventArgs e)
     {
         SyncNavigationStack(e.Animated, e);
     }
 
-    protected virtual void SyncNavigationStack(bool animated, NavigationRequestedEventArgs e)
+    protected virtual void SyncNavigationStack(bool animated, NavigationRequestedEventArgs? e)
     {
         var pageStack = new List<IView>()
         {
@@ -139,11 +139,11 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
     protected virtual ISimpleStackNavigationManager CreateNavigationManager() =>
         throw new NotImplementedException("CreateNavigationManager() method must be implemented");
 
-    public static void RequestNavigation(BaseSimpleShellSectionHandler<PlatformT> handler, IStackNavigation view, object arg3)
+    public static void RequestNavigation(BaseSimpleShellSectionHandler<PlatformT> handler, IStackNavigation view, object? arg3)
     {
         if (arg3 is ArgsNavigationRequest nr)
         {
-            var shell = handler.VirtualView.FindParentOfType<SimpleShell>();
+            var shell = handler.VirtualView.FindParentOfType<SimpleShell>() ?? throw new NullReferenceException("Could not find a Shell instance in the view tree.");
             var shellSectionContainer = GetShellGroupContainer(handler.VirtualView);
             var shellItemContainer = GetShellItemContainer(handler.VirtualView);
 
@@ -165,7 +165,7 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
         handler.RefreshGroupContainers();
     }
 
-    private static IView GetShellItemContainer(ShellSection shellSection)
+    private static IView? GetShellItemContainer(ShellSection shellSection)
     {
         if (shellSection.Parent is ShellItem shellItem)
             return GetShellGroupContainer(shellItem);
@@ -173,7 +173,7 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
         return null;
     }
 
-    private static IView GetShellGroupContainer(ShellGroupItem group)
+    private static IView? GetShellGroupContainer(ShellGroupItem group)
     {
         var container = SimpleShell.GetShellGroupContainer(group);
 
@@ -187,14 +187,14 @@ public abstract partial class BaseSimpleShellSectionHandler<PlatformT> : Element
             SimpleShell.SetShellGroupContainer(group, container);
         }
 
-        container?.ToHandler(group.Handler.MauiContext);
+        container?.ToHandler(group.Handler.MauiContext ?? throw new NullReferenceException("MauiContext should not be null here."));
 
         if (container is BindableObject bindable && !bindable.IsSet(BindableObject.BindingContextProperty))
             bindable.BindingContext = group;
         return container;
     }
 
-    private static void LogStack(NavigationRequestedEventArgs e, List<IView> pageStack, ShellSection virtualView)
+    private static void LogStack(NavigationRequestedEventArgs? e, List<IView> pageStack, ShellSection virtualView)
     {
         var requestType = e?.RequestType.ToString() ?? "null";
         var sequence = string.Join(" -> ", pageStack

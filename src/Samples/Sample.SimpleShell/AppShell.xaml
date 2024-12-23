@@ -67,7 +67,7 @@
                 Grid.Row="1"
                 Margin="20,5"
                 HorizontalOptions="Center" Spacing="10"
-                BindableLayout.ItemsSource="{Binding ShellSections, Source={x:Reference thisShell}}">
+                BindableLayout.ItemsSource="{Binding ShellSections, Source={x:Reference thisShell}, x:DataType={x:Type simpleShell:SimpleShell}}">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate
                         x:DataType="BaseShellItem">
@@ -83,6 +83,7 @@
 
     <simpleShell:SimpleShell.Content>
         <Grid
+            x:Name="rootContainer"
             RowDefinitions="50, *">
             <Button
                 x:Name="backButton"
@@ -94,7 +95,7 @@
             <Label
                 Margin="20,5"
                 HorizontalOptions="Center" VerticalOptions="Center"
-                Text="{Binding CurrentShellContent.Title, Source={x:Reference thisShell}}"
+                Text="{Binding CurrentShellContent.Title, Source={x:Reference thisShell}, x:DataType={x:Type simpleShell:SimpleShell}}"
                 FontAttributes="Bold" FontSize="18"/>
             <simpleShell:SimpleNavigationHost
                 Grid.Row="1"/>

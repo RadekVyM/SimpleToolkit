@@ -9,7 +9,7 @@ public partial class PopoverHandler : ElementHandler<IPopover, SimpleFlyout>
 {
     protected override SimpleFlyout CreatePlatformElement()
     {
-        return new SimpleFlyout(MauiContext);
+        return new SimpleFlyout(MauiContext ?? throw new NullReferenceException("MauiContext should not be null here."));
     }
 
     protected override void ConnectHandler(SimpleFlyout platformView)
@@ -33,7 +33,7 @@ public partial class PopoverHandler : ElementHandler<IPopover, SimpleFlyout>
         handler.PlatformView.AreOpenCloseAnimationsEnabled = popover.IsAnimated;
     }
 
-    public static void MapShow(PopoverHandler handler, IPopover popover, object parentView)
+    public static void MapShow(PopoverHandler handler, IPopover popover, object? parentView)
     {
         if (parentView is not IElement anchor)
             return;    
@@ -41,7 +41,7 @@ public partial class PopoverHandler : ElementHandler<IPopover, SimpleFlyout>
         handler.PlatformView.Show(anchor);
     }
 
-    public static void MapHide(PopoverHandler handler, IPopover popover, object arg3)
+    public static void MapHide(PopoverHandler handler, IPopover popover, object? arg3)
     {
         handler.PlatformView.Hide();
     }

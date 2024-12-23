@@ -30,10 +30,10 @@ public partial class SimpleShellHandler
     };
 
     protected bool platformViewHasContent = false;
-    protected ISimpleNavigationHost navigationHost;
-    protected SimpleShellItemHandler currentShellItemHandler;
+    protected ISimpleNavigationHost? navigationHost;
+    protected SimpleShellItemHandler? currentShellItemHandler;
 
-    public ShellItem SelectedItem { get; protected set; }
+    public ShellItem? SelectedItem { get; protected set; }
 
 
     public SimpleShellHandler(IPropertyMapper mapper, CommandMapper commandMapper)
@@ -77,7 +77,8 @@ public partial class SimpleShellHandler
     protected virtual SimpleShellItemHandler CreateShellItemHandler()
     {
         // One handler is reused for all ShellItems
-        var itemHandler = currentShellItemHandler ??= (SimpleShellItemHandler)VirtualView.CurrentItem.ToHandler(MauiContext);
+        var itemHandler = currentShellItemHandler ??=
+            (SimpleShellItemHandler)VirtualView.CurrentItem.ToHandler(MauiContext ?? throw new NullReferenceException("MauiContext cannot be null here."));
 
         if (itemHandler.PlatformView != GetNavigationHostContent() && navigationHost?.Handler is SimpleNavigationHostHandler navHostHandler)
             navHostHandler.SetContent(itemHandler.PlatformView);
@@ -93,7 +94,7 @@ public partial class SimpleShellHandler
         if (navigationHost is not null && navigationHost?.Handler is SimpleNavigationHostHandler navHostHandler)
             navHostHandler.SetContent(null);
 
-        var platformContent = content.ToPlatform(MauiContext);
+        var platformContent = content.ToPlatform(MauiContext ?? throw new NullReferenceException("MauiContext cannot be null here."));
         platformViewHasContent = platformContent is not null;
 
 #if ANDROID
@@ -106,7 +107,8 @@ public partial class SimpleShellHandler
         if (platformViewHasContent && PlatformView.Subviews.FirstOrDefault() != platformContent)
         {
             PlatformView.ClearSubviews();
-            PlatformView.AddSubview(platformContent);
+            if (platformContent is not null)
+                PlatformView.AddSubview(platformContent);
         }
 #elif WINDOWS
         if (platformViewHasContent && PlatformView.Child != platformContent)
@@ -118,7 +120,7 @@ public partial class SimpleShellHandler
         navigationHost = VirtualView.Content.FindSimpleNavigationHost();
     }
 
-    protected virtual void UpdateRootPageContainer(IView view)
+    protected virtual void UpdateRootPageContainer(IView? view)
     {
         if (VirtualView?.CurrentItem?.Handler is null || VirtualView.CurrentItem.Handler is not SimpleShellItemHandler shellItemHandler)
             return;

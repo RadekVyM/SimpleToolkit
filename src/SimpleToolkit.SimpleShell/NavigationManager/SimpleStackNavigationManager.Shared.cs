@@ -29,7 +29,7 @@ public partial class SimpleStackNavigationManager : BaseSimpleStackNavigationMan
         StackNavigation = navigationView;
     }
 
-    public virtual void Disconnect(IStackNavigation navigationView, NavFrame navigationFrame)
+    public virtual void Disconnect(IStackNavigation? navigationView, NavFrame navigationFrame)
     {
         this.navigationFrame = null;
         StackNavigation = null;
@@ -41,12 +41,11 @@ public partial class SimpleStackNavigationManager : BaseSimpleStackNavigationMan
         ArgsNavigationRequest args,
         SimpleShell shell,
         IReadOnlyList<IView> newPageStack,
-        IView previousShellItemContainer,
-        IView previousShellSectionContainer,
-        IView previousPage,
+        IView? previousShellItemContainer,
+        IView? previousShellSectionContainer,
+        IView? previousPage,
         bool isPreviousPageRoot)
     {
-        var oldPageStack = NavigationStack;
         NavigationStack = newPageStack;
 
         if (args.RequestType == NavigationRequestType.Remove || args.RequestType == NavigationRequestType.Insert)
@@ -56,16 +55,12 @@ public partial class SimpleStackNavigationManager : BaseSimpleStackNavigationMan
             return;
         }
 
-        var pagesToDisconnect = GetPagesToDisconnect(oldPageStack, newPageStack);
-
-        NavigateToPageInContainer(transitionType, presentationMode, shell, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot, pagesToDisconnect);
+        NavigateToPageInContainer(transitionType, presentationMode, shell, previousShellItemContainer, previousShellSectionContainer, previousPage, isPreviousPageRoot);
     }
     
     protected override void OnBackStackChanged(IReadOnlyList<IView> newPageStack, SimpleShell shell)
     {
-        var oldPageStack = NavigationStack;
         NavigationStack = newPageStack;
-        DisconnectHandlers(oldPageStack, newPageStack);
         FireNavigationFinished();
     }
 }

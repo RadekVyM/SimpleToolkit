@@ -15,28 +15,28 @@ public class ContentButton : Border, IContentButton
     /// <summary>
     /// Event that fires when the button is clicked.
     /// </summary>
-    public event EventHandler Clicked;
+    public event EventHandler? Clicked;
     /// <summary>
     /// Event that fires when the button is pressed.
     /// </summary>
-    public event EventHandler<ContentButtonEventArgs> Pressed;
+    public event EventHandler<ContentButtonEventArgs>? Pressed;
     /// <summary>
     /// Event that fires when the button is released.
     /// </summary>
-    public event EventHandler<ContentButtonEventArgs> Released;
+    public event EventHandler<ContentButtonEventArgs>? Released;
 
     public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(ContentButton), defaultValue: null, propertyChanging: OnCommandChanging, propertyChanged: OnCommandChanged);
 
     public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(ContentButton), defaultValue: null,
         propertyChanged: (bindable, oldvalue, newvalue) => CommandCanExecuteChanged(bindable, EventArgs.Empty));
 
-    public virtual ICommand Command
+    public virtual ICommand? Command
     {
-        get => (ICommand)GetValue(CommandProperty);
+        get => GetValue(CommandProperty) as ICommand;
         set => SetValue(CommandProperty, value);
     }
 
-    public virtual object CommandParameter
+    public virtual object? CommandParameter
     {
         get => GetValue(CommandParameterProperty);
         set => SetValue(CommandParameterProperty, value);
@@ -110,7 +110,7 @@ public class ContentButton : Border, IContentButton
         }
     }
 
-    private void OnCommandCanExecuteChanged(object sender, EventArgs e)
+    private void OnCommandCanExecuteChanged(object? sender, EventArgs e)
         => CommandCanExecuteChanged(this, e);
 
     private static void CommandChanged(ContentButton button)
@@ -121,11 +121,9 @@ public class ContentButton : Border, IContentButton
             button.SetValueFromRenderer(IsEnabledProperty, true);
     }
 
-    private static void CommandCanExecuteChanged(object sender, EventArgs e)
+    private static void CommandCanExecuteChanged(object? sender, EventArgs e)
     {
-        var button = sender as ContentButton;
-
-        if (button.Command is not null)
+        if (sender is ContentButton button && button.Command is not null)
         {
             button.SetValueFromRenderer(IsEnabledProperty, button.Command.CanExecute(button.CommandParameter));
             button.UpdateState();
@@ -134,7 +132,8 @@ public class ContentButton : Border, IContentButton
 
     private static void OnCommandChanged(BindableObject bindable, object oldValue, object newValue)
     {
-        var button = bindable as ContentButton;
+        if (bindable is not ContentButton button)
+            return;
 
         if (newValue is ICommand newCommand)
             newCommand.CanExecuteChanged += button.OnCommandCanExecuteChanged;
@@ -144,9 +143,7 @@ public class ContentButton : Border, IContentButton
 
     private static void OnCommandChanging(BindableObject bindable, object oldValue, object newValue)
     {
-        var button = bindable as ContentButton;
-
-        if (oldValue is ICommand oldCommand)
+        if (bindable is ContentButton button && oldValue is ICommand oldCommand)
             oldCommand.CanExecuteChanged -= button.OnCommandCanExecuteChanged;
     }
 }

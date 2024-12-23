@@ -7,7 +7,9 @@ public partial class PopoverHandler : ElementHandler<IPopover, SimplePopupWindow
 {
     protected override SimplePopupWindow CreatePlatformElement()
     {
-        return new SimplePopupWindow(MauiContext.Context, MauiContext);
+        return new SimplePopupWindow(
+            MauiContext?.Context ?? throw new NullReferenceException("MauiContext should not be null here."),
+            MauiContext);
     }
 
     protected override void ConnectHandler(SimplePopupWindow platformView)
@@ -31,7 +33,7 @@ public partial class PopoverHandler : ElementHandler<IPopover, SimplePopupWindow
         handler.PlatformView.IsAnimated = popover.IsAnimated;
     }
 
-    public static void MapShow(PopoverHandler handler, IPopover popover, object parentView)
+    public static void MapShow(PopoverHandler handler, IPopover popover, object? parentView)
     {
         if (parentView is not IElement anchor)
             return;
@@ -39,7 +41,7 @@ public partial class PopoverHandler : ElementHandler<IPopover, SimplePopupWindow
         handler.PlatformView.Show(anchor);
     }
 
-    public static void MapHide(PopoverHandler handler, IPopover popover, object arg3)
+    public static void MapHide(PopoverHandler handler, IPopover popover, object? arg3)
     {
         handler.PlatformView.Hide();
     }

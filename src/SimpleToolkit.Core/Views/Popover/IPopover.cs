@@ -8,7 +8,7 @@ public interface IPopover : IElement
     /// <summary>
     /// Content of the popover
     /// </summary>
-    View Content { get; set; }
+    View? Content { get; set; }
     /// <summary>
     /// Whether the default platform-specific animations should be used.
     /// </summary>

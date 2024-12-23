@@ -2,7 +2,7 @@
 
 internal static class ElementExtensions
 {
-    public static SimpleNavigationHost FindSimpleNavigationHost(this IView view)
+    public static SimpleNavigationHost? FindSimpleNavigationHost(this IView? view)
     {
         if (view is null)
             return null;
@@ -26,7 +26,7 @@ internal static class ElementExtensions
         return null;
     }
 
-    public static T FindParentOfType<T>(this Element element, bool includeThis = false)
+    public static T? FindParentOfType<T>(this Element element, bool includeThis = false)
         where T : IElement
     {
         if (includeThis && element is T view)

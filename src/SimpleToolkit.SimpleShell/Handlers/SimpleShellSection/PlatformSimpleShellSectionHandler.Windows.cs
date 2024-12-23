@@ -5,7 +5,7 @@ namespace SimpleToolkit.SimpleShell.Handlers;
 
 public partial class PlatformSimpleShellSectionHandler
 {
-    protected WGrid RootContentContainer { get; private set; }
+    protected WGrid RootContentContainer { get; private set; } = null!;
 
     protected override WFrame CreatePlatformElement()
     {

@@ -13,7 +13,7 @@ namespace SimpleToolkit.SimpleShell.Handlers;
 public interface IBaseSimpleShellSectionHandler
 {
     void RefreshGroupContainers();
-    void SetRootPageContainer(IView view);
+    void SetRootPageContainer(IView? view);
     void SetVirtualView(IElement view);
     ShellSection VirtualView { get; }
     PlatformView PlatformView { get; }

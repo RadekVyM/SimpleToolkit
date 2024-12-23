@@ -1,5 +1,4 @@
-﻿using Microsoft.Maui.Handlers;
-using WGrid = Microsoft.UI.Xaml.Controls.Grid;
+﻿using WGrid = Microsoft.UI.Xaml.Controls.Grid;
 
 namespace SimpleToolkit.SimpleShell.Handlers;
 

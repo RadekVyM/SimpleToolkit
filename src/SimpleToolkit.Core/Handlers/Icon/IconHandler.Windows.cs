@@ -7,7 +7,7 @@ namespace SimpleToolkit.Core.Handlers;
 
 public class IconHandler : ViewHandler<Icon, WBorder>, IElementHandler
 {
-    private IconSourceElement iconElement;
+    private IconSourceElement? iconElement;
 
     public static IPropertyMapper<Icon, IconHandler> Mapper = new PropertyMapper<Icon, IconHandler>(ViewHandler.ViewMapper)
     {
@@ -41,37 +41,35 @@ public class IconHandler : ViewHandler<Icon, WBorder>, IElementHandler
 
     protected override void ConnectHandler(WBorder platformView)
     {
-        iconElement.SizeChanged += FontIconSizeChanged;
+        if (iconElement is not null)
+            iconElement.SizeChanged += FontIconSizeChanged;
         base.ConnectHandler(platformView);
     }
 
     protected override void DisconnectHandler(WBorder platformView)
     {
-        iconElement.SizeChanged -= FontIconSizeChanged;
+        if (iconElement is not null)
+            iconElement.SizeChanged -= FontIconSizeChanged;
         base.DisconnectHandler(platformView);
     }
 
-    private void FontIconSizeChanged(object sender, Microsoft.UI.Xaml.SizeChangedEventArgs e)
+    private void FontIconSizeChanged(object? sender, Microsoft.UI.Xaml.SizeChangedEventArgs e)
     {
-        var iconElement = sender as IconSourceElement;
-
-        if (iconElement.ActualHeight < 0 || iconElement.ActualWidth < 0)
-        {
+        if (sender is not IconSourceElement iconElement || iconElement.ActualHeight < 0 || iconElement.ActualWidth < 0)
             return;
-        }
 
         // Fit glyph to the View
-        if (VirtualView.Source?.ToIconSource(this.MauiContext) is FontIconSource fontIconSource)
+        if (VirtualView.Source?.ToIconSource(MauiContext ?? throw new NullReferenceException("MauiContext should not be null here.")) is FontIconSource fontIconSource)
         {
             const double fontSizeScale = 0.86;
 
-            UpdateIconSourceDefaults(this, this.VirtualView, fontIconSource);
+            UpdateIconSourceDefaults(this, VirtualView, fontIconSource);
             fontIconSource.FontSize = Math.Min(iconElement.ActualHeight, iconElement.ActualWidth) * fontSizeScale;
             iconElement.IconSource = fontIconSource;
         }
     }
 
-    private static void UpdateIconSourceDefaults(IconHandler handler, Icon icon, IconSource iconSource)
+    private static void UpdateIconSourceDefaults(IconHandler handler, Icon icon, IconSource? iconSource)
     {
         if (iconSource is BitmapIconSource bitmapIconSource)
         {
@@ -80,7 +78,7 @@ public class IconHandler : ViewHandler<Icon, WBorder>, IElementHandler
 
         if (iconSource is FontIconSource fontIconSource)
         {
-            if (handler.iconElement.IconSource is FontIconSource oldFontIconSource)
+            if (handler.iconElement?.IconSource is FontIconSource oldFontIconSource)
             {
                 fontIconSource.FontSize = oldFontIconSource.FontSize;
             }
@@ -92,10 +90,11 @@ public class IconHandler : ViewHandler<Icon, WBorder>, IElementHandler
 
     public static void MapSource(IconHandler handler, Icon icon)
     {
-        var iconSource = icon.Source?.ToIconSource(handler.MauiContext);
+        var iconSource = icon.Source?.ToIconSource(handler.MauiContext ?? throw new NullReferenceException("MauiContext should not be null here."));
         UpdateIconSourceDefaults(handler, icon, iconSource);
 
-        handler.iconElement.IconSource = iconSource;
+        if (handler.iconElement is not null)
+            handler.iconElement.IconSource = iconSource;
     }
 
     public static void MapTintColor(IconHandler handler, Icon icon)

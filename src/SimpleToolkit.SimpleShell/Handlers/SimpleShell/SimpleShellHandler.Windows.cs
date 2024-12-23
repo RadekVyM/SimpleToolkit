@@ -12,7 +12,7 @@ public partial class SimpleShellHandler : ViewHandler<ISimpleShell, WBorder>
         return container;
     }
 
-    protected virtual WFrameworkElement GetNavigationHostContent()
+    protected virtual WFrameworkElement? GetNavigationHostContent()
     {
         return (navigationHost?.Handler as SimpleNavigationHostHandler)?.PlatformView?.Children.FirstOrDefault() as WFrameworkElement;
     }

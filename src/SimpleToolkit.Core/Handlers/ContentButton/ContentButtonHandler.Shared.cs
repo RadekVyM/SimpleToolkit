@@ -4,7 +4,7 @@ namespace SimpleToolkit.Core.Handlers;
 
 public partial class ContentButtonHandler : BorderHandler
 {
-    public new IContentButton VirtualView => base.VirtualView as IContentButton;
+    public new IContentButton VirtualView => (IContentButton)base.VirtualView;
 
     public ContentButtonHandler() : base(Mapper, CommandMapper)
     { }

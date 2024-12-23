@@ -17,11 +17,11 @@ public class SimpleShellTransition : ISimpleShellTransition
     /// <summary>
     /// Callback that is called when the transition starts.
     /// </summary>
-    public Action<SimpleShellTransitionArgs> Starting { get; }
+    public Action<SimpleShellTransitionArgs>? Starting { get; }
     /// <summary>
     /// Callback that is called when the transition finishes.
     /// </summary>
-    public Action<SimpleShellTransitionArgs> Finished { get; }
+    public Action<SimpleShellTransitionArgs>? Finished { get; }
     /// <summary>
     /// Duration of the transition.
     /// </summary>
@@ -46,11 +46,11 @@ public class SimpleShellTransition : ISimpleShellTransition
     /// <param name="easing">Easing of the transition animation.</param>
     public SimpleShellTransition(
         Action<SimpleShellTransitionArgs> callback,
-        Func<SimpleShellTransitionArgs, uint> duration = null,
-        Action<SimpleShellTransitionArgs> starting = null,
-        Action<SimpleShellTransitionArgs> finished = null,
-        Func<SimpleShellTransitionArgs, bool> destinationPageInFront = null,
-        Func<SimpleShellTransitionArgs, Easing> easing = null)
+        Func<SimpleShellTransitionArgs, uint>? duration = null,
+        Action<SimpleShellTransitionArgs>? starting = null,
+        Action<SimpleShellTransitionArgs>? finished = null,
+        Func<SimpleShellTransitionArgs, bool>? destinationPageInFront = null,
+        Func<SimpleShellTransitionArgs, Easing>? easing = null)
     {
         Callback = callback;
         Duration = duration ?? ((args) => DefaultDuration);

@@ -11,13 +11,12 @@ public abstract partial class BaseSimpleStackNavigationManager
 {
     protected virtual void AddPlatformPageToContainer(IView newPage, SimpleShell shell, bool onTop = true, bool isCurrentPageRoot = true)
     {
+        _ = navigationFrame ?? throw new NullReferenceException("navigationFrame should not be null here.");
+        
         if (navigationFrame.NextResponder is not SimpleShellSectionContentController contentController)
             return;
 
-        var newPageView = GetPlatformView(newPage);
-
-        if (newPageView is null)
-            return;
+        var newPageView = GetPlatformView(newPage) ?? throw new NullReferenceException("PlatformView should not be null here.");
 
         newPageView.RemoveFromSuperview();
 
@@ -25,8 +24,9 @@ public abstract partial class BaseSimpleStackNavigationManager
 
         if (newPage.Handler is PageHandler pageHandler)
         {
-            pageHandler.ViewController.RemoveFromParentViewController();
-            contentController.AddChildViewController(pageHandler.ViewController);
+            pageHandler.ViewController?.RemoveFromParentViewController();
+            if (pageHandler.ViewController is {} pageViewController)
+                contentController.AddChildViewController(pageViewController);
         }
 
         if (isCurrentPageRoot)
@@ -36,17 +36,18 @@ public abstract partial class BaseSimpleStackNavigationManager
         else
         {
             navigationFrame.AddSubview(newPageView);
-            navigationFrame.BringSubviewToFront(onTop ? newPageView : navigationFrame.Subviews.FirstOrDefault());
+            if ((onTop ? newPageView : navigationFrame.Subviews.FirstOrDefault()) is {} view)
+                navigationFrame.BringSubviewToFront(view);
         }
 
         if (newPage.Handler is PageHandler didMovePageHandler)
-            didMovePageHandler.ViewController.DidMoveToParentViewController(contentController);
+            didMovePageHandler.ViewController?.DidMoveToParentViewController(contentController);
     }
 
     protected virtual void RemovePlatformPageFromContainer(
-        IView oldPage,
-        IView oldShellItemContainer,
-        IView oldShellSectionContainer,
+        IView? oldPage,
+        IView? oldShellItemContainer,
+        IView? oldShellSectionContainer,
         bool isCurrentPageRoot,
         bool isPreviousPageRoot)
     {
@@ -55,7 +56,7 @@ public abstract partial class BaseSimpleStackNavigationManager
         if (oldPageView is null)
             return;
 
-        if (oldPage.Handler is PageHandler pageHandler)
+        if (oldPage?.Handler is PageHandler pageHandler)
         {
             pageHandler.ViewController?.WillMoveToParentViewController(null);
             pageHandler.ViewController?.RemoveFromParentViewController();
@@ -75,20 +76,20 @@ public abstract partial class BaseSimpleStackNavigationManager
 
     protected void AddPlatformRootPage(bool onTop, PlatformView newPageView)
     {
-        var r = AddToContainer(this.rootPageContainer, navigationFrame, onTop);
-        var i = AddToContainer(currentShellItemContainer, r, onTop);
-        var s = AddToContainer(currentShellSectionContainer, i, onTop);
+        _ = navigationFrame ?? throw new NullReferenceException("navigationFrame should not be null here.");
+        
+        var r = AddToContainer(this.rootPageContainer, navigationFrame, onTop) ?? throw new NullReferenceException($"{nameof(SimpleNavigationHost)} is missing");
+        var i = AddToContainer(currentShellItemContainer, r, onTop) ?? throw new NullReferenceException($"{nameof(SimpleNavigationHost)} is missing");
+        var s = AddToContainer(currentShellSectionContainer, i, onTop) ?? throw new NullReferenceException($"{nameof(SimpleNavigationHost)} is missing");
         AddToContainer(newPageView, s, onTop);
     }
 
-    private NavFrame AddToContainer(IView childContainer, NavFrame parentNavHost, bool onTop)
+    private NavFrame? AddToContainer(IView? childContainer, NavFrame parentNavHost, bool onTop)
     {
-        _ = parentNavHost ?? throw new ArgumentNullException(nameof(parentNavHost), $"{nameof(SimpleNavigationHost)} is missing");
-
         if (childContainer is null)
             return parentNavHost;
 
-        var platformChildContainer = GetPlatformView(childContainer);
+        var platformChildContainer = GetPlatformView(childContainer) ?? throw new NullReferenceException($"PlatformView should not be null here");
         
         AddToContainer(platformChildContainer, parentNavHost, onTop);
 
@@ -100,12 +101,11 @@ public abstract partial class BaseSimpleStackNavigationManager
 
     private void AddToContainer(PlatformView child, NavFrame parentNavHost, bool onTop)
     {
-        _ = parentNavHost ?? throw new ArgumentNullException(nameof(parentNavHost), $"{nameof(SimpleNavigationHost)} is missing");
-
         if (!parentNavHost.Subviews.Contains(child))
             parentNavHost.AddSubview(child);
 
-        parentNavHost.BringSubviewToFront(onTop ? child : parentNavHost.Subviews.FirstOrDefault());
+        if ((onTop ? child : parentNavHost.Subviews.FirstOrDefault()) is {} view)
+            parentNavHost.BringSubviewToFront(view);
     }
 
     private static partial void AddChild(PlatformContainer parent, PlatformView child)
@@ -123,7 +123,7 @@ public abstract partial class BaseSimpleStackNavigationManager
         parent.ClearSubviews();
     }
 
-    protected private partial List<PlatformView> RemoveContainer(IView oldContainer, PlatformContainer parent = null)
+    protected private partial List<PlatformView> RemoveContainer(IView oldContainer, PlatformContainer? parent)
     {
         var oldPlatformContainer = GetPlatformView(oldContainer);
         var oldChildren = new List<PlatformView>();
@@ -134,7 +134,7 @@ public abstract partial class BaseSimpleStackNavigationManager
             oldNavHost.ClearSubviews();
         }
 
-        oldPlatformContainer.RemoveFromSuperview();
+        oldPlatformContainer?.RemoveFromSuperview();
 
         return oldChildren;
     }

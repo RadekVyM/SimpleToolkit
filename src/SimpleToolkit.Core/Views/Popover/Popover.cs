@@ -26,9 +26,9 @@ public class Popover : Element, IPopover
     public static readonly BindableProperty AttachedPopoverProperty =
         BindableProperty.CreateAttached("AttachedPopover", typeof(Popover), typeof(View), null);
 
-    public virtual View Content
+    public virtual View? Content
     {
-        get => (View)GetValue(ContentProperty);
+        get => GetValue(ContentProperty) as View;
         set => SetValue(ContentProperty, value);
     }
 
@@ -61,7 +61,7 @@ public class Popover : Element, IPopover
     /// </summary>
     /// <param name="view">The view to which the popover is attached.</param>
     /// <returns>The popover that is attached to the view.</returns>
-    public static Popover GetAttachedPopover(BindableObject view)
+    public static Popover? GetAttachedPopover(BindableObject view)
     {
         _ = view ?? throw new ArgumentNullException(nameof(view));
         return (Popover)view.GetValue(AttachedPopoverProperty);
@@ -72,7 +72,7 @@ public class Popover : Element, IPopover
     /// </summary>
     /// <param name="view">The view to which the popover will be attached.</param>
     /// <param name="popover">The popover that will be attached to the view.</param>
-    public static void SetAttachedPopover(BindableObject view, Popover popover)
+    public static void SetAttachedPopover(BindableObject view, Popover? popover)
     {
         _ = view ?? throw new ArgumentNullException(nameof(view));
         view.SetValue(AttachedPopoverProperty, popover);
@@ -80,7 +80,7 @@ public class Popover : Element, IPopover
 
     public virtual void Show(View parentView)
     {
-        var mauiContext = parentView.Handler.MauiContext;
+        var mauiContext = parentView.Handler?.MauiContext ?? throw new NullReferenceException("MauiContext should not be null here.");
         var platformPopup = this.ToHandler(mauiContext);
 
         Parent = parentView;
@@ -115,7 +115,9 @@ public class Popover : Element, IPopover
 
     private static void OnContentChanged(BindableObject bindable, object oldValue, object newValue)
     {
-        var popover = bindable as Popover;
+        if (bindable is not Popover popover)
+            return;
+
         popover.OnBindingContextChanged();
     }
 }

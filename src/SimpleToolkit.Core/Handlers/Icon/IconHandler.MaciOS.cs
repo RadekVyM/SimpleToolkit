@@ -16,7 +16,7 @@ public class IconHandler : ViewHandler<Icon, UIImageView>, IImageHandler
     {
     };
 
-    ImageSourcePartLoader imageSourcePartLoader;
+    ImageSourcePartLoader? imageSourcePartLoader;
     public ImageSourcePartLoader SourceLoader =>
         imageSourcePartLoader ??= new ImageSourcePartLoader(new SourceSetter(this));
 
@@ -82,7 +82,7 @@ public class IconHandler : ViewHandler<Icon, UIImageView>, IImageHandler
 
     class SourceSetter(IconHandler handler) : SimpleIconSourcePartSetter(handler)
     {
-        public override void SetImageSource(UIImage platformImage)
+        public override void SetImageSource(UIImage? platformImage)
         {
             if (Handler?.PlatformView is not UIImageView imageView)
                 return;

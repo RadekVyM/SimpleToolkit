@@ -7,21 +7,27 @@ public partial class PopoverTest : Button
     public static readonly BindableProperty PopoverAlignmentProperty =
         BindableProperty.Create(nameof(PopoverAlignment), typeof(PopoverAlignment), typeof(PopoverTest), propertyChanged: static (sender, oldValue, newValue) =>
         {
-            var button = sender as PopoverTest;
+            if (sender is not PopoverTest button)
+                return;
+
             button.popover.Alignment = (PopoverAlignment)newValue;
         });
 
     public static readonly BindableProperty UseDefaultStylingProperty =
         BindableProperty.Create(nameof(UseDefaultStyling), typeof(bool), typeof(PopoverTest), defaultValue: true, propertyChanged: static (sender, oldValue, newValue) =>
         {
-            var button = sender as PopoverTest;
+            if (sender is not PopoverTest button)
+                return;
+
             button.popover.UseDefaultStyling = (bool)newValue;
         });
 
     public static readonly BindableProperty IsAnimatedProperty =
         BindableProperty.Create(nameof(IsAnimated), typeof(bool), typeof(PopoverTest), defaultValue: true, propertyChanged: static (sender, oldValue, newValue) =>
         {
-            var button = sender as PopoverTest;
+            if (sender is not PopoverTest button)
+                return;
+
             button.popover.IsAnimated = (bool)newValue;
         });
 
@@ -50,9 +56,11 @@ public partial class PopoverTest : Button
 	}
 
 
-    private void ButtonClicked(object sender, EventArgs e)
+    private void ButtonClicked(object? sender, EventArgs e)
     {
-        var button = sender as View;
+        if (sender is not View button)
+            return;
+
         button.ShowAttachedPopover();
     }
 

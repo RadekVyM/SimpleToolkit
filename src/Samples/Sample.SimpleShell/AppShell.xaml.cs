@@ -1,4 +1,5 @@
 ﻿using Sample.SimpleShell.Views.Pages;
+using SimpleToolkit.Core;
 using SimpleToolkit.SimpleShell.Extensions;
 
 namespace Sample.SimpleShell;
@@ -9,9 +10,28 @@ public partial class AppShell : SimpleToolkit.SimpleShell.SimpleShell
 	{
 		InitializeComponent();
 
+        Loaded += AppShellLoaded;
+        Unloaded += AppShellUnloaded;
+
 		Routing.RegisterRoute(nameof(YellowDetailPage), typeof(YellowDetailPage));
 
         this.SetTransition(Transitions.CustomPlatformTransition);
+    }
+
+
+    private void AppShellLoaded(object sender, EventArgs e)
+    {
+        Window.SubscribeToSafeAreaChanges(OnSafeAreaChanged);
+    }
+
+    private void AppShellUnloaded(object sender, EventArgs e)
+    {
+        Window.UnsubscribeFromSafeAreaChanges(OnSafeAreaChanged);
+    }
+
+    private void OnSafeAreaChanged(Thickness safeAreaPadding)
+    {
+        rootContainer.Padding = safeAreaPadding;
     }
 
     private async void ShellItemButtonClicked(object sender, EventArgs e)

@@ -16,7 +16,7 @@ namespace SimpleToolkit.SimpleShell.Handlers;
 public partial class SimpleShellItemHandler : IAppearanceObserver
 {
     public static PropertyMapper<ShellItem, SimpleShellItemHandler> Mapper =
-        new PropertyMapper<ShellItem, SimpleShellItemHandler>(ElementMapper)
+        new(ElementMapper)
         {
             [nameof(ShellItem.CurrentItem)] = MapCurrentItem,
             [Shell.TabBarIsVisibleProperty.PropertyName] = MapTabBarIsVisible,
@@ -24,11 +24,11 @@ public partial class SimpleShellItemHandler : IAppearanceObserver
         };
 
     public static CommandMapper<ShellItem, SimpleShellItemHandler> CommandMapper =
-        new CommandMapper<ShellItem, SimpleShellItemHandler>(ElementCommandMapper);
+        new(ElementCommandMapper);
 
-    protected IView rootPageContainer;
-    protected ShellSection currentShellSection;
-    protected IBaseSimpleShellSectionHandler currentShellSectionHandler;
+    protected IView? rootPageContainer;
+    protected ShellSection? currentShellSection;
+    protected IBaseSimpleShellSectionHandler? currentShellSectionHandler;
 
 
     public SimpleShellItemHandler(IPropertyMapper mapper, CommandMapper commandMapper)
@@ -46,7 +46,7 @@ public partial class SimpleShellItemHandler : IAppearanceObserver
     {
     }
 
-    public virtual void SetRootPageContainer(IView view)
+    public virtual void SetRootPageContainer(IView? view)
     {
         rootPageContainer = view;
         currentShellSectionHandler?.SetRootPageContainer(view);
@@ -65,7 +65,8 @@ public partial class SimpleShellItemHandler : IAppearanceObserver
         if (VirtualView.CurrentItem is not null)
         {
             // One handler is reused for all ShellSections
-            currentShellSectionHandler ??= (IBaseSimpleShellSectionHandler)VirtualView.CurrentItem.ToHandler(MauiContext);
+            currentShellSectionHandler ??=
+                (IBaseSimpleShellSectionHandler)VirtualView.CurrentItem.ToHandler(MauiContext ?? throw new NullReferenceException("MauiContext cannot be null here."));
 
             UpdatePlatformViewContent();
 
@@ -79,7 +80,7 @@ public partial class SimpleShellItemHandler : IAppearanceObserver
             currentShellSection.PropertyChanged += OnCurrentShellSectionPropertyChanged;
     }
 
-    private static void OnCurrentShellSectionPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private static void OnCurrentShellSectionPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
     }
 

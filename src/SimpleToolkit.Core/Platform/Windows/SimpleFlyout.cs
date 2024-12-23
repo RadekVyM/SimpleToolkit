@@ -9,12 +9,12 @@ using XamlStyle = Microsoft.UI.Xaml.Style;
 
 namespace SimpleToolkit.Core.Platform;
 
-public class SimpleFlyout : Flyout
+public partial class SimpleFlyout : Flyout
 {
     private readonly IMauiContext mauiContext;
 
-    internal WGrid PanelContent => Content as WGrid;
-    public IPopover VirtualView { get; private set; }
+    internal WGrid PanelContent => (WGrid)Content;
+    public IPopover? VirtualView { get; private set; }
     
     
     public SimpleFlyout(IMauiContext mauiContext)
@@ -36,7 +36,7 @@ public class SimpleFlyout : Flyout
         {
             PanelContent?.Children.Clear();
 
-            var content = handler.VirtualView.Content.ToPlatform(handler.MauiContext);
+            var content = handler.VirtualView.Content?.ToPlatform(mauiContext);
             var grid = new WGrid();
             grid.Children.Add(content);
             Content = grid;
@@ -69,7 +69,7 @@ public class SimpleFlyout : Flyout
 
     private FrameworkElement GetDefaultAnchor()
     {
-        ArgumentNullException.ThrowIfNull(VirtualView.Parent);
+        ArgumentNullException.ThrowIfNull(VirtualView?.Parent);
         var frameworkElement = VirtualView.Parent.ToPlatform(mauiContext);
         frameworkElement.ContextFlyout = this;
 
@@ -90,7 +90,7 @@ public class SimpleFlyout : Flyout
     {
         var flyoutStyle = new XamlStyle(typeof(FlyoutPresenter));
 
-        if (!VirtualView.UseDefaultStyling)
+        if (VirtualView?.UseDefaultStyling is not true)
         {
             flyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.BackgroundProperty, Colors.Transparent.ToWindowsColor()));
             flyoutStyle.Setters.Add(new Microsoft.UI.Xaml.Setter(FlyoutPresenter.IsDefaultShadowEnabledProperty, false));
