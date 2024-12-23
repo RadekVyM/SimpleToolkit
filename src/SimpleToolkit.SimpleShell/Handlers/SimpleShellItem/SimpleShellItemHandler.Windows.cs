@@ -12,7 +12,7 @@ public partial class SimpleShellItemHandler : ElementHandler<ShellItem, WBorder>
 
     private void UpdatePlatformViewContent()
     {
-        if (currentShellSectionHandler.PlatformView != PlatformView.Child)
-            PlatformView.Child = currentShellSectionHandler.PlatformView;
+        if (currentShellSectionHandler?.PlatformView != PlatformView.Child)
+            PlatformView.Child = currentShellSectionHandler?.PlatformView;
     }
 }

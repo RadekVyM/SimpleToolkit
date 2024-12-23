@@ -5,23 +5,23 @@ using Microsoft.UI.Xaml;
 
 namespace SimpleToolkit.Core.Platform;
 
-public class SimpleContentButtonPanel : ContentPanel
+public partial class SimpleContentButtonPanel : ContentPanel
 {
-    internal Action Clicked { get; set; }
+    internal Action? Clicked { get; set; }
 
     protected override AutomationPeer OnCreateAutomationPeer()
     {
         return new ContentButtonAutomationPeer(this);
     }
 
-    private class ContentButtonAutomationPeer(FrameworkElement owner) : FrameworkElementAutomationPeer(owner), IInvokeProvider
+    private partial class ContentButtonAutomationPeer(FrameworkElement owner) : FrameworkElementAutomationPeer(owner), IInvokeProvider
     {
         public void Invoke()
         {
             ((SimpleContentButtonPanel)Owner).Clicked?.Invoke();
         }
 
-        protected override IList<AutomationPeer> GetChildrenCore()
+        protected override IList<AutomationPeer>? GetChildrenCore()
         {
             return null;
         }

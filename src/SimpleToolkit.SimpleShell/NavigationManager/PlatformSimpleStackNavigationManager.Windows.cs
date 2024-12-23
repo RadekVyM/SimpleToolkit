@@ -21,14 +21,15 @@ public partial class PlatformSimpleStackNavigationManager
         bool animated = true)
     {
         var transition = pageTransition(currentPage);
-        var newPageView = GetPlatformView(currentPage);
+        var newPageView = GetPlatformView(currentPage) ?? throw new NullReferenceException("PlatformView cannot be null here.");
         var oldPageView = GetPlatformView(previousPage);
         var newSectionContainer = GetPlatformView(currentShellSectionContainer);
         var oldSectionContainer = GetPlatformView(previousShellSectionContainer);
         var newItemContainer = GetPlatformView(currentShellItemContainer);
         var oldItemContainer = GetPlatformView(previousShellItemContainer);
 
-        var to = BaseSimpleStackNavigationManager.GetFirstDifferent(newItemContainer, newSectionContainer, newPageView, oldItemContainer, oldSectionContainer);
+        var to = BaseSimpleStackNavigationManager.GetFirstDifferent(newItemContainer, newSectionContainer, newPageView, oldItemContainer, oldSectionContainer) ??
+            throw new NullReferenceException("PlatformView cannot be null here.");
         var from = BaseSimpleStackNavigationManager.GetFirstDifferent(oldItemContainer, oldSectionContainer, oldPageView, newItemContainer, newSectionContainer);
 
         ClearTransitions(newPageView, newSectionContainer, newItemContainer);
@@ -36,9 +37,9 @@ public partial class PlatformSimpleStackNavigationManager
         var switchingTransition = GetValue(transition, args, transition?.SwitchingAnimation, new EntranceThemeTransition());
 
         if (animated && switchingTransition is not null)
-            to.Transitions = new TransitionCollection { switchingTransition };
+            to.Transitions = [switchingTransition];
         else
-            to.Transitions = new TransitionCollection { };
+            to.Transitions = [];
 
         // Here we go again 😶
         // The delay is needed to play the animation, but ideally it should not be
@@ -62,17 +63,15 @@ public partial class PlatformSimpleStackNavigationManager
             (!isRootNavigation && newPageStack[newPageStack.Count - 1] != NavigationStack[NavigationStack.Count - 1]);
         var oldPageStack = NavigationStack;
         NavigationStack = newPageStack;
-        var pagesToDisconnect = GetPagesToDisconnect(oldPageStack, newPageStack);
 
         if (!switchFragments)
-        {
-            DisconnectHandlers(pagesToDisconnect);
             return;
-        }
 
         var platformView = isCurrentPageRoot ?
             navigationFrame :
             GetPlatformView(newPageStack[newPageStack.Count - 1]);
+
+        _ = platformView ?? throw new NullReferenceException("PlatformView cannot be null here.");
 
         var shouldPop = ShouldPop(newPageStack, oldPageStack);
         var defaultTransitionInfo = new SlideNavigationTransitionInfo()
@@ -86,20 +85,20 @@ public partial class PlatformSimpleStackNavigationManager
                 GetValue(transition, args, transition?.PushingAnimation, defaultTransitionInfo)) :
             null;
         var destinationPageType = GetDestinationPageType();
-        var navigationParameter = new NavigationParameter(platformView, pagesToDisconnect);
+        var navigationParameter = new NavigationParameter(platformView);
 
         if (shouldPop)
         {
-            rootContainer.BackStack.Insert(0, new PageStackEntry(destinationPageType, navigationParameter, transitionInfo));
-            rootContainer.GoBack(transitionInfo);
+            rootContainer?.BackStack.Insert(0, new PageStackEntry(destinationPageType, navigationParameter, transitionInfo));
+            rootContainer?.GoBack(transitionInfo);
         }
         else
         {
-            rootContainer.Navigate(destinationPageType, navigationParameter, transitionInfo);
+            rootContainer?.Navigate(destinationPageType, navigationParameter, transitionInfo);
         }
 
-        rootContainer.BackStack.Clear();
-        rootContainer.ForwardStack.Clear();
+        rootContainer?.BackStack.Clear();
+        rootContainer?.ForwardStack.Clear();
     }
 
     protected virtual Type GetDestinationPageType() =>
@@ -114,7 +113,7 @@ public partial class PlatformSimpleStackNavigationManager
         if (e.Content is not Microsoft.UI.Xaml.Controls.Page page)
             return;
 
-        ContentPresenter presenter;
+        ContentPresenter? presenter;
 
         if (page.Content is null)
         {
@@ -138,10 +137,8 @@ public partial class PlatformSimpleStackNavigationManager
 
         try
         {
-            var parameter = e.Parameter as NavigationParameter;
+            var parameter = (e.Parameter as NavigationParameter) ?? throw new NullReferenceException("Parameter is missing.");
             presenter.Content = parameter.PlatformView;
-
-            DisconnectHandlers(parameter.pagesToDisconnect);
         }
         catch (Exception)
         {
@@ -152,7 +149,7 @@ public partial class PlatformSimpleStackNavigationManager
 
     private static bool ShouldPop(IReadOnlyList<IView> newPageStack, IReadOnlyList<IView> oldPageStack)
     {
-        IView lastSame = null;
+        IView? lastSame = null;
 
         for (int i = 0; i < newPageStack.Count; i++)
         {
@@ -166,15 +163,15 @@ public partial class PlatformSimpleStackNavigationManager
             || lastSame == newPageStack[newPageStack.Count - 1];
     }
 
-    private static void ClearTransitions(FrameworkElement newPageView, FrameworkElement newSectionContainer, FrameworkElement newItemContainer)
+    private static void ClearTransitions(FrameworkElement newPageView, FrameworkElement? newSectionContainer, FrameworkElement? newItemContainer)
     {
         if (newPageView is not null)
-            newPageView.Transitions = new TransitionCollection { };
+            newPageView.Transitions = [];
         if (newSectionContainer is not null)
-            newSectionContainer.Transitions = new TransitionCollection { };
+            newSectionContainer.Transitions = [];
         if (newItemContainer is not null)
-            newItemContainer.Transitions = new TransitionCollection { };
+            newItemContainer.Transitions = [];
     }
 
-    private record NavigationParameter(FrameworkElement PlatformView, IList<IView> pagesToDisconnect);
+    private record NavigationParameter(FrameworkElement PlatformView);
 }

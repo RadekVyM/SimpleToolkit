@@ -9,10 +9,10 @@ namespace SimpleToolkit.Core.Handlers;
 public partial class ContentButtonHandler
 {
     private bool alreadyReleased = true;
-    private PointerEventHandler pointerPressedHandler;
-    private PointerEventHandler pointerReleasedHandler;
-    private PointerEventHandler pointerExitedHandler;
-    private KeyEventHandler keyDownHandler;
+    private PointerEventHandler? pointerPressedHandler;
+    private PointerEventHandler? pointerReleasedHandler;
+    private PointerEventHandler? pointerExitedHandler;
+    private KeyEventHandler? keyDownHandler;
 
 
     protected override PlatformView CreatePlatformView()
@@ -116,7 +116,9 @@ public partial class ContentButtonHandler
 
     private Point GetPointerPosition(PointerRoutedEventArgs e)
     {
+#pragma warning disable CsWinRT1030 // Project does not enable unsafe blocks
         var position = e.GetCurrentPoint(PlatformView).Position;
+#pragma warning restore CsWinRT1030 // Project does not enable unsafe blocks
         return new Point(position.X, position.Y);
     }
 }

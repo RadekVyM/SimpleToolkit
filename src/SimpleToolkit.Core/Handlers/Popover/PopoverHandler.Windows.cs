@@ -9,7 +9,7 @@ public partial class PopoverHandler : ElementHandler<IPopover, SimpleFlyout>
 {
     protected override SimpleFlyout CreatePlatformElement()
     {
-        return new SimpleFlyout(MauiContext);
+        return new SimpleFlyout(MauiContext ?? throw new NullReferenceException("MauiContext should not be null here."));
     }
 
     protected override void ConnectHandler(SimpleFlyout platformView)

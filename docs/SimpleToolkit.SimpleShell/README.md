@@ -565,12 +565,6 @@ The yellow and green pages are grouped under one tab:
     </tr>
 </table>
 
-## Disconnecting page handlers
-
-`SimpleShell` automatically calls the `DisconnectHandler()` method on all [handlers](https://learn.microsoft.com/dotnet/maui/user-interface/handlers) of pages that are being removed from a navigation stack. For example, when you pop a page from a navigation stack, the `DisconnectHandler()` method is called on its handler.
-
-This behavior can be disabled on a per-page basis with the `SimpleShell.ShouldAutoDisconnectPageHandler` attached property. Just set this property on the page to `false` if you do not want its handler to be automatically disconnected.
-
 ## Transitions
 
 `SimpleShell` allows you to define custom transitions between pages during navigation:
