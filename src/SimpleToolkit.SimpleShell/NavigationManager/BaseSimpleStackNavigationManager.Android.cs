@@ -54,7 +54,7 @@ public abstract partial class BaseSimpleStackNavigationManager
     protected private void AddPlatformRootPage(bool onTop, PlatformView newPageView)
     {
         _ = navigationFrame ?? throw new NullReferenceException("navigationFrame should not be null here.");
-        
+
         var r = AddToContainer(this.rootPageContainer, navigationFrame, onTop) ?? throw new NullReferenceException($"{nameof(SimpleNavigationHost)} is missing");
         var i = AddToContainer(currentShellItemContainer, r, onTop) ?? throw new NullReferenceException($"{nameof(SimpleNavigationHost)} is missing");
         var s = AddToContainer(currentShellSectionContainer, i, onTop) ?? throw new NullReferenceException($"{nameof(SimpleNavigationHost)} is missing");
@@ -67,7 +67,7 @@ public abstract partial class BaseSimpleStackNavigationManager
             return parentNavHost;
 
         var platformChildContainer = GetPlatformView(childContainer) ?? throw new NullReferenceException($"PlatformView should not be null here");
-        
+
         AddToContainer(platformChildContainer, parentNavHost, onTop);
 
         if (GetPageContainerNavHost(childContainer) is PlatformContainer navHost)

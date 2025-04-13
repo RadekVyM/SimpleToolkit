@@ -43,7 +43,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.60" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)'=='DEBUG'">

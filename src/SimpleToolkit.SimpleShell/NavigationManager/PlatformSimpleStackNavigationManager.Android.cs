@@ -122,7 +122,7 @@ public partial class PlatformSimpleStackNavigationManager
                     GetValue(transition, args, transition?.PoppingLeaveAnimation, Resource.Animation.simpleshell_exit_right) :
                     GetValue(transition, args, transition?.PushingLeaveAnimation, Resource.Animation.simpleshell_none));
         }
-        
+
         transaction.Replace(rootContainer.Id, currentFragment);
         transaction.Commit();
 

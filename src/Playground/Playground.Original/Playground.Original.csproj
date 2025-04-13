@@ -56,18 +56,18 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)'!='DEBUG'">
-		<PackageReference Include="SimpleToolkit.Core" Version="6.0.0" />
+		<PackageReference Include="SimpleToolkit.Core" Version="6.0.1" />
 		<PackageReference Include="SimpleToolkit.SimpleShell.Controls" Version="4.0.0-preview1" />
-		<PackageReference Include="SimpleToolkit.SimpleShell" Version="5.0.0" />
+		<PackageReference Include="SimpleToolkit.SimpleShell" Version="5.0.1" />
 	</ItemGroup>
-		
+
 	<ItemGroup Condition="'$(Configuration)'=='DEBUG'">
 		<ProjectReference Include="..\..\SimpleToolkit.SimpleShell.Controls\SimpleToolkit.SimpleShell.Controls.csproj" />
 		<ProjectReference Include="..\..\SimpleToolkit.SimpleShell\SimpleToolkit.SimpleShell.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.60" />
 	</ItemGroup>
 
 	<!-- Build Properties must be defined within these property groups to ensure successful publishing
