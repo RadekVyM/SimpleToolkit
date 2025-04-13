@@ -42,10 +42,10 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
 
       - name: Install MAUI Workload
         run: dotnet workload install maui --ignore-failed-sources
@@ -59,7 +59,7 @@ jobs:
         run: dotnet pack .\src\SimpleToolkit.SimpleShell\SimpleToolkit.SimpleShell.csproj --configuration Release --output ${{ env.SimpleShellNuGetDirectory }}
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nuget
           if-no-files-found: error
