@@ -14,6 +14,11 @@ on:
         required: true
         type: boolean
         default: true
+      pack_helpers:
+        description: "Pack SimpleToolkit.Helpers"
+        required: true
+        type: boolean
+        default: true
       push_simplebutton:
         description: "Push SimpleToolkit.SimpleButton"
         required: false
@@ -21,6 +26,11 @@ on:
         default: false
       push_simpleshell:
         description: "Push SimpleToolkit.SimpleShell"
+        required: false
+        type: boolean
+        default: false
+      push_helpers:
+        description: "Push SimpleToolkit.Helpers"
         required: false
         type: boolean
         default: false
@@ -32,6 +42,7 @@ env:
   NuGetDirectory: .\nuget
   SimpleButtonNuGetDirectory: .\nuget\SimpleButton
   SimpleShellNuGetDirectory: .\nuget\SimpleShell
+  HelpersNuGetDirectory: .\nuget\Helpers
 
 defaults:
   run:
@@ -58,6 +69,10 @@ jobs:
         if: ${{ inputs.pack_simpleshell || inputs.push_simpleshell }}
         run: dotnet pack .\src\SimpleToolkit.SimpleShell\SimpleToolkit.SimpleShell.csproj --configuration Release --output ${{ env.SimpleShellNuGetDirectory }}
 
+      - name: Pack SimpleToolkit.Helpers
+        if: ${{ inputs.pack_helpers || inputs.push_helpers }}
+        run: dotnet pack .\src\SimpleToolkit.Helpers\SimpleToolkit.Helpers.csproj --configuration Release --output ${{ env.HelpersNuGetDirectory }}
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -73,3 +88,7 @@ jobs:
       - name: Push SimpleToolkit.SimpleShell
         if: ${{ inputs.pack_simpleshell && inputs.push_simpleshell }}
         run: dotnet nuget push "${{ env.SimpleShellNuGetDirectory }}\*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+
+      - name: Push SimpleToolkit.Helpers
+        if: ${{ inputs.pack_helpers && inputs.push_helpers }}
+        run: dotnet nuget push "${{ env.HelpersNuGetDirectory }}\*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json

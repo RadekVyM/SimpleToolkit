@@ -7,15 +7,19 @@
 
 ## 📦 NuGet Packages
 
-The library is split into modular packages so you only pull in what you need.
+The library is split into modular packages so you only pull in what you need:
 
-- [SimpleToolkit.SimpleShell](#simpletoolkitsimpleshell) - a lightweight, decoupled implementation of .NET MAUI `Shell`.
+- [SimpleToolkit.SimpleShell](#simpletoolkitsimpleshell) — a lightweight, decoupled implementation of .NET MAUI `Shell`
 
   [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.svg?label=SimpleToolkit.SimpleShell)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell/)
 
-- [SimpleToolkit.SimpleButton](#simpletoolkitsimplebutton) - a button that can hold whatever content you want
+- [SimpleToolkit.SimpleButton](#simpletoolkitsimplebutton) — a button that can hold whatever content you want
 
   [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.SimpleButton.svg?label=SimpleToolkit.SimpleButton)](https://www.nuget.org/packages/SimpleToolkit.SimpleButton/)
+
+- [SimpleToolkit.Helpers](#simpletoolkithelpers) — a collection of essential cross-platform helpers for .NET MAUI
+
+  [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.Helpers.svg?label=SimpleToolkit.Helpers)](https://www.nuget.org/packages/SimpleToolkit.Helpers/)
 
 ## 📱 [Samples](./docs/Samples.md)
 
@@ -118,3 +122,14 @@ builder.UseSimpleButton();
 ```
 
 > See [documentation](./docs/SimpleToolkit.SimpleButton) for more information.
+
+## 📐 SimpleToolkit.Helpers
+
+[![SimpleToolkit.Helpers](https://img.shields.io/nuget/v/SimpleToolkit.Helpers.svg?label=SimpleToolkit.Helpers)](https://www.nuget.org/packages/SimpleToolkit.Helpers/)
+[![Documentation](https://img.shields.io/badge/-Documentation%20-forestgreen)](./docs/SimpleToolkit.Helpers)
+
+A collection of essential cross-platform helpers for .NET MAUI to bridge the gap between shared code and native platform APIs:
+
+- `WindowInsetsProvider` — Provides a unified way to retrieve current window insets.
+
+> See [documentation](./docs/SimpleToolkit.Helpers) for more information.

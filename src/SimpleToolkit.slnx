@@ -1,0 +1,27 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Playground/">
+    <Project Path="Playground/Playground.Original/Playground.Original.csproj">
+      <Deploy Solution="*|Any CPU" />
+    </Project>
+  </Folder>
+  <Folder Name="/Samples/">
+    <Project Path="Samples/Sample.Core/Sample.Core.csproj" />
+    <Project Path="Samples/Sample.SimpleShell/Sample.SimpleShell.csproj">
+      <Deploy Solution="Debug|Any CPU" />
+    </Project>
+    <Project Path="Samples/Sample.SimpleShellSharpnadoTabs/Sample.SimpleShellSharpnadoTabs.csproj">
+      <Deploy Solution="*|Any CPU" />
+    </Project>
+    <Project Path="Samples/Sample.SimpleShellTopBar/Sample.SimpleShellTopBar.csproj">
+      <Deploy Solution="*|Any CPU" />
+    </Project>
+  </Folder>
+  <Project Path="SimpleToolkit.Helpers/SimpleToolkit.Helpers.csproj" />
+  <Project Path="SimpleToolkit.SimpleButton/SimpleToolkit.SimpleButton.csproj" />
+  <Project Path="SimpleToolkit.SimpleShell/SimpleToolkit.SimpleShell.csproj" />
+</Solution>
