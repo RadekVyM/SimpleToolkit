@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using SimpleToolkit.Core;
+using SimpleToolkit.SimpleButton;
 using SimpleToolkit.SimpleShell;
 
 namespace Sample.SimpleShellTopBar;
@@ -12,14 +12,12 @@ public static class MauiProgram
         builder
             .UseMauiApp<App>()
             .UseSimpleShell()
-            .UseSimpleToolkit()
+            .UseSimpleButton()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
-
-        builder.DisplayContentBehindBars();
 
 #if DEBUG
         builder.Logging.AddDebug();

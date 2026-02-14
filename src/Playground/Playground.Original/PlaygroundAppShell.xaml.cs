@@ -1,6 +1,4 @@
-﻿using SimpleToolkit.Core;
-using SimpleToolkit.SimpleShell.Controls;
-using Playground.Original.Views.Pages;
+﻿using Playground.Original.Views.Pages;
 using SimpleToolkit.SimpleShell.Transitions;
 using SimpleToolkit.SimpleShell.Extensions;
 using System.Windows.Input;
@@ -20,28 +18,6 @@ namespace Playground.Original
 
             InitializeComponent();
 
-            designLanguagesListPopover.Items = new List<DesignLanguageItem>
-            {
-                new DesignLanguageItem("Material3", () =>
-                {
-                    VisualStateManager.GoToState(this, "Material3");
-                    designButton.HideAttachedPopover();
-                }),
-                new DesignLanguageItem("Cupertino", () =>
-                {
-                    VisualStateManager.GoToState(this, "Cupertino");
-                    designButton.HideAttachedPopover();
-                }),
-                new DesignLanguageItem("Fluent", () =>
-                {
-                    VisualStateManager.GoToState(this, "Fluent");
-                    designButton.HideAttachedPopover();
-                }),
-            };
-
-            VisualStateManager.GoToState(this, "Material3");
-            designLanguagesListPopover.SelectedItem = designLanguagesListPopover.Items.FirstOrDefault();
-
             Routing.RegisterRoute(nameof(ImagePage), typeof(ImagePage));
             Routing.RegisterRoute(nameof(FirstYellowDetailPage), typeof(FirstYellowDetailPage));
             Routing.RegisterRoute(nameof(SecondYellowDetailPage), typeof(SecondYellowDetailPage));
@@ -49,9 +25,6 @@ namespace Playground.Original
             Routing.RegisterRoute(nameof(FourthYellowDetailPage), typeof(FourthYellowDetailPage));
             Routing.RegisterRoute(nameof(FirstGreenDetailPage), typeof(FirstGreenDetailPage));
             Routing.RegisterRoute(nameof(ImageDetailPage), typeof(ImageDetailPage));
-
-            Loaded += AppShellLoaded;
-            Unloaded += AppShellUnloaded;
 
             this.SetTransition(
                 callback: static args =>
@@ -110,16 +83,6 @@ namespace Playground.Original
             return base.OnBackButtonPressed();
         }
 
-        private void AppShellLoaded(object? sender, EventArgs e)
-        {
-            Window.SubscribeToSafeAreaChanges(OnSafeAreaChanged);
-        }
-
-        private void AppShellUnloaded(object? sender, EventArgs e)
-        {
-            Window.UnsubscribeFromSafeAreaChanges(OnSafeAreaChanged);
-        }
-
         private void OnSafeAreaChanged(Thickness safeAreaPadding)
         {
             rootContainer.Padding = new Thickness(0, safeAreaPadding.Top, 0, safeAreaPadding.Bottom);
@@ -133,12 +96,6 @@ namespace Playground.Original
 
             if (!CurrentState.Location.OriginalString.Contains(shellItem.Route))
                 await this.GoToAsync($"///{shellItem.Route}");
-        }
-
-        private async void TabBarItemSelected(object? sender, TabItemSelectedEventArgs e)
-        {
-            if (!CurrentState.Location.OriginalString.Contains(e.ShellItem.Route))
-                await this.GoToAsync($"///{e.ShellItem.Route}");
         }
 
         private async void BackButtonClicked(object? sender, EventArgs e)
@@ -173,24 +130,6 @@ namespace Playground.Original
             orangeAdded = true;
         }
 
-        private void ShowPopoverButtonClicked(object? sender, EventArgs e)
-        {
-            testBehavior.Test();
-            if (sender is not View button)
-                return;
-
-            button.ShowAttachedPopover();
-        }
-
-        private void DesignLanguagesListPopoverItemSelected(object? sender, ListPopoverItemSelectedEventArgs e)
-        {
-            if (e.Item is DesignLanguageItem designLanguageItem)
-            {
-                designLanguagesListPopover.SelectedItem = designLanguageItem;
-                designLanguageItem.Action?.Invoke();
-            }
-        }
-
         private void SwapButtonClicked(object? sender, EventArgs e)
         {
             Content = new SimpleNavigationHost();
@@ -205,7 +144,7 @@ namespace Playground.Original
         {
             Resources.TryGetValue("AnotherSimpleShellSectionContainer", out object template);
 
-            SimpleShell.SetShellGroupContainerTemplate(iconsTab, template as DataTemplate);
+            SimpleShell.SetShellGroupContainerTemplate(grayTab, template as DataTemplate);
         }
 
         private record DesignLanguageItem(string Title, Action Action)

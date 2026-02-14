@@ -33,7 +33,9 @@
             
     <simpleShell:SimpleShell.RootPageContainer>
         <Grid
-            RowDefinitions="*, auto">
+            RowDefinitions="*, auto"
+            SafeAreaEdges="None"
+            Background="{AppThemeBinding Default=White, Dark=Black}">
             <controls:TopBarScaffold
                 IsBackButtonVisible="False"
                 Title="{Binding CurrentShellContent.Title, Source={x:Reference thisShell}, x:DataType={x:Type simpleShell:SimpleShell}}">
@@ -75,12 +77,5 @@
             </HorizontalStackLayout>
         </Grid>
     </simpleShell:SimpleShell.RootPageContainer>
-    
-    <simpleShell:SimpleShell.Content>
-        <Grid
-            x:Name="rootContainer">
-            <simpleShell:SimpleNavigationHost />
-        </Grid>
-    </simpleShell:SimpleShell.Content>
 
 </simpleShell:SimpleShell>

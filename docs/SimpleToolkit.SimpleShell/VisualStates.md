@@ -1,8 +1,8 @@
-## Visual states
+# Visual states
 
-`SimpleShell` provides multiple groups of states.
+`SimpleShell` provides multiple groups of visual states.
 
-### `ShellSection` states
+## `ShellSection` states
 
 States in the `SimpleShellSectionState.[ShellSection route]` format:
 
@@ -25,7 +25,7 @@ States in the `SimpleShellSectionState.[ShellSection route]` format:
 
 When a user navigates to a tab with a `HomeTab` route, the view named `tabBar` will have a red background, and when to a tab with a `SettingsTab` route, the view named `tabBar` will have a green background. 
 
-### `ShellContent` states
+## `ShellContent` states
 
 States in the `SimpleShellContentState.[ShellContent route]` format:
 
@@ -48,7 +48,7 @@ States in the `SimpleShellContentState.[ShellContent route]` format:
 
 When a user navigates to a `ShellContent` with a `HomePage` route, the view named `tabBar` will have a yellow background, and when to a `ShellContent` with a `SettingsPage` route, the view named `tabBar` will have a blue background.
 
-### Page type states
+## Page type states
 
 States in the `SimplePageState.[Page type name]` format:
 

@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="Playground.Original.Views.Pages.SimpleButtonPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Playground.Original.Views.Pages"
+    xmlns:sb="clr-namespace:SimpleToolkit.SimpleButton;assembly=SimpleToolkit.SimpleButton"
+    xmlns:behaviors="clr-namespace:Playground.Original.Behaviors"
+    Title="Simple Buttons">
+
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+        </Style>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout
+            HorizontalOptions="Fill"
+            Spacing="20"
+            VerticalOptions="Center">
+
+            <VerticalStackLayout.Behaviors>
+                <behaviors:TestBehavior x:Name="testBehavior"/>
+            </VerticalStackLayout.Behaviors>
+
+            <sb:SimpleButton
+                Clicked="SignInClicked"
+                HorizontalOptions="Center"
+                Stroke="Transparent"
+                StrokeThickness="0">
+                <HorizontalStackLayout
+                    Padding="12,10"
+                    HorizontalOptions="Center"
+                    Spacing="10">
+                    <Image
+                        HeightRequest="18"
+                        Source="star.png"
+                        VerticalOptions="Center"
+                        WidthRequest="18" />
+                    <Label
+                        FontAttributes="Bold"
+                        Text="Sign in with email"
+                        TextColor="Black"
+                        VerticalOptions="Center" />
+                </HorizontalStackLayout>
+            </sb:SimpleButton>
+
+            <sb:SimpleButton
+                Background="Orange"
+                Clicked="VariableButtonClicked"
+                HorizontalOptions="Center"
+                StrokeShape="{RoundRectangle CornerRadius=6}">
+                <VerticalStackLayout Padding="6">
+                    <Label HorizontalTextAlignment="Center" Text="I am a button" />
+                    <Label HorizontalTextAlignment="Center" Text="with" />
+                    <Label
+                        x:Name="variableContentLabel"
+                        HorizontalTextAlignment="Center"
+                        Text="the default content" />
+                </VerticalStackLayout>
+            </sb:SimpleButton>
+
+            <sb:SimpleButton
+                x:Name="simpleButton"
+                Background="Orange"
+                Clicked="StarButtonClicked"
+                HorizontalOptions="Center"
+                StrokeShape="{RoundRectangle CornerRadius=6}">
+                <HorizontalStackLayout Padding="12,10" Spacing="10">
+                    <Image
+                        HeightRequest="18"
+                        Source="star.png"
+                        VerticalOptions="Center"
+                        WidthRequest="18" />
+                    <Label Text="Show Image Page" />
+                </HorizontalStackLayout>
+
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroupList>
+                        <VisualStateGroup>
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Pressed">
+                                <VisualState.Setters>
+                                    <Setter Property="Background" Value="OrangeRed" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="PointerOver">
+                                <VisualState.Setters>
+                                    <Setter Property="Background" Value="DarkOrange" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Disabled">
+                                <VisualState.Setters>
+                                    <Setter Property="Background" Value="LightGray" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </VisualStateManager.VisualStateGroups>
+            </sb:SimpleButton>
+
+            <Button
+                x:Name="isEnabledButton"
+                Background="Orange"
+                Clicked="ChangeButtonClicked"
+                HorizontalOptions="Center"
+                Text="Enabled" />
+
+            <Button
+                x:Name="commandParameterButton"
+                Background="Orange"
+                Clicked="ChangeCommandParameterButtonClicked"
+                HorizontalOptions="Center"
+                Text="Can execute" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

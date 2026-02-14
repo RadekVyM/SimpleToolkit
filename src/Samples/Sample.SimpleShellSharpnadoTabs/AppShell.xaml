@@ -49,7 +49,7 @@
 
 
     <simpleShell:SimpleShell.RootPageContainer>
-        <Grid CompressedLayout.IsHeadless="True">
+        <Grid>
             <controls:TopBarScaffold
                 x:Name="scaffold"
                 Title="{Binding CurrentShellContent.Title, Source={x:Reference thisShell}, x:DataType={x:Type simpleShell:SimpleShell}}"
@@ -138,7 +138,7 @@
     </simpleShell:SimpleShell.RootPageContainer>
 
     <simpleShell:SimpleShell.Content>
-        <ContentView x:Name="contentView" CompressedLayout.IsHeadless="True">
+        <ContentView x:Name="contentView">
             <simpleShell:SimpleNavigationHost />
         </ContentView>
     </simpleShell:SimpleShell.Content>

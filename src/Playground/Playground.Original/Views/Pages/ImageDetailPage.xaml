@@ -19,11 +19,5 @@
                 x:Name="image"
                 HorizontalOptions="Fill" VerticalOptions="Fill"/>
         </Grid>
-
-        <AbsoluteLayout
-            x:Name="transitionLayer">
-            <Image
-                x:Name="transitionImage"/>
-        </AbsoluteLayout>
     </Grid>
 </ContentPage>

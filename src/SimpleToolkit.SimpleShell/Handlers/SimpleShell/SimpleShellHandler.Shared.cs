@@ -128,9 +128,22 @@ public partial class SimpleShellHandler
         shellItemHandler.SetRootPageContainer(view);
     }
 
+    protected override void ConnectHandler(PlatformShell platformView)
+    {
+        base.ConnectHandler(platformView);
+
+        #if ANDROID
+        AndroidInsetExtensions.SetupViewWithLocalListener(platformView);
+        #endif
+    }
+
     protected override void DisconnectHandler(PlatformShell platformView)
     {
         base.DisconnectHandler(platformView);
+
+        #if ANDROID
+        AndroidInsetExtensions.RemoveViewWithLocalListener(platformView);
+        #endif
 
         navigationHost = null;
         currentShellItemHandler = null;

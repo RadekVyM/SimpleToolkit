@@ -1,5 +1,4 @@
 ﻿using Android.Widget;
-using Microsoft.Maui.Controls.Platform.Compatibility;
 using Microsoft.Maui.Handlers;
 using AView = Android.Views.View;
 

@@ -1,33 +1,27 @@
 # SimpleToolkit.SimpleShell
 
-The _SimpleToolkit.SimpleShell_ package provides you with a simplified implementation of .NET MAUI `Shell` that lets you easily create a custom navigation experience in your .NET MAUI applications. Same as .NET MAUI `Shell`, `SimpleShell` provides you with:
+`SimpleShell` is a lightweight, decoupled implementation of .NET MAUI `Shell`. It provides the powerful URI-based navigation and stack management of `Shell` but **without any forced UI**.
 
-- A single place to describe the logical hierarchy of an app.
-- A URI-based navigation scheme that permits navigation to any page in the app.
+You gain 100% control over your navigation UI (TabBars, Flyouts, TitleBars) while keeping the standard `Shell.Current.GoToAsync()` workflow.
 
-**`SimpleShell` does not come with any navigation controls.** `SimpleShell` just gives you the ability to use custom navigation controls along with the URI-based navigation and automatic navigation stack management.
+## 🚀 Getting Started
 
-## Getting Started
-
-In order to use _SimpleToolkit.SimpleShell_, you need to call the `UseSimpleShell()` extension method in your `MauiProgram.cs` file:
-
+1. **Initialize**: Register the handler in your `MauiProgram.cs`:
 ```csharp
-builder.UseSimpleShell();
+// usePlatformTransitions: true (default) uses native page animations
+builder.UseSimpleShell(usePlatformTransitions: true);
 ```
 
-This method also takes a boolean parameter `usePlatformTransitions`, which defaults to `true` and controls wheter platform-specific animated transitions between pages are used.
-
-### XAML namespace
-
-All `SimpleShell` related controls and attached properties can be found in the following XAML namespace:
-
+2. **Namespace**: Add this to your XAML:
 ```xml
 xmlns:simpleShell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolkit.SimpleShell"
 ```
 
-## SimpleShell
+## 🏗️ Core Concepts
 
 `SimpleShell` is a simplified implementation of .NET MAUI `Shell`. All `SimpleShell` is is just a set of containers for your application content with the ability to put the hosting area for pages wherever you want. This gives you the flexibility to add custom tab bars, navigation bars, flyouts, etc. to your `Shell` application while using the URI-based navigation.
+
+## 📖 Usage Example
 
 Let's say we have four root pages - `YellowPage`, `GreenPage`, `RedPage` and `BluePage` - and one detail page - `YellowDetailPage`. Shell with a simple app bar and tab bar can be defined like this:
 
@@ -143,18 +137,21 @@ public partial class AppShell : SimpleToolkit.SimpleShell.SimpleShell
 }
 ```
 
-Navigation between pages works almost the same as in .NET MAUI `Shell`, just use the common `Shell.Current.GoToAsync()`. `SimpleShell` differs only in these cases:
+Navigation between pages works almost the same as in .NET MAUI `Shell`, just use the common `Shell.Current.GoToAsync()`. Pages that are not part of the shell hierarchy can be registered using the `Routing.RegisterRoute()` method.
 
-- The `animate` parameter value has no effect on whether the transition animation is played or not.
-- When platform-specific transition animations are used, the `Task` returned by the `GoToAsync()` method will complete once the navigation has been initiated, not once the animation has been completed. In other words, the returned `Task` is not waiting for the animation to complete. The same applies to `Navigated` events.
 
-Pages that are not part of the shell hierarchy can be registered using the `Routing.RegisterRoute()` method.
+## ⚖️ When to use SimpleShell?
 
-## Why not use `SimpleShell` and use .NET MAUI `Shell` instead
+**Choose SimpleShell if:**
 
-- .NET MAUI `Shell` offers a platform-specific appearance.
-- Platform-specific navigation controls that .NET MAUI `Shell` provides probably have better performance than controls composed of multiple .NET MAUI views.
-- A `SimpleShell`-based application may not have as good accessibility in some scenarios due to the lack of platform-specific navigation controls. .NET MAUI `Shell` should be accessible out of the box since it uses platform-specific controls.
-- Maybe I have implemented something wrong that has a negative impact on the performance, accessibility, or something like that.
+* You need a completely custom design that native Shell doesn't allow.
+* You want a unified UI look across iOS, Android, and Windows.
+* You want to host the navigation area anywhere in your layout.
 
-> See [documentation](https://github.com/RadekVyM/SimpleToolkit/tree/main/docs/SimpleToolkit.SimpleShell) for more information.
+**Stick to .NET MAUI Shell if:**
+
+* You want a 100% "Native" look and feel.
+* Out-of-the-box accessibility is your top priority.
+* You don't want to build your own TabBar/Flyout logic.
+
+> 📖 **Full Documentation:** [Detailed Guide & API Reference](https://github.com/RadekVyM/SimpleToolkit/tree/main/docs/SimpleToolkit.SimpleShell)

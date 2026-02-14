@@ -10,19 +10,9 @@
 
     <Tab>
         <ShellContent
-            Title="Icon"
-            ContentTemplate="{DataTemplate pages:IconPage}"
-            Route="IconPage" />
-
-        <ShellContent
-            Title="ContentButton"
-            ContentTemplate="{DataTemplate pages:ContentButtonPage}"
-            Route="ContentButtonPage" />
-
-        <ShellContent
-            Title="Popover"
-            ContentTemplate="{DataTemplate pages:PopoverPage}"
-            Route="PopoverPage" />
+            Title="SimpleButton"
+            ContentTemplate="{DataTemplate pages:SimpleButtonPage}"
+            Route="SimpleButtonPage" />
     </Tab>
 
 </Shell>

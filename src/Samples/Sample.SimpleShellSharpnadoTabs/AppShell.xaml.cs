@@ -1,5 +1,4 @@
 ﻿using Sample.SimpleShellSharpnadoTabs.Views.Pages;
-using SimpleToolkit.Core;
 
 namespace Sample.SimpleShellSharpnadoTabs;
 
@@ -10,13 +9,6 @@ public partial class AppShell : SimpleToolkit.SimpleShell.SimpleShell
         InitializeComponent();
 
         Routing.RegisterRoute(nameof(FirstDetailPage), typeof(FirstDetailPage));
-
-        Loaded += AppShellLoaded;
-    }
-
-    private void AppShellLoaded(object? sender, EventArgs e)
-    {
-        this.Window.SubscribeToSafeAreaChanges(safeArea => contentView.Padding = safeArea);
     }
 
     protected override void OnNavigated(ShellNavigatedEventArgs args)

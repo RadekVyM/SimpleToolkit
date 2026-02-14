@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using SimpleToolkit.Core;
 using SimpleToolkit.SimpleShell;
 
 namespace Sample.SimpleShell;
@@ -18,7 +17,6 @@ public static class MauiProgram
 			});
 
 		builder.UseSimpleShell();
-        builder.DisplayContentBehindBars();
 
 #if DEBUG
 		builder.Logging.AddDebug();

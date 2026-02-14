@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:Playground.Original.Views.Pages"
     xmlns:local="clr-namespace:Playground.Original">
-    
+
     <Shell.TitleView>
         <Label Text="Hello title"/>
     </Shell.TitleView>
@@ -13,16 +13,24 @@
     <TabBar>
         <!--<Tab Title="Flame tab" Route="FirstTab"
          Icon="flame_empty.png">-->
-        <ShellContent
+        <Tab
             Title="Gray"
-            Icon="bird_empty.png"
-            ContentTemplate="{DataTemplate pages:GrayPage}"
-            Route="GrayPage" />
-        <ShellContent
+            Icon="bird_empty.png">
+            <ShellContent
+                Title="Gray"
+                Icon="bird_empty.png"
+                ContentTemplate="{DataTemplate pages:GrayPage}"
+                Route="GrayPage" />
+        </Tab>
+        <Tab
             Title="Yellow"
-            Icon="flame_empty.png"
-            ContentTemplate="{DataTemplate pages:YellowPage}"
-            Route="YellowPage" />
+            Icon="flame_empty.png">
+            <ShellContent
+                Title="Yellow"
+                Icon="flame_empty.png"
+                ContentTemplate="{DataTemplate pages:YellowPage}"
+                Route="YellowPage" />
+        </Tab>
         <!--</Tab>-->
 
         <Tab Title="Case tab" Route="SecondTab"
@@ -39,13 +47,5 @@
                 Route="RedPage" />
         </Tab>
 
-        <Tab Title="Purple"
-             Icon="avatar_empty.png">
-            <ShellContent
-            Title="Purple"
-            Icon="avatar_empty.png"
-            ContentTemplate="{DataTemplate pages:PurplePage}"
-            Route="PurplePage" />
-        </Tab>
     </TabBar>
 </Shell>

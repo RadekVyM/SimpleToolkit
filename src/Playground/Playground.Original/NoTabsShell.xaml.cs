@@ -1,5 +1,4 @@
 using Playground.Original.Views.Pages;
-using SimpleToolkit.Core;
 using SimpleToolkit.SimpleShell;
 using SimpleToolkit.SimpleShell.Extensions;
 
@@ -17,27 +16,9 @@ public partial class NoTabsShell : SimpleShell
 
         InitializeComponent();
 
-        Loaded += AppShellLoaded;
-        Unloaded += AppShellUnloaded;
-
         this.SetTransition(Transitions.DefaultUniversalTransition);
     }
 
-
-    private void AppShellLoaded(object? sender, EventArgs e)
-    {
-        Window.SubscribeToSafeAreaChanges(OnSafeAreaChanged);
-    }
-
-    private void AppShellUnloaded(object? sender, EventArgs e)
-    {
-        Window.UnsubscribeFromSafeAreaChanges(OnSafeAreaChanged);
-    }
-
-    private void OnSafeAreaChanged(Thickness safeAreaPadding)
-    {
-        rootContainer.Padding = safeAreaPadding;
-    }
 
     private async void ShellItemButtonClicked(object? sender, EventArgs e)
     {

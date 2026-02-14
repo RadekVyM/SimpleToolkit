@@ -1,8 +1,6 @@
 # `SimpleShell` page transitions
 
-`SimpleShell` allows you to define custom transition animations between pages during navigation.
-
-There are two types of transitions that can be used:
+`SimpleShell` allows you to define custom page transitions. There are two types of transitions that can be used:
 
 - **Platform-specific transitions** - transitions provided by the platform-specific APIs and controls. These transitions are used by default.
 - **Universal transitions** - fully cross-platform transitions that are defined using only .NET MAUI APIs.

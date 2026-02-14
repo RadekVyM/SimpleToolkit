@@ -1,5 +1,4 @@
 using Playground.Original.Views.Pages;
-using SimpleToolkit.Core;
 using SimpleToolkit.SimpleShell;
 using SimpleToolkit.SimpleShell.Extensions;
 
@@ -17,24 +16,11 @@ public partial class ShellItemsShell : SimpleShell
 
         InitializeComponent();
 
-        Loaded += AppShellLoaded;
-        Unloaded += AppShellUnloaded;
-
 		this.SetTransition(SimpleShell.UsesPlatformTransitions ?
 			Transitions.CustomPlatformTransition :
 			Transitions.DefaultUniversalTransition);
 	}
 
-
-    private void AppShellLoaded(object? sender, EventArgs e)
-    {
-        Window.SubscribeToSafeAreaChanges(OnSafeAreaChanged);
-    }
-
-    private void AppShellUnloaded(object? sender, EventArgs e)
-    {
-        Window.UnsubscribeFromSafeAreaChanges(OnSafeAreaChanged);
-    }
 
     private void OnSafeAreaChanged(Thickness safeAreaPadding)
     {

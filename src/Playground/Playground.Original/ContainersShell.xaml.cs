@@ -1,6 +1,5 @@
 using Playground.Original.Extensions;
 using Playground.Original.Views.Pages;
-using SimpleToolkit.Core;
 using SimpleToolkit.SimpleShell;
 
 #if ANDROID
@@ -30,27 +29,9 @@ public partial class ContainersShell : SimpleShell
 
         InitializeComponent();
 
-        Loaded += AppShellLoaded;
-        Unloaded += AppShellUnloaded;
-
         Navigated += AppShellNavigated;
-	}
-
-
-    private void AppShellLoaded(object? sender, EventArgs e)
-    {
-        Window.SubscribeToSafeAreaChanges(OnSafeAreaChanged);
     }
 
-    private void AppShellUnloaded(object? sender, EventArgs e)
-    {
-        Window.UnsubscribeFromSafeAreaChanges(OnSafeAreaChanged);
-    }
-
-    private void OnSafeAreaChanged(Thickness safeAreaPadding)
-    {
-        contentContainer.Padding = safeAreaPadding;
-    }
 
     private async void AppShellNavigated(object? sender, ShellNavigatedEventArgs e)
     {

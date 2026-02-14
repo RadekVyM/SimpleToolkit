@@ -142,10 +142,10 @@ public class SimpleFragment(AView view) : Fragment, AndroidAnimation.IAnimationL
     public override AView OnCreateView(LayoutInflater inflater, ViewGroup? container, Bundle? savedInstanceState)
     {
         // The view needs to be placed in a container for translations pivots to work
-        var frame = new FrameLayout(Context ?? throw new NullReferenceException("Context should not be null here."));
-        frame.AddView(view);
+        root = new FrameLayout(Context ?? throw new NullReferenceException("Context should not be null here."));
+        root.AddView(view);
 
-        return frame;
+        return root;
     }
 
     protected override void Dispose(bool disposing)

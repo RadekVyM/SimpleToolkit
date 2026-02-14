@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Sharpnado.Tabs;
-using SimpleToolkit.Core;
+using SimpleToolkit.SimpleButton;
 using SimpleToolkit.SimpleShell;
 
 namespace Sample.SimpleShellSharpnadoTabs;
@@ -14,15 +14,13 @@ public static class MauiProgram
             .UseMauiApp<App>()
             .UseSharpnadoTabs(false)
             .UseSimpleShell()
-            .UseSimpleToolkit()
+            .UseSimpleButton()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 fonts.AddFont("Font Awesome 6 Free-Solid-900.otf", "FontAwesome");
             });
-
-        builder.DisplayContentBehindBars();
 
 #if DEBUG
         builder.Logging.AddDebug();

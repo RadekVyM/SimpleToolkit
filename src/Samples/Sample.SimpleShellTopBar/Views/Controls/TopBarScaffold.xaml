@@ -2,7 +2,7 @@
 <ContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:simpleCore="clr-namespace:SimpleToolkit.Core;assembly=SimpleToolkit.Core"
+    xmlns:sb="clr-namespace:SimpleToolkit.SimpleButton;assembly=SimpleToolkit.SimpleButton"
     xmlns:controls="clr-namespace:Sample.SimpleShellTopBar.Views.Controls"
     x:Class="Sample.SimpleShellTopBar.Views.Controls.TopBarScaffold"
     
@@ -10,37 +10,33 @@
 
     <ContentView.Content>
         <Grid
-            RowDefinitions="auto, *"
-            CompressedLayout.IsHeadless="True">
+            RowDefinitions="auto, *">
             <Grid
                 x:Name="topBar"
                 ColumnDefinitions="50, *, 50"
                 Padding="0, 5"
                 MinimumHeightRequest="60">
-                <simpleCore:ContentButton
+                <sb:SimpleButton
                     IsVisible="{Binding Source={x:Reference scaffold}, Path=IsBackButtonVisible, x:DataType={x:Type controls:TopBarScaffold}}"
                     VerticalOptions="Center" HorizontalOptions="Center"
                     HeightRequest="30" WidthRequest="30"
                     StrokeThickness="0"
                     Clicked="BackButtonClicked">
-                    <simpleCore:Icon
+                    <Image
                         Source="arrow_left.png"
-                        TintColor="{AppThemeBinding Default=Black, Dark=White}"
                         VerticalOptions="Center" HorizontalOptions="Center"
                         HeightRequest="20" WidthRequest="20" />
-                </simpleCore:ContentButton>
+                </sb:SimpleButton>
 
                 <ContentView
                     x:Name="titleContent"
-                    Grid.Column="1"
-                    CompressedLayout.IsHeadless="True"/>
+                    Grid.Column="1" />
             </Grid>
 
             <ContentView
                 x:Name="pageContent"
                 Content="{Binding Source={x:Reference scaffold}, Path=PageContent, x:DataType={x:Type controls:TopBarScaffold}}"
-                Grid.Row="1"
-                CompressedLayout.IsHeadless="True"/>
+                Grid.Row="1" />
         </Grid>
     </ContentView.Content>
 </ContentView>

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using SimpleToolkit.Core;
+using SimpleToolkit.SimpleButton;
 
 namespace Sample.Core;
 
@@ -10,7 +10,7 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
-			.UseSimpleToolkit()
+			.UseSimpleButton()
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
