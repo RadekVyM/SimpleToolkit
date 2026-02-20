@@ -6,18 +6,16 @@
 
 # SimpleToolkit
 
-</div>
-
 <br />
 
 **SimpleToolkit** is a collection of helpers and lightweight, easily customizable .NET MAUI controls designed to give developers full control over their app's UI and navigation.
+
+</div>
 
 <br />
 
 > [!CAUTION]
 > Long-term support is not guaranteed. However, this repository is released under the MIT license, so you can always fork the repository and build the packages yourself.
-
------
 
 ## 📦 NuGet Packages
 
