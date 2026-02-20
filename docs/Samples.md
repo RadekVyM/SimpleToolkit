@@ -1,7 +1,7 @@
 # List of samples built using SimpleToolkit
 
 ## [Marvelous .NET MAUI](https://github.com/RadekVyM/MarvelousMAUI)
-**.NET MAUI clone** of the [Wonderous app](https://flutter.gskinner.com/wonderous/) - a visual showcase of **eight wonders of the world** made with [Flutter](https://github.com/flutter/flutter) by the team at [gskinner](https://gskinner.com/).
+**.NET MAUI clone** of the [Wonderous app](https://flutter.gskinner.com/wonderous/) — a visual showcase of **eight wonders of the world** made with [Flutter](https://github.com/flutter/flutter) by the team at [gskinner](https://gskinner.com/).
 
 https://github.com/RadekVyM/MarvelousMAUI/assets/65116078/3a6b59a0-e48f-4af4-b168-2d0481df4b15
 

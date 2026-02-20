@@ -38,7 +38,7 @@ xmlns:simpleShell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolki
 
 > Even though `SimpleShell` inherits from the `Shell` class, many of its properites are not mapped to any platform controls. However, you can bind these properties to your custom controls.
 
-Let's say we want to have an app with four root pages - `YellowPage`, `GreenPage`, `RedPage` and `BluePage` — and one detail page — `YellowDetailPage`. In `SimpleShell`, the logical hierarchy of the app can be defined like this:
+Let's say we want to have an app with four root pages — `YellowPage`, `GreenPage`, `RedPage` and `BluePage` — and one detail page — `YellowDetailPage`. In `SimpleShell`, the logical hierarchy of the app can be defined like this:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>

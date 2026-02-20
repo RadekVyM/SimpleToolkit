@@ -23,7 +23,7 @@ xmlns:simpleShell="clr-namespace:SimpleToolkit.SimpleShell;assembly=SimpleToolki
 
 ## 📖 Usage Example
 
-Let's say we have four root pages - `YellowPage`, `GreenPage`, `RedPage` and `BluePage` - and one detail page - `YellowDetailPage`. Shell with a simple app bar and tab bar can be defined like this:
+Let's say we have four root pages — `YellowPage`, `GreenPage`, `RedPage` and `BluePage` — and one detail page — `YellowDetailPage`. Shell with a simple app bar and tab bar can be defined like this:
 
 ```xml
 <simpleShell:SimpleShell

@@ -1,23 +1,37 @@
-# <img src="./images/logo_with_background.svg" width="40" height="25"> SimpleToolkit
+<div align="center">
 
-**SimpleToolkit** is a collection of lightweight, easily customizable .NET MAUI controls designed to give developers full control over their app's UI and navigation.
+<p>
+<img src="./images/logo_with_background.svg" width="40" height="40">
+</p>
+
+# SimpleToolkit
+
+</div>
+
+<br />
+
+**SimpleToolkit** is a collection of helpers and lightweight, easily customizable .NET MAUI controls designed to give developers full control over their app's UI and navigation.
+
+<br />
 
 > [!CAUTION]
 > Long-term support is not guaranteed. However, this repository is released under the MIT license, so you can always fork the repository and build the packages yourself.
+
+-----
 
 ## 📦 NuGet Packages
 
 The library is split into modular packages so you only pull in what you need:
 
-- [SimpleToolkit.SimpleShell](#simpletoolkitsimpleshell) — a lightweight, decoupled implementation of .NET MAUI `Shell`
+- [SimpleToolkit.SimpleShell](#-simpletoolkitsimpleshell) — a lightweight, decoupled implementation of .NET MAUI `Shell`
 
   [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.svg?label=SimpleToolkit.SimpleShell)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell/)
 
-- [SimpleToolkit.SimpleButton](#simpletoolkitsimplebutton) — a button that can hold whatever content you want
+- [SimpleToolkit.SimpleButton](#-simpletoolkitsimplebutton) — a button that can hold whatever content you want
 
   [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.SimpleButton.svg?label=SimpleToolkit.SimpleButton)](https://www.nuget.org/packages/SimpleToolkit.SimpleButton/)
 
-- [SimpleToolkit.Helpers](#simpletoolkithelpers) — a collection of essential cross-platform helpers for .NET MAUI
+- [SimpleToolkit.Helpers](#-simpletoolkithelpers) — a collection of essential cross-platform helpers for .NET MAUI
 
   [![NuGet](https://img.shields.io/nuget/v/SimpleToolkit.Helpers.svg?label=SimpleToolkit.Helpers)](https://www.nuget.org/packages/SimpleToolkit.Helpers/)
 
@@ -73,7 +87,7 @@ Here are some of my samples that were built using this library:
 * **iOS / Mac Catalyst**
 * **Windows (WinUI)**
 
-## 🛠️ SimpleToolkit.SimpleShell
+## 🌐 SimpleToolkit.SimpleShell
 
 [![SimpleToolkit.SimpleShell](https://img.shields.io/nuget/v/SimpleToolkit.SimpleShell.svg?label=SimpleToolkit.SimpleShell)](https://www.nuget.org/packages/SimpleToolkit.SimpleShell/)
 [![Documentation](https://img.shields.io/badge/-Documentation%20-forestgreen)](./docs/SimpleToolkit.SimpleShell)
