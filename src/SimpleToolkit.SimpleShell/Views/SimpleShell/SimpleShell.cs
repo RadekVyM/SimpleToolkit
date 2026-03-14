@@ -2,12 +2,6 @@
 
 namespace SimpleToolkit.SimpleShell;
 
-// TODO: It looks like the toolbar is part of ShellSection on iOS. So it is missing in my implementation. How to solve it?
-// 1) Lets hope that the toolbar will be handled as on Android and Windows when Shell totally transitions to handler architecture
-// 2) Implement it myself in my SimpleShellSectionHandler - This can be a waste of time if 1) comes true
-// I am waiting for transition to handler architecture and then I will see
-// I have set default visibility of the toolbar to hidden for now
-
 /// <summary>
 /// Implementation of <see cref="Shell"/> that lets you define your custom navigation experience. 
 /// </summary>
@@ -113,13 +107,7 @@ public partial class SimpleShell : Shell, ISimpleShell
 
     protected override void OnHandlerChanging(HandlerChangingEventArgs args)
     {
-        // TODO: If I do not comment this out, I get this exception on Android when I leave the app using the back button and then open the app again:
-        // System.InvalidOperationException: 'Handler is already being set elsewhere'
-        // But it is really weird because it looks like nothing is called in the OnHandlerChanging() method. Page do not even override it
-        // There is also the HandlerChanging event for those who need to do something on handler changing
-        // This situation overall causes problems - e.g. when I try to navigate deeper to the stack after coming back to the app, the app crashes with 'pending navigation' exception
-
-        //base.OnHandlerChanging(args);
+        base.OnHandlerChanging(args);
 
         SetDefaultShellPropertyValues();
         UpdateVisualStates();
