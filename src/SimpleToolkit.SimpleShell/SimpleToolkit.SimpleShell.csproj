@@ -26,10 +26,10 @@
 		<PackageTags>MAUI, Controls, Shell, Navigation, Transitions</PackageTags>
 		<Authors>RadekVyM</Authors>
 		<PackageOutputPath>..\..\packages</PackageOutputPath>
-		<VersionPrefix>6.0.0</VersionPrefix>
+		<VersionPrefix>6.0.1</VersionPrefix>
 		<VersionSuffix></VersionSuffix>
 		<Version>$(VersionPrefix)$(VersionSuffix)</Version>
-		<Description>Simplified implementation of .NET MAUI Shell that is part of SimpleToolkit library.</Description>
+		<Description>Simplified implementation of .NET MAUI Shell that is part of the SimpleToolkit library.</Description>
 		<PackageProjectUrl>https://github.com/RadekVyM/SimpleToolkit</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/RadekVyM/SimpleToolkit</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
